@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tempo de Reacção · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>⚡ <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section class="panel">
+    <div class="reaction-zone" id="zone" style="background:var(--brand)"></div>
+    <p class="small muted center" id="trial-info" style="margin-top:12px"></p>
+  </section>
+
+  <section id="panel-result" class="hidden">
+    <div class="panel">
+      <h2 style="margin-top:0" data-i18n="res.title"></h2>
+      <div class="tiles">
+        <div class="tile"><div class="num" id="r-avg">—</div><div class="lbl" data-i18n="res.avg"></div></div>
+        <div class="tile"><div class="num" id="r-best">—</div><div class="lbl" data-i18n="res.best"></div></div>
+      </div>
+      <div id="trials-list" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:8px"></div>
+      <h3 data-i18n="res.ref"></h3>
+      <table class="data">
+        <tbody id="ref-table"></tbody>
+      </table>
+    </div>
+    <div class="panel panel-soft">
+      <p style="margin:0" data-i18n="res.expl"></p>
+    </div>
+    <div class="center mt-2">
+      <button class="btn" id="btn-again" data-i18n="btn.again"></button>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "games",
+  i18n: {
+    pt: {
+      "page.title": "Tempo de Reacção",
+      "crumb": "Jogos",
+      "intro.lead": "Mede a velocidade a que o teu cérebro detecta um sinal visual e dispara uma resposta motora. São 5 tentativas.",
+      "zone.idle": "Clica para começar",
+      "zone.wait": "Espera pelo verde...",
+      "zone.go": "CLICA!",
+      "zone.early": "Cedo demais! 😅 Clica para repetir",
+      "zone.next": " ms — clica para continuar",
+      "trial.info": "Tentativa ",
+      "res.title": "Resultado",
+      "res.avg": "Média",
+      "res.best": "Melhor",
+      "res.ref": "Para comparação",
+      "ref.1": ["≈ 150-200 ms", "Atletas de elite e gamers competitivos"],
+      "ref.2": ["≈ 200-250 ms", "Adulto jovem típico"],
+      "ref.3": ["≈ 250-330 ms", "Média da população geral"],
+      "ref.4": ["> 330 ms", "Cansaço, distracção — ou uma noite mal dormida"],
+      "res.expl": "🧠 O que se passa: entre o flash verde e o teu clique, a luz atinge a retina, o sinal viaja até ao córtex visual, é reconhecido, a decisão é tomada e a ordem motora desce até aos músculos da mão. Tudo isto em cerca de um quarto de segundo. O tempo de reacção varia com a idade, o sono, a cafeína e o treino — e nunca chega a zero: os neurónios têm velocidades de condução finitas.",
+      "btn.again": "Repetir"
+    },
+    en: {
+      "page.title": "Reaction Time",
+      "crumb": "Games",
+      "intro.lead": "Measure how fast your brain detects a visual signal and fires a motor response. 5 attempts.",
+      "zone.idle": "Click to start",
+      "zone.wait": "Wait for green...",
+      "zone.go": "CLICK!",
+      "zone.early": "Too early! 😅 Click to retry",
+      "zone.next": " ms — click to continue",
+      "trial.info": "Attempt ",
+      "res.title": "Result",
+      "res.avg": "Average",
+      "res.best": "Best",
+      "res.ref": "For comparison",
+      "ref.1": ["≈ 150-200 ms", "Elite athletes and competitive gamers"],
+      "ref.2": ["≈ 200-250 ms", "Typical young adult"],
+      "ref.3": ["≈ 250-330 ms", "General population average"],
+      "ref.4": ["> 330 ms", "Fatigue, distraction — or a bad night's sleep"],
+      "res.expl": "🧠 What is going on: between the green flash and your click, light hits the retina, the signal travels to the visual cortex, gets recognised, a decision is made and the motor command runs down to your hand muscles. All in about a quarter of a second. Reaction time varies with age, sleep, caffeine and training — and never reaches zero: neurons have finite conduction speeds.",
+      "btn.again": "Try again"
+    }
+  }
+};
+</script>
+<script src="../js/app.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var TRIALS = 5;
+  var state = "idle"; // idle | waiting | go | early | between | done
+  var results = [];
+  var goAt = 0;
+  var waitTimer = null;
+  var lastMs = 0;
+
+  function setZone(text, bg) {
+    var z = $("zone");
+    z.textContent = text;
+    z.style.background = bg;
+  }
+
+  function info() {
+    $("trial-info").textContent = state === "done" ? "" :
+      PL.t("trial.info") + Math.min(results.length + 1, TRIALS) + " / " + TRIALS;
+  }
+
+  function idle() {
+    state = "idle";
+    results = [];
+    $("panel-result").classList.add("hidden");
+    setZone(PL.t("zone.idle"), "var(--brand)");
+    info();
+  }
+
+  function armWait() {
+    state = "waiting";
+    setZone(PL.t("zone.wait"), "var(--critical)");
+    info();
+    clearTimeout(waitTimer);
+    waitTimer = setTimeout(function () {
+      state = "go";
+      goAt = performance.now();
+      setZone(PL.t("zone.go"), "var(--good)");
+    }, 1200 + Math.random() * 2800);
+  }
+
+  function finish() {
+    state = "done";
+    info();
+    var avg = Math.round(results.reduce(function (a, b) { return a + b; }, 0) / results.length);
+    var best = Math.min.apply(null, results);
+    $("r-avg").textContent = avg + " ms";
+    $("r-best").textContent = best + " ms";
+    $("trials-list").innerHTML = results.map(function (r) {
+      return "<span class='chip'>" + r + " ms</span>";
+    }).join("");
+    var refs = "";
+    ["ref.1", "ref.2", "ref.3", "ref.4"].forEach(function (k) {
+      var r = PL.t(k);
+      refs += "<tr><td style='font-weight:800;white-space:nowrap'>" + r[0] + "</td><td>" + r[1] + "</td></tr>";
+    });
+    $("ref-table").innerHTML = refs;
+    $("panel-result").classList.remove("hidden");
+    setZone(avg + " ms", "var(--brand)");
+  }
+
+  $("zone").addEventListener("click", function () {
+    if (state === "idle" || state === "early") {
+      armWait();
+    } else if (state === "waiting") {
+      clearTimeout(waitTimer);
+      state = "early";
+      setZone(PL.t("zone.early"), "var(--warn)");
+    } else if (state === "go") {
+      lastMs = Math.round(performance.now() - goAt);
+      results.push(lastMs);
+      if (results.length >= TRIALS) {
+        finish();
+      } else {
+        state = "between";
+        setZone(lastMs + PL.t("zone.next"), "var(--accent)");
+        info();
+      }
+    } else if (state === "between") {
+      armWait();
+    } else if (state === "done") {
+      idle();
+      armWait();
+    }
+  });
+
+  $("btn-again").addEventListener("click", function () {
+    idle();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  document.addEventListener("pl:ready", idle);
+  PL.onLang(function () {
+    if (state === "idle") setZone(PL.t("zone.idle"), "var(--brand)");
+    if (state === "waiting") setZone(PL.t("zone.wait"), "var(--critical)");
+    if (state === "early") setZone(PL.t("zone.early"), "var(--warn)");
+    if (state === "between") setZone(lastMs + PL.t("zone.next"), "var(--accent)");
+    if (state === "done") finish();
+    info();
+  });
+})();
+</script>
+</body>
+</html>

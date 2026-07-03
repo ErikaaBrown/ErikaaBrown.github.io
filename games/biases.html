@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz de Vieses Cognitivos · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>🪞 <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section id="panel-intro" class="panel">
+    <p data-i18n="intro.p1"></p>
+    <div class="center mt-2">
+      <button class="btn" id="btn-start" data-i18n="btn.start"></button>
+    </div>
+  </section>
+
+  <section id="panel-game" class="panel hidden">
+    <div class="progress-track"><div class="progress-fill" id="pfill" style="width:0%"></div></div>
+    <p class="small muted" id="qcount"></p>
+    <div class="scenario-box" id="scene" style="max-width:none;margin-bottom:16px"></div>
+    <p class="small muted" data-i18n="q.which"></p>
+    <div class="opt-list" id="opts"></div>
+    <div id="feedback" class="hidden" style="margin-top:16px">
+      <div class="notice" id="feedback-text"></div>
+      <div class="center">
+        <button class="btn btn-sm" id="btn-next" data-i18n="btn.next"></button>
+      </div>
+    </div>
+  </section>
+
+  <section id="panel-result" class="hidden">
+    <div class="panel center">
+      <h2 style="margin-top:0" data-i18n="res.title"></h2>
+      <div class="tiles" style="max-width:220px;margin:1rem auto">
+        <div class="tile"><div class="num" id="r-score"></div><div class="lbl" data-i18n="res.score"></div></div>
+      </div>
+      <p id="r-comment" class="muted"></p>
+    </div>
+    <div class="panel">
+      <h3 style="margin-top:0" data-i18n="guide.title"></h3>
+      <div id="guide"></div>
+    </div>
+    <div class="panel panel-soft">
+      <p style="margin:0" data-i18n="res.expl"></p>
+    </div>
+    <div class="center mt-2">
+      <button class="btn" id="btn-again" data-i18n="btn.again"></button>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "games",
+  i18n: {
+    pt: {
+      "page.title": "Quiz de Vieses Cognitivos",
+      "crumb": "Jogos",
+      "intro.lead": "O cérebro usa atalhos para decidir depressa. Na maioria das vezes funcionam — e quando falham, falham de formas previsíveis.",
+      "intro.p1": "Vais ler 10 situações do dia-a-dia. Em cada uma, identifica o viés cognitivo em acção. No fim recebes um guia rápido com todos os vieses do quiz.",
+      "btn.start": "Começar",
+      "btn.next": "Seguinte →",
+      "btn.again": "Jogar outra vez",
+      "q.which": "Que viés está em acção?",
+      "fb.right": "✔️ Certo! ",
+      "fb.wrong": "✖️ Era «",
+      "fb.wrong2": "». ",
+      "res.title": "Resultado",
+      "res.score": "em 10",
+      "res.c1": "Caçador de vieses profissional! Poucas armadilhas te escapam.",
+      "res.c2": "Bom olho! Os vieses que falhaste são dos que mais nos enganam a todos.",
+      "res.c3": "Os vieses são traiçoeiros — conhecê-los é o primeiro passo para os apanhar em flagrante. O guia em baixo ajuda.",
+      "guide.title": "Guia rápido dos 10 vieses",
+      "res.expl": "🧠 A ironia final: conhecer vieses não imuniza — o «ponto cego do viés» é acharmos que os outros são mais enviesados do que nós. O antídoto prático é criar fricção: pedir opiniões contrárias, dormir sobre decisões grandes e perguntar «que provas me fariam mudar de ideias?»"
+    },
+    en: {
+      "page.title": "Cognitive Bias Quiz",
+      "crumb": "Games",
+      "intro.lead": "The brain uses shortcuts to decide fast. Most of the time they work — and when they fail, they fail in predictable ways.",
+      "intro.p1": "You will read 10 everyday situations. In each one, identify the cognitive bias at work. At the end you get a quick guide to all the biases in the quiz.",
+      "btn.start": "Start",
+      "btn.next": "Next →",
+      "btn.again": "Play again",
+      "q.which": "Which bias is at work?",
+      "fb.right": "✔️ Correct! ",
+      "fb.wrong": "✖️ It was \"",
+      "fb.wrong2": "\". ",
+      "res.title": "Result",
+      "res.score": "out of 10",
+      "res.c1": "A professional bias hunter! Few traps get past you.",
+      "res.c2": "Good eye! The ones you missed are among those that fool us all the most.",
+      "res.c3": "Biases are treacherous — knowing them is the first step to catching them in the act. The guide below helps.",
+      "guide.title": "Quick guide to the 10 biases",
+      "res.expl": "🧠 The final irony: knowing about biases does not immunise you — the \"bias blind spot\" is believing others are more biased than we are. The practical antidote is friction: ask for opposing views, sleep on big decisions, and ask \"what evidence would change my mind?\""
+    }
+  }
+};
+</script>
+<script src="../js/app.js"></script>
+<script>
+(function () {
+  var B = {
+    confirm:   { pt: "Viés de confirmação", en: "Confirmation bias",
+                 g: { pt: "Procurar e valorizar apenas o que confirma o que já acreditamos.", en: "Seeking and valuing only what confirms what we already believe." } },
+    anchor:    { pt: "Ancoragem", en: "Anchoring",
+                 g: { pt: "O primeiro número que vemos «puxa» todas as estimativas seguintes.", en: "The first number we see \"pulls\" every estimate that follows." } },
+    avail:     { pt: "Heurística da disponibilidade", en: "Availability heuristic",
+                 g: { pt: "Julgar provável o que nos vem facilmente à memória — como o que aparece nas notícias.", en: "Judging as likely whatever comes easily to mind — like what appears in the news." } },
+    sunk:      { pt: "Custo afundado", en: "Sunk cost fallacy",
+                 g: { pt: "Continuar a investir numa má aposta só porque já investimos nela.", en: "Continuing to invest in a bad bet just because we already invested in it." } },
+    halo:      { pt: "Efeito de halo", en: "Halo effect",
+                 g: { pt: "Uma qualidade positiva visível contagia o julgamento de todas as outras.", en: "One visible positive quality colours our judgement of all the others." } },
+    survivor:  { pt: "Viés do sobrevivente", en: "Survivorship bias",
+                 g: { pt: "Ver só os casos que «sobreviveram» e esquecer todos os que ficaram pelo caminho.", en: "Seeing only the cases that \"survived\" and forgetting all those that fell along the way." } },
+    dk:        { pt: "Efeito Dunning-Kruger", en: "Dunning-Kruger effect",
+                 g: { pt: "Saber pouco sobre um tema impede-nos de perceber quanto nos falta saber.", en: "Knowing little about a topic prevents us from seeing how much we do not know." } },
+    framing:   { pt: "Efeito de enquadramento", en: "Framing effect",
+                 g: { pt: "A mesma informação convence de forma diferente conforme a embalagem.", en: "The same information persuades differently depending on the packaging." } },
+    hindsight: { pt: "Viés retrospectivo", en: "Hindsight bias",
+                 g: { pt: "Depois de sabermos o desfecho, parece-nos que «sempre foi óbvio».", en: "Once we know the outcome, it feels like \"it was obvious all along\"." } },
+    herd:      { pt: "Prova social", en: "Social proof",
+                 g: { pt: "Se toda a gente faz, deve estar certo — o atalho que cria filas e modas.", en: "If everyone does it, it must be right — the shortcut that creates queues and fads." } }
+  };
+
+  var ROUNDS = [
+    { ans: "confirm", opts: ["confirm", "avail", "hindsight", "halo"],
+      s: { pt: "A Ana acredita que a lua cheia altera o comportamento das pessoas. Sempre que há lua cheia e alguém age de forma estranha, repara e comenta. Nas outras noites, não regista nada.",
+           en: "Ana believes the full moon changes people's behaviour. Whenever there is a full moon and someone acts strangely, she notices and comments. On other nights, she registers nothing." },
+      ex: { pt: "Só os casos que confirmam a crença são contados; os contra-exemplos passam despercebidos.", en: "Only the cases confirming the belief get counted; the counter-examples go unnoticed." } },
+    { ans: "anchor", opts: ["anchor", "framing", "sunk", "confirm"],
+      s: { pt: "Uma camisola custa 80€, com a etiqueta «antes: 160€». O Rui acha que é uma pechincha — embora nunca tenha pago 80€ por uma camisola na vida.",
+           en: "A jumper costs €80, with a tag saying \"was: €160\". Rui thinks it is a bargain — although he has never paid €80 for a jumper in his life." },
+      ex: { pt: "Os 160€ funcionam como âncora: o valor só parece baixo por comparação com o número inicial.", en: "The €160 acts as an anchor: the price only looks low compared with the initial number." } },
+    { ans: "avail", opts: ["avail", "confirm", "survivor", "herd"],
+      s: { pt: "Depois de ver uma semana de notícias sobre um acidente de avião, a Inês decide fazer as férias de carro — apesar de, ao quilómetro, o carro ser muito mais perigoso.",
+           en: "After a week of news about a plane crash, Inês decides to take her holiday by car — although, per kilometre, the car is far more dangerous." },
+      ex: { pt: "As imagens vívidas e recentes vêm facilmente à memória e inflacionam a probabilidade percebida.", en: "Vivid, recent images come easily to mind and inflate the perceived probability." } },
+    { ans: "sunk", opts: ["sunk", "anchor", "dk", "framing"],
+      s: { pt: "A meio do filme, o Tiago já percebeu que é péssimo. Fica até ao fim na mesma: «Já paguei o bilhete, não vou desperdiçá-lo.»",
+           en: "Halfway through the film, Tiago already knows it is terrible. He stays until the end anyway: \"I paid for the ticket, I'm not wasting it.\"" },
+      ex: { pt: "O bilhete está pago aconteça o que acontecer — a única coisa que ainda pode salvar é o resto da noite.", en: "The ticket is paid for no matter what — the only thing still salvageable is the rest of the evening." } },
+    { ans: "halo", opts: ["halo", "herd", "confirm", "anchor"],
+      s: { pt: "O candidato é alto, bem-parecido e muito simpático. Sem reparar, o entrevistador começa a assumir que também deve ser competente e honesto.",
+           en: "The candidate is tall, good-looking and very friendly. Without noticing, the interviewer starts assuming he must also be competent and honest." },
+      ex: { pt: "Uma característica saliente (aparência, simpatia) «ilumina» qualidades que não foram observadas.", en: "One salient trait (looks, friendliness) \"lights up\" qualities that were never observed." } },
+    { ans: "survivor", opts: ["survivor", "avail", "hindsight", "dk"],
+      s: { pt: "«O meu avô fumou um maço por dia até aos 95 anos, portanto isso do tabaco é exagero.»",
+           en: "\"My grandfather smoked a pack a day until he was 95, so all this about tobacco is exaggerated.\"" },
+      ex: { pt: "Os fumadores que morreram aos 55 não estão cá para contar a história — só vemos o sobrevivente.", en: "The smokers who died at 55 are not here to tell the tale — we only see the survivor." } },
+    { ans: "dk", opts: ["dk", "confirm", "halo", "sunk"],
+      s: { pt: "Depois de duas semanas a ver vídeos sobre nutrição, o Nuno corrige a médica com toda a confiança: «Isso que está a dizer já está desactualizado.»",
+           en: "After two weeks of watching nutrition videos, Nuno confidently corrects his doctor: \"What you're saying is already outdated.\"" },
+      ex: { pt: "Com pouco conhecimento, falta o próprio conhecimento necessário para avaliar o que não se sabe.", en: "With little knowledge, one lacks the very knowledge needed to assess what one does not know." } },
+    { ans: "framing", opts: ["framing", "anchor", "herd", "avail"],
+      s: { pt: "O iogurte «90% isento de gordura» vende muito mais do que o iogurte «com 10% de gordura» — apesar de serem exactamente o mesmo produto.",
+           en: "The \"90% fat-free\" yoghurt sells far more than the \"10% fat\" yoghurt — although they are exactly the same product." },
+      ex: { pt: "A informação é idêntica; muda apenas o enquadramento positivo ou negativo — e a decisão muda com ele.", en: "The information is identical; only the positive or negative framing changes — and the decision changes with it." } },
+    { ans: "hindsight", opts: ["hindsight", "confirm", "survivor", "framing"],
+      s: { pt: "Depois da derrota, o Carlos jura: «Eu sempre soube que íamos perder este jogo.» Curiosamente, tinha apostado dinheiro na vitória.",
+           en: "After the defeat, Carlos swears: \"I always knew we were going to lose this match.\" Curiously, he had bet money on a win." },
+      ex: { pt: "Conhecido o desfecho, a memória reescreve a previsão — «eu sabia» é quase sempre reconstrução.", en: "Once the outcome is known, memory rewrites the prediction — \"I knew it\" is almost always reconstruction." } },
+    { ans: "herd", opts: ["herd", "halo", "avail", "anchor"],
+      s: { pt: "Numa cidade desconhecida, a Joana escolhe o restaurante com fila à porta: «Se tanta gente espera, deve ser óptimo.»",
+           en: "In an unfamiliar city, Joana picks the restaurant with a queue outside: \"If so many people are waiting, it must be great.\"" },
+      ex: { pt: "Na ausência de informação própria, o comportamento dos outros serve de prova — nem sempre fiável.", en: "In the absence of first-hand information, other people's behaviour serves as evidence — not always reliable." } }
+  ];
+
+  var $ = function (id) { return document.getElementById(id); };
+  var idx = 0, score = 0, state = "intro", answered = false;
+  var currentOrder = [];
+
+  function show(p) {
+    $("panel-intro").classList.toggle("hidden", p !== "intro");
+    $("panel-game").classList.toggle("hidden", p !== "game");
+    $("panel-result").classList.toggle("hidden", p !== "result");
+    state = p;
+  }
+
+  function shuffle(a) {
+    a = a.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function renderRound(reshuffle) {
+    var r = ROUNDS[idx];
+    answered = false;
+    $("qcount").textContent = (idx + 1) + " / " + ROUNDS.length;
+    $("pfill").style.width = (idx / ROUNDS.length * 100) + "%";
+    $("feedback").classList.add("hidden");
+    $("scene").textContent = r.s[PL.lang];
+    if (reshuffle) currentOrder = shuffle(r.opts);
+    var box = $("opts");
+    box.innerHTML = "";
+    currentOrder.forEach(function (key) {
+      var b = document.createElement("button");
+      b.className = "opt-btn";
+      b.textContent = B[key][PL.lang];
+      b.addEventListener("click", function () { pick(key, b); });
+      box.appendChild(b);
+    });
+  }
+
+  function pick(key, btn) {
+    if (answered) return;
+    answered = true;
+    var r = ROUNDS[idx];
+    var right = key === r.ans;
+    if (right) score++;
+    $("opts").querySelectorAll(".opt-btn").forEach(function (b) {
+      if (b.textContent === B[r.ans][PL.lang]) b.classList.add("correct");
+    });
+    if (!right) btn.classList.add("wrong");
+    var prefix = right ? PL.t("fb.right") : PL.t("fb.wrong") + B[r.ans][PL.lang] + PL.t("fb.wrong2");
+    $("feedback-text").textContent = prefix + r.ex[PL.lang];
+    $("feedback").classList.remove("hidden");
+  }
+
+  function renderGuide() {
+    var html = "";
+    ROUNDS.forEach(function (r) {
+      var b = B[r.ans];
+      html += "<div class='interp'><h3>" + b[PL.lang] + "</h3><p>" + b.g[PL.lang] + "</p></div>";
+    });
+    $("guide").innerHTML = html;
+  }
+
+  function next() {
+    idx++;
+    if (idx >= ROUNDS.length) {
+      $("r-score").textContent = score;
+      $("r-comment").textContent = PL.t(score >= 9 ? "res.c1" : score >= 6 ? "res.c2" : "res.c3");
+      renderGuide();
+      show("result");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      renderRound(true);
+    }
+  }
+
+  function start() {
+    idx = 0; score = 0;
+    show("game");
+    renderRound(true);
+  }
+
+  $("btn-start").addEventListener("click", start);
+  $("btn-again").addEventListener("click", function () {
+    start();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  $("btn-next").addEventListener("click", next);
+
+  PL.onLang(function () {
+    if (state === "game" && !answered) renderRound(false);
+    if (state === "result") {
+      $("r-comment").textContent = PL.t(score >= 9 ? "res.c1" : score >= 6 ? "res.c2" : "res.c3");
+      renderGuide();
+    }
+  });
+})();
+</script>
+</body>
+</html>

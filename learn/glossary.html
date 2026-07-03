@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glossário · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>📖 <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <div class="search-bar">
+    <input type="text" id="search" data-i18n-ph="search.ph">
+  </div>
+  <p class="small muted" id="count-line"></p>
+  <div id="terms"></div>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "learn",
+  i18n: {
+    pt: {
+      "page.title": "Glossário de Psicologia",
+      "crumb": "Aprender",
+      "intro.lead": "Os termos essenciais, explicados em linguagem clara. O nome em inglês aparece ao lado de cada termo.",
+      "search.ph": "Procurar um termo... (ex.: dopamina, viés, memória)",
+      "count.showing": " termos",
+      "count.none": "Nenhum termo encontrado — tenta outra palavra."
+    },
+    en: {
+      "page.title": "Psychology Glossary",
+      "crumb": "Learn",
+      "intro.lead": "The essential terms, explained in plain language. The Portuguese name appears next to each term.",
+      "search.ph": "Search for a term... (e.g.: dopamine, bias, memory)",
+      "count.showing": " terms",
+      "count.none": "No terms found — try another word."
+    }
+  }
+};
+</script>
+<script src="../js/app.js"></script>
+<script>
+(function () {
+  var TERMS = [
+    { pt: ["Amígdala", "Pequeno núcleo do sistema límbico, central na detecção de ameaças e no processamento do medo. Dispara a resposta de alarme antes de o córtex terminar a análise."], en: ["Amygdala", "Small nucleus of the limbic system, central to threat detection and fear processing. It fires the alarm response before the cortex finishes its analysis."] },
+    { pt: ["Ansiedade", "Resposta de antecipação a uma ameaça futura e difusa. Distingue-se do medo, que responde a um perigo presente e concreto."], en: ["Anxiety", "An anticipatory response to a future, diffuse threat. It differs from fear, which responds to a present, concrete danger."] },
+    { pt: ["Atenção selectiva", "Capacidade de focar num estímulo enquanto se ignoram os restantes — como ouvir uma só conversa numa festa barulhenta."], en: ["Selective attention", "The ability to focus on one stimulus while ignoring the rest — like following a single conversation at a noisy party."] },
+    { pt: ["Auto-estima", "Avaliação global que cada pessoa faz do seu próprio valor. Estável ao longo do tempo, mas sensível a sucessos e fracassos."], en: ["Self-esteem", "The overall evaluation a person makes of their own worth. Stable over time, but sensitive to successes and failures."] },
+    { pt: ["Burnout", "Estado de exaustão física e emocional causado por stress crónico de trabalho, com cinismo e sensação de ineficácia. Reconhecido pela OMS como fenómeno ocupacional."], en: ["Burnout", "A state of physical and emotional exhaustion caused by chronic work stress, with cynicism and a sense of ineffectiveness. Recognised by the WHO as an occupational phenomenon."] },
+    { pt: ["Catarse", "Libertação de emoções reprimidas, com sensação de alívio. O conceito vem de Aristóteles e foi adoptado pela psicanálise."], en: ["Catharsis", "The release of repressed emotions, with a feeling of relief. The concept comes from Aristotle and was adopted by psychoanalysis."] },
+    { pt: ["Cognição", "O conjunto dos processos mentais: percepção, atenção, memória, linguagem, raciocínio e decisão."], en: ["Cognition", "The set of mental processes: perception, attention, memory, language, reasoning and decision-making."] },
+    { pt: ["Condicionamento clássico", "Aprendizagem por associação: um estímulo neutro passa a provocar uma resposta por ter sido emparelhado com outro estímulo. Os cães de Pavlov são o exemplo clássico."], en: ["Classical conditioning", "Learning by association: a neutral stimulus comes to trigger a response after being paired with another stimulus. Pavlov's dogs are the classic example."] },
+    { pt: ["Condicionamento operante", "Aprendizagem pelas consequências: comportamentos seguidos de reforço repetem-se; comportamentos punidos diminuem. Estudado por Skinner."], en: ["Operant conditioning", "Learning through consequences: behaviours followed by reinforcement repeat; punished behaviours decrease. Studied by Skinner."] },
+    { pt: ["Cortisol", "A principal hormona do stress. Útil em picos curtos (mobiliza energia), prejudicial quando permanece cronicamente elevada — afecta sono, memória e imunidade."], en: ["Cortisol", "The main stress hormone. Useful in short bursts (it mobilises energy), harmful when chronically elevated — affecting sleep, memory and immunity."] },
+    { pt: ["Dissonância cognitiva", "Desconforto de manter crenças ou comportamentos contraditórios. Tendemos a resolvê-la mudando a crença mais fácil — nem sempre a mais correcta. Descrita por Festinger."], en: ["Cognitive dissonance", "The discomfort of holding contradictory beliefs or behaviours. We tend to resolve it by changing the easiest belief — not always the most correct one. Described by Festinger."] },
+    { pt: ["Dopamina", "Neurotransmissor da motivação e da antecipação da recompensa — dispara mais com a expectativa do que com o prémio em si."], en: ["Dopamine", "The neurotransmitter of motivation and reward anticipation — it fires more for the expectation than for the prize itself."] },
+    { pt: ["Efeito Dunning-Kruger", "Tendência de quem sabe pouco sobre um tema para sobrestimar o que sabe — falta-lhe o próprio conhecimento necessário para notar as lacunas."], en: ["Dunning-Kruger effect", "The tendency of those who know little about a topic to overestimate what they know — they lack the very knowledge needed to notice the gaps."] },
+    { pt: ["Efeito Pigmalião", "As expectativas dos outros influenciam o nosso desempenho: alunos de quem se espera mais melhoram mais. Também chamado profecia auto-realizada."], en: ["Pygmalion effect", "Other people's expectations shape our performance: students expected to do better improve more. Also called a self-fulfilling prophecy."] },
+    { pt: ["Efeito placebo", "Melhoria real de sintomas causada pela expectativa de melhorar, e não pela substância ou tratamento em si."], en: ["Placebo effect", "A real improvement in symptoms caused by the expectation of improvement, rather than by the substance or treatment itself."] },
+    { pt: ["Empatia", "Capacidade de sentir e compreender a experiência do outro. Tem uma componente afectiva (sentir com) e uma cognitiva (compreender a perspectiva)."], en: ["Empathy", "The capacity to feel and understand another person's experience. It has an affective component (feeling with) and a cognitive one (understanding the perspective)."] },
+    { pt: ["Estereótipo", "Crença generalizada sobre as características de um grupo, aplicada aos seus membros individuais — mesmo quando não se ajusta."], en: ["Stereotype", "A generalised belief about the characteristics of a group, applied to its individual members — even when it does not fit."] },
+    { pt: ["Extroversão / Introversão", "Dimensão da personalidade ligada à origem da energia: os extrovertidos recarregam com estimulação social, os introvertidos com tempo próprio."], en: ["Extraversion / Introversion", "A personality dimension linked to the source of energy: extraverts recharge through social stimulation, introverts through time alone."] },
+    { pt: ["Flow (fluxo)", "Estado de imersão total numa actividade desafiante mas exequível: o tempo desaparece e a acção flui. Descrito por Csikszentmihalyi."], en: ["Flow", "A state of total immersion in a challenging but doable activity: time disappears and action flows. Described by Csikszentmihalyi."] },
+    { pt: ["Gratificação adiada", "Capacidade de resistir a uma recompensa imediata em troca de uma maior no futuro — famosa pelo «teste do marshmallow»."], en: ["Delayed gratification", "The ability to resist an immediate reward in exchange for a bigger one later — famous from the \"marshmallow test\"."] },
+    { pt: ["Habituação", "Diminuição gradual da resposta a um estímulo repetido — a razão por que deixamos de ouvir o relógio a trabalhar."], en: ["Habituation", "The gradual decrease in response to a repeated stimulus — the reason we stop hearing the clock ticking."] },
+    { pt: ["Heurística", "Atalho mental que permite decidir depressa com pouca informação. Quase sempre útil; ocasionalmente, a origem dos vieses."], en: ["Heuristic", "A mental shortcut that allows fast decisions with little information. Almost always useful; occasionally, the origin of biases."] },
+    { pt: ["Inteligência emocional", "Capacidade de reconhecer, compreender e gerir emoções — as próprias e as dos outros. Proposta por Salovey e Mayer, popularizada por Goleman."], en: ["Emotional intelligence", "The ability to recognise, understand and manage emotions — one's own and other people's. Proposed by Salovey and Mayer, popularised by Goleman."] },
+    { pt: ["Locus de controlo", "Grau em que atribuímos o que nos acontece a causas internas («depende de mim») ou externas («depende da sorte, dos outros»)."], en: ["Locus of control", "The degree to which we attribute what happens to us to internal causes (\"it depends on me\") or external ones (\"it depends on luck, on others\")."] },
+    { pt: ["Mecanismos de defesa", "Estratégias inconscientes para reduzir a angústia: negação, projecção, racionalização, repressão. Conceito da psicanálise ainda usado na clínica."], en: ["Defence mechanisms", "Unconscious strategies to reduce distress: denial, projection, rationalisation, repression. A psychoanalytic concept still used clinically."] },
+    { pt: ["Memória de trabalho", "Sistema que mantém e manipula informação durante segundos — o «bloco de notas» mental onde fazemos contas de cabeça. Capacidade muito limitada."], en: ["Working memory", "The system that holds and manipulates information for seconds — the mental \"notepad\" where we do sums in our head. Very limited capacity."] },
+    { pt: ["Metacognição", "Pensar sobre o próprio pensamento: saber o que se sabe, notar quando não se está a perceber, escolher estratégias para aprender melhor."], en: ["Metacognition", "Thinking about one's own thinking: knowing what you know, noticing when you are not understanding, choosing strategies to learn better."] },
+    { pt: ["Mindfulness (atenção plena)", "Atenção deliberada ao momento presente, sem julgamento. Prática com efeitos demonstrados na redução de stress e na regulação emocional."], en: ["Mindfulness", "Deliberate, non-judgemental attention to the present moment. A practice with demonstrated effects on stress reduction and emotional regulation."] },
+    { pt: ["Neuroplasticidade", "Capacidade do cérebro de se reorganizar com a experiência — criar e reforçar ligações ao longo de toda a vida, não só na infância."], en: ["Neuroplasticity", "The brain's capacity to reorganise itself with experience — creating and strengthening connections throughout life, not just in childhood."] },
+    { pt: ["Neurotransmissor", "Mensageiro químico que transmite sinais entre neurónios: dopamina, serotonina, GABA, glutamato, entre dezenas de outros."], en: ["Neurotransmitter", "A chemical messenger that carries signals between neurons: dopamine, serotonin, GABA, glutamate, among dozens of others."] },
+    { pt: ["Procrastinação", "Adiamento voluntário de uma tarefa apesar de sabermos que sairemos a perder. A investigação mostra que é um problema de regulação emocional, não de preguiça."], en: ["Procrastination", "Voluntarily postponing a task although we know we will lose out. Research shows it is a problem of emotion regulation, not laziness."] },
+    { pt: ["Psicologia positiva", "Ramo que estuda cientificamente o bem-estar, as forças pessoais e o que faz a vida valer a pena. Fundado por Seligman em 1998."], en: ["Positive psychology", "The branch that scientifically studies wellbeing, personal strengths and what makes life worth living. Founded by Seligman in 1998."] },
+    { pt: ["Reforço", "Qualquer consequência que aumenta a probabilidade de um comportamento se repetir — positivo (ganhar algo bom) ou negativo (livrar-se de algo mau)."], en: ["Reinforcement", "Any consequence that increases the probability of a behaviour repeating — positive (gaining something good) or negative (removing something bad)."] },
+    { pt: ["Resiliência", "Capacidade de adaptação positiva perante adversidade. Não é uma armadura fixa: constrói-se com apoio social, sentido e experiência."], en: ["Resilience", "The capacity for positive adaptation in the face of adversity. It is not fixed armour: it is built through social support, meaning and experience."] },
+    { pt: ["Ruminação", "Repetição improdutiva dos mesmos pensamentos negativos, sem chegar a soluções. Factor de risco para depressão e ansiedade."], en: ["Rumination", "The unproductive repetition of the same negative thoughts, without reaching solutions. A risk factor for depression and anxiety."] },
+    { pt: ["Serotonina", "Neurotransmissor envolvido na regulação do humor, do sono e do apetite. Alvo dos antidepressivos mais comuns (ISRS)."], en: ["Serotonin", "A neurotransmitter involved in regulating mood, sleep and appetite. The target of the most common antidepressants (SSRIs)."] },
+    { pt: ["Síndrome do impostor", "Sensação persistente de ser uma fraude prestes a ser descoberta, apesar de provas objectivas de competência. Muito comum em meios exigentes."], en: ["Impostor syndrome", "The persistent feeling of being a fraud about to be exposed, despite objective evidence of competence. Very common in demanding environments."] },
+    { pt: ["Sistema límbico", "Conjunto de estruturas cerebrais (amígdala, hipocampo, hipotálamo...) central no processamento emocional e na memória."], en: ["Limbic system", "A set of brain structures (amygdala, hippocampus, hypothalamus...) central to emotional processing and memory."] },
+    { pt: ["Terapia cognitivo-comportamental", "Família de psicoterapias centrada na relação entre pensamentos, emoções e comportamentos. Das abordagens com maior apoio empírico."], en: ["Cognitive-behavioural therapy", "A family of psychotherapies focused on the relationship between thoughts, emotions and behaviours. Among the approaches with the strongest empirical support."] },
+    { pt: ["Viés cognitivo", "Desvio sistemático e previsível do julgamento racional, produzido pelos atalhos mentais. Catalogados às centenas desde Kahneman e Tversky."], en: ["Cognitive bias", "A systematic, predictable deviation from rational judgement, produced by mental shortcuts. Catalogued in the hundreds since Kahneman and Tversky."] },
+    { pt: ["Vinculação", "Laço emocional profundo com figuras significativas, formado na infância e reflectido nas relações adultas. Teoria de Bowlby e Ainsworth."], en: ["Attachment", "A deep emotional bond with significant figures, formed in childhood and reflected in adult relationships. Bowlby and Ainsworth's theory."] }
+  ];
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  function norm(s) {
+    return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
+  function render() {
+    var q = norm($("search").value.trim());
+    var lang = PL.lang;
+    var other = lang === "pt" ? "en" : "pt";
+    var list = TERMS.slice().sort(function (a, b) {
+      return a[lang][0].localeCompare(b[lang][0], lang);
+    });
+    var html = "";
+    var shown = 0;
+    list.forEach(function (t) {
+      var hay = norm(t.pt[0] + " " + t.pt[1] + " " + t.en[0] + " " + t.en[1]);
+      if (q && hay.indexOf(q) < 0) return;
+      shown++;
+      html += "<div class='term'><h3>" + t[lang][0] +
+        " <span class='alt-lang'>· " + t[other][0] + "</span></h3>" +
+        "<p>" + t[lang][1] + "</p></div>";
+    });
+    $("terms").innerHTML = html;
+    $("count-line").textContent = shown ? shown + PL.t("count.showing") : PL.t("count.none");
+  }
+
+  $("search").addEventListener("input", render);
+  document.addEventListener("pl:ready", render);
+  PL.onLang(render);
+})();
+</script>
+</body>
+</html>

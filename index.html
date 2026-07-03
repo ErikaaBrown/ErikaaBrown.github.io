@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PsicoLab — Explora a tua mente</title>
+<meta name="description" content="Testes, ferramentas e jogos interactivos de psicologia, em português e inglês. Interactive psychology tests, tools and games.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container">
+
+  <section class="hero">
+    <span class="kicker" data-i18n="hero.kicker"></span>
+    <h1 data-i18n="hero.title"></h1>
+    <p class="lead" data-i18n="hero.lead"></p>
+    <div class="hero-cta">
+      <a class="btn" href="#tests" data-i18n="hero.cta1"></a>
+      <a class="btn btn-ghost" href="#tools" data-i18n="hero.cta2"></a>
+    </div>
+  </section>
+
+  <section id="tests">
+    <div class="section-head">
+      <h2 data-i18n="s.tests"></h2>
+      <span class="sub" data-i18n="s.tests.sub"></span>
+    </div>
+    <div class="cards">
+      <a class="card" href="tests/big-five.html">
+        <span class="icon">🧭</span>
+        <h3 data-i18n="bf.t"></h3>
+        <p data-i18n="bf.d"></p>
+        <span class="meta"><span class="chip" data-i18n="bf.m1"></span><span class="chip" data-i18n="bf.m2"></span></span>
+      </a>
+      <a class="card" href="tests/attachment.html">
+        <span class="icon">🤝</span>
+        <h3 data-i18n="at.t"></h3>
+        <p data-i18n="at.d"></p>
+        <span class="meta"><span class="chip" data-i18n="at.m1"></span><span class="chip" data-i18n="at.m2"></span></span>
+      </a>
+      <a class="card" href="tests/eq.html">
+        <span class="icon">💛</span>
+        <h3 data-i18n="eq.t"></h3>
+        <p data-i18n="eq.d"></p>
+        <span class="meta"><span class="chip" data-i18n="eq.m1"></span><span class="chip" data-i18n="eq.m2"></span></span>
+      </a>
+      <a class="card" href="tests/stress.html">
+        <span class="icon">🌡️</span>
+        <h3 data-i18n="st.t"></h3>
+        <p data-i18n="st.d"></p>
+        <span class="meta"><span class="chip" data-i18n="st.m1"></span><span class="chip" data-i18n="st.m2"></span></span>
+      </a>
+    </div>
+  </section>
+
+  <section id="tools">
+    <div class="section-head">
+      <h2 data-i18n="s.tools"></h2>
+      <span class="sub" data-i18n="s.tools.sub"></span>
+    </div>
+    <div class="cards">
+      <a class="card" href="tools/mood.html">
+        <span class="icon">📔</span>
+        <h3 data-i18n="md.t"></h3>
+        <p data-i18n="md.d"></p>
+        <span class="meta"><span class="chip" data-i18n="chip.daily"></span></span>
+      </a>
+      <a class="card" href="tools/thoughts.html">
+        <span class="icon">💭</span>
+        <h3 data-i18n="th.t"></h3>
+        <p data-i18n="th.d"></p>
+        <span class="meta"><span class="chip" data-i18n="chip.cbt"></span></span>
+      </a>
+      <a class="card" href="tools/breathing.html">
+        <span class="icon">🌬️</span>
+        <h3 data-i18n="br.t"></h3>
+        <p data-i18n="br.d"></p>
+        <span class="meta"><span class="chip" data-i18n="chip.calm"></span></span>
+      </a>
+      <a class="card" href="tools/meditation.html">
+        <span class="icon">🧘</span>
+        <h3 data-i18n="me.t"></h3>
+        <p data-i18n="me.d"></p>
+        <span class="meta"><span class="chip" data-i18n="chip.calm"></span></span>
+      </a>
+      <a class="card" href="tools/gratitude.html">
+        <span class="icon">🙏</span>
+        <h3 data-i18n="gr.t"></h3>
+        <p data-i18n="gr.d"></p>
+        <span class="meta"><span class="chip" data-i18n="chip.daily"></span></span>
+      </a>
+      <a class="card" href="tools/habits.html">
+        <span class="icon">✅</span>
+        <h3 data-i18n="hb.t"></h3>
+        <p data-i18n="hb.d"></p>
+        <span class="meta"><span class="chip" data-i18n="chip.daily"></span></span>
+      </a>
+    </div>
+  </section>
+
+  <section id="games">
+    <div class="section-head">
+      <h2 data-i18n="s.games"></h2>
+      <span class="sub" data-i18n="s.games.sub"></span>
+    </div>
+    <div class="cards">
+      <a class="card" href="games/stroop.html">
+        <span class="icon">🎨</span>
+        <h3 data-i18n="sp.t"></h3>
+        <p data-i18n="sp.d"></p>
+        <span class="meta"><span class="chip" data-i18n="chip.classic"></span><span class="chip" data-i18n="chip.1min"></span></span>
+      </a>
+      <a class="card" href="games/reaction.html">
+        <span class="icon">⚡</span>
+        <h3 data-i18n="rt.t"></h3>
+        <p data-i18n="rt.d"></p>
+        <span class="meta"><span class="chip" data-i18n="chip.1min"></span></span>
+      </a>
+      <a class="card" href="games/emotions.html">
+        <span class="icon">🎭</span>
+        <h3 data-i18n="em.t"></h3>
+        <p data-i18n="em.d"></p>
+        <span class="meta"><span class="chip" data-i18n="chip.12r"></span></span>
+      </a>
+      <a class="card" href="games/biases.html">
+        <span class="icon">🪞</span>
+        <h3 data-i18n="bi.t"></h3>
+        <p data-i18n="bi.d"></p>
+        <span class="meta"><span class="chip" data-i18n="chip.10r"></span></span>
+      </a>
+      <a class="card" href="games/dilemma.html">
+        <span class="icon">⚖️</span>
+        <h3 data-i18n="dl.t"></h3>
+        <p data-i18n="dl.d"></p>
+        <span class="meta"><span class="chip" data-i18n="chip.strategy"></span></span>
+      </a>
+      <a class="card" href="games/adventure.html">
+        <span class="icon">🗺️</span>
+        <h3 data-i18n="ad.t"></h3>
+        <p data-i18n="ad.d"></p>
+        <span class="meta"><span class="chip" data-i18n="chip.story"></span></span>
+      </a>
+    </div>
+  </section>
+
+  <section id="learn">
+    <div class="section-head">
+      <h2 data-i18n="s.learn"></h2>
+      <span class="sub" data-i18n="s.learn.sub"></span>
+    </div>
+    <div class="cards">
+      <a class="card" href="learn/glossary.html">
+        <span class="icon">📖</span>
+        <h3 data-i18n="gl.t"></h3>
+        <p data-i18n="gl.d"></p>
+        <span class="meta"><span class="chip" data-i18n="chip.40t"></span></span>
+      </a>
+      <a class="card" href="learn/timeline.html">
+        <span class="icon">🕰️</span>
+        <h3 data-i18n="tl.t"></h3>
+        <p data-i18n="tl.d"></p>
+        <span class="meta"><span class="chip" data-i18n="chip.history"></span></span>
+      </a>
+      <a class="card" href="learn/articles.html">
+        <span class="icon">📰</span>
+        <h3 data-i18n="ar.t"></h3>
+        <p data-i18n="ar.d"></p>
+        <span class="meta"><span class="chip" data-i18n="chip.reads"></span></span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "",
+  section: "home",
+  i18n: {
+    pt: {
+      "hero.kicker": "Psicologia interactiva",
+      "hero.title": "Explora a tua mente.",
+      "hero.lead": "Testes, ferramentas e jogos para descobrires como pensas, sentes e decides — com base na ciência psicológica.",
+      "hero.cta1": "Fazer um teste",
+      "hero.cta2": "Explorar ferramentas",
+      "s.tests": "Testes", "s.tests.sub": "Auto-conhecimento com base científica",
+      "s.tools": "Ferramentas", "s.tools.sub": "Pequenas práticas, grandes efeitos",
+      "s.games": "Jogos", "s.games.sub": "Aprender a brincar",
+      "s.learn": "Aprender", "s.learn.sub": "Para mentes curiosas",
+      "bf.t": "Personalidade Big Five",
+      "bf.d": "Os cinco grandes traços: abertura, conscienciosidade, extroversão, amabilidade e neuroticismo.",
+      "bf.m1": "25 perguntas", "bf.m2": "≈ 6 min",
+      "at.t": "Estilo de Vinculação",
+      "at.d": "Como te ligas aos outros nas relações próximas: seguro, ansioso, evitante ou receoso.",
+      "at.m1": "12 perguntas", "at.m2": "≈ 3 min",
+      "eq.t": "Inteligência Emocional",
+      "eq.d": "Como reconheces, compreendes e geres emoções — as tuas e as dos outros.",
+      "eq.m1": "16 perguntas", "eq.m2": "≈ 4 min",
+      "st.t": "Termómetro de Stress",
+      "st.d": "Qual tem sido o teu nível de stress percebido no último mês?",
+      "st.m1": "10 perguntas", "st.m2": "≈ 3 min",
+      "md.t": "Diário Emocional",
+      "md.d": "Regista o teu humor de cada dia e observa padrões ao longo do tempo num gráfico.",
+      "th.t": "Registo de Pensamentos",
+      "th.d": "Técnica da terapia cognitivo-comportamental para reestruturar pensamentos difíceis.",
+      "br.t": "Respiração Guiada",
+      "br.d": "Box breathing, 4-7-8 e respiração coerente, com uma animação para acompanhares.",
+      "me.t": "Temporizador de Meditação",
+      "me.d": "Sessões de silêncio com sino de início e fim. Simples e sem distracções.",
+      "gr.t": "Diário de Gratidão",
+      "gr.d": "Três coisas boas por dia. Um hábito pequeno com efeitos comprovados.",
+      "hb.t": "Rastreador de Hábitos",
+      "hb.d": "Acompanha hábitos diários e mantém a tua sequência viva.",
+      "sp.t": "Teste de Stroop",
+      "sp.d": "Diz a cor, ignora a palavra. Mais difícil do que parece.",
+      "rt.t": "Tempo de Reacção",
+      "rt.d": "Quão depressa consegues reagir? Mede os teus reflexos.",
+      "em.t": "Reconhecer Emoções",
+      "em.d": "Consegues ler emoções em caras e em situações do dia-a-dia?",
+      "bi.t": "Quiz de Vieses Cognitivos",
+      "bi.d": "Descobre as armadilhas do teu próprio pensamento.",
+      "dl.t": "Dilema do Prisioneiro",
+      "dl.d": "Cooperar ou trair? Joga contra estratégias clássicas da teoria dos jogos.",
+      "ad.t": "A Grande Apresentação",
+      "ad.d": "Uma história interactiva sobre stress, escolhas e formas de lidar com uma semana difícil.",
+      "gl.t": "Glossário",
+      "gl.d": "Dezenas de termos de psicologia explicados, em português e inglês.",
+      "tl.t": "Cronologia da Psicologia",
+      "tl.d": "De Wundt a Kahneman: os marcos que fizeram a psicologia.",
+      "ar.t": "Artigos",
+      "ar.d": "Leituras curtas sobre a mente, mitos e bem-estar.",
+      "chip.daily": "Uso diário", "chip.cbt": "TCC", "chip.calm": "Relaxamento",
+      "chip.classic": "Clássico", "chip.1min": "≈ 1 min", "chip.12r": "12 rondas",
+      "chip.10r": "10 cenários", "chip.strategy": "Estratégia", "chip.story": "História",
+      "chip.40t": "40+ termos", "chip.history": "História", "chip.reads": "4 artigos"
+    },
+    en: {
+      "hero.kicker": "Interactive psychology",
+      "hero.title": "Explore your mind.",
+      "hero.lead": "Tests, tools and games to discover how you think, feel and decide — grounded in psychological science.",
+      "hero.cta1": "Take a test",
+      "hero.cta2": "Explore tools",
+      "s.tests": "Tests", "s.tests.sub": "Science-based self-knowledge",
+      "s.tools": "Tools", "s.tools.sub": "Small practices, big effects",
+      "s.games": "Games", "s.games.sub": "Learning through play",
+      "s.learn": "Learn", "s.learn.sub": "For curious minds",
+      "bf.t": "Big Five Personality",
+      "bf.d": "The five major traits: openness, conscientiousness, extraversion, agreeableness and neuroticism.",
+      "bf.m1": "25 questions", "bf.m2": "≈ 6 min",
+      "at.t": "Attachment Style",
+      "at.d": "How you connect to others in close relationships: secure, anxious, avoidant or fearful.",
+      "at.m1": "12 questions", "at.m2": "≈ 3 min",
+      "eq.t": "Emotional Intelligence",
+      "eq.d": "How you recognise, understand and manage emotions — yours and other people's.",
+      "eq.m1": "16 questions", "eq.m2": "≈ 4 min",
+      "st.t": "Stress Thermometer",
+      "st.d": "How high has your perceived stress been over the last month?",
+      "st.m1": "10 questions", "st.m2": "≈ 3 min",
+      "md.t": "Mood Diary",
+      "md.d": "Log your mood each day and watch patterns emerge over time in a chart.",
+      "th.t": "Thought Record",
+      "th.d": "A cognitive-behavioural therapy technique for reframing difficult thoughts.",
+      "br.t": "Guided Breathing",
+      "br.d": "Box breathing, 4-7-8 and coherent breathing, with an animation to follow.",
+      "me.t": "Meditation Timer",
+      "me.d": "Silent sessions with a start and end bell. Simple and distraction-free.",
+      "gr.t": "Gratitude Journal",
+      "gr.d": "Three good things a day. A tiny habit with proven effects.",
+      "hb.t": "Habit Tracker",
+      "hb.d": "Track daily habits and keep your streak alive.",
+      "sp.t": "Stroop Test",
+      "sp.d": "Name the colour, ignore the word. Harder than it sounds.",
+      "rt.t": "Reaction Time",
+      "rt.d": "How fast can you react? Measure your reflexes.",
+      "em.t": "Reading Emotions",
+      "em.d": "Can you read emotions in faces and everyday situations?",
+      "bi.t": "Cognitive Bias Quiz",
+      "bi.d": "Discover the traps in your own thinking.",
+      "dl.t": "Prisoner's Dilemma",
+      "dl.d": "Cooperate or defect? Play against classic game-theory strategies.",
+      "ad.t": "The Big Presentation",
+      "ad.d": "An interactive story about stress, choices and coping with a hard week.",
+      "gl.t": "Glossary",
+      "gl.d": "Dozens of psychology terms explained, in Portuguese and English.",
+      "tl.t": "Timeline of Psychology",
+      "tl.d": "From Wundt to Kahneman: the milestones that made psychology.",
+      "ar.t": "Articles",
+      "ar.d": "Short reads on the mind, myths and wellbeing.",
+      "chip.daily": "Daily use", "chip.cbt": "CBT", "chip.calm": "Relaxation",
+      "chip.classic": "Classic", "chip.1min": "≈ 1 min", "chip.12r": "12 rounds",
+      "chip.10r": "10 scenarios", "chip.strategy": "Strategy", "chip.story": "Story",
+      "chip.40t": "40+ terms", "chip.history": "History", "chip.reads": "4 articles"
+    }
+  }
+};
+</script>
+<script src="js/app.js"></script>
+</body>
+</html>

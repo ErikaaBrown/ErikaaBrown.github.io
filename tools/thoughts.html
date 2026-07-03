@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registo de Pensamentos · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>💭 <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section class="panel panel-soft">
+    <p data-i18n="model.p" style="margin:0"></p>
+  </section>
+
+  <section class="panel">
+    <h3 style="margin-top:0" data-i18n="form.title"></h3>
+
+    <label class="field-label" for="f-sit"><span data-i18n="f.sit"></span></label>
+    <textarea id="f-sit" data-i18n-ph="f.sit.ph" style="min-height:64px"></textarea>
+
+    <label class="field-label" for="f-thought"><span data-i18n="f.thought"></span></label>
+    <textarea id="f-thought" data-i18n-ph="f.thought.ph" style="min-height:64px"></textarea>
+
+    <label class="field-label" for="f-emo"><span data-i18n="f.emo"></span></label>
+    <input type="text" id="f-emo" data-i18n-ph="f.emo.ph">
+    <label class="field-label"><span data-i18n="f.int1"></span> <strong id="int1-val">70</strong>%</label>
+    <input type="range" id="f-int1" min="0" max="100" value="70">
+
+    <label class="field-label" for="f-for"><span data-i18n="f.for"></span></label>
+    <textarea id="f-for" data-i18n-ph="f.for.ph" style="min-height:64px"></textarea>
+
+    <label class="field-label" for="f-against"><span data-i18n="f.against"></span></label>
+    <textarea id="f-against" data-i18n-ph="f.against.ph" style="min-height:64px"></textarea>
+
+    <label class="field-label" for="f-alt"><span data-i18n="f.alt"></span></label>
+    <textarea id="f-alt" data-i18n-ph="f.alt.ph" style="min-height:64px"></textarea>
+
+    <label class="field-label"><span data-i18n="f.int2"></span> <strong id="int2-val">40</strong>%</label>
+    <input type="range" id="f-int2" min="0" max="100" value="40">
+
+    <div class="center mt-2">
+      <button class="btn" id="btn-save" data-i18n="btn.save"></button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h3 style="margin-top:0" data-i18n="dist.title"></h3>
+    <p class="small muted" data-i18n="dist.sub"></p>
+    <div id="distortions"></div>
+  </section>
+
+  <section id="history-section">
+    <h2 data-i18n="hist.title"></h2>
+    <div id="history"></div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tools",
+  i18n: {
+    pt: {
+      "page.title": "Registo de Pensamentos",
+      "crumb": "Ferramentas",
+      "intro.lead": "Uma técnica central da terapia cognitivo-comportamental: examinar um pensamento difícil como um cientista examina uma hipótese.",
+      "model.p": "💡 O modelo cognitivo diz que não são as situações que nos perturbam directamente, mas a interpretação que fazemos delas. Entre a situação e a emoção há sempre um pensamento — e os pensamentos podem ser examinados, testados e reformulados.",
+      "form.title": "Novo registo",
+      "f.sit": "1 · A situação",
+      "f.sit.ph": "O que aconteceu? Onde, quando, com quem?",
+      "f.thought": "2 · O pensamento automático",
+      "f.thought.ph": "O que te passou pela cabeça nesse momento? («Vou falhar», «Ninguém gosta de mim»...)",
+      "f.emo": "3 · A emoção",
+      "f.emo.ph": "ansiedade, vergonha, raiva, tristeza...",
+      "f.int1": "Intensidade da emoção:",
+      "f.for": "4 · Provas a favor do pensamento",
+      "f.for.ph": "Que factos concretos apoiam este pensamento?",
+      "f.against": "5 · Provas contra o pensamento",
+      "f.against.ph": "Que factos o contradizem? O que dirias a um amigo na mesma situação?",
+      "f.alt": "6 · Pensamento alternativo, mais equilibrado",
+      "f.alt.ph": "Tendo em conta todas as provas, qual é uma leitura mais justa da situação?",
+      "f.int2": "Intensidade da emoção agora:",
+      "btn.save": "Guardar registo",
+      "saved": "Registo guardado 🌿",
+      "fill.req": "Preenche pelo menos a situação e o pensamento",
+      "dist.title": "Distorções cognitivas frequentes",
+      "dist.sub": "Reconheces alguma no teu pensamento automático?",
+      "hist.title": "Registos anteriores",
+      "del.confirm": "Apagar este registo?",
+      "before": "antes", "after": "depois"
+    },
+    en: {
+      "page.title": "Thought Record",
+      "crumb": "Tools",
+      "intro.lead": "A core technique of cognitive-behavioural therapy: examining a difficult thought the way a scientist examines a hypothesis.",
+      "model.p": "💡 The cognitive model says that situations do not disturb us directly — our interpretation of them does. Between the situation and the emotion there is always a thought — and thoughts can be examined, tested and reworded.",
+      "form.title": "New record",
+      "f.sit": "1 · The situation",
+      "f.sit.ph": "What happened? Where, when, with whom?",
+      "f.thought": "2 · The automatic thought",
+      "f.thought.ph": "What went through your mind at that moment? (\"I'll fail\", \"Nobody likes me\"...)",
+      "f.emo": "3 · The emotion",
+      "f.emo.ph": "anxiety, shame, anger, sadness...",
+      "f.int1": "Emotion intensity:",
+      "f.for": "4 · Evidence for the thought",
+      "f.for.ph": "What concrete facts support this thought?",
+      "f.against": "5 · Evidence against the thought",
+      "f.against.ph": "What facts contradict it? What would you tell a friend in the same situation?",
+      "f.alt": "6 · Alternative, more balanced thought",
+      "f.alt.ph": "Considering all the evidence, what is a fairer reading of the situation?",
+      "f.int2": "Emotion intensity now:",
+      "btn.save": "Save record",
+      "saved": "Record saved 🌿",
+      "fill.req": "Fill in at least the situation and the thought",
+      "dist.title": "Common cognitive distortions",
+      "dist.sub": "Do you recognise any of them in your automatic thought?",
+      "hist.title": "Previous records",
+      "del.confirm": "Delete this record?",
+      "before": "before", "after": "after"
+    }
+  }
+};
+</script>
+<script src="../js/app.js"></script>
+<script>
+(function () {
+  var DISTORTIONS = [
+    { e: "⚫⚪", pt: ["Tudo-ou-nada", "Ver as coisas em categorias absolutas: ou é perfeito ou é um fracasso."], en: ["All-or-nothing", "Seeing things in absolute categories: either it is perfect or it is a failure."] },
+    { e: "🌪️", pt: ["Catastrofização", "Assumir que vai acontecer o pior cenário possível — e que não vais aguentar."], en: ["Catastrophising", "Assuming the worst possible scenario will happen — and that you will not cope."] },
+    { e: "🔮", pt: ["Leitura de mentes", "Ter a certeza do que os outros estão a pensar de ti, sem provas."], en: ["Mind reading", "Being certain of what others are thinking about you, without evidence."] },
+    { e: "🌍", pt: ["Generalização excessiva", "Transformar um caso isolado numa regra universal: «correu mal uma vez, corre sempre mal»."], en: ["Overgeneralisation", "Turning one isolated event into a universal rule: \"it went wrong once, it always goes wrong\"."] },
+    { e: "🥅", pt: ["Filtro mental", "Focar apenas no pormenor negativo e ignorar tudo o resto que correu bem."], en: ["Mental filter", "Focusing only on the negative detail and ignoring everything else that went well."] },
+    { e: "🏷️", pt: ["Rotulagem", "Colar um rótulo global a ti próprio a partir de um erro: «sou um desastre»."], en: ["Labelling", "Sticking a global label on yourself based on one mistake: \"I'm a disaster\"."] }
+  ];
+
+  var $ = function (id) { return document.getElementById(id); };
+  var entries = PL.load("thoughts", []);
+
+  function renderDistortions() {
+    var html = "";
+    DISTORTIONS.forEach(function (d) {
+      var c = d[PL.lang];
+      html += "<div class='interp'><h3>" + d.e + " " + c[0] + "</h3><p>" + c[1] + "</p></div>";
+    });
+    $("distortions").innerHTML = html;
+  }
+
+  function renderHistory() {
+    var html = "";
+    entries.slice().reverse().forEach(function (e, ri) {
+      var i = entries.length - 1 - ri;
+      var delta = e.int1 - e.int2;
+      var deltaBadge = delta > 0
+        ? "<span class='chip' style='background:var(--brand-soft);color:var(--brand-ink)'>−" + delta + "%</span>"
+        : "";
+      html += "<div class='entry'><div class='entry-head'>" +
+        "<span class='entry-date'>" + PL.fmtDate(e.date) + "</span>" +
+        "<span class='chip'>" + PL.esc(e.emo || "—") + " " + e.int1 + "% → " + e.int2 + "%</span>" + deltaBadge +
+        "<button class='del' data-i='" + i + "'>🗑️</button></div>" +
+        "<p style='margin:10px 0 4px'><strong>💭</strong> " + PL.esc(e.thought) + "</p>" +
+        (e.alt ? "<p style='margin:0;color:var(--brand-ink)'><strong>🌱</strong> " + PL.esc(e.alt) + "</p>" : "") +
+        "<p class='small muted' style='margin:8px 0 0'>" + PL.esc(e.sit) + "</p>" +
+        "</div>";
+    });
+    $("history").innerHTML = html;
+    $("history").querySelectorAll(".del").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (confirm(PL.t("del.confirm"))) {
+          entries.splice(parseInt(b.getAttribute("data-i"), 10), 1);
+          PL.store("thoughts", entries);
+          renderHistory();
+        }
+      });
+    });
+  }
+
+  $("f-int1").addEventListener("input", function () { $("int1-val").textContent = this.value; });
+  $("f-int2").addEventListener("input", function () { $("int2-val").textContent = this.value; });
+
+  $("btn-save").addEventListener("click", function () {
+    var sit = $("f-sit").value.trim();
+    var thought = $("f-thought").value.trim();
+    if (!sit || !thought) { PL.toast(PL.t("fill.req")); return; }
+    entries.push({
+      date: PL.todayISO(),
+      sit: sit,
+      thought: thought,
+      emo: $("f-emo").value.trim(),
+      int1: parseInt($("f-int1").value, 10),
+      evFor: $("f-for").value.trim(),
+      evAgainst: $("f-against").value.trim(),
+      alt: $("f-alt").value.trim(),
+      int2: parseInt($("f-int2").value, 10)
+    });
+    PL.store("thoughts", entries);
+    ["f-sit", "f-thought", "f-emo", "f-for", "f-against", "f-alt"].forEach(function (id) { $(id).value = ""; });
+    PL.toast(PL.t("saved"));
+    renderHistory();
+    window.scrollTo({ top: document.getElementById("history-section").offsetTop - 80, behavior: "smooth" });
+  });
+
+  document.addEventListener("pl:ready", function () { renderDistortions(); renderHistory(); });
+  PL.onLang(function () { renderDistortions(); renderHistory(); });
+})();
+</script>
+</body>
+</html>

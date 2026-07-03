@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rastreador de Hábitos · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>✅ <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section class="panel">
+    <h3 style="margin-top:0" data-i18n="add.title"></h3>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+      <div style="flex:1;min-width:220px">
+        <label class="field-label" for="new-name" data-i18n="add.name"></label>
+        <input type="text" id="new-name" data-i18n-ph="add.ph" maxlength="40">
+      </div>
+      <div>
+        <label class="field-label" for="new-emoji" data-i18n="add.icon"></label>
+        <select id="new-emoji" style="width:84px;font-size:1.2rem">
+          <option>💧</option><option>📚</option><option>🏃</option><option>🧘</option>
+          <option>😴</option><option>🥗</option><option>☀️</option><option>✍️</option>
+          <option>💪</option><option>🚭</option><option>📵</option><option>🌿</option>
+        </select>
+      </div>
+      <button class="btn" id="btn-add" data-i18n="btn.add"></button>
+    </div>
+    <p class="small muted" data-i18n="add.hint" style="margin-top:10px"></p>
+  </section>
+
+  <section class="panel">
+    <div style="overflow-x:auto">
+      <table class="habit-table" id="grid"></table>
+    </div>
+    <p class="small muted hidden" id="empty-msg" data-i18n="empty"></p>
+  </section>
+
+  <section class="panel panel-soft">
+    <p style="margin:0" data-i18n="why.p"></p>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tools",
+  i18n: {
+    pt: {
+      "page.title": "Rastreador de Hábitos",
+      "crumb": "Ferramentas",
+      "intro.lead": "Marca os teus hábitos dia a dia. Ver a sequência crescer é, por si só, um dos motivadores mais fortes que existem.",
+      "add.title": "Novo hábito",
+      "add.name": "Nome",
+      "add.ph": "ex.: Beber 1,5 L de água",
+      "add.icon": "Ícone",
+      "btn.add": "Adicionar",
+      "add.hint": "Dica: formula o hábito pela positiva («ler 10 páginas») e liga-o a uma rotina que já existe («depois do café da manhã»).",
+      "empty": "Ainda não tens hábitos — adiciona o primeiro acima. Começa por um só: pequeno e fácil de cumprir.",
+      "col.habit": "Hábito",
+      "col.streak": "Sequência",
+      "added": "Hábito adicionado 🌱",
+      "name.req": "Dá um nome ao hábito",
+      "del.confirm": "Apagar este hábito e todo o seu histórico?",
+      "why.p": "🔬 Porque funciona: os hábitos formam-se por repetição num contexto estável — em média 66 dias, segundo o estudo de Lally (2010), e não os míticos 21. Falhar um dia não estraga nada: o que conta é a tendência. A regra de ouro é «nunca falhar duas vezes seguidas»."
+    },
+    en: {
+      "page.title": "Habit Tracker",
+      "crumb": "Tools",
+      "intro.lead": "Tick off your habits day by day. Watching the streak grow is, by itself, one of the strongest motivators there is.",
+      "add.title": "New habit",
+      "add.name": "Name",
+      "add.ph": "e.g.: Drink 1.5 L of water",
+      "add.icon": "Icon",
+      "btn.add": "Add",
+      "add.hint": "Tip: phrase the habit positively (\"read 10 pages\") and attach it to an existing routine (\"after morning coffee\").",
+      "empty": "No habits yet — add your first one above. Start with just one: small and easy to keep.",
+      "col.habit": "Habit",
+      "col.streak": "Streak",
+      "added": "Habit added 🌱",
+      "name.req": "Give the habit a name",
+      "del.confirm": "Delete this habit and all its history?",
+      "why.p": "🔬 Why it works: habits form through repetition in a stable context — on average 66 days according to Lally's study (2010), not the mythical 21. Missing one day ruins nothing: what counts is the trend. The golden rule is \"never miss twice in a row\"."
+    }
+  }
+};
+</script>
+<script src="../js/app.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var habits = PL.load("habits", []);
+
+  function isoDaysAgo(n) {
+    var d = new Date();
+    d.setDate(d.getDate() - n);
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
+
+  function streakOf(h) {
+    var s = 0;
+    for (var i = 0; ; i++) {
+      if (h.c[isoDaysAgo(i)]) s++;
+      else if (i === 0) continue;
+      else break;
+    }
+    return s;
+  }
+
+  function render() {
+    var grid = $("grid");
+    $("empty-msg").classList.toggle("hidden", habits.length > 0);
+    if (!habits.length) { grid.innerHTML = ""; return; }
+
+    var days = [];
+    for (var i = 6; i >= 0; i--) days.push(isoDaysAgo(i));
+    var locale = PL.lang === "pt" ? "pt-PT" : "en-GB";
+
+    var head = "<tr><th style='text-align:left'>" + PL.t("col.habit") + "</th>";
+    days.forEach(function (iso) {
+      var d = new Date(iso + "T12:00:00");
+      var wd = d.toLocaleDateString(locale, { weekday: "short" }).replace(".", "");
+      head += "<th>" + wd + "<br>" + d.getDate() + "</th>";
+    });
+    head += "<th>" + PL.t("col.streak") + "</th><th></th></tr>";
+
+    var rows = "";
+    habits.forEach(function (h, hi) {
+      rows += "<tr><td class='habit-name'>" + h.e + " " + PL.esc(h.n) + "</td>";
+      days.forEach(function (iso) {
+        var on = h.c[iso] ? " on" : "";
+        rows += "<td><button class='check-cell" + on + "' data-h='" + hi + "' data-iso='" + iso + "'>" + (h.c[iso] ? "✓" : "") + "</button></td>";
+      });
+      var st = streakOf(h);
+      rows += "<td><span class='streak-flame'>" + (st > 0 ? "🔥 " + st : "—") + "</span></td>";
+      rows += "<td><button class='del' data-del='" + hi + "' style='background:none;border:none;cursor:pointer;color:var(--ink-3)'>🗑️</button></td></tr>";
+    });
+
+    grid.innerHTML = head + rows;
+
+    grid.querySelectorAll(".check-cell").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var h = habits[parseInt(b.getAttribute("data-h"), 10)];
+        var iso = b.getAttribute("data-iso");
+        if (h.c[iso]) delete h.c[iso]; else h.c[iso] = 1;
+        PL.store("habits", habits);
+        render();
+      });
+    });
+    grid.querySelectorAll("[data-del]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (confirm(PL.t("del.confirm"))) {
+          habits.splice(parseInt(b.getAttribute("data-del"), 10), 1);
+          PL.store("habits", habits);
+          render();
+        }
+      });
+    });
+  }
+
+  $("btn-add").addEventListener("click", function () {
+    var name = $("new-name").value.trim();
+    if (!name) { PL.toast(PL.t("name.req")); return; }
+    habits.push({ n: name, e: $("new-emoji").value, c: {} });
+    PL.store("habits", habits);
+    $("new-name").value = "";
+    PL.toast(PL.t("added"));
+    render();
+  });
+  $("new-name").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") $("btn-add").click();
+  });
+
+  document.addEventListener("pl:ready", render);
+  PL.onLang(render);
+})();
+</script>
+</body>
+</html>

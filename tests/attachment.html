@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estilo de Vinculação · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>🤝 <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section id="panel-intro" class="panel">
+    <p data-i18n="intro.p1"></p>
+    <p data-i18n="intro.p2"></p>
+    <div class="notice" data-i18n-html="intro.notice"></div>
+    <div class="center mt-2">
+      <button class="btn" id="btn-start" data-i18n="btn.start"></button>
+    </div>
+  </section>
+
+  <section id="panel-quiz" class="panel hidden">
+    <div class="progress-track"><div class="progress-fill" id="pfill" style="width:0%"></div></div>
+    <p class="small muted" id="qcount"></p>
+    <p class="quiz-q" id="qtext"></p>
+    <div class="likert" id="likert"></div>
+    <div class="scale-hints">
+      <span data-i18n="lk.1"></span>
+      <span data-i18n="lk.5"></span>
+    </div>
+    <div class="quiz-nav">
+      <button class="btn btn-ghost btn-sm" id="btn-back" data-i18n="btn.back"></button>
+      <span></span>
+    </div>
+  </section>
+
+  <section id="panel-result" class="hidden">
+    <div class="panel">
+      <h2 style="margin-top:0" data-i18n="res.title"></h2>
+      <p class="muted" id="dominant-line"></p>
+      <div id="bars"></div>
+    </div>
+    <div class="panel" id="interp"></div>
+    <div class="notice" data-i18n-html="res.notice"></div>
+    <div class="center mt-2">
+      <button class="btn btn-ghost" id="btn-retake" data-i18n="btn.retake"></button>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tests",
+  i18n: {
+    pt: {
+      "page.title": "Estilo de Vinculação",
+      "crumb": "Testes",
+      "intro.lead": "A teoria da vinculação descreve os padrões com que nos ligamos às pessoas mais próximas — padrões que começam na infância e ecoam na vida adulta.",
+      "intro.p1": "Responde a 12 afirmações sobre como te costumas sentir nas relações próximas (amorosas, de amizade ou familiares). Indica até que ponto cada frase te descreve.",
+      "intro.p2": "No fim verás o teu perfil nos quatro estilos: seguro, ansioso, evitante e receoso.",
+      "intro.notice": "<strong>Lembra-te:</strong> os estilos de vinculação são tendências, não rótulos. Mudam com a experiência e com relações seguras — a chamada «segurança conquistada».",
+      "btn.start": "Começar o teste",
+      "btn.back": "← Anterior",
+      "btn.retake": "Repetir o teste",
+      "lk.1": "Nada a ver comigo",
+      "lk.5": "Sou mesmo eu",
+      "res.title": "O teu perfil de vinculação",
+      "res.dominant": "Estilo predominante: ",
+      "res.notice": "<strong>Nota:</strong> quase toda a gente tem traços de vários estilos. O que importa é reconhecer padrões — e saber que podem evoluir.",
+      "tip.label": "Pista de crescimento"
+    },
+    en: {
+      "page.title": "Attachment Style",
+      "crumb": "Tests",
+      "intro.lead": "Attachment theory describes the patterns we use to bond with the people closest to us — patterns that begin in childhood and echo into adult life.",
+      "intro.p1": "Respond to 12 statements about how you usually feel in close relationships (romantic, friendship or family). Indicate how well each sentence describes you.",
+      "intro.p2": "At the end you will see your profile across the four styles: secure, anxious, avoidant and fearful.",
+      "intro.notice": "<strong>Remember:</strong> attachment styles are tendencies, not labels. They change with experience and with secure relationships — so-called \"earned security\".",
+      "btn.start": "Start the test",
+      "btn.back": "← Previous",
+      "btn.retake": "Retake the test",
+      "lk.1": "Not me at all",
+      "lk.5": "That's exactly me",
+      "res.title": "Your attachment profile",
+      "res.dominant": "Predominant style: ",
+      "res.notice": "<strong>Note:</strong> almost everyone has traits of several styles. What matters is recognising patterns — and knowing they can evolve.",
+      "tip.label": "Growth hint"
+    }
+  }
+};
+</script>
+<script src="../js/app.js"></script>
+<script>
+(function () {
+  var STYLES = [
+    { pt: "Seguro", en: "Secure", emoji: "🌳",
+      desc: { pt: "Sentes-te confortável com a proximidade e com a autonomia. Consegues pedir apoio, dar apoio e falar de conflitos abertamente, sem medo de perder a relação.",
+              en: "You feel comfortable with both closeness and autonomy. You can ask for support, give support and talk about conflict openly, without fearing the loss of the relationship." },
+      tip: { pt: "Continua a cultivar o que já fazes bem: comunicação directa e disponibilidade emocional.",
+             en: "Keep nurturing what you already do well: direct communication and emotional availability." } },
+    { pt: "Ansioso", en: "Anxious", emoji: "🌊",
+      desc: { pt: "Desejas muita proximidade e temes a rejeição. Tendes a procurar confirmação frequente de que és importante para os outros, e o silêncio deles inquieta-te.",
+              en: "You crave closeness and fear rejection. You tend to seek frequent reassurance that you matter to others, and their silence unsettles you." },
+      tip: { pt: "Treina a auto-tranquilização e o pedir directamente aquilo de que precisas, em vez de testar os outros.",
+             en: "Practise self-soothing and asking directly for what you need, instead of testing others." } },
+    { pt: "Evitante", en: "Avoidant", emoji: "🏔️",
+      desc: { pt: "Valorizas muito a independência e a auto-suficiência. A proximidade excessiva desconforta-te e tendes a guardar os sentimentos para ti.",
+              en: "You highly value independence and self-sufficiency. Too much closeness makes you uncomfortable and you tend to keep feelings to yourself." },
+      tip: { pt: "Experimenta pequenos passos de vulnerabilidade: partilhar algo pessoal com alguém de confiança não anula a tua autonomia.",
+             en: "Try small steps of vulnerability: sharing something personal with someone you trust does not cancel your autonomy." } },
+    { pt: "Receoso", en: "Fearful", emoji: "🌗",
+      desc: { pt: "Queres relações próximas mas custa-te confiar, por isso oscilas entre aproximar-te e afastar-te. É o estilo mais associado a experiências relacionais difíceis.",
+              en: "You want close relationships but find it hard to trust, so you swing between approaching and pulling away. It is the style most associated with difficult relational experiences." },
+      tip: { pt: "Construir confiança previsível, devagar, ajuda muito — e este é o padrão em que o acompanhamento psicológico costuma fazer mais diferença.",
+             en: "Building predictable trust, slowly, helps a lot — and this is the pattern where psychological support tends to make the biggest difference." } }
+  ];
+
+  var ITEMS = [
+    { s: 0, pt: "Sinto-me confortável a depender dos outros e a que dependam de mim.", en: "I feel comfortable depending on others and having them depend on me." },
+    { s: 1, pt: "Preocupa-me que as pessoas de quem gosto não gostem tanto de mim.", en: "I worry that the people I care about do not care about me as much." },
+    { s: 2, pt: "Prefiro não depender de ninguém, nem que dependam de mim.", en: "I prefer not to depend on anyone, nor to have anyone depend on me." },
+    { s: 3, pt: "Quero relações próximas, mas custa-me confiar totalmente.", en: "I want close relationships, but I find it hard to trust completely." },
+    { s: 0, pt: "É-me fácil aproximar-me emocionalmente das pessoas.", en: "It is easy for me to get emotionally close to people." },
+    { s: 1, pt: "Preciso de muita confirmação de que sou importante para os outros.", en: "I need a lot of reassurance that I matter to others." },
+    { s: 2, pt: "Sinto-me desconfortável quando alguém se aproxima demasiado.", en: "I feel uncomfortable when someone gets too close." },
+    { s: 3, pt: "Tenho medo de me magoar se me aproximar demasiado de alguém.", en: "I am afraid of getting hurt if I get too close to someone." },
+    { s: 0, pt: "Não me preocupo muito com a possibilidade de ser abandonado.", en: "I do not worry much about being abandoned." },
+    { s: 1, pt: "Fico inquieto quando alguém próximo demora a responder-me.", en: "I get restless when someone close takes a long time to reply." },
+    { s: 2, pt: "Guardo os meus sentimentos para mim.", en: "I keep my feelings to myself." },
+    { s: 3, pt: "As relações próximas deixam-me dividido: quero-as e evito-as ao mesmo tempo.", en: "Close relationships leave me torn: I want them and avoid them at the same time." }
+  ];
+
+  var LIKERT = {
+    pt: ["Nada a ver comigo", "Pouco", "Mais ou menos", "Bastante", "Sou mesmo eu"],
+    en: ["Not me at all", "A little", "Somewhat", "Quite a lot", "Exactly me"]
+  };
+
+  var answers = new Array(ITEMS.length).fill(0);
+  var idx = 0;
+  var state = "intro";
+  var $ = function (id) { return document.getElementById(id); };
+
+  function show(panel) {
+    $("panel-intro").classList.toggle("hidden", panel !== "intro");
+    $("panel-quiz").classList.toggle("hidden", panel !== "quiz");
+    $("panel-result").classList.toggle("hidden", panel !== "result");
+    state = panel;
+  }
+
+  function renderQuestion() {
+    var item = ITEMS[idx];
+    $("qtext").textContent = item[PL.lang];
+    $("qcount").textContent = (idx + 1) + " / " + ITEMS.length;
+    $("pfill").style.width = (idx / ITEMS.length * 100) + "%";
+    var lk = $("likert");
+    lk.innerHTML = "";
+    LIKERT[PL.lang].forEach(function (label, i) {
+      var b = document.createElement("button");
+      b.innerHTML = "<span style='display:block;font-size:1.15rem;font-weight:800'>" + (i + 1) + "</span>" + label;
+      if (answers[idx] === i + 1) b.classList.add("sel");
+      b.addEventListener("click", function () {
+        answers[idx] = i + 1;
+        b.classList.add("sel");
+        setTimeout(function () {
+          if (idx < ITEMS.length - 1) { idx++; renderQuestion(); }
+          else { finish(); }
+        }, 220);
+      });
+      lk.appendChild(b);
+    });
+    $("btn-back").disabled = idx === 0;
+  }
+
+  function scores() {
+    var sums = [0, 0, 0, 0];
+    ITEMS.forEach(function (item, i) { sums[item.s] += answers[i]; });
+    return sums.map(function (s) { return Math.round((s - 3) / 12 * 100); });
+  }
+
+  function renderResult(sc) {
+    var maxI = sc.indexOf(Math.max.apply(null, sc));
+    var st = STYLES[maxI];
+    $("dominant-line").innerHTML = PL.t("res.dominant") + "<strong>" + st.emoji + " " + st[PL.lang] + "</strong>";
+    var bars = "";
+    sc.forEach(function (v, i) {
+      var s = STYLES[i];
+      var hl = i === maxI ? " style='color:var(--brand-ink)'" : "";
+      bars += "<div class='rbar'><div class='rbar-head'><span" + hl + ">" + s.emoji + " " + s[PL.lang] + "</span><span class='val'>" + v + "%</span></div>" +
+        "<div class='track'><div class='fill' style='width:" + v + "%'></div></div></div>";
+    });
+    $("bars").innerHTML = bars;
+    $("interp").innerHTML =
+      "<div class='interp'><h3>" + st.emoji + " " + st[PL.lang] + "</h3><p>" + st.desc[PL.lang] + "</p></div>" +
+      "<p class='small muted' style='margin:14px 0 0'><strong>💡 " + PL.t("tip.label") + ":</strong> " + st.tip[PL.lang] + "</p>";
+  }
+
+  function finish() {
+    $("pfill").style.width = "100%";
+    renderResult(scores());
+    show("result");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  $("btn-start").addEventListener("click", function () {
+    answers.fill(0); idx = 0; show("quiz"); renderQuestion();
+  });
+  $("btn-back").addEventListener("click", function () {
+    if (idx > 0) { idx--; renderQuestion(); }
+  });
+  $("btn-retake").addEventListener("click", function () {
+    answers.fill(0); idx = 0; show("quiz"); renderQuestion();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  PL.onLang(function () {
+    if (state === "quiz") renderQuestion();
+    if (state === "result") renderResult(scores());
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inteligência Emocional · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>💛 <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section id="panel-intro" class="panel">
+    <p data-i18n="intro.p1"></p>
+    <p data-i18n="intro.p2"></p>
+    <div class="notice" data-i18n-html="intro.notice"></div>
+    <div class="center mt-2">
+      <button class="btn" id="btn-start" data-i18n="btn.start"></button>
+    </div>
+  </section>
+
+  <section id="panel-quiz" class="panel hidden">
+    <div class="progress-track"><div class="progress-fill" id="pfill" style="width:0%"></div></div>
+    <p class="small muted" id="qcount"></p>
+    <p class="quiz-q" id="qtext"></p>
+    <div class="likert" id="likert"></div>
+    <div class="scale-hints">
+      <span data-i18n="lk.1"></span>
+      <span data-i18n="lk.5"></span>
+    </div>
+    <div class="quiz-nav">
+      <button class="btn btn-ghost btn-sm" id="btn-back" data-i18n="btn.back"></button>
+      <span></span>
+    </div>
+  </section>
+
+  <section id="panel-result" class="hidden">
+    <div class="panel">
+      <h2 style="margin-top:0" data-i18n="res.title"></h2>
+      <div class="tiles">
+        <div class="tile"><div class="num" id="total-num"></div><div class="lbl" data-i18n="res.total"></div></div>
+      </div>
+      <p id="band-text" class="muted"></p>
+      <div id="bars"></div>
+    </div>
+    <div class="panel" id="focus"></div>
+    <div class="notice" data-i18n-html="res.notice"></div>
+    <div class="center mt-2">
+      <button class="btn btn-ghost" id="btn-retake" data-i18n="btn.retake"></button>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tests",
+  i18n: {
+    pt: {
+      "page.title": "Inteligência Emocional",
+      "crumb": "Testes",
+      "intro.lead": "A inteligência emocional é a capacidade de reconhecer, compreender e gerir emoções — as tuas e as das outras pessoas.",
+      "intro.p1": "Responde a 16 afirmações sobre como lidas com emoções no dia-a-dia. Indica com que frequência cada frase se aplica a ti.",
+      "intro.p2": "O resultado cobre quatro domínios: auto-consciência, auto-regulação, consciência social e gestão de relações.",
+      "intro.notice": "<strong>Lembra-te:</strong> ao contrário do QI, a inteligência emocional treina-se — e melhora com prática deliberada em qualquer idade.",
+      "btn.start": "Começar o teste",
+      "btn.back": "← Anterior",
+      "btn.retake": "Repetir o teste",
+      "lk.1": "Quase nunca",
+      "lk.5": "Quase sempre",
+      "res.title": "O teu resultado",
+      "res.total": "Pontuação global",
+      "band.dev": "Em desenvolvimento — há bastante espaço para crescer, e a boa notícia é que estas competências respondem muito bem ao treino.",
+      "band.solid": "Sólida — tens uma base boa; o próximo salto está em trabalhar o teu domínio mais fraco.",
+      "band.strong": "Forte — lidas muito bem com o mundo emocional; continua a usar essas competências de forma consciente.",
+      "focus.title": "Onde focar",
+      "focus.strong": "Ponto forte",
+      "focus.weak": "Área a desenvolver",
+      "res.notice": "<strong>Nota:</strong> auto-avaliações de inteligência emocional medem a tua percepção, que nem sempre coincide com a competência real. Pedir feedback a quem te conhece bem é um óptimo complemento."
+    },
+    en: {
+      "page.title": "Emotional Intelligence",
+      "crumb": "Tests",
+      "intro.lead": "Emotional intelligence is the ability to recognise, understand and manage emotions — your own and other people's.",
+      "intro.p1": "Respond to 16 statements about how you deal with emotions in everyday life. Indicate how often each sentence applies to you.",
+      "intro.p2": "The result covers four domains: self-awareness, self-regulation, social awareness and relationship management.",
+      "intro.notice": "<strong>Remember:</strong> unlike IQ, emotional intelligence is trainable — and improves with deliberate practice at any age.",
+      "btn.start": "Start the test",
+      "btn.back": "← Previous",
+      "btn.retake": "Retake the test",
+      "lk.1": "Almost never",
+      "lk.5": "Almost always",
+      "res.title": "Your result",
+      "res.total": "Overall score",
+      "band.dev": "Developing — there is plenty of room to grow, and the good news is that these skills respond very well to training.",
+      "band.solid": "Solid — you have a good base; the next leap lies in working on your weakest domain.",
+      "band.strong": "Strong — you handle the emotional world very well; keep using those skills consciously.",
+      "focus.title": "Where to focus",
+      "focus.strong": "Strength",
+      "focus.weak": "Area to develop",
+      "res.notice": "<strong>Note:</strong> self-assessments of emotional intelligence measure your perception, which does not always match actual skill. Asking for feedback from people who know you well is a great complement."
+    }
+  }
+};
+</script>
+<script src="../js/app.js"></script>
+<script>
+(function () {
+  var DOMAINS = [
+    { emoji: "🔍", pt: "Auto-consciência", en: "Self-awareness",
+      tip: { pt: "Experimenta nomear as tuas emoções por escrito — o Diário Emocional aqui do site ajuda. Pôr sentimentos em palavras reduz a sua intensidade.",
+             en: "Try naming your emotions in writing — the Mood Diary on this site helps. Putting feelings into words lowers their intensity." } },
+    { emoji: "🛞", pt: "Auto-regulação", en: "Self-regulation",
+      tip: { pt: "Técnicas de respiração (como a 4-7-8, na secção Ferramentas) criam o espaço entre o estímulo e a resposta.",
+             en: "Breathing techniques (like 4-7-8, in the Tools section) create the space between stimulus and response." } },
+    { emoji: "🫶", pt: "Consciência social", en: "Social awareness",
+      tip: { pt: "Nas próximas conversas, tenta resumir o que a outra pessoa disse antes de responderes — escuta activa treina empatia.",
+             en: "In your next conversations, try summarising what the other person said before replying — active listening trains empathy." } },
+    { emoji: "🌉", pt: "Gestão de relações", en: "Relationship management",
+      tip: { pt: "Usa frases na primeira pessoa («eu sinto que...») em vez de acusações («tu fazes sempre...») nas conversas difíceis.",
+             en: "Use first-person sentences (\"I feel that...\") instead of accusations (\"you always...\") in difficult conversations." } }
+  ];
+
+  var ITEMS = [
+    { d: 0, r: false, pt: "Consigo identificar o que estou a sentir no momento em que o sinto.", en: "I can identify what I am feeling at the moment I feel it." },
+    { d: 1, r: false, pt: "Mantenho a calma em situações de tensão.", en: "I stay calm in tense situations." },
+    { d: 2, r: false, pt: "Apercebo-me facilmente do estado de espírito das pessoas à minha volta.", en: "I easily pick up on the mood of people around me." },
+    { d: 3, r: false, pt: "Consigo resolver conflitos de forma que ambas as partes fiquem bem.", en: "I can resolve conflicts in a way that leaves both sides okay." },
+    { d: 0, r: false, pt: "Percebo como as minhas emoções influenciam as minhas decisões.", en: "I understand how my emotions influence my decisions." },
+    { d: 1, r: false, pt: "Quando estou irritado, consigo esperar antes de responder.", en: "When I am irritated, I can wait before responding." },
+    { d: 2, r: false, pt: "Consigo pôr-me no lugar dos outros, mesmo quando discordo deles.", en: "I can put myself in others' shoes, even when I disagree with them." },
+    { d: 3, r: false, pt: "As pessoas procuram-me quando precisam de desabafar.", en: "People come to me when they need to vent." },
+    { d: 0, r: false, pt: "Reconheço os meus pontos fortes e as minhas limitações.", en: "I recognise my strengths and my limitations." },
+    { d: 1, r: false, pt: "Recupero depressa de emoções negativas.", en: "I recover quickly from negative emotions." },
+    { d: 2, r: false, pt: "Noto sinais não verbais — tom de voz, postura, expressões.", en: "I notice non-verbal cues — tone of voice, posture, expressions." },
+    { d: 3, r: false, pt: "Consigo dar feedback difícil sem ferir a outra pessoa.", en: "I can give difficult feedback without hurting the other person." },
+    { d: 0, r: true,  pt: "Dou por mim a reagir sem perceber porquê.", en: "I catch myself reacting without understanding why." },
+    { d: 1, r: true,  pt: "Digo coisas de que me arrependo quando estou zangado.", en: "I say things I regret when I am angry." },
+    { d: 2, r: true,  pt: "Custa-me perceber porque é que as pessoas se chateiam comigo.", en: "I struggle to understand why people get upset with me." },
+    { d: 3, r: true,  pt: "Evito conversas difíceis mesmo quando são necessárias.", en: "I avoid difficult conversations even when they are necessary." }
+  ];
+
+  var LIKERT = {
+    pt: ["Quase nunca", "Raramente", "Às vezes", "Muitas vezes", "Quase sempre"],
+    en: ["Almost never", "Rarely", "Sometimes", "Often", "Almost always"]
+  };
+
+  var answers = new Array(ITEMS.length).fill(0);
+  var idx = 0;
+  var state = "intro";
+  var $ = function (id) { return document.getElementById(id); };
+
+  function show(panel) {
+    $("panel-intro").classList.toggle("hidden", panel !== "intro");
+    $("panel-quiz").classList.toggle("hidden", panel !== "quiz");
+    $("panel-result").classList.toggle("hidden", panel !== "result");
+    state = panel;
+  }
+
+  function renderQuestion() {
+    var item = ITEMS[idx];
+    $("qtext").textContent = item[PL.lang];
+    $("qcount").textContent = (idx + 1) + " / " + ITEMS.length;
+    $("pfill").style.width = (idx / ITEMS.length * 100) + "%";
+    var lk = $("likert");
+    lk.innerHTML = "";
+    LIKERT[PL.lang].forEach(function (label, i) {
+      var b = document.createElement("button");
+      b.innerHTML = "<span style='display:block;font-size:1.15rem;font-weight:800'>" + (i + 1) + "</span>" + label;
+      if (answers[idx] === i + 1) b.classList.add("sel");
+      b.addEventListener("click", function () {
+        answers[idx] = i + 1;
+        b.classList.add("sel");
+        setTimeout(function () {
+          if (idx < ITEMS.length - 1) { idx++; renderQuestion(); }
+          else { finish(); }
+        }, 220);
+      });
+      lk.appendChild(b);
+    });
+    $("btn-back").disabled = idx === 0;
+  }
+
+  function scores() {
+    var sums = [0, 0, 0, 0];
+    ITEMS.forEach(function (item, i) {
+      var v = answers[i];
+      if (item.r) v = 6 - v;
+      sums[item.d] += v;
+    });
+    return sums.map(function (s) { return Math.round((s - 4) / 16 * 100); });
+  }
+
+  function renderResult(sc) {
+    var total = Math.round(sc.reduce(function (a, b) { return a + b; }, 0) / 4);
+    $("total-num").textContent = total + "%";
+    var bandKey = total < 45 ? "band.dev" : total <= 70 ? "band.solid" : "band.strong";
+    $("band-text").textContent = PL.t(bandKey);
+
+    var bars = "";
+    sc.forEach(function (v, i) {
+      var d = DOMAINS[i];
+      bars += "<div class='rbar'><div class='rbar-head'><span>" + d.emoji + " " + d[PL.lang] + "</span><span class='val'>" + v + "%</span></div>" +
+        "<div class='track'><div class='fill' style='width:" + v + "%'></div></div></div>";
+    });
+    $("bars").innerHTML = bars;
+
+    var maxI = sc.indexOf(Math.max.apply(null, sc));
+    var minI = sc.indexOf(Math.min.apply(null, sc));
+    $("focus").innerHTML =
+      "<h3 style='margin-top:0'>" + PL.t("focus.title") + "</h3>" +
+      "<div class='interp'><h3>💪 " + PL.t("focus.strong") + ": " + DOMAINS[maxI][PL.lang] + "</h3></div>" +
+      "<div class='interp'><h3>🌱 " + PL.t("focus.weak") + ": " + DOMAINS[minI][PL.lang] + "</h3>" +
+      "<p>" + DOMAINS[minI].tip[PL.lang] + "</p></div>";
+  }
+
+  function finish() {
+    $("pfill").style.width = "100%";
+    renderResult(scores());
+    show("result");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  $("btn-start").addEventListener("click", function () {
+    answers.fill(0); idx = 0; show("quiz"); renderQuestion();
+  });
+  $("btn-back").addEventListener("click", function () {
+    if (idx > 0) { idx--; renderQuestion(); }
+  });
+  $("btn-retake").addEventListener("click", function () {
+    answers.fill(0); idx = 0; show("quiz"); renderQuestion();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  PL.onLang(function () {
+    if (state === "quiz") renderQuestion();
+    if (state === "result") renderResult(scores());
+  });
+})();
+</script>
+</body>
+</html>

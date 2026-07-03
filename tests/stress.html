@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Termómetro de Stress · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>🌡️ <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section id="panel-intro" class="panel">
+    <p data-i18n="intro.p1"></p>
+    <div class="notice" data-i18n-html="intro.notice"></div>
+    <div class="center mt-2">
+      <button class="btn" id="btn-start" data-i18n="btn.start"></button>
+    </div>
+  </section>
+
+  <section id="panel-quiz" class="panel hidden">
+    <div class="progress-track"><div class="progress-fill" id="pfill" style="width:0%"></div></div>
+    <p class="small muted" id="qcount"></p>
+    <p class="small muted" data-i18n="quiz.frame"></p>
+    <p class="quiz-q" id="qtext"></p>
+    <div class="likert" id="likert"></div>
+    <div class="quiz-nav">
+      <button class="btn btn-ghost btn-sm" id="btn-back" data-i18n="btn.back"></button>
+      <span></span>
+    </div>
+  </section>
+
+  <section id="panel-result" class="hidden">
+    <div class="panel center">
+      <h2 style="margin-top:0" data-i18n="res.title"></h2>
+      <div class="chart-wrap" id="gauge-wrap" style="max-width:420px;margin:0 auto"></div>
+      <p id="badge-line"></p>
+      <p id="band-text" class="muted" style="max-width:560px;margin:10px auto 0;text-align:left"></p>
+    </div>
+    <div class="panel" id="suggestions"></div>
+    <div class="notice" data-i18n-html="res.notice"></div>
+    <div class="center mt-2">
+      <button class="btn btn-ghost" id="btn-retake" data-i18n="btn.retake"></button>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tests",
+  i18n: {
+    pt: {
+      "page.title": "Termómetro de Stress",
+      "crumb": "Testes",
+      "intro.lead": "O stress percebido é a medida em que sentes a tua vida como imprevisível, incontrolável e sobrecarregada.",
+      "intro.p1": "Vais responder a 10 perguntas sobre como te sentiste durante o último mês. Indica com que frequência cada situação aconteceu. Responde depressa e com sinceridade — a primeira resposta costuma ser a mais fiel.",
+      "intro.notice": "<strong>Importante:</strong> este termómetro é apenas indicativo. Não mede ansiedade clínica nem burnout, e não substitui uma avaliação profissional.",
+      "btn.start": "Começar",
+      "btn.back": "← Anterior",
+      "btn.retake": "Repetir",
+      "quiz.frame": "No último mês...",
+      "res.title": "O teu nível de stress percebido",
+      "res.notice": "<strong>Se o stress te está a pesar:</strong> falar com um psicólogo faz diferença. Em Portugal podes começar pela linha SNS 24 — 808 24 24 24 (opção de aconselhamento psicológico).",
+      "band.low": "Nível baixo. O último mês parece ter estado em equilíbrio: sentiste que tinhas controlo sobre o essencial. Continua a proteger os hábitos que te dão estabilidade.",
+      "band.mod": "Nível moderado. Há alguma pressão acumulada — nada de invulgar, mas vale a pena olhar para o que a está a causar antes que cresça.",
+      "band.high": "Nível elevado. O último mês foi exigente e a sensação de sobrecarga é significativa. Prioriza activamente a recuperação: sono, pausas e apoio.",
+      "band.vhigh": "Nível muito elevado. Sentes pouco controlo e muita sobrecarga há semanas. Isto merece atenção a sério — e idealmente uma conversa com um profissional.",
+      "lbl.low": "Baixo", "lbl.mod": "Moderado", "lbl.high": "Elevado", "lbl.vhigh": "Muito elevado",
+      "sug.title": "O que costuma ajudar",
+      "sug.1": "🛌 Protege o sono: é a base da regulação emocional.",
+      "sug.2": "🌬️ Experimenta a Respiração Guiada aqui do site — 3 minutos chegam para acalmar o sistema nervoso.",
+      "sug.3": "🚶 Movimento regular, mesmo que leve: caminhar 20 minutos já reduz cortisol.",
+      "sug.4": "🗣️ Fala com alguém de confiança — pôr o stress em palavras alivia-o.",
+      "sug.5": "📋 Divide o que te sobrecarrega em passos pequenos e concretos.",
+      "sug.pro": "🤝 Se este nível se mantém há semanas, considera procurar apoio profissional — não é fraqueza, é estratégia."
+    },
+    en: {
+      "page.title": "Stress Thermometer",
+      "crumb": "Tests",
+      "intro.lead": "Perceived stress is the degree to which you experience your life as unpredictable, uncontrollable and overloaded.",
+      "intro.p1": "You will answer 10 questions about how you felt during the last month. Indicate how often each situation happened. Answer quickly and honestly — the first answer is usually the truest.",
+      "intro.notice": "<strong>Important:</strong> this thermometer is indicative only. It does not measure clinical anxiety or burnout, and does not replace a professional assessment.",
+      "btn.start": "Start",
+      "btn.back": "← Previous",
+      "btn.retake": "Retake",
+      "quiz.frame": "In the last month...",
+      "res.title": "Your perceived stress level",
+      "res.notice": "<strong>If stress is weighing on you:</strong> talking to a psychologist makes a difference. Reach out to a local mental-health helpline or your doctor to get started.",
+      "band.low": "Low level. The last month seems to have been in balance: you felt in control of what matters. Keep protecting the habits that give you stability.",
+      "band.mod": "Moderate level. Some pressure has built up — nothing unusual, but it is worth looking at what is causing it before it grows.",
+      "band.high": "High level. The last month was demanding and the sense of overload is significant. Actively prioritise recovery: sleep, breaks and support.",
+      "band.vhigh": "Very high level. You have felt little control and a lot of overload for weeks. This deserves serious attention — ideally a conversation with a professional.",
+      "lbl.low": "Low", "lbl.mod": "Moderate", "lbl.high": "High", "lbl.vhigh": "Very high",
+      "sug.title": "What usually helps",
+      "sug.1": "🛌 Protect your sleep: it is the foundation of emotional regulation.",
+      "sug.2": "🌬️ Try the Guided Breathing on this site — 3 minutes are enough to calm the nervous system.",
+      "sug.3": "🚶 Regular movement, even light: a 20-minute walk already lowers cortisol.",
+      "sug.4": "🗣️ Talk to someone you trust — putting stress into words relieves it.",
+      "sug.5": "📋 Break what overwhelms you into small, concrete steps.",
+      "sug.pro": "🤝 If this level has lasted for weeks, consider seeking professional support — it is not weakness, it is strategy."
+    }
+  }
+};
+</script>
+<script src="../js/app.js"></script>
+<script>
+(function () {
+  var ITEMS = [
+    { r: false, pt: "...senti-me nervoso ou em stress.", en: "...I felt nervous or stressed." },
+    { r: false, pt: "...senti que não conseguia controlar as coisas importantes da minha vida.", en: "...I felt unable to control the important things in my life." },
+    { r: true,  pt: "...senti confiança na minha capacidade de resolver problemas pessoais.", en: "...I felt confident in my ability to handle personal problems." },
+    { r: true,  pt: "...senti que as coisas estavam a correr como eu queria.", en: "...I felt that things were going my way." },
+    { r: false, pt: "...senti que as dificuldades se acumulavam tanto que não as conseguia ultrapassar.", en: "...I felt difficulties piling up so high I could not overcome them." },
+    { r: false, pt: "...irritei-me com coisas fora do meu controlo.", en: "...I got upset over things outside my control." },
+    { r: true,  pt: "...consegui gerir bem o meu tempo e as minhas prioridades.", en: "...I managed my time and priorities well." },
+    { r: false, pt: "...dormi mal por causa de preocupações.", en: "...I slept badly because of worries." },
+    { r: true,  pt: "...consegui relaxar no meu tempo livre.", en: "...I was able to relax in my free time." },
+    { r: false, pt: "...senti-me sobrecarregado com tudo o que tinha para fazer.", en: "...I felt overloaded by everything I had to do." }
+  ];
+
+  var FREQ = {
+    pt: ["Nunca", "Quase nunca", "Às vezes", "Frequentemente", "Muito frequentemente"],
+    en: ["Never", "Almost never", "Sometimes", "Often", "Very often"]
+  };
+
+  var BANDS = [
+    { max: 13, key: "low",   color: "var(--good)",     icon: "✅" },
+    { max: 19, key: "mod",   color: "var(--warn)",     icon: "⚠️" },
+    { max: 26, key: "high",  color: "var(--serious)",  icon: "🔶" },
+    { max: 40, key: "vhigh", color: "var(--critical)", icon: "❗" }
+  ];
+
+  var answers = new Array(ITEMS.length).fill(-1);
+  var idx = 0;
+  var state = "intro";
+  var $ = function (id) { return document.getElementById(id); };
+
+  function show(panel) {
+    $("panel-intro").classList.toggle("hidden", panel !== "intro");
+    $("panel-quiz").classList.toggle("hidden", panel !== "quiz");
+    $("panel-result").classList.toggle("hidden", panel !== "result");
+    state = panel;
+  }
+
+  function renderQuestion() {
+    var item = ITEMS[idx];
+    $("qtext").textContent = item[PL.lang];
+    $("qcount").textContent = (idx + 1) + " / " + ITEMS.length;
+    $("pfill").style.width = (idx / ITEMS.length * 100) + "%";
+    var lk = $("likert");
+    lk.innerHTML = "";
+    FREQ[PL.lang].forEach(function (label, i) {
+      var b = document.createElement("button");
+      b.textContent = label;
+      if (answers[idx] === i) b.classList.add("sel");
+      b.addEventListener("click", function () {
+        answers[idx] = i;
+        b.classList.add("sel");
+        setTimeout(function () {
+          if (idx < ITEMS.length - 1) { idx++; renderQuestion(); }
+          else { finish(); }
+        }, 220);
+      });
+      lk.appendChild(b);
+    });
+    $("btn-back").disabled = idx === 0;
+  }
+
+  function score() {
+    var s = 0;
+    ITEMS.forEach(function (item, i) {
+      s += item.r ? 4 - answers[i] : answers[i];
+    });
+    return s;
+  }
+
+  function bandOf(s) {
+    for (var i = 0; i < BANDS.length; i++) if (s <= BANDS[i].max) return BANDS[i];
+    return BANDS[BANDS.length - 1];
+  }
+
+  function gauge(s) {
+    var cx = 210, cy = 200, R = 150, W = 26;
+    function pol(frac) {
+      var a = Math.PI + frac * Math.PI;
+      return [cx + R * Math.cos(a), cy + R * Math.sin(a)];
+    }
+    function arc(f0, f1, color) {
+      var p0 = pol(f0), p1 = pol(f1);
+      var large = (f1 - f0) > 0.5 ? 1 : 0;
+      return "<path d='M" + p0[0] + " " + p0[1] + " A" + R + " " + R + " 0 " + large + " 1 " + p1[0] + " " + p1[1] +
+        "' fill='none' style='stroke:" + color + "' stroke-width='" + W + "'/>";
+    }
+    var gap = 0.008;
+    var stops = [0, 13.5 / 40, 19.5 / 40, 26.5 / 40, 1];
+    var arcs = "";
+    BANDS.forEach(function (b, i) {
+      arcs += arc(stops[i] + (i ? gap : 0), stops[i + 1] - (i < 3 ? gap : 0), b.color);
+    });
+    var f = Math.max(0.01, Math.min(0.99, s / 40));
+    var tip = pol(f);
+    var innerR = R - W / 2 - 12;
+    var a = Math.PI + f * Math.PI;
+    var base = [cx + innerR * Math.cos(a), cy + innerR * Math.sin(a)];
+    var needle = "<line x1='" + base[0] + "' y1='" + base[1] + "' x2='" + tip[0] + "' y2='" + tip[1] +
+      "' style='stroke:var(--ink)' stroke-width='4' stroke-linecap='round'/>";
+    return "<svg viewBox='0 0 420 240' role='img' aria-label='Gauge'>" + arcs + needle +
+      "<text x='" + cx + "' y='" + (cy - 30) + "' text-anchor='middle' font-size='52' font-weight='800' style='fill:var(--ink)'>" + s + "</text>" +
+      "<text x='" + cx + "' y='" + (cy - 4) + "' text-anchor='middle' font-size='14' style='fill:var(--ink-3)'>/ 40</text>" +
+      "<text x='" + (cx - R) + "' y='" + (cy + 26) + "' text-anchor='middle' font-size='12' style='fill:var(--ink-3)'>0</text>" +
+      "<text x='" + (cx + R) + "' y='" + (cy + 26) + "' text-anchor='middle' font-size='12' style='fill:var(--ink-3)'>40</text>" +
+      "</svg>";
+  }
+
+  function renderResult() {
+    var s = score();
+    var b = bandOf(s);
+    $("gauge-wrap").innerHTML = gauge(s);
+    $("badge-line").innerHTML = "<span class='status-badge'>" + b.icon + " <span style='color:" + b.color + "'>" + PL.t("lbl." + b.key) + "</span></span>";
+    $("band-text").textContent = PL.t("band." + b.key);
+    var sugs = ["sug.1", "sug.2", "sug.3", "sug.4", "sug.5"];
+    var html = "<h3 style='margin-top:0'>" + PL.t("sug.title") + "</h3><ul style='padding-left:0;list-style:none;margin:0'>";
+    sugs.forEach(function (k) { html += "<li style='margin:10px 0'>" + PL.t(k) + "</li>"; });
+    if (b.key === "high" || b.key === "vhigh") html += "<li style='margin:14px 0;font-weight:700'>" + PL.t("sug.pro") + "</li>";
+    html += "</ul>";
+    $("suggestions").innerHTML = html;
+  }
+
+  function finish() {
+    $("pfill").style.width = "100%";
+    renderResult();
+    show("result");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  $("btn-start").addEventListener("click", function () {
+    answers.fill(-1); idx = 0; show("quiz"); renderQuestion();
+  });
+  $("btn-back").addEventListener("click", function () {
+    if (idx > 0) { idx--; renderQuestion(); }
+  });
+  $("btn-retake").addEventListener("click", function () {
+    answers.fill(-1); idx = 0; show("quiz"); renderQuestion();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  PL.onLang(function () {
+    if (state === "quiz") renderQuestion();
+    if (state === "result") renderResult();
+  });
+})();
+</script>
+</body>
+</html>

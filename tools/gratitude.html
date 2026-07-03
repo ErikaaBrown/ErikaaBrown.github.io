@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diário de Gratidão · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>🙏 <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section class="panel">
+    <h3 style="margin-top:0" data-i18n="today.title"></h3>
+    <p class="small muted" id="prompt-line"></p>
+    <label class="field-label">1.</label>
+    <input type="text" id="g1" data-i18n-ph="ph.1">
+    <label class="field-label">2.</label>
+    <input type="text" id="g2" data-i18n-ph="ph.2">
+    <label class="field-label">3.</label>
+    <input type="text" id="g3" data-i18n-ph="ph.3">
+    <div class="center mt-2">
+      <button class="btn" id="btn-save" data-i18n="btn.save"></button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="tiles">
+      <div class="tile"><div class="num" id="stat-streak">0</div><div class="lbl" data-i18n="stat.streak"></div></div>
+      <div class="tile"><div class="num" id="stat-total">0</div><div class="lbl" data-i18n="stat.total"></div></div>
+    </div>
+  </section>
+
+  <section class="panel panel-soft">
+    <p style="margin:0" data-i18n="why.p"></p>
+  </section>
+
+  <section>
+    <h2 data-i18n="hist.title"></h2>
+    <div id="history"></div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tools",
+  i18n: {
+    pt: {
+      "page.title": "Diário de Gratidão",
+      "crumb": "Ferramentas",
+      "intro.lead": "Registar três coisas boas por dia é um dos exercícios mais estudados da psicologia positiva — simples, rápido e com efeitos duradouros no bem-estar.",
+      "today.title": "As três coisas boas de hoje",
+      "ph.1": "Algo que correu bem hoje...",
+      "ph.2": "Alguém ou algo por que estás grato...",
+      "ph.3": "Um pequeno prazer que quase passou despercebido...",
+      "btn.save": "Guardar",
+      "saved": "Gratidão guardada 🌿",
+      "fill.one": "Escreve pelo menos uma coisa boa",
+      "stat.streak": "Dias seguidos",
+      "stat.total": "Registos no total",
+      "why.p": "🔬 Porque funciona: no estudo clássico de Seligman (2005), quem escreveu «três coisas boas» todas as noites durante uma semana mostrou mais felicidade e menos sintomas depressivos — efeitos ainda visíveis seis meses depois. O truque está em notar também porquê é que a coisa boa aconteceu.",
+      "hist.title": "Registos anteriores",
+      "del.confirm": "Apagar este dia?",
+      "prompts": [
+        "Sugestão: pensa em algo que outra pessoa fez por ti hoje.",
+        "Sugestão: houve algum momento de calma ou beleza no teu dia?",
+        "Sugestão: que capacidade tua usaste hoje e dás por garantida?",
+        "Sugestão: o que é que hoje correu melhor do que esperavas?",
+        "Sugestão: que conforto do teu dia-a-dia mereceria mais atenção?"
+      ]
+    },
+    en: {
+      "page.title": "Gratitude Journal",
+      "crumb": "Tools",
+      "intro.lead": "Writing down three good things a day is one of the most studied exercises in positive psychology — simple, quick, and with lasting effects on wellbeing.",
+      "today.title": "Today's three good things",
+      "ph.1": "Something that went well today...",
+      "ph.2": "Someone or something you are grateful for...",
+      "ph.3": "A small pleasure that almost went unnoticed...",
+      "btn.save": "Save",
+      "saved": "Gratitude saved 🌿",
+      "fill.one": "Write at least one good thing",
+      "stat.streak": "Day streak",
+      "stat.total": "Total entries",
+      "why.p": "🔬 Why it works: in Seligman's classic study (2005), people who wrote \"three good things\" every night for one week showed greater happiness and fewer depressive symptoms — effects still visible six months later. The trick is also noticing why the good thing happened.",
+      "hist.title": "Previous entries",
+      "del.confirm": "Delete this day?",
+      "prompts": [
+        "Hint: think of something another person did for you today.",
+        "Hint: was there a moment of calm or beauty in your day?",
+        "Hint: which of your abilities did you use today and take for granted?",
+        "Hint: what went better today than you expected?",
+        "Hint: which everyday comfort deserves more of your attention?"
+      ]
+    }
+  }
+};
+</script>
+<script src="../js/app.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var data = PL.load("gratitude", {});
+
+  function isoDaysAgo(n) {
+    var d = new Date();
+    d.setDate(d.getDate() - n);
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
+
+  function renderToday() {
+    var t = data[PL.todayISO()];
+    if (t) {
+      $("g1").value = t[0] || "";
+      $("g2").value = t[1] || "";
+      $("g3").value = t[2] || "";
+    }
+    var prompts = (window.PAGE.i18n[PL.lang] || {}).prompts || [];
+    var dayIdx = new Date().getDate() % prompts.length;
+    $("prompt-line").textContent = prompts[dayIdx] || "";
+  }
+
+  function renderStats() {
+    var streak = 0;
+    for (var i = 0; ; i++) {
+      if (data[isoDaysAgo(i)]) streak++;
+      else if (i === 0) continue;
+      else break;
+    }
+    $("stat-streak").textContent = streak;
+    $("stat-total").textContent = Object.keys(data).length;
+  }
+
+  function renderHistory() {
+    var keys = Object.keys(data).sort().reverse().slice(0, 21);
+    var html = "";
+    keys.forEach(function (iso) {
+      var items = data[iso].filter(function (x) { return x; }).map(function (x) {
+        return "<li style='margin:4px 0'>" + PL.esc(x) + "</li>";
+      }).join("");
+      html += "<div class='entry'><div class='entry-head'>" +
+        "<span class='entry-date'>✨ " + PL.fmtDate(iso) + "</span>" +
+        "<button class='del' data-iso='" + iso + "'>🗑️</button></div>" +
+        "<ul style='margin:8px 0 0;padding-left:20px'>" + items + "</ul></div>";
+    });
+    $("history").innerHTML = html;
+    $("history").querySelectorAll(".del").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (confirm(PL.t("del.confirm"))) {
+          delete data[b.getAttribute("data-iso")];
+          PL.store("gratitude", data);
+          renderAll();
+        }
+      });
+    });
+  }
+
+  function renderAll() { renderToday(); renderStats(); renderHistory(); }
+
+  $("btn-save").addEventListener("click", function () {
+    var vals = [$("g1").value.trim(), $("g2").value.trim(), $("g3").value.trim()];
+    if (!vals[0] && !vals[1] && !vals[2]) { PL.toast(PL.t("fill.one")); return; }
+    data[PL.todayISO()] = vals;
+    PL.store("gratitude", data);
+    PL.toast(PL.t("saved"));
+    renderAll();
+  });
+
+  document.addEventListener("pl:ready", renderAll);
+  PL.onLang(renderAll);
+})();
+</script>
+</body>
+</html>

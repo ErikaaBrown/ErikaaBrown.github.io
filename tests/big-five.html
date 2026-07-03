@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personalidade Big Five · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>🧭 <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section id="panel-intro" class="panel">
+    <p data-i18n="intro.p1"></p>
+    <p data-i18n="intro.p2"></p>
+    <div class="notice" data-i18n-html="intro.notice"></div>
+    <div class="center mt-2">
+      <button class="btn" id="btn-start" data-i18n="btn.start"></button>
+    </div>
+    <p class="center small muted" id="last-result" style="margin-top:14px"></p>
+  </section>
+
+  <section id="panel-quiz" class="panel hidden">
+    <div class="progress-track"><div class="progress-fill" id="pfill" style="width:0%"></div></div>
+    <p class="small muted" id="qcount"></p>
+    <p class="quiz-q" id="qtext"></p>
+    <div class="likert" id="likert"></div>
+    <div class="scale-hints">
+      <span data-i18n="lk.1"></span>
+      <span data-i18n="lk.5"></span>
+    </div>
+    <div class="quiz-nav">
+      <button class="btn btn-ghost btn-sm" id="btn-back" data-i18n="btn.back"></button>
+      <span></span>
+    </div>
+  </section>
+
+  <section id="panel-result" class="hidden">
+    <div class="panel">
+      <h2 style="margin-top:0" data-i18n="res.title"></h2>
+      <p class="muted" data-i18n="res.sub"></p>
+      <div class="chart-wrap" id="radar-wrap"></div>
+      <div id="bars"></div>
+      <h3 data-i18n="res.table"></h3>
+      <table class="data">
+        <thead><tr><th data-i18n="tbl.trait"></th><th data-i18n="tbl.score"></th><th data-i18n="tbl.level"></th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="panel" id="interps"></div>
+    <div class="notice" data-i18n-html="res.notice"></div>
+    <div class="center mt-2">
+      <button class="btn btn-ghost" id="btn-retake" data-i18n="btn.retake"></button>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tests",
+  i18n: {
+    pt: {
+      "page.title": "Personalidade Big Five",
+      "crumb": "Testes",
+      "intro.lead": "O modelo dos cinco factores é o modelo de personalidade com maior apoio científico na psicologia actual.",
+      "intro.p1": "Vais responder a 25 afirmações sobre a forma como habitualmente pensas, sentes e ages. Para cada uma, indica até que ponto concordas. Não há respostas certas nem erradas — responde com honestidade, pensando em como és na maioria das situações.",
+      "intro.p2": "No fim recebes o teu perfil nos cinco traços: Abertura à Experiência, Conscienciosidade, Extroversão, Amabilidade e Neuroticismo.",
+      "intro.notice": "<strong>Lembra-te:</strong> este teste é educativo e recreativo. Um perfil de personalidade rigoroso exige instrumentos validados e interpretação profissional.",
+      "btn.start": "Começar o teste",
+      "btn.back": "← Anterior",
+      "btn.retake": "Repetir o teste",
+      "lk.1": "Discordo totalmente",
+      "lk.5": "Concordo totalmente",
+      "res.title": "O teu perfil",
+      "res.sub": "Pontuações de 0 a 100 em cada traço. Não há perfis bons ou maus — cada combinação tem forças próprias.",
+      "res.table": "Em detalhe",
+      "tbl.trait": "Traço", "tbl.score": "Pontuação", "tbl.level": "Nível",
+      "res.notice": "<strong>Como ler:</strong> os traços são contínuos e relativamente estáveis, mas não são um destino — o contexto e a experiência também moldam o comportamento.",
+      "lvl.low": "Baixo", "lvl.mid": "Moderado", "lvl.high": "Elevado",
+      "last.prefix": "Último resultado guardado: "
+    },
+    en: {
+      "page.title": "Big Five Personality",
+      "crumb": "Tests",
+      "intro.lead": "The five-factor model is the personality model with the strongest scientific support in psychology today.",
+      "intro.p1": "You will respond to 25 statements about how you usually think, feel and act. For each one, indicate how much you agree. There are no right or wrong answers — be honest and think about how you are in most situations.",
+      "intro.p2": "At the end you will get your profile on the five traits: Openness to Experience, Conscientiousness, Extraversion, Agreeableness and Neuroticism.",
+      "intro.notice": "<strong>Remember:</strong> this test is educational and recreational. A rigorous personality profile requires validated instruments and professional interpretation.",
+      "btn.start": "Start the test",
+      "btn.back": "← Previous",
+      "btn.retake": "Retake the test",
+      "lk.1": "Strongly disagree",
+      "lk.5": "Strongly agree",
+      "res.title": "Your profile",
+      "res.sub": "Scores from 0 to 100 on each trait. There are no good or bad profiles — every combination has its own strengths.",
+      "res.table": "In detail",
+      "tbl.trait": "Trait", "tbl.score": "Score", "tbl.level": "Level",
+      "res.notice": "<strong>How to read this:</strong> traits are continuous and relatively stable, but they are not destiny — context and experience also shape behaviour.",
+      "lvl.low": "Low", "lvl.mid": "Moderate", "lvl.high": "High",
+      "last.prefix": "Last saved result: "
+    }
+  }
+};
+</script>
+<script src="../js/app.js"></script>
+<script>
+(function () {
+  var TRAITS = [
+    { key: "O", pt: "Abertura", en: "Openness",
+      interp: {
+        low:  { pt: "Prático e concreto: preferes o familiar e o comprovado ao experimental. Valorizas soluções que funcionam.", en: "Practical and concrete: you prefer the familiar and proven over the experimental. You value solutions that work." },
+        mid:  { pt: "Equilibras curiosidade e pragmatismo: estás aberto a novidades, mas com os pés na terra.", en: "You balance curiosity and pragmatism: open to novelty, but with your feet on the ground." },
+        high: { pt: "Imaginativo e curioso: procuras ideias novas, arte e experiências fora do comum.", en: "Imaginative and curious: you seek out new ideas, art and unusual experiences." }
+      } },
+    { key: "C", pt: "Conscienciosidade", en: "Conscientiousness",
+      interp: {
+        low:  { pt: "Flexível e espontâneo: prazos e planos rígidos podem custar-te, mas adaptas-te bem ao imprevisto.", en: "Flexible and spontaneous: strict deadlines and plans can be hard for you, but you adapt well to the unexpected." },
+        mid:  { pt: "Consegues ser organizado quando é preciso, sem rigidez excessiva.", en: "You can be organised when needed, without excessive rigidity." },
+        high: { pt: "Disciplinado e fiável: defines objectivos claros e cumpres o que prometes.", en: "Disciplined and reliable: you set clear goals and deliver on your promises." }
+      } },
+    { key: "E", pt: "Extroversão", en: "Extraversion",
+      interp: {
+        low:  { pt: "Introvertido: recarregas energias sozinho e preferes conversas profundas a grandes grupos.", en: "Introverted: you recharge alone and prefer deep conversations to large groups." },
+        mid:  { pt: "Ambivertido: sentes-te confortável tanto em grupo como sozinho, conforme o momento.", en: "Ambiverted: you feel comfortable both in groups and alone, depending on the moment." },
+        high: { pt: "Extrovertido: a interacção social dá-te energia, entusiasmo e à-vontade.", en: "Extraverted: social interaction gives you energy, enthusiasm and ease." }
+      } },
+    { key: "A", pt: "Amabilidade", en: "Agreeableness",
+      interp: {
+        low:  { pt: "Directo e céptico: dizes o que pensas e questionas as intenções dos outros. Útil para negociar e decidir com frieza.", en: "Direct and sceptical: you say what you think and question others' intentions. Useful for negotiating and deciding coolly." },
+        mid:  { pt: "Cooperas com os outros sem deixares de defender a tua posição quando importa.", en: "You cooperate with others while still standing your ground when it matters." },
+        high: { pt: "Empático e cooperante: o bem-estar dos outros pesa muito nas tuas decisões.", en: "Empathetic and cooperative: other people's wellbeing weighs heavily in your decisions." }
+      } },
+    { key: "N", pt: "Neuroticismo", en: "Neuroticism",
+      interp: {
+        low:  { pt: "Emocionalmente estável: manténs a calma sob pressão e recuperas depressa de contratempos.", en: "Emotionally stable: you stay calm under pressure and bounce back quickly from setbacks." },
+        mid:  { pt: "Sentes stress e preocupação em doses moderadas, como a maioria das pessoas.", en: "You feel stress and worry in moderate doses, like most people." },
+        high: { pt: "Sensível ao stress: as emoções negativas surgem com facilidade — vale a pena investir em estratégias de regulação emocional.", en: "Sensitive to stress: negative emotions arise easily — it is worth investing in emotional-regulation strategies." }
+      } }
+  ];
+
+  var ITEMS = [
+    { t: 0, r: false, pt: "Tenho uma imaginação fértil.", en: "I have a vivid imagination." },
+    { t: 0, r: false, pt: "Gosto de experimentar actividades novas.", en: "I enjoy trying new activities." },
+    { t: 0, r: false, pt: "Interesso-me por ideias abstractas e teóricas.", en: "I am interested in abstract, theoretical ideas." },
+    { t: 0, r: true,  pt: "Prefiro rotinas conhecidas a experiências novas.", en: "I prefer familiar routines to new experiences." },
+    { t: 0, r: false, pt: "A arte, a música ou a literatura tocam-me profundamente.", en: "Art, music or literature move me deeply." },
+    { t: 1, r: false, pt: "Sou organizado e metódico.", en: "I am organised and methodical." },
+    { t: 1, r: false, pt: "Cumpro prazos e compromissos.", en: "I meet deadlines and commitments." },
+    { t: 1, r: true,  pt: "Deixo as tarefas para a última hora.", en: "I leave tasks until the last minute." },
+    { t: 1, r: false, pt: "Presto atenção aos pormenores.", en: "I pay attention to details." },
+    { t: 1, r: false, pt: "Planeio antes de agir.", en: "I plan before I act." },
+    { t: 2, r: false, pt: "Sinto-me cheio de energia quando estou com outras pessoas.", en: "I feel energised when I am with other people." },
+    { t: 2, r: false, pt: "Inicio conversas com facilidade.", en: "I start conversations easily." },
+    { t: 2, r: true,  pt: "Prefiro ficar em segundo plano.", en: "I prefer to stay in the background." },
+    { t: 2, r: false, pt: "Gosto de ser o centro das atenções.", en: "I like being the centre of attention." },
+    { t: 2, r: true,  pt: "Fico esgotado depois de muita interacção social.", en: "I feel drained after a lot of social interaction." },
+    { t: 3, r: false, pt: "Preocupo-me com os sentimentos dos outros.", en: "I care about other people's feelings." },
+    { t: 3, r: false, pt: "Confio facilmente nas pessoas.", en: "I trust people easily." },
+    { t: 3, r: true,  pt: "Digo coisas duras sem pensar nas consequências.", en: "I say harsh things without thinking about the consequences." },
+    { t: 3, r: false, pt: "Gosto de ajudar mesmo sem receber nada em troca.", en: "I like helping even when I get nothing in return." },
+    { t: 3, r: true,  pt: "Os problemas dos outros interessam-me pouco.", en: "Other people's problems are of little interest to me." },
+    { t: 4, r: false, pt: "Preocupo-me com facilidade.", en: "I worry easily." },
+    { t: 4, r: false, pt: "Irrito-me com pequenas coisas.", en: "I get irritated by small things." },
+    { t: 4, r: true,  pt: "Mantenho a calma sob pressão.", en: "I stay calm under pressure." },
+    { t: 4, r: false, pt: "Tenho alterações de humor frequentes.", en: "I have frequent mood swings." },
+    { t: 4, r: false, pt: "Sinto-me tenso ou ansioso muitas vezes.", en: "I often feel tense or anxious." }
+  ];
+
+  var LIKERT = {
+    pt: ["Discordo totalmente", "Discordo", "Neutro", "Concordo", "Concordo totalmente"],
+    en: ["Strongly disagree", "Disagree", "Neutral", "Agree", "Strongly agree"]
+  };
+
+  var answers = new Array(ITEMS.length).fill(0);
+  var idx = 0;
+  var state = "intro"; // intro | quiz | result
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  function show(panel) {
+    $("panel-intro").classList.toggle("hidden", panel !== "intro");
+    $("panel-quiz").classList.toggle("hidden", panel !== "quiz");
+    $("panel-result").classList.toggle("hidden", panel !== "result");
+    state = panel;
+  }
+
+  function renderQuestion() {
+    var item = ITEMS[idx];
+    $("qtext").textContent = item[PL.lang];
+    $("qcount").textContent = (idx + 1) + " / " + ITEMS.length;
+    $("pfill").style.width = (idx / ITEMS.length * 100) + "%";
+    var lk = $("likert");
+    lk.innerHTML = "";
+    LIKERT[PL.lang].forEach(function (label, i) {
+      var b = document.createElement("button");
+      b.innerHTML = "<span style='display:block;font-size:1.15rem;font-weight:800'>" + (i + 1) + "</span>" + label;
+      if (answers[idx] === i + 1) b.classList.add("sel");
+      b.addEventListener("click", function () {
+        answers[idx] = i + 1;
+        b.classList.add("sel");
+        setTimeout(function () {
+          if (idx < ITEMS.length - 1) { idx++; renderQuestion(); }
+          else { finish(); }
+        }, 220);
+      });
+      lk.appendChild(b);
+    });
+    $("btn-back").disabled = idx === 0;
+  }
+
+  function scores() {
+    var sums = [0, 0, 0, 0, 0];
+    ITEMS.forEach(function (item, i) {
+      var v = answers[i];
+      if (item.r) v = 6 - v;
+      sums[item.t] += v;
+    });
+    return sums.map(function (s) { return Math.round((s - 5) / 20 * 100); });
+  }
+
+  function band(p) { return p < 40 ? "low" : p <= 65 ? "mid" : "high"; }
+
+  function radar(vals) {
+    var cx = 280, cy = 195, R = 138, N = 5;
+    function pt(i, r) {
+      var a = -Math.PI / 2 + i * 2 * Math.PI / N;
+      return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+    }
+    var rings = "";
+    [20, 40, 60, 80, 100].forEach(function (lv) {
+      var pts = [];
+      for (var i = 0; i < N; i++) pts.push(pt(i, R * lv / 100).join(","));
+      rings += "<polygon points='" + pts.join(" ") + "' fill='none' style='stroke:var(--grid)' stroke-width='1'/>";
+    });
+    var axes = "", labels = "";
+    for (var i = 0; i < N; i++) {
+      var p = pt(i, R);
+      axes += "<line x1='" + cx + "' y1='" + cy + "' x2='" + p[0] + "' y2='" + p[1] + "' style='stroke:var(--grid)' stroke-width='1'/>";
+      var lp = pt(i, R + 26);
+      labels += "<text x='" + lp[0] + "' y='" + (lp[1] + 4) + "' text-anchor='middle' font-size='13' font-weight='700' style='fill:var(--ink-2)'>" + TRAITS[i][PL.lang] + "</text>";
+    }
+    var poly = [], dots = "";
+    vals.forEach(function (v, i) {
+      var p = pt(i, R * Math.max(v, 3) / 100);
+      poly.push(p.join(","));
+      dots += "<circle cx='" + p[0] + "' cy='" + p[1] + "' r='5' style='fill:var(--chart-1);stroke:var(--surface)' stroke-width='2'/>";
+    });
+    return "<svg viewBox='0 0 560 400' role='img' aria-label='Radar'>" + rings + axes +
+      "<polygon points='" + poly.join(" ") + "' style='fill:var(--chart-1);opacity:0.22'/>" +
+      "<polygon points='" + poly.join(" ") + "' fill='none' style='stroke:var(--chart-1)' stroke-width='2.5' stroke-linejoin='round'/>" +
+      dots + labels + "</svg>";
+  }
+
+  function finish() {
+    $("pfill").style.width = "100%";
+    var sc = scores();
+    PL.store("bigfive", { date: PL.todayISO(), scores: sc });
+    renderResult(sc);
+    show("result");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function renderResult(sc) {
+    $("radar-wrap").innerHTML = radar(sc);
+    var bars = "", rows = "", interps = "";
+    sc.forEach(function (v, i) {
+      var tr = TRAITS[i];
+      var b = band(v);
+      var lvl = PL.t("lvl." + b);
+      bars += "<div class='rbar'><div class='rbar-head'><span>" + tr[PL.lang] + "</span><span class='val'>" + v + "%</span></div>" +
+        "<div class='track'><div class='fill' style='width:" + v + "%'></div></div></div>";
+      rows += "<tr><td>" + tr[PL.lang] + "</td><td>" + v + "%</td><td>" + lvl + "</td></tr>";
+      interps += "<div class='interp'><h3>" + tr[PL.lang] + " — " + lvl + "</h3><p>" + tr.interp[b][PL.lang] + "</p></div>";
+    });
+    $("bars").innerHTML = bars;
+    $("tbody").innerHTML = rows;
+    $("interps").innerHTML = interps;
+  }
+
+  function showLast() {
+    var last = PL.load("bigfive", null);
+    $("last-result").textContent = last ? PL.t("last.prefix") + PL.fmtDate(last.date) : "";
+  }
+
+  $("btn-start").addEventListener("click", function () {
+    answers.fill(0); idx = 0;
+    show("quiz"); renderQuestion();
+  });
+  $("btn-back").addEventListener("click", function () {
+    if (idx > 0) { idx--; renderQuestion(); }
+  });
+  $("btn-retake").addEventListener("click", function () {
+    answers.fill(0); idx = 0;
+    show("quiz"); renderQuestion();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  document.addEventListener("pl:ready", showLast);
+  PL.onLang(function () {
+    showLast();
+    if (state === "quiz") renderQuestion();
+    if (state === "result") renderResult(scores());
+  });
+})();
+</script>
+</body>
+</html>

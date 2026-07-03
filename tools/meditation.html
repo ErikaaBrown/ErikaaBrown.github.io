@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Temporizador de Meditação · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>🧘 <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section class="panel">
+    <div style="display:flex;gap:14px;flex-wrap:wrap">
+      <div style="flex:1;min-width:180px">
+        <label class="field-label" for="duration" data-i18n="lbl.duration"></label>
+        <select id="duration">
+          <option value="180">3 min</option>
+          <option value="300" selected>5 min</option>
+          <option value="600">10 min</option>
+          <option value="900">15 min</option>
+          <option value="1200">20 min</option>
+        </select>
+      </div>
+      <div style="flex:1;min-width:180px">
+        <label class="field-label" for="interval" data-i18n="lbl.interval"></label>
+        <select id="interval">
+          <option value="0" data-i18n="opt.none"></option>
+          <option value="60">1 min</option>
+          <option value="120">2 min</option>
+          <option value="300">5 min</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ring-wrap">
+      <svg width="260" height="260" viewBox="0 0 260 260">
+        <circle cx="130" cy="130" r="112" fill="none" style="stroke:var(--surface-3)" stroke-width="12"/>
+        <circle id="ring" cx="130" cy="130" r="112" fill="none" style="stroke:var(--chart-1)" stroke-width="12"
+                stroke-linecap="round" stroke-dasharray="703.7" stroke-dashoffset="0"
+                transform="rotate(-90 130 130)"/>
+      </svg>
+      <div class="ring-center">
+        <div class="time" id="time-display">5:00</div>
+        <div class="small muted" id="state-label"></div>
+      </div>
+    </div>
+
+    <div class="center" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button class="btn" id="btn-toggle" data-i18n="btn.start"></button>
+      <button class="btn btn-ghost" id="btn-reset" data-i18n="btn.reset"></button>
+    </div>
+  </section>
+
+  <section class="panel panel-soft">
+    <h3 style="margin-top:0" data-i18n="tips.title"></h3>
+    <ul style="margin:0;padding-left:20px" id="tips"></ul>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tools",
+  i18n: {
+    pt: {
+      "page.title": "Temporizador de Meditação",
+      "crumb": "Ferramentas",
+      "intro.lead": "Um temporizador simples, com sino de início e de fim, para meditares sem olhar para o relógio.",
+      "lbl.duration": "Duração",
+      "lbl.interval": "Sino de intervalo",
+      "opt.none": "Sem sino",
+      "btn.start": "Começar",
+      "btn.pause": "Pausa",
+      "btn.resume": "Retomar",
+      "btn.reset": "Repor",
+      "state.running": "em sessão",
+      "state.paused": "em pausa",
+      "state.done": "sessão completa 🌿",
+      "tips.title": "Para começar a meditar",
+      "tip.1": "Senta-te confortavelmente, com as costas direitas mas sem rigidez.",
+      "tip.2": "Escolhe uma âncora: a respiração, os sons à tua volta ou as sensações do corpo.",
+      "tip.3": "Quando a mente divagar — e vai divagar — repara nisso sem julgamento e volta à âncora. Esse regresso É o exercício.",
+      "tip.4": "Começa com sessões curtas (3-5 min). Consistência vale mais do que duração.",
+      "tip.5": "Não existe «meditar bem»: se estás a treinar o voltar, está a funcionar."
+    },
+    en: {
+      "page.title": "Meditation Timer",
+      "crumb": "Tools",
+      "intro.lead": "A simple timer with a start and end bell, so you can meditate without checking the clock.",
+      "lbl.duration": "Duration",
+      "lbl.interval": "Interval bell",
+      "opt.none": "No bell",
+      "btn.start": "Start",
+      "btn.pause": "Pause",
+      "btn.resume": "Resume",
+      "btn.reset": "Reset",
+      "state.running": "in session",
+      "state.paused": "paused",
+      "state.done": "session complete 🌿",
+      "tips.title": "Getting started with meditation",
+      "tip.1": "Sit comfortably, back straight but not stiff.",
+      "tip.2": "Choose an anchor: your breath, the sounds around you, or bodily sensations.",
+      "tip.3": "When the mind wanders — and it will — notice it without judgement and return to the anchor. That return IS the exercise.",
+      "tip.4": "Start with short sessions (3-5 min). Consistency beats duration.",
+      "tip.5": "There is no such thing as \"meditating well\": if you are practising the return, it is working."
+    }
+  }
+};
+</script>
+<script src="../js/app.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var CIRC = 703.7;
+  var total = 300, left = 300;
+  var state = "idle"; // idle | running | paused | done
+  var timer = null;
+  var audioCtx = null;
+
+  function bell(gainMul) {
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      var t0 = audioCtx.currentTime;
+      [523.25, 659.25, 783.99].forEach(function (f, i) {
+        var o = audioCtx.createOscillator();
+        var g = audioCtx.createGain();
+        o.type = "sine";
+        o.frequency.value = f;
+        g.gain.setValueAtTime(0, t0);
+        g.gain.linearRampToValueAtTime((gainMul || 0.22) / (i + 1), t0 + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + 3.2);
+        o.connect(g); g.connect(audioCtx.destination);
+        o.start(t0); o.stop(t0 + 3.4);
+      });
+    } catch (e) { /* sem áudio disponível */ }
+  }
+
+  function fmt(s) {
+    return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+  }
+
+  function draw() {
+    $("time-display").textContent = fmt(left);
+    var frac = total > 0 ? left / total : 0;
+    $("ring").style.strokeDashoffset = String(CIRC * (1 - frac));
+    var lbl = state === "running" ? PL.t("state.running") :
+              state === "paused" ? PL.t("state.paused") :
+              state === "done" ? PL.t("state.done") : "";
+    $("state-label").textContent = lbl;
+    $("btn-toggle").textContent = state === "running" ? PL.t("btn.pause") :
+                                  state === "paused" ? PL.t("btn.resume") : PL.t("btn.start");
+  }
+
+  function tick() {
+    left--;
+    var intv = parseInt($("interval").value, 10);
+    if (left > 0 && intv > 0 && (total - left) % intv === 0) bell(0.12);
+    if (left <= 0) {
+      left = 0;
+      clearInterval(timer);
+      state = "done";
+      bell(0.3);
+      setTimeout(function () { bell(0.3); }, 700);
+    }
+    draw();
+  }
+
+  function reset() {
+    clearInterval(timer);
+    total = parseInt($("duration").value, 10);
+    left = total;
+    state = "idle";
+    $("duration").disabled = false;
+    draw();
+  }
+
+  $("btn-toggle").addEventListener("click", function () {
+    if (state === "running") {
+      clearInterval(timer);
+      state = "paused";
+    } else {
+      if (state === "idle" || state === "done") {
+        total = parseInt($("duration").value, 10);
+        left = total;
+        bell(0.25);
+      }
+      state = "running";
+      $("duration").disabled = true;
+      timer = setInterval(tick, 1000);
+    }
+    draw();
+  });
+  $("btn-reset").addEventListener("click", reset);
+  $("duration").addEventListener("change", function () {
+    if (state === "idle" || state === "done") reset();
+  });
+
+  function renderTips() {
+    var html = "";
+    ["tip.1", "tip.2", "tip.3", "tip.4", "tip.5"].forEach(function (k) {
+      html += "<li style='margin:8px 0'>" + PL.t(k) + "</li>";
+    });
+    $("tips").innerHTML = html;
+  }
+
+  document.addEventListener("pl:ready", function () { reset(); renderTips(); });
+  PL.onLang(function () { draw(); renderTips(); });
+})();
+</script>
+</body>
+</html>

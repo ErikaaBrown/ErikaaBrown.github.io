@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Respiração Guiada · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>🌬️ <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section class="panel">
+    <div style="display:flex;gap:14px;flex-wrap:wrap">
+      <div style="flex:1;min-width:200px">
+        <label class="field-label" for="technique" data-i18n="lbl.technique"></label>
+        <select id="technique">
+          <option value="box">Box breathing · 4-4-4-4</option>
+          <option value="478">4-7-8</option>
+          <option value="coherent" data-i18n="opt.coherent"></option>
+        </select>
+      </div>
+      <div style="flex:1;min-width:200px">
+        <label class="field-label" for="duration" data-i18n="lbl.duration"></label>
+        <select id="duration">
+          <option value="60">1 min</option>
+          <option value="180" selected>3 min</option>
+          <option value="300">5 min</option>
+        </select>
+      </div>
+    </div>
+    <p class="small muted" id="tech-desc" style="margin-top:14px"></p>
+
+    <div class="breath-stage">
+      <div class="breath-circle" id="circle"><span id="phase-count"></span></div>
+    </div>
+    <p class="breath-phase-label" id="phase-label"></p>
+    <p class="center small muted" id="session-info"></p>
+
+    <div class="center">
+      <button class="btn" id="btn-toggle" data-i18n="btn.start"></button>
+    </div>
+  </section>
+
+  <section class="panel panel-soft">
+    <p style="margin:0" data-i18n="why.p"></p>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tools",
+  i18n: {
+    pt: {
+      "page.title": "Respiração Guiada",
+      "crumb": "Ferramentas",
+      "intro.lead": "A respiração lenta e controlada é o interruptor mais directo que temos para acalmar o sistema nervoso.",
+      "lbl.technique": "Técnica",
+      "lbl.duration": "Duração",
+      "opt.coherent": "Respiração coerente · 5-5",
+      "btn.start": "Começar",
+      "btn.stop": "Parar",
+      "phase.in": "Inspira",
+      "phase.hold": "Sustém",
+      "phase.out": "Expira",
+      "phase.ready": "Prepara-te...",
+      "phase.done": "Sessão completa 🌿",
+      "cycles": "ciclos",
+      "remaining": "restantes",
+      "desc.box": "Usada por militares e atletas para recuperar o foco sob pressão. Quatro tempos iguais: inspirar, suster, expirar, suster.",
+      "desc.478": "Popularizada pelo Dr. Andrew Weil como auxílio para adormecer. A expiração longa activa o sistema nervoso parassimpático.",
+      "desc.coherent": "Cerca de 6 respirações por minuto — o ritmo que maximiza a variabilidade da frequência cardíaca, associada à regulação emocional.",
+      "why.p": "🫁 Porque funciona: a expiração lenta estimula o nervo vago, que trava a resposta de luta-ou-fuga. Bastam 3 minutos para o efeito se notar na frequência cardíaca. Se sentires tonturas, volta ao teu ritmo natural."
+    },
+    en: {
+      "page.title": "Guided Breathing",
+      "crumb": "Tools",
+      "intro.lead": "Slow, controlled breathing is the most direct switch we have to calm the nervous system.",
+      "lbl.technique": "Technique",
+      "lbl.duration": "Duration",
+      "opt.coherent": "Coherent breathing · 5-5",
+      "btn.start": "Start",
+      "btn.stop": "Stop",
+      "phase.in": "Breathe in",
+      "phase.hold": "Hold",
+      "phase.out": "Breathe out",
+      "phase.ready": "Get ready...",
+      "phase.done": "Session complete 🌿",
+      "cycles": "cycles",
+      "remaining": "remaining",
+      "desc.box": "Used by the military and athletes to regain focus under pressure. Four equal counts: inhale, hold, exhale, hold.",
+      "desc.478": "Popularised by Dr. Andrew Weil as a sleep aid. The long exhale activates the parasympathetic nervous system.",
+      "desc.coherent": "About 6 breaths per minute — the rhythm that maximises heart-rate variability, which is linked to emotional regulation.",
+      "why.p": "🫁 Why it works: slow exhaling stimulates the vagus nerve, which brakes the fight-or-flight response. Three minutes are enough for the effect to show in your heart rate. If you feel dizzy, return to your natural rhythm."
+    }
+  }
+};
+</script>
+<script src="../js/app.js"></script>
+<script>
+(function () {
+  var TECHNIQUES = {
+    box: [{ p: "in", d: 4 }, { p: "hold", d: 4 }, { p: "out", d: 4 }, { p: "hold", d: 4 }],
+    "478": [{ p: "in", d: 4 }, { p: "hold", d: 7 }, { p: "out", d: 8 }],
+    coherent: [{ p: "in", d: 5 }, { p: "out", d: 5 }]
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var running = false;
+  var timer = null;
+  var phaseIdx = 0, phaseLeft = 0, totalLeft = 0, cycles = 0;
+
+  function tech() { return TECHNIQUES[$("technique").value]; }
+
+  function updateDesc() {
+    var key = $("technique").value === "478" ? "desc.478" : "desc." + $("technique").value;
+    $("tech-desc").textContent = PL.t(key);
+  }
+
+  function setCircle(phase, dur) {
+    var c = $("circle");
+    c.style.transition = "transform " + dur + "s cubic-bezier(0.4, 0, 0.4, 1)";
+    if (phase === "in") c.style.transform = "scale(1)";
+    else if (phase === "out") c.style.transform = "scale(0.72)";
+  }
+
+  function startPhase() {
+    var ph = tech()[phaseIdx];
+    phaseLeft = ph.d;
+    $("phase-label").textContent = PL.t("phase." + ph.p);
+    $("phase-count").textContent = phaseLeft;
+    setCircle(ph.p, ph.d);
+  }
+
+  function tick() {
+    totalLeft--;
+    phaseLeft--;
+    if (phaseLeft <= 0) {
+      phaseIdx++;
+      if (phaseIdx >= tech().length) { phaseIdx = 0; cycles++; }
+      if (totalLeft <= 0) { stop(true); return; }
+      startPhase();
+    } else {
+      $("phase-count").textContent = phaseLeft;
+    }
+    sessionInfo();
+  }
+
+  function sessionInfo() {
+    var m = Math.floor(totalLeft / 60), s = totalLeft % 60;
+    $("session-info").textContent = cycles + " " + PL.t("cycles") + " · " +
+      m + ":" + String(s).padStart(2, "0") + " " + PL.t("remaining");
+  }
+
+  function start() {
+    running = true;
+    phaseIdx = 0;
+    cycles = 0;
+    totalLeft = parseInt($("duration").value, 10);
+    $("btn-toggle").textContent = PL.t("btn.stop");
+    $("technique").disabled = true;
+    $("duration").disabled = true;
+    startPhase();
+    sessionInfo();
+    timer = setInterval(tick, 1000);
+  }
+
+  function stop(done) {
+    running = false;
+    clearInterval(timer);
+    $("btn-toggle").textContent = PL.t("btn.start");
+    $("technique").disabled = false;
+    $("duration").disabled = false;
+    $("phase-label").textContent = done ? PL.t("phase.done") : "";
+    $("phase-count").textContent = "";
+    $("session-info").textContent = "";
+    var c = $("circle");
+    c.style.transition = "transform 1.2s ease";
+    c.style.transform = "scale(0.72)";
+  }
+
+  $("btn-toggle").addEventListener("click", function () {
+    if (running) stop(false); else start();
+  });
+  $("technique").addEventListener("change", updateDesc);
+
+  document.addEventListener("pl:ready", updateDesc);
+  PL.onLang(function () {
+    updateDesc();
+    if (running) {
+      var ph = tech()[phaseIdx];
+      $("phase-label").textContent = PL.t("phase." + ph.p);
+      $("btn-toggle").textContent = PL.t("btn.stop");
+      sessionInfo();
+    }
+  });
+})();
+</script>
+</body>
+</html>

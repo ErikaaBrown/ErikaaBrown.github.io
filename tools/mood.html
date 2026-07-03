@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diário Emocional · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>📔 <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section class="panel">
+    <h3 style="margin-top:0" data-i18n="today.title"></h3>
+    <p class="small muted" data-i18n="today.q"></p>
+    <div class="mood-row" id="mood-row"></div>
+    <label class="field-label" data-i18n="today.tags"></label>
+    <div class="tag-row" id="tag-row"></div>
+    <label class="field-label" for="note" data-i18n="today.note"></label>
+    <textarea id="note" data-i18n-ph="today.note.ph"></textarea>
+    <div class="center mt-2">
+      <button class="btn" id="btn-save" data-i18n="btn.save"></button>
+    </div>
+  </section>
+
+  <section class="panel" id="stats-panel">
+    <div class="tiles">
+      <div class="tile"><div class="num" id="stat-streak">0</div><div class="lbl" data-i18n="stat.streak"></div></div>
+      <div class="tile"><div class="num" id="stat-count">0</div><div class="lbl" data-i18n="stat.count"></div></div>
+      <div class="tile"><div class="num" id="stat-avg">—</div><div class="lbl" data-i18n="stat.avg"></div></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <h3 style="margin:0" data-i18n="chart.title"></h3>
+      <button class="btn btn-ghost btn-sm" id="btn-view" style="margin-left:auto"></button>
+    </div>
+    <div class="chart-wrap" id="chart-wrap" style="margin-top:14px">
+      <div class="viz-tooltip" id="tooltip"></div>
+      <div id="chart"></div>
+    </div>
+    <div id="table-view" class="hidden" style="margin-top:14px;overflow-x:auto"></div>
+    <p class="small muted hidden" id="empty-msg" data-i18n="chart.empty"></p>
+  </section>
+
+  <section id="history-section">
+    <h2 data-i18n="hist.title"></h2>
+    <div id="history"></div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tools",
+  i18n: {
+    pt: {
+      "page.title": "Diário Emocional",
+      "crumb": "Ferramentas",
+      "intro.lead": "Registar o humor todos os dias torna visíveis padrões que de outra forma passam despercebidos — e nomear emoções, por si só, ajuda a regulá-las.",
+      "today.title": "O registo de hoje",
+      "today.q": "Como te sentes hoje, em geral?",
+      "today.tags": "Que emoções estiveram presentes? (opcional)",
+      "today.note": "Nota do dia (opcional)",
+      "today.note.ph": "O que marcou o dia? O que pode explicar este humor?",
+      "btn.save": "Guardar o dia",
+      "saved": "Registo guardado 🌿",
+      "pick.mood": "Escolhe primeiro um humor",
+      "stat.streak": "Dias seguidos",
+      "stat.count": "Registos (30 dias)",
+      "stat.avg": "Humor médio",
+      "chart.title": "Últimos 30 dias",
+      "chart.empty": "Ainda não há registos suficientes — o gráfico aparece assim que guardares o primeiro dia.",
+      "chart.view.table": "Ver tabela",
+      "chart.view.chart": "Ver gráfico",
+      "tbl.date": "Data", "tbl.mood": "Humor", "tbl.tags": "Emoções",
+      "hist.title": "Registos recentes",
+      "del.confirm": "Apagar este registo?"
+    },
+    en: {
+      "page.title": "Mood Diary",
+      "crumb": "Tools",
+      "intro.lead": "Logging your mood every day makes visible the patterns that otherwise go unnoticed — and naming emotions, by itself, helps regulate them.",
+      "today.title": "Today's entry",
+      "today.q": "How do you feel today, overall?",
+      "today.tags": "Which emotions were present? (optional)",
+      "today.note": "Note for the day (optional)",
+      "today.note.ph": "What marked the day? What might explain this mood?",
+      "btn.save": "Save the day",
+      "saved": "Entry saved 🌿",
+      "pick.mood": "Pick a mood first",
+      "stat.streak": "Day streak",
+      "stat.count": "Entries (30 days)",
+      "stat.avg": "Average mood",
+      "chart.title": "Last 30 days",
+      "chart.empty": "Not enough entries yet — the chart appears as soon as you save your first day.",
+      "chart.view.table": "View table",
+      "chart.view.chart": "View chart",
+      "tbl.date": "Date", "tbl.mood": "Mood", "tbl.tags": "Emotions",
+      "hist.title": "Recent entries",
+      "del.confirm": "Delete this entry?"
+    }
+  }
+};
+</script>
+<script src="../js/app.js"></script>
+<script>
+(function () {
+  var MOODS = [
+    { e: "😞", pt: "Péssimo", en: "Awful" },
+    { e: "😕", pt: "Em baixo", en: "Low" },
+    { e: "😐", pt: "Neutro", en: "Neutral" },
+    { e: "🙂", pt: "Bom", en: "Good" },
+    { e: "😄", pt: "Óptimo", en: "Great" }
+  ];
+  var TAGS = [
+    { pt: "calma", en: "calm" }, { pt: "alegria", en: "joy" }, { pt: "gratidão", en: "gratitude" },
+    { pt: "energia", en: "energy" }, { pt: "entusiasmo", en: "excitement" }, { pt: "ansiedade", en: "anxiety" },
+    { pt: "tristeza", en: "sadness" }, { pt: "irritação", en: "irritation" }, { pt: "cansaço", en: "tiredness" },
+    { pt: "stress", en: "stress" }, { pt: "solidão", en: "loneliness" }, { pt: "tédio", en: "boredom" }
+  ];
+
+  var $ = function (id) { return document.getElementById(id); };
+  var data = PL.load("mood", {});
+  var selMood = 0;
+  var selTags = [];
+  var viewTable = false;
+
+  function isoDaysAgo(n) {
+    var d = new Date();
+    d.setDate(d.getDate() - n);
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
+
+  function renderToday() {
+    var today = data[PL.todayISO()];
+    if (today) {
+      selMood = today.m;
+      selTags = (today.tags || []).slice();
+      $("note").value = today.note || "";
+    }
+    var row = $("mood-row");
+    row.innerHTML = "";
+    MOODS.forEach(function (m, i) {
+      var b = document.createElement("button");
+      b.className = "mood-btn" + (selMood === i + 1 ? " sel" : "");
+      b.textContent = m.e;
+      b.title = m[PL.lang];
+      b.addEventListener("click", function () {
+        selMood = i + 1;
+        renderToday();
+      });
+      row.appendChild(b);
+    });
+    var tr = $("tag-row");
+    tr.innerHTML = "";
+    TAGS.forEach(function (t, i) {
+      var b = document.createElement("button");
+      b.className = "tag-btn" + (selTags.indexOf(i) >= 0 ? " sel" : "");
+      b.textContent = t[PL.lang];
+      b.addEventListener("click", function () {
+        var p = selTags.indexOf(i);
+        if (p >= 0) selTags.splice(p, 1); else selTags.push(i);
+        renderToday();
+      });
+      tr.appendChild(b);
+    });
+  }
+
+  function save() {
+    if (!selMood) { PL.toast(PL.t("pick.mood")); return; }
+    data[PL.todayISO()] = { m: selMood, tags: selTags.slice(), note: $("note").value.trim() };
+    PL.store("mood", data);
+    PL.toast(PL.t("saved"));
+    renderAll();
+  }
+
+  function last30() {
+    var out = [];
+    for (var i = 29; i >= 0; i--) {
+      var iso = isoDaysAgo(i);
+      out.push({ iso: iso, entry: data[iso] || null });
+    }
+    return out;
+  }
+
+  function renderStats() {
+    var streak = 0;
+    for (var i = 0; ; i++) {
+      var iso = isoDaysAgo(i);
+      if (data[iso]) streak++;
+      else if (i === 0) continue; // hoje ainda pode não estar registado
+      else break;
+    }
+    var days = last30().filter(function (d) { return d.entry; });
+    $("stat-streak").textContent = streak;
+    $("stat-count").textContent = days.length;
+    if (days.length) {
+      var avg = days.reduce(function (a, d) { return a + d.entry.m; }, 0) / days.length;
+      $("stat-avg").textContent = MOODS[Math.round(avg) - 1].e;
+    } else {
+      $("stat-avg").textContent = "—";
+    }
+  }
+
+  function renderChart() {
+    var days = last30();
+    var logged = days.filter(function (d) { return d.entry; });
+    $("empty-msg").classList.toggle("hidden", logged.length > 0);
+    $("btn-view").textContent = viewTable ? PL.t("chart.view.chart") : PL.t("chart.view.table");
+    $("chart").parentElement.classList.toggle("hidden", viewTable);
+    $("table-view").classList.toggle("hidden", !viewTable);
+
+    if (viewTable) {
+      var rows = "";
+      logged.slice().reverse().forEach(function (d) {
+        var tags = (d.entry.tags || []).map(function (i) { return TAGS[i][PL.lang]; }).join(", ");
+        rows += "<tr><td>" + PL.fmtDate(d.iso) + "</td><td>" + MOODS[d.entry.m - 1].e + " " + MOODS[d.entry.m - 1][PL.lang] + "</td><td>" + PL.esc(tags) + "</td></tr>";
+      });
+      $("table-view").innerHTML = "<table class='data'><thead><tr><th>" + PL.t("tbl.date") + "</th><th>" + PL.t("tbl.mood") + "</th><th>" + PL.t("tbl.tags") + "</th></tr></thead><tbody>" + rows + "</tbody></table>";
+      return;
+    }
+
+    var W = 640, H = 250, L = 40, R = 14, T = 16, B = 32;
+    var iw = W - L - R, ih = H - T - B;
+    function x(i) { return L + i / 29 * iw; }
+    function y(m) { return T + (5 - m) / 4 * ih; }
+
+    var grid = "", ylabels = "";
+    for (var m = 1; m <= 5; m++) {
+      grid += "<line x1='" + L + "' y1='" + y(m) + "' x2='" + (W - R) + "' y2='" + y(m) + "' style='stroke:var(--grid)' stroke-width='1'/>";
+      ylabels += "<text x='" + (L - 10) + "' y='" + (y(m) + 5) + "' text-anchor='middle' font-size='13'>" + MOODS[m - 1].e + "</text>";
+    }
+    var xlabels = "";
+    [29, 22, 15, 8, 1].forEach(function (ago) {
+      var i = 29 - ago;
+      var d = new Date(isoDaysAgo(ago) + "T12:00:00");
+      xlabels += "<text x='" + x(i) + "' y='" + (H - 8) + "' text-anchor='middle' font-size='11' style='fill:var(--ink-3)'>" +
+        d.getDate() + "/" + (d.getMonth() + 1) + "</text>";
+    });
+
+    var pts = [];
+    days.forEach(function (d, i) { if (d.entry) pts.push({ i: i, iso: d.iso, m: d.entry.m, tags: d.entry.tags || [] }); });
+    var path = "", dots = "";
+    pts.forEach(function (p, k) {
+      path += (k === 0 ? "M" : "L") + x(p.i).toFixed(1) + " " + y(p.m).toFixed(1) + " ";
+      dots += "<circle cx='" + x(p.i) + "' cy='" + y(p.m) + "' r='4.5' style='fill:var(--chart-1);stroke:var(--surface)' stroke-width='2'/>";
+    });
+
+    $("chart").innerHTML = "<svg viewBox='0 0 " + W + " " + H + "' id='mood-svg'>" + grid + ylabels + xlabels +
+      (pts.length > 1 ? "<path d='" + path + "' fill='none' style='stroke:var(--chart-1)' stroke-width='2.5' stroke-linejoin='round' stroke-linecap='round'/>" : "") +
+      dots + "<rect id='hover-rect' x='" + L + "' y='" + T + "' width='" + iw + "' height='" + ih + "' fill='transparent'/></svg>";
+
+    var svg = document.getElementById("mood-svg");
+    var tt = $("tooltip");
+    svg.addEventListener("mousemove", function (ev) {
+      if (!pts.length) return;
+      var rect = svg.getBoundingClientRect();
+      var mx = (ev.clientX - rect.left) / rect.width * W;
+      var best = pts[0], bd = 1e9;
+      pts.forEach(function (p) {
+        var d = Math.abs(x(p.i) - mx);
+        if (d < bd) { bd = d; best = p; }
+      });
+      if (bd > 30) { tt.classList.remove("show"); return; }
+      var tags = best.tags.map(function (i) { return TAGS[i][PL.lang]; }).join(", ");
+      tt.innerHTML = "<div class='tt-title'>" + PL.fmtDate(best.iso) + "</div><div class='tt-val'>" +
+        MOODS[best.m - 1].e + " " + MOODS[best.m - 1][PL.lang] + (tags ? " · " + PL.esc(tags) : "") + "</div>";
+      var wrap = $("chart-wrap").getBoundingClientRect();
+      tt.style.left = Math.min(ev.clientX - wrap.left + 14, wrap.width - 180) + "px";
+      tt.style.top = (ev.clientY - wrap.top - 46) + "px";
+      tt.classList.add("show");
+    });
+    svg.addEventListener("mouseleave", function () { tt.classList.remove("show"); });
+  }
+
+  function renderHistory() {
+    var keys = Object.keys(data).sort().reverse().slice(0, 14);
+    var html = "";
+    keys.forEach(function (iso) {
+      var e = data[iso];
+      var tags = (e.tags || []).map(function (i) { return "<span class='chip'>" + TAGS[i][PL.lang] + "</span>"; }).join(" ");
+      html += "<div class='entry'><div class='entry-head'>" +
+        "<span style='font-size:1.4rem'>" + MOODS[e.m - 1].e + "</span>" +
+        "<span class='entry-date'>" + PL.fmtDate(iso) + "</span>" + tags +
+        "<button class='del' data-iso='" + iso + "' title='×'>🗑️</button></div>" +
+        (e.note ? "<p class='small muted' style='margin:8px 0 0'>" + PL.esc(e.note) + "</p>" : "") +
+        "</div>";
+    });
+    $("history").innerHTML = html;
+    $("history").querySelectorAll(".del").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (confirm(PL.t("del.confirm"))) {
+          delete data[b.getAttribute("data-iso")];
+          PL.store("mood", data);
+          renderAll();
+        }
+      });
+    });
+  }
+
+  function renderAll() {
+    renderToday();
+    renderStats();
+    renderChart();
+    renderHistory();
+  }
+
+  $("btn-save").addEventListener("click", save);
+  $("btn-view").addEventListener("click", function () {
+    viewTable = !viewTable;
+    renderChart();
+  });
+
+  document.addEventListener("pl:ready", renderAll);
+  PL.onLang(renderAll);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cronologia da Psicologia · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>🕰️ <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <div class="timeline" id="timeline" style="margin-top:2rem"></div>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "learn",
+  i18n: {
+    pt: {
+      "page.title": "Cronologia da Psicologia",
+      "crumb": "Aprender",
+      "intro.lead": "Da fundação do primeiro laboratório à ciência aberta: os marcos que transformaram a psicologia numa ciência."
+    },
+    en: {
+      "page.title": "Timeline of Psychology",
+      "crumb": "Learn",
+      "intro.lead": "From the founding of the first laboratory to open science: the milestones that turned psychology into a science."
+    }
+  }
+};
+</script>
+<script src="../js/app.js"></script>
+<script>
+(function () {
+  var EVENTS = [
+    { y: "1879", t: { pt: "Nasce a psicologia científica", en: "Scientific psychology is born" },
+      d: { pt: "Wilhelm Wundt funda em Leipzig o primeiro laboratório de psicologia experimental. A mente passa a ser estudada com métodos científicos.", en: "Wilhelm Wundt founds the first experimental psychology laboratory in Leipzig. The mind starts being studied with scientific methods." } },
+    { y: "1885", t: { pt: "A curva do esquecimento", en: "The forgetting curve" },
+      d: { pt: "Hermann Ebbinghaus mede como a memória decai com o tempo — usando-se a si próprio como único sujeito, com listas de sílabas sem sentido.", en: "Hermann Ebbinghaus measures how memory decays over time — using himself as the only subject, with lists of nonsense syllables." } },
+    { y: "1890", t: { pt: "«Principles of Psychology»", en: "\"Principles of Psychology\"" },
+      d: { pt: "William James publica a obra fundadora da psicologia americana, com intuições sobre hábito, atenção e consciência ainda hoje citadas.", en: "William James publishes the founding work of American psychology, with insights on habit, attention and consciousness still cited today." } },
+    { y: "1900", t: { pt: "A psicanálise", en: "Psychoanalysis" },
+      d: { pt: "Freud publica «A Interpretação dos Sonhos». Muitas das suas teses não sobreviveram ao teste empírico, mas a ideia de processos mentais inconscientes ficou.", en: "Freud publishes \"The Interpretation of Dreams\". Many of his claims did not survive empirical testing, but the idea of unconscious mental processes remained." } },
+    { y: "1905", t: { pt: "O primeiro teste de inteligência", en: "The first intelligence test" },
+      d: { pt: "Alfred Binet e Théodore Simon criam uma escala para identificar crianças que precisavam de apoio escolar — o antepassado de todos os testes de QI.", en: "Alfred Binet and Théodore Simon create a scale to identify children needing school support — the ancestor of all IQ tests." } },
+    { y: "1913", t: { pt: "O manifesto behaviorista", en: "The behaviourist manifesto" },
+      d: { pt: "John Watson propõe que a psicologia estude apenas o comportamento observável. Durante meio século, a mente fica «fora dos limites».", en: "John Watson proposes that psychology study only observable behaviour. For half a century, the mind is \"off limits\"." } },
+    { y: "1936", t: { pt: "Piaget e a mente da criança", en: "Piaget and the child's mind" },
+      d: { pt: "Jean Piaget mostra que as crianças não são adultos em miniatura: o pensamento desenvolve-se por estádios qualitativamente diferentes.", en: "Jean Piaget shows that children are not miniature adults: thinking develops through qualitatively different stages." } },
+    { y: "1938", t: { pt: "O condicionamento operante", en: "Operant conditioning" },
+      d: { pt: "B. F. Skinner demonstra como as consequências moldam o comportamento — e a «caixa de Skinner» torna-se um ícone da psicologia experimental.", en: "B. F. Skinner demonstrates how consequences shape behaviour — and the \"Skinner box\" becomes an icon of experimental psychology." } },
+    { y: "1943", t: { pt: "A hierarquia das necessidades", en: "The hierarchy of needs" },
+      d: { pt: "Abraham Maslow propõe que as necessidades humanas se organizam em níveis, da sobrevivência à auto-realização. A famosa pirâmide, curiosamente, nunca foi desenhada por ele.", en: "Abraham Maslow proposes that human needs are organised in levels, from survival to self-actualisation. The famous pyramid, curiously, was never drawn by him." } },
+    { y: "1951", t: { pt: "A conformidade de Asch", en: "Asch's conformity" },
+      d: { pt: "Solomon Asch mostra que muitas pessoas negam a evidência dos próprios olhos para não contrariar o grupo — mesmo em julgamentos triviais.", en: "Solomon Asch shows that many people deny the evidence of their own eyes rather than contradict the group — even in trivial judgements." } },
+    { y: "1956", t: { pt: "A revolução cognitiva", en: "The cognitive revolution" },
+      d: { pt: "George Miller publica «O mágico número sete, mais ou menos dois». A mente volta ao centro da psicologia, agora estudada como processadora de informação.", en: "George Miller publishes \"The magical number seven, plus or minus two\". The mind returns to the centre of psychology, now studied as an information processor." } },
+    { y: "1961", t: { pt: "O boneco Bobo", en: "The Bobo doll" },
+      d: { pt: "Albert Bandura demonstra a aprendizagem social: crianças que viram adultos agredir um boneco imitaram a agressão. Aprendemos observando.", en: "Albert Bandura demonstrates social learning: children who watched adults hit a doll imitated the aggression. We learn by watching." } },
+    { y: "1963", t: { pt: "A obediência de Milgram", en: "Milgram's obedience" },
+      d: { pt: "Sob instruções de uma figura de autoridade, a maioria dos participantes administrou o que julgava serem choques perigosos. Um marco — e um debate ético que dura até hoje.", en: "Under instructions from an authority figure, most participants delivered what they believed were dangerous shocks. A landmark — and an ethical debate that continues today." } },
+    { y: "1967", t: { pt: "A terapia cognitiva", en: "Cognitive therapy" },
+      d: { pt: "Aaron Beck descobre que examinar pensamentos automáticos alivia a depressão — nasce a base da terapia cognitivo-comportamental moderna.", en: "Aaron Beck finds that examining automatic thoughts relieves depression — the basis of modern cognitive-behavioural therapy is born." } },
+    { y: "1971", t: { pt: "A prisão de Stanford", en: "The Stanford prison" },
+      d: { pt: "A experiência de Zimbardo torna-se a mais famosa (e mais criticada) da psicologia social: análises posteriores revelaram graves problemas metodológicos — hoje é sobretudo uma lição sobre como não fazer ciência.", en: "Zimbardo's experiment becomes social psychology's most famous (and most criticised): later analyses revealed serious methodological problems — today it is mainly a lesson in how not to do science." } },
+    { y: "1979", t: { pt: "A teoria das perspectivas", en: "Prospect theory" },
+      d: { pt: "Kahneman e Tversky mostram que as decisões humanas violam sistematicamente a racionalidade económica. A psicologia entra na economia — e vale um Nobel em 2002.", en: "Kahneman and Tversky show that human decisions systematically violate economic rationality. Psychology enters economics — earning a Nobel in 2002." } },
+    { y: "1990", t: { pt: "A inteligência emocional", en: "Emotional intelligence" },
+      d: { pt: "Peter Salovey e John Mayer definem o conceito; Daniel Goleman populariza-o em 1995 e muda a conversa sobre o que significa «ser inteligente».", en: "Peter Salovey and John Mayer define the concept; Daniel Goleman popularises it in 1995 and changes the conversation about what \"being smart\" means." } },
+    { y: "1998", t: { pt: "A psicologia positiva", en: "Positive psychology" },
+      d: { pt: "Martin Seligman, presidente da APA, propõe estudar também o que faz a vida valer a pena — forças, virtudes e bem-estar — e não apenas a doença.", en: "Martin Seligman, APA president, proposes also studying what makes life worth living — strengths, virtues and wellbeing — not just illness." } },
+    { y: "2015", t: { pt: "A crise (e reforma) da replicação", en: "The replication crisis (and reform)" },
+      d: { pt: "Um consórcio tenta replicar 100 estudos publicados: menos de metade resiste. A psicologia responde liderando a ciência aberta — pré-registo, dados partilhados, amostras maiores.", en: "A consortium tries to replicate 100 published studies: fewer than half hold up. Psychology responds by leading open science — pre-registration, shared data, bigger samples." } }
+  ];
+
+  function render() {
+    var html = "";
+    EVENTS.forEach(function (e) {
+      html += "<div class='tl-item'><div class='year'>" + e.y + "</div>" +
+        "<h3>" + e.t[PL.lang] + "</h3><p>" + e.d[PL.lang] + "</p></div>";
+    });
+    document.getElementById("timeline").innerHTML = html;
+  }
+
+  document.addEventListener("pl:ready", render);
+  PL.onLang(render);
+})();
+</script>
+</body>
+</html>
