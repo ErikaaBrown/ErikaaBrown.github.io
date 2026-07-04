@@ -25,48 +25,86 @@
   </section>
 
   <section id="panel-auth" class="hidden">
-    <div class="panel">
-      <div style="display:flex;gap:8px;margin-bottom:18px">
-        <button class="btn btn-sm" id="tab-login" data-i18n="tab.login"></button>
-        <button class="btn btn-ghost btn-sm" id="tab-signup" data-i18n="tab.signup"></button>
+    <div class="panel auth-card">
+      <div class="auth-side">
+        <h2 data-i18n="side.title"></h2>
+        <p class="sub" data-i18n="side.sub"></p>
+        <ul>
+          <li>📱 <span data-i18n="side.b1"></span></li>
+          <li>🔒 <span data-i18n="side.b2"></span></li>
+          <li>🕊️ <span data-i18n="side.b3"></span></li>
+          <li>🗑️ <span data-i18n="side.b4"></span></li>
+        </ul>
       </div>
+      <div class="auth-main">
+        <div class="seg">
+          <button id="tab-login" class="active" data-i18n="tab.login"></button>
+          <button id="tab-signup" data-i18n="tab.signup"></button>
+        </div>
 
-      <label class="field-label" for="f-email">Email</label>
-      <input type="email" id="f-email" autocomplete="email" data-i18n-ph="ph.email">
+        <label class="field-label" for="f-email">Email</label>
+        <input type="email" id="f-email" autocomplete="email" data-i18n-ph="ph.email">
 
-      <label class="field-label" for="f-pass"><span data-i18n="lbl.pass"></span></label>
-      <input type="password" id="f-pass" autocomplete="current-password" data-i18n-ph="ph.pass">
+        <label class="field-label" for="f-pass"><span data-i18n="lbl.pass"></span></label>
+        <div class="pass-wrap">
+          <input type="password" id="f-pass" autocomplete="current-password" data-i18n-ph="ph.pass">
+          <button type="button" class="pass-eye" id="eye-1" aria-label="mostrar">👁️</button>
+        </div>
 
-      <div id="signup-extra" class="hidden">
-        <label class="field-label" for="f-pass2"><span data-i18n="lbl.pass2"></span></label>
-        <input type="password" id="f-pass2" autocomplete="new-password">
-        <div class="notice" data-i18n-html="warn.e2e"></div>
-        <label style="display:flex;gap:10px;align-items:flex-start;font-size:0.9rem;cursor:pointer">
-          <input type="checkbox" id="f-ack" style="width:auto;margin-top:4px">
-          <span data-i18n="ack.label"></span>
-        </label>
-      </div>
+        <div id="signup-extra" class="hidden">
+          <label class="field-label" for="f-pass2"><span data-i18n="lbl.pass2"></span></label>
+          <div class="pass-wrap">
+            <input type="password" id="f-pass2" autocomplete="new-password">
+            <button type="button" class="pass-eye" id="eye-2" aria-label="mostrar">👁️</button>
+          </div>
+          <div class="notice" data-i18n-html="warn.e2e"></div>
+          <label style="display:flex;gap:10px;align-items:flex-start;font-size:0.9rem;cursor:pointer">
+            <input type="checkbox" id="f-ack" style="width:auto;margin-top:4px">
+            <span data-i18n="ack.label"></span>
+          </label>
+        </div>
 
-      <p class="small" id="auth-error" style="color:var(--critical);min-height:1.2em;margin:10px 0 0"></p>
+        <p class="small" id="auth-error" style="color:var(--critical);min-height:1.2em;margin:12px 0 0"></p>
 
-      <div class="center mt-2">
-        <button class="btn" id="btn-submit"></button>
+        <button class="btn" id="btn-submit" style="width:100%;margin-top:10px"></button>
       </div>
     </div>
 
-    <div class="panel panel-soft">
+    <div class="panel">
       <h3 style="margin-top:0" data-i18n="how.title"></h3>
-      <p class="small" data-i18n="how.p1" style="margin-bottom:8px"></p>
-      <p class="small" data-i18n="how.p2" style="margin:0"></p>
+      <div class="privacy-steps">
+        <div class="privacy-step">
+          <span class="ico">🔑</span>
+          <div><h4 data-i18n="how.1t"></h4><p data-i18n="how.1p"></p></div>
+        </div>
+        <div class="privacy-step">
+          <span class="ico">🗄️</span>
+          <div><h4 data-i18n="how.2t"></h4><p data-i18n="how.2p"></p></div>
+        </div>
+        <div class="privacy-step">
+          <span class="ico">🙈</span>
+          <div><h4 data-i18n="how.3t"></h4><p data-i18n="how.3p"></p></div>
+        </div>
+        <div class="privacy-step">
+          <span class="ico">🧭</span>
+          <div><h4 data-i18n="how.4t"></h4><p data-i18n="how.4p"></p></div>
+        </div>
+      </div>
     </div>
   </section>
 
   <section id="panel-account" class="hidden">
     <div class="panel">
-      <h3 style="margin-top:0"><span data-i18n="acct.hello"></span> <span id="acct-email" style="color:var(--brand-ink)"></span></h3>
-      <p class="small muted" data-i18n="acct.what"></p>
-      <p class="small" id="sync-status" style="font-weight:700"></p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+      <div class="acct-head">
+        <span class="avatar" id="acct-avatar"></span>
+        <div>
+          <h3 style="margin:0"><span data-i18n="acct.hello"></span></h3>
+          <p class="small muted" style="margin:2px 0 0" id="acct-email"></p>
+        </div>
+      </div>
+      <p class="small muted" data-i18n="acct.what" style="margin-top:16px"></p>
+      <p class="small" id="sync-status" style="font-weight:700;min-height:1.2em"></p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
         <button class="btn btn-sm" id="btn-sync" data-i18n="btn.sync"></button>
         <button class="btn btn-ghost btn-sm" id="btn-logout" data-i18n="btn.logout"></button>
         <button class="btn btn-danger btn-sm" id="btn-delete" data-i18n="btn.delete" style="margin-left:auto"></button>
@@ -88,33 +126,45 @@ window.PAGE = {
     pt: {
       "page.title": "A tua conta",
       "crumb": "PsicoLab",
-      "intro.lead": "Com uma conta, o diário emocional, o registo de pensamentos, a gratidão e os hábitos ficam guardados de forma cifrada — e acompanham-te em qualquer dispositivo.",
-      "unconf.p": "⚙️ O sistema de contas ainda não está activo — falta configurar o backend na Cloudflare (instruções em cloudflare/README.md no repositório).",
+      "intro.lead": "Cria uma conta gratuita para guardares o diário emocional, o registo de pensamentos, a gratidão e os hábitos em segurança, no telemóvel e no computador.",
+      "unconf.p": "⚙️ O sistema de contas ainda não está activo. Falta configurar o backend na Cloudflare (instruções em cloudflare/README.md no repositório).",
+      "side.title": "Os teus registos, sempre contigo",
+      "side.sub": "Em qualquer dispositivo, sempre protegidos.",
+      "side.b1": "Acede no telemóvel e no computador",
+      "side.b2": "Tudo cifrado antes de sair do teu browser",
+      "side.b3": "Sem anúncios, sem partilha de dados, sem custos",
+      "side.b4": "Podes apagar tudo quando quiseres",
       "tab.login": "Entrar",
       "tab.signup": "Criar conta",
       "ph.email": "o.teu@email.com",
       "lbl.pass": "Palavra-passe",
       "lbl.pass2": "Repete a palavra-passe",
       "ph.pass": "mínimo 8 caracteres",
-      "warn.e2e": "<strong>🔐 Importante:</strong> os teus registos são cifrados no teu browser com uma chave derivada da palavra-passe. Nem o servidor nem a administração do site os conseguem ler. Por isso, <strong>se perderes a palavra-passe, os dados guardados no servidor ficam irrecuperáveis</strong> — não há «recuperar palavra-passe».",
-      "ack.label": "Compreendo que, se perder a palavra-passe, os meus dados sincronizados não podem ser recuperados.",
+      "warn.e2e": "<strong>🔐 Guarda bem a tua palavra-passe.</strong> Os teus registos são fechados com uma chave criada a partir dela, e ninguém tem essa chave a não ser tu. Se te esqueceres da palavra-passe, não conseguimos recuperar o que está guardado na conta.",
+      "ack.label": "Compreendo que, se perder a palavra-passe, os registos guardados na conta não podem ser recuperados.",
       "btn.login": "Entrar",
       "btn.signup": "Criar conta",
-      "how.title": "Como funciona a privacidade",
-      "how.p1": "1. A tua palavra-passe nunca sai do teu browser. A partir dela derivam-se duas chaves: uma para provar quem és ao servidor, outra — que o servidor nunca vê — para cifrar os teus registos (AES-256).",
-      "how.p2": "2. O servidor guarda apenas texto cifrado. Só sincronizamos as ferramentas que precisam de memória: diário emocional, registo de pensamentos, gratidão e hábitos. Os testes e jogos não enviam nada.",
-      "acct.hello": "Sessão iniciada:",
-      "acct.what": "Diário emocional, registo de pensamentos, gratidão e hábitos sincronizam-se automaticamente sempre que guardas algo.",
+      "how.title": "A tua privacidade, explicada de forma simples",
+      "how.1t": "A chave é só tua",
+      "how.1p": "Quando crias a conta, o teu browser cria uma chave secreta a partir da tua palavra-passe. Essa chave nunca sai do teu dispositivo.",
+      "how.2t": "Guardamos um cofre fechado",
+      "how.2p": "Antes de saírem do teu browser, os registos são fechados nesse cofre digital. O que chega ao servidor é ilegível: parece uma sequência de letras e números sem sentido.",
+      "how.3t": "Nem nós conseguimos ler",
+      "how.3p": "Sem a tua chave, ninguém abre o cofre. Nem a equipa do PsicoLab, nem a empresa onde ele fica guardado.",
+      "how.4t": "Guardamos só o essencial",
+      "how.4p": "Apenas o teu email e os registos das ferramentas (diário, pensamentos, gratidão e hábitos). Os testes e os jogos não enviam nada. Podes apagar a conta a qualquer momento.",
+      "acct.hello": "Olá! 🌿",
+      "acct.what": "O diário emocional, o registo de pensamentos, a gratidão e os hábitos sincronizam-se sozinhos sempre que guardas alguma coisa.",
       "btn.sync": "Sincronizar agora",
       "btn.logout": "Terminar sessão",
       "btn.delete": "Apagar conta e dados",
-      "sync.done": "✔ Sincronizado",
-      "sync.pulled": "✔ Sincronizado — registos mais recentes recebidos",
-      "sync.err": "✖ Falha na sincronização — verifica a ligação",
+      "sync.done": "✔ Tudo sincronizado",
+      "sync.pulled": "✔ Sincronizado. Recebemos registos mais recentes.",
+      "sync.err": "✖ Não foi possível sincronizar. Verifica a ligação.",
       "sync.ing": "A sincronizar...",
-      "acct.note": "🔐 Os dados locais deste browser continuam a existir depois de terminares a sessão. Apagar a conta remove tudo o que está no servidor — os dados locais ficam intactos.",
+      "acct.note": "🔐 Os dados guardados neste browser continuam cá depois de terminares a sessão. Se apagares a conta, removemos tudo o que está no servidor.",
       "del.confirm1": "Apagar a conta e TODOS os dados no servidor? Esta acção não pode ser desfeita.",
-      "del.confirm2": "Confirmas mesmo? Os dados cifrados no servidor serão eliminados definitivamente.",
+      "del.confirm2": "Confirmas mesmo? Os dados no servidor serão eliminados definitivamente.",
       "err.bad_credentials": "Email ou palavra-passe incorrectos.",
       "err.email_taken": "Já existe uma conta com esse email.",
       "err.invalid_input": "Verifica o email e a palavra-passe (mínimo 8 caracteres).",
@@ -126,33 +176,45 @@ window.PAGE = {
     en: {
       "page.title": "Your account",
       "crumb": "PsychLab",
-      "intro.lead": "With an account, your mood diary, thought records, gratitude and habits are stored encrypted — and follow you on any device.",
-      "unconf.p": "⚙️ The account system is not active yet — the Cloudflare backend still needs to be configured (instructions in cloudflare/README.md in the repository).",
+      "intro.lead": "Create a free account to keep your mood diary, thought records, gratitude and habits safe, on your phone and on your computer.",
+      "unconf.p": "⚙️ The account system is not active yet. The Cloudflare backend still needs to be configured (instructions in cloudflare/README.md in the repository).",
+      "side.title": "Your entries, always with you",
+      "side.sub": "On any device, always protected.",
+      "side.b1": "Use it on your phone and your computer",
+      "side.b2": "Everything is locked before it leaves your browser",
+      "side.b3": "No ads, no data sharing, no costs",
+      "side.b4": "You can delete everything whenever you want",
       "tab.login": "Sign in",
       "tab.signup": "Create account",
       "ph.email": "your@email.com",
       "lbl.pass": "Password",
       "lbl.pass2": "Repeat the password",
       "ph.pass": "minimum 8 characters",
-      "warn.e2e": "<strong>🔐 Important:</strong> your entries are encrypted in your browser with a key derived from your password. Neither the server nor the site administrators can read them. Therefore, <strong>if you lose your password, the data stored on the server becomes unrecoverable</strong> — there is no \"password reset\".",
-      "ack.label": "I understand that if I lose my password, my synced data cannot be recovered.",
+      "warn.e2e": "<strong>🔐 Keep your password safe.</strong> Your entries are locked with a key created from it, and nobody has that key except you. If you forget your password, we cannot recover what is stored in the account.",
+      "ack.label": "I understand that if I lose my password, the entries stored in the account cannot be recovered.",
       "btn.login": "Sign in",
       "btn.signup": "Create account",
-      "how.title": "How privacy works",
-      "how.p1": "1. Your password never leaves your browser. Two keys are derived from it: one to prove who you are to the server, another — which the server never sees — to encrypt your entries (AES-256).",
-      "how.p2": "2. The server stores only ciphertext. We sync only the tools that need memory: mood diary, thought records, gratitude and habits. Tests and games send nothing.",
-      "acct.hello": "Signed in:",
-      "acct.what": "Mood diary, thought records, gratitude and habits sync automatically whenever you save something.",
+      "how.title": "Your privacy, explained simply",
+      "how.1t": "The key is yours alone",
+      "how.1p": "When you create the account, your browser creates a secret key from your password. That key never leaves your device.",
+      "how.2t": "We store a locked safe",
+      "how.2p": "Before they leave your browser, your entries are locked inside that digital safe. What reaches the server is unreadable: it looks like a meaningless string of letters and numbers.",
+      "how.3t": "Not even we can read it",
+      "how.3p": "Without your key, nobody can open the safe. Not the PsychLab team, and not the company where it is stored.",
+      "how.4t": "We keep only the essentials",
+      "how.4p": "Just your email and the entries from the tools (diary, thoughts, gratitude and habits). Tests and games send nothing. You can delete the account at any time.",
+      "acct.hello": "Hello! 🌿",
+      "acct.what": "Your mood diary, thought records, gratitude and habits sync by themselves whenever you save something.",
       "btn.sync": "Sync now",
       "btn.logout": "Sign out",
       "btn.delete": "Delete account and data",
-      "sync.done": "✔ Synced",
-      "sync.pulled": "✔ Synced — newer entries received",
-      "sync.err": "✖ Sync failed — check your connection",
+      "sync.done": "✔ Everything synced",
+      "sync.pulled": "✔ Synced. Newer entries received.",
+      "sync.err": "✖ Could not sync. Check your connection.",
       "sync.ing": "Syncing...",
-      "acct.note": "🔐 The local data in this browser remains after you sign out. Deleting the account removes everything on the server — local data stays intact.",
+      "acct.note": "🔐 The data saved in this browser stays here after you sign out. If you delete the account, we remove everything stored on the server.",
       "del.confirm1": "Delete the account and ALL data on the server? This cannot be undone.",
-      "del.confirm2": "Are you sure? The encrypted data on the server will be permanently deleted.",
+      "del.confirm2": "Are you sure? The data on the server will be permanently deleted.",
       "err.bad_credentials": "Incorrect email or password.",
       "err.email_taken": "An account with that email already exists.",
       "err.invalid_input": "Check the email and password (minimum 8 characters).",
@@ -184,6 +246,7 @@ window.PAGE = {
     if (u) {
       show("account");
       $("acct-email").textContent = u.email;
+      $("acct-avatar").textContent = (u.email || "?").charAt(0);
     } else {
       show("auth");
       renderMode();
@@ -192,8 +255,8 @@ window.PAGE = {
 
   function renderMode() {
     var login = mode === "login";
-    $("tab-login").className = login ? "btn btn-sm" : "btn btn-ghost btn-sm";
-    $("tab-signup").className = login ? "btn btn-ghost btn-sm" : "btn btn-sm";
+    $("tab-login").classList.toggle("active", login);
+    $("tab-signup").classList.toggle("active", !login);
     $("signup-extra").classList.toggle("hidden", login);
     $("btn-submit").textContent = PL.t(login ? "btn.login" : "btn.signup");
     $("f-pass").setAttribute("autocomplete", login ? "current-password" : "new-password");
@@ -227,6 +290,14 @@ window.PAGE = {
     });
   }
 
+  function eye(btnId, inputId) {
+    $(btnId).addEventListener("click", function () {
+      var f = $(inputId);
+      f.type = f.type === "password" ? "text" : "password";
+      $(btnId).textContent = f.type === "password" ? "👁️" : "🙈";
+    });
+  }
+
   document.addEventListener("pl:sync-ready", function () {
     ready = true;
     render();
@@ -235,6 +306,8 @@ window.PAGE = {
     $("tab-signup").addEventListener("click", function () { mode = "signup"; renderMode(); });
     $("btn-submit").addEventListener("click", submit);
     $("f-pass").addEventListener("keydown", function (e) { if (e.key === "Enter" && mode === "login") submit(); });
+    eye("eye-1", "f-pass");
+    eye("eye-2", "f-pass2");
 
     $("btn-sync").addEventListener("click", function () {
       $("sync-status").textContent = PL.t("sync.ing");
