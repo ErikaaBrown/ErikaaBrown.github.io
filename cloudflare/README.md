@@ -16,6 +16,9 @@ A palavra-passe nunca é enviada: o browser deriva duas chaves distintas
 2. Nome: `psicolab-db` → **Create**.
 3. Abre a base criada, separador **Console**, cola o conteúdo de
    `schema.sql` e executa.
+   - Se a consola reclamar, executa cada instrução separadamente
+     (os dois `CREATE TABLE` e o `CREATE INDEX`, um de cada vez).
+     Voltar a executar não faz mal — os `IF NOT EXISTS` protegem.
 
 ### 2. Criar o Worker
 1. **Compute (Workers) → Workers & Pages → Create → Create Worker**.
