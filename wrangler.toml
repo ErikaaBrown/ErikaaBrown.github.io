@@ -1,0 +1,8 @@
+name = "psicolab-api"
+main = "cloudflare/worker.js"
+compatibility_date = "2026-07-04"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "psicolab-db"
+database_id = "07f02119-82f5-4c55-a32a-0dc65f1c721c"
