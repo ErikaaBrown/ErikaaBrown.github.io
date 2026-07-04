@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caixa das Preocupações · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>📦 <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section class="panel panel-soft">
+    <p style="margin:0" data-i18n="how.p"></p>
+  </section>
+
+  <section class="panel">
+    <h3 style="margin-top:0" data-i18n="add.title"></h3>
+    <label class="field-label" for="f-worry" data-i18n="add.label"></label>
+    <textarea id="f-worry" data-i18n-ph="add.ph" style="min-height:70px" maxlength="300"></textarea>
+    <div class="center mt-2">
+      <button class="btn" id="btn-add" data-i18n="btn.add"></button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="tiles">
+      <div class="tile"><div class="num" id="stat-open">0</div><div class="lbl" data-i18n="stat.open"></div></div>
+      <div class="tile"><div class="num" id="stat-resolved">0</div><div class="lbl" data-i18n="stat.resolved"></div></div>
+      <div class="tile"><div class="num" id="stat-pct">—</div><div class="lbl" data-i18n="stat.pct"></div></div>
+    </div>
+    <p class="small muted" id="punchline" style="margin:4px 0 0"></p>
+  </section>
+
+  <section>
+    <h2 data-i18n="open.title"></h2>
+    <p class="small muted" data-i18n="open.sub"></p>
+    <div id="open-list"></div>
+    <p class="small muted hidden" id="open-empty" data-i18n="open.empty"></p>
+  </section>
+
+  <section>
+    <h2 data-i18n="res.title"></h2>
+    <div id="resolved-list"></div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tools",
+  i18n: {
+    pt: {
+      "page.title": "Caixa das Preocupações",
+      "crumb": "Ferramentas",
+      "intro.lead": "Uma técnica simples da terapia cognitivo-comportamental: em vez de discutires com as preocupações a toda a hora, guarda-as numa caixa e marca um encontro com elas.",
+      "how.p": "💡 Como funciona: quando uma preocupação aparecer fora de horas, escreve-a aqui e volta ao que estavas a fazer. Reserva 15 minutos por dia (o «tempo de preocupação») para abrir a caixa. Mais tarde, quando souberes o desfecho, regista se a preocupação se concretizou. A investigação sugere que a grande maioria nunca acontece, e ver essa percentagem com os teus próprios dados é o melhor antídoto.",
+      "add.title": "Guardar uma preocupação",
+      "add.label": "O que te anda a ocupar a cabeça?",
+      "add.ph": "ex.: E se a apresentação de sexta correr mal?",
+      "btn.add": "Guardar na caixa",
+      "added": "Guardada. Volta ao teu dia 🌿",
+      "empty.req": "Escreve primeiro a preocupação",
+      "stat.open": "Na caixa",
+      "stat.resolved": "Com desfecho",
+      "stat.pct": "Não aconteceram",
+      "punch.some": "Dos receios que já têm desfecho, esta percentagem nunca se concretizou. Os dados falam por si.",
+      "punch.none": "Quando registares desfechos, vais ver aqui que percentagem das tuas preocupações nunca chegou a acontecer.",
+      "open.title": "Na caixa",
+      "open.sub": "Quando souberes o desfecho, marca-o. É esse o momento em que a técnica ensina.",
+      "open.empty": "A caixa está vazia. Bom sinal 🌿",
+      "res.title": "Com desfecho",
+      "btn.happened": "Aconteceu",
+      "btn.nothappened": "Não aconteceu",
+      "tag.happened": "aconteceu",
+      "tag.nothappened": "não aconteceu",
+      "del.confirm": "Apagar esta preocupação?"
+    },
+    en: {
+      "page.title": "The Worry Box",
+      "crumb": "Tools",
+      "intro.lead": "A simple technique from cognitive-behavioural therapy: instead of arguing with your worries all day, store them in a box and schedule a meeting with them.",
+      "how.p": "💡 How it works: when a worry shows up outside hours, write it here and get back to what you were doing. Set aside 15 minutes a day (your \"worry time\") to open the box. Later, when you know the outcome, record whether the worry came true. Research suggests the vast majority never happen, and seeing that percentage with your own data is the best antidote.",
+      "add.title": "Store a worry",
+      "add.label": "What is occupying your mind?",
+      "add.ph": "e.g.: What if Friday's presentation goes badly?",
+      "btn.add": "Put it in the box",
+      "added": "Stored. Back to your day 🌿",
+      "empty.req": "Write the worry first",
+      "stat.open": "In the box",
+      "stat.resolved": "With an outcome",
+      "stat.pct": "Never happened",
+      "punch.some": "Of the worries that already have an outcome, this percentage never came true. The data speaks for itself.",
+      "punch.none": "Once you record outcomes, you will see here what percentage of your worries never actually happened.",
+      "open.title": "In the box",
+      "open.sub": "When you know the outcome, mark it. That is the moment the technique teaches.",
+      "open.empty": "The box is empty. A good sign 🌿",
+      "res.title": "With an outcome",
+      "btn.happened": "It happened",
+      "btn.nothappened": "It did not happen",
+      "tag.happened": "happened",
+      "tag.nothappened": "did not happen",
+      "del.confirm": "Delete this worry?"
+    }
+  }
+};
+</script>
+<script src="../js/app.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var worries = PL.load("worries", []);
+
+  function save() { PL.store("worries", worries); }
+
+  function renderStats() {
+    var open = worries.filter(function (w) { return !w.done; }).length;
+    var resolved = worries.filter(function (w) { return w.done; });
+    $("stat-open").textContent = open;
+    $("stat-resolved").textContent = resolved.length;
+    if (resolved.length) {
+      var not = resolved.filter(function (w) { return !w.happened; }).length;
+      $("stat-pct").textContent = Math.round(not / resolved.length * 100) + "%";
+      $("punchline").textContent = PL.t("punch.some");
+    } else {
+      $("stat-pct").textContent = "—";
+      $("punchline").textContent = PL.t("punch.none");
+    }
+  }
+
+  function renderLists() {
+    var openBox = $("open-list"), resBox = $("resolved-list");
+    openBox.innerHTML = ""; resBox.innerHTML = "";
+    var openCount = 0;
+
+    worries.slice().reverse().forEach(function (w) {
+      var idx = worries.indexOf(w);
+      var div = document.createElement("div");
+      div.className = "entry";
+      if (!w.done) {
+        openCount++;
+        div.innerHTML =
+          "<div class='entry-head'><span class='entry-date'>" + PL.fmtDate(w.added) + "</span>" +
+          "<button class='del' data-del='" + idx + "'>🗑️</button></div>" +
+          "<p style='margin:8px 0 12px'>" + PL.esc(w.text) + "</p>" +
+          "<div style='display:flex;gap:8px;flex-wrap:wrap'>" +
+          "<button class='btn btn-ghost btn-sm' data-outcome='1' data-i='" + idx + "'>😬 " + PL.t("btn.happened") + "</button>" +
+          "<button class='btn btn-sm' data-outcome='0' data-i='" + idx + "'>🌤️ " + PL.t("btn.nothappened") + "</button>" +
+          "</div>";
+        openBox.appendChild(div);
+      } else {
+        var tag = w.happened
+          ? "<span class='chip' style='background:color-mix(in srgb, var(--serious) 18%, var(--surface-2))'>😬 " + PL.t("tag.happened") + "</span>"
+          : "<span class='chip' style='background:var(--brand-soft);color:var(--brand-ink)'>🌤️ " + PL.t("tag.nothappened") + "</span>";
+        div.innerHTML =
+          "<div class='entry-head'><span class='entry-date'>" + PL.fmtDate(w.added) + "</span>" + tag +
+          "<button class='del' data-del='" + idx + "'>🗑️</button></div>" +
+          "<p class='small muted' style='margin:8px 0 0'>" + PL.esc(w.text) + "</p>";
+        resBox.appendChild(div);
+      }
+    });
+
+    $("open-empty").classList.toggle("hidden", openCount > 0);
+
+    document.querySelectorAll("[data-outcome]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var w = worries[parseInt(b.getAttribute("data-i"), 10)];
+        w.done = true;
+        w.happened = b.getAttribute("data-outcome") === "1";
+        w.resolved = PL.todayISO();
+        save();
+        renderAll();
+      });
+    });
+    document.querySelectorAll(".del").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (confirm(PL.t("del.confirm"))) {
+          worries.splice(parseInt(b.getAttribute("data-del"), 10), 1);
+          save();
+          renderAll();
+        }
+      });
+    });
+  }
+
+  function renderAll() { renderStats(); renderLists(); }
+
+  $("btn-add").addEventListener("click", function () {
+    var text = $("f-worry").value.trim();
+    if (!text) { PL.toast(PL.t("empty.req")); return; }
+    worries.push({ text: text, added: PL.todayISO(), done: false, happened: false });
+    save();
+    $("f-worry").value = "";
+    PL.toast(PL.t("added"));
+    renderAll();
+  });
+
+  document.addEventListener("pl:ready", renderAll);
+  PL.onLang(renderAll);
+})();
+</script>
+</body>
+</html>

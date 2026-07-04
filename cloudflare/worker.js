@@ -16,7 +16,7 @@ const ALLOWED_ORIGINS = [
   "http://127.0.0.1:8765"
 ];
 
-const TOOLS = ["mood", "thoughts", "gratitude", "habits"];
+const TOOLS = ["mood", "thoughts", "gratitude", "habits", "sleep", "worries", "scores"];
 const MAX_BLOB = 300 * 1024; // 300 KB por ferramenta
 const TOKEN_TTL_S = 60 * 60 * 24 * 30; // 30 dias
 
