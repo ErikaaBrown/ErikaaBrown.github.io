@@ -23,8 +23,8 @@ jobs:
 
       - name: Commit se houver alterações
         run: |
-          git config user.name "psicolab-bot"
-          git config user.email "actions@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/articles.json
           if git diff --staged --quiet; then
             echo "Sem alterações."

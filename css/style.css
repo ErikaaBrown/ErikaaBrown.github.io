@@ -410,6 +410,57 @@ table.data td { padding: 9px 10px; border-bottom: 1px solid var(--line); font-va
 .article-body p { color: var(--ink-2); font-size: 0.97rem; }
 .article-body h3 { font-size: 1.02rem; }
 
+/* ---------- conta / autenticação ---------- */
+.auth-card {
+  display: grid; grid-template-columns: 0.85fr 1.15fr;
+  padding: 0; overflow: hidden;
+}
+.auth-side {
+  background: linear-gradient(155deg, var(--brand), var(--accent));
+  color: #fff; padding: 36px 30px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.auth-side h2 { color: #fff; margin: 0; font-size: 1.5rem; }
+.auth-side .sub { margin: 0; opacity: 0.92; font-size: 0.95rem; }
+.auth-side ul { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 12px; font-size: 0.92rem; }
+.auth-side li { display: flex; gap: 10px; align-items: flex-start; line-height: 1.45; }
+.auth-main { padding: 32px 30px; }
+.seg { display: flex; background: var(--surface-2); border-radius: 999px; padding: 4px; gap: 4px; margin-bottom: 22px; }
+.seg button {
+  flex: 1; border: none; background: transparent; padding: 10px 8px; border-radius: 999px;
+  font-family: var(--font-body); font-size: 0.95rem; font-weight: 800; color: var(--ink-2);
+  cursor: pointer; transition: all 0.2s;
+}
+.seg button.active { background: var(--surface); color: var(--brand-ink); box-shadow: var(--shadow); }
+.pass-wrap { position: relative; }
+.pass-wrap input { padding-right: 48px; }
+.pass-eye {
+  position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+  border: none; background: none; cursor: pointer; font-size: 1.05rem;
+  padding: 7px 9px; border-radius: 9px; color: var(--ink-3);
+}
+.pass-eye:hover { background: var(--surface-2); }
+.privacy-steps { display: grid; gap: 16px; }
+.privacy-step { display: flex; gap: 14px; align-items: flex-start; }
+.privacy-step .ico {
+  width: 44px; height: 44px; border-radius: 13px; background: var(--brand-soft);
+  display: grid; place-items: center; font-size: 1.25rem; flex-shrink: 0;
+}
+.privacy-step h4 { margin: 0 0 3px; font-size: 0.98rem; font-family: var(--font-body); font-weight: 800; }
+.privacy-step p { margin: 0; font-size: 0.92rem; color: var(--ink-2); }
+.acct-head { display: flex; gap: 16px; align-items: center; }
+.avatar {
+  width: 54px; height: 54px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--brand), var(--accent));
+  color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 1.35rem;
+  text-transform: uppercase;
+}
+@media (max-width: 760px) {
+  .auth-card { grid-template-columns: 1fr; }
+  .auth-side { padding: 26px 22px; }
+  .auth-main { padding: 24px 20px; }
+}
+
 /* ---------- feed de artigos ---------- */
 .feed-item { padding: 20px 22px; }
 .feed-head { display: flex; gap: 16px; align-items: flex-start; }
