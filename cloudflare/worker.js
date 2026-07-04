@@ -1,18 +1,15 @@
 /**
  * PsicoLab — API de contas e sincronização (Cloudflare Worker, ficheiro único)
  *
- * Pode ser colado directamente no editor do dashboard da Cloudflare.
  * Requisitos configurados no dashboard:
- *   - Binding D1 com o nome "DB" (base de dados criada com schema.sql)
- *   - Variável secreta "SESSION_SECRET" (string longa e aleatória)
+ * - Binding D1 com o nome "DB" (base de dados criada com schema.sql)
+ * - Variável secreta "SESSION_SECRET" (string longa e aleatória)
  *
  * Privacidade: o servidor só guarda blobs cifrados no browser (AES-GCM).
  * A palavra-passe nunca chega aqui — o cliente envia uma chave de
  * autenticação derivada (PBKDF2), distinta da chave de cifra.
  */
-export default {
-  async fetch(request, env) {
-    
+
 const ALLOWED_ORIGINS = [
   "https://erikaabrown.github.io",
   "http://localhost:8765",
@@ -114,7 +111,6 @@ async function login(env, body, origin) {
   const row = await env.DB.prepare(
     "SELECT id, auth_salt, auth_hash FROM users WHERE email = ?"
   ).bind(email).first();
-  // resposta idêntica para email inexistente e palavra-passe errada
   if (!row) return json({ error: "bad_credentials" }, 401, origin);
   const hash = await sha256hex(row.auth_salt + "|" + body.authKey);
   if (hash !== row.auth_hash) return json({ error: "bad_credentials" }, 401, origin);
@@ -194,6 +190,3 @@ export default {
     }
   }
 };
-
-    }
-}
