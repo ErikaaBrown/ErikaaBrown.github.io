@@ -160,7 +160,25 @@ window.PAGE = {
     { id: "random",
       name: { pt: "Aleatório", en: "Random" },
       desc: { pt: "Escolheu ao calhas em cada ronda. Contra o caos, nenhuma estratégia de confiança se consegue formar.", en: "Chose at random every round. Against chaos, no strategy of trust can form." },
-      play: function () { return Math.random() < 0.5 ? "C" : "D"; } }
+      play: function () { return Math.random() < 0.5 ? "C" : "D"; } },
+    { id: "pavlov",
+      name: { pt: "Pavlov (ganhou-fica, perdeu-muda)", en: "Pavlov (win-stay, lose-shift)" },
+      desc: { pt: "Se a última ronda lhe correu bem, repetiu a jogada; se correu mal, mudou. Uma regra de aprendizagem simples que coopera bem — mas explora quem perdoa demasiado.", en: "If the last round went well for it, it repeated the move; if it went badly, it switched. A simple learning rule that cooperates well — but exploits those who forgive too much." },
+      play: function (h) {
+        if (!h.opp.length) return "C";
+        var o = h.opp[h.opp.length - 1], y = h.you[h.you.length - 1];
+        var won = y === "C"; // recebeu 3 (CC) ou 5 (DC): em ambos os casos, tu cooperaste
+        return won ? o : (o === "C" ? "D" : "C");
+      } },
+    { id: "gtft",
+      name: { pt: "Olho por Olho Generoso", en: "Generous Tit for Tat" },
+      desc: { pt: "Como o Olho por Olho, mas perdoou cerca de um terço das traições. Em ambientes com ruído, a generosidade evita ciclos infinitos de vingança.", en: "Like Tit for Tat, but it forgave about a third of betrayals. In noisy environments, generosity prevents endless cycles of revenge." },
+      play: function (h) {
+        if (!h.you.length) return "C";
+        var last = h.you[h.you.length - 1];
+        if (last === "D" && Math.random() < 0.33) return "C";
+        return last;
+      } }
   ];
 
   var PAYOFF = { CC: [3, 3], CD: [0, 5], DC: [5, 0], DD: [1, 1] };
@@ -226,7 +244,10 @@ window.PAGE = {
   }
 
   function start() {
-    strat = STRATEGIES[Math.floor(Math.random() * STRATEGIES.length)];
+    var lastId = PL.load("dilemma_last", null);
+    var pool = STRATEGIES.filter(function (s) { return s.id !== lastId; });
+    strat = pool[Math.floor(Math.random() * pool.length)];
+    PL.store("dilemma_last", strat.id);
     hist = { you: [], opp: [] };
     youPts = 0; oppPts = 0; round = 0;
     show("game");

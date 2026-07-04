@@ -20,7 +20,20 @@
     <p data-i18n="intro.lead"></p>
   </div>
 
-  <div id="articles" style="margin-top:1.5rem"></div>
+  <section id="feed-section" class="hidden">
+    <div class="section-head" style="margin-top:1.5rem">
+      <h2 data-i18n="feed.title"></h2>
+      <span class="sub" id="feed-updated"></span>
+    </div>
+    <p class="small muted" data-i18n="feed.license"></p>
+    <div id="feed-list"></div>
+  </section>
+  <p class="small muted hidden" id="feed-absent" data-i18n="feed.absent"></p>
+
+  <div class="section-head" style="margin-top:3rem">
+    <h2 data-i18n="ours.title"></h2>
+  </div>
+  <div id="articles"></div>
 </main>
 
 <div id="site-footer"></div>
@@ -36,7 +49,18 @@ window.PAGE = {
       "intro.lead": "Leituras curtas sobre a mente, escritas com base na investigação — sem jargão nem promessas milagrosas.",
       "read.min": " min de leitura",
       "read.open": "Ler artigo ↓",
-      "read.close": "Fechar ↑"
+      "read.close": "Fechar ↑",
+      "feed.title": "Da imprensa científica",
+      "feed.updated": "actualizado a ",
+      "feed.license": "Selecção diária e automática (em inglês). Os artigos do The Conversation são republicados na íntegra ao abrigo da licença Creative Commons BY-ND, com crédito ao autor; das restantes fontes mostramos apenas o resumo e a ligação para o original.",
+      "feed.absent": "A lista de artigos da imprensa ainda não foi gerada — aparece após a primeira execução automática (corre todos os dias).",
+      "feed.read": "Ler aqui ↓",
+      "feed.close": "Fechar ↑",
+      "feed.readsource": "Ler na fonte ↗",
+      "feed.by": "Por ",
+      "feed.attribution": "Este artigo foi republicado do The Conversation ao abrigo da licença Creative Commons BY-ND. ",
+      "feed.original": "Ler o artigo original",
+      "ours.title": "Os nossos artigos"
     },
     en: {
       "page.title": "Articles",
@@ -44,7 +68,18 @@ window.PAGE = {
       "intro.lead": "Short reads about the mind, grounded in research — no jargon, no miracle promises.",
       "read.min": " min read",
       "read.open": "Read article ↓",
-      "read.close": "Close ↑"
+      "read.close": "Close ↑",
+      "feed.title": "From the science press",
+      "feed.updated": "updated ",
+      "feed.license": "Daily automatic selection (in English). The Conversation articles are republished in full under the Creative Commons BY-ND licence, with credit to the author; for the other sources we show only the summary and a link to the original.",
+      "feed.absent": "The press article list has not been generated yet — it appears after the first automatic run (runs daily).",
+      "feed.read": "Read here ↓",
+      "feed.close": "Close ↑",
+      "feed.readsource": "Read at the source ↗",
+      "feed.by": "By ",
+      "feed.attribution": "This article is republished from The Conversation under a Creative Commons BY-ND licence. ",
+      "feed.original": "Read the original article",
+      "ours.title": "Our articles"
     }
   }
 };
@@ -161,6 +196,79 @@ window.PAGE = {
 
   document.addEventListener("pl:ready", render);
   PL.onLang(render);
+})();
+</script>
+<script>
+/* Feed diário "Da imprensa científica" — lê data/articles.json gerado pela Action */
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var feed = null;
+  var openFeed = {};
+
+  function bylineOf(a) {
+    var parts = [];
+    if (a.author) parts.push(PL.t("feed.by") + PL.esc(a.author));
+    parts.push(PL.esc(a.source));
+    if (a.date) parts.push(PL.fmtDate(a.date));
+    return parts.join(" · ");
+  }
+
+  function renderFeed() {
+    if (!feed) return;
+    $("feed-section").classList.remove("hidden");
+    if (feed.updated) {
+      $("feed-updated").textContent = PL.t("feed.updated") + PL.fmtDate(feed.updated.slice(0, 10));
+    }
+    var box = $("feed-list");
+    box.innerHTML = "";
+    feed.articles.forEach(function (a, i) {
+      var card = document.createElement("div");
+      card.className = "panel feed-item" + (openFeed[i] ? " open" : "");
+      var thumb = a.image
+        ? "<img class='feed-thumb' src='" + PL.esc(a.image) + "' alt='' loading='lazy'>"
+        : "";
+      var action = a.cc
+        ? "<span class='chip' style='background:var(--brand-soft);color:var(--brand-ink);cursor:pointer' data-toggle='" + i + "'>" +
+          PL.t(openFeed[i] ? "feed.close" : "feed.read") + "</span>"
+        : "<a class='chip' style='background:var(--accent-soft)' href='" + PL.esc(a.url) + "' target='_blank' rel='noopener'>" +
+          PL.t("feed.readsource") + "</a>";
+      var body = "";
+      if (a.cc && openFeed[i]) {
+        body = "<div class='article-content'>" + a.contentHtml +
+          "<div class='attribution'>" + PL.t("feed.attribution") +
+          "<a href='" + PL.esc(a.url) + "' target='_blank' rel='noopener'>" + PL.t("feed.original") + "</a></div></div>";
+      }
+      card.innerHTML =
+        "<div class='feed-head'>" + thumb +
+        "<div style='flex:1;min-width:0'>" +
+        "<h3 style='margin:0 0 4px;font-size:1.05rem'>" + PL.esc(a.title) + "</h3>" +
+        "<p class='small muted' style='margin:0 0 8px'>" + bylineOf(a) + "</p>" +
+        "<p class='small' style='margin:0 0 10px;color:var(--ink-2)'>" + PL.esc(a.summary) + "</p>" +
+        action + " <span class='chip'>EN</span>" +
+        "</div></div>" + body;
+      var t = card.querySelector("[data-toggle]");
+      if (t) {
+        t.addEventListener("click", function () {
+          openFeed[i] = !openFeed[i];
+          renderFeed();
+        });
+      }
+      box.appendChild(card);
+    });
+  }
+
+  fetch("../data/articles.json").then(function (r) {
+    if (!r.ok) throw new Error("absent");
+    return r.json();
+  }).then(function (data) {
+    if (!data.articles || !data.articles.length) throw new Error("empty");
+    feed = data;
+    renderFeed();
+  }).catch(function () {
+    $("feed-absent").classList.remove("hidden");
+  });
+
+  PL.onLang(renderFeed);
 })();
 </script>
 </body>

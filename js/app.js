@@ -16,7 +16,8 @@
       "footer.privacy": "Os teus dados ficam apenas no teu browser — nada é enviado para servidores.",
       "footer.made": "Feito com calma 🌿",
       "lang.switch": "Switch to English",
-      "theme.toggle": "Alternar tema claro/escuro"
+      "theme.toggle": "Alternar tema claro/escuro",
+      "nav.account": "Conta"
     },
     en: {
       "site.name": "PsychLab",
@@ -30,7 +31,8 @@
       "footer.privacy": "Your data stays in your browser only — nothing is sent to any server.",
       "footer.made": "Made with calm 🌿",
       "lang.switch": "Mudar para Português",
-      "theme.toggle": "Toggle light/dark theme"
+      "theme.toggle": "Toggle light/dark theme",
+      "nav.account": "Account"
     }
   };
 
@@ -75,6 +77,7 @@
       "<a class=\"logo\" href=\"" + ROOT + "index.html\"><span class=\"mark\">🧠</span><span data-i18n=\"site.name\"></span></a>" +
       "<nav class=\"main-nav\">" + links + "</nav>" +
       "<div class=\"header-actions\">" +
+      "<a id=\"account-btn\" class=\"icon-btn\" href=\"" + ROOT + "account.html\" style=\"text-decoration:none\">👤</a>" +
       "<button id=\"lang-btn\" class=\"icon-btn\"></button>" +
       "<button id=\"theme-btn\" class=\"icon-btn\"></button>" +
       "</div></div></header>";
@@ -109,6 +112,11 @@
       lb.textContent = lang === "pt" ? "EN" : "PT";
       lb.title = t("lang.switch");
       lb.setAttribute("aria-label", t("lang.switch"));
+    }
+    var ab = document.getElementById("account-btn");
+    if (ab) {
+      ab.title = t("nav.account");
+      ab.setAttribute("aria-label", t("nav.account"));
     }
     if (tb) {
       tb.textContent = theme === "dark" ? "☀️" : "🌙";
@@ -210,6 +218,9 @@
     renderFooter();
     applyI18n();
     document.dispatchEvent(new CustomEvent("pl:ready", { detail: { lang: lang } }));
+    var s = document.createElement("script");
+    s.src = ROOT + "js/sync.js";
+    document.body.appendChild(s);
   }
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", boot);
