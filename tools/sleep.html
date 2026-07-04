@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diário de Sono · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>😴 <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section class="panel">
+    <h3 style="margin-top:0" data-i18n="today.title"></h3>
+    <div style="display:flex;gap:14px;flex-wrap:wrap">
+      <div style="flex:1;min-width:150px">
+        <label class="field-label" for="f-bed" data-i18n="f.bed"></label>
+        <input type="time" id="f-bed" value="23:00">
+      </div>
+      <div style="flex:1;min-width:150px">
+        <label class="field-label" for="f-wake" data-i18n="f.wake"></label>
+        <input type="time" id="f-wake" value="07:00">
+      </div>
+    </div>
+    <p class="small muted" id="duration-preview" style="margin:12px 0 0;font-weight:700"></p>
+    <label class="field-label" data-i18n="f.quality"></label>
+    <div class="likert" id="quality" style="max-width:420px"></div>
+    <label class="field-label" for="f-note" data-i18n="f.note"></label>
+    <input type="text" id="f-note" data-i18n-ph="f.note.ph" maxlength="120">
+    <div class="center mt-2">
+      <button class="btn" id="btn-save" data-i18n="btn.save"></button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="tiles">
+      <div class="tile"><div class="num" id="stat-avg">—</div><div class="lbl" data-i18n="stat.avg"></div></div>
+      <div class="tile"><div class="num" id="stat-q">—</div><div class="lbl" data-i18n="stat.q"></div></div>
+      <div class="tile"><div class="num" id="stat-n">0</div><div class="lbl" data-i18n="stat.n"></div></div>
+    </div>
+    <h3 data-i18n="chart.title"></h3>
+    <div class="chart-wrap" id="chart"></div>
+    <p class="small muted hidden" id="empty-msg" data-i18n="chart.empty"></p>
+  </section>
+
+  <section class="panel panel-soft">
+    <h3 style="margin-top:0" data-i18n="tips.title"></h3>
+    <ul style="margin:0;padding-left:20px" id="tips"></ul>
+  </section>
+
+  <section>
+    <h2 data-i18n="hist.title"></h2>
+    <div id="history"></div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tools",
+  i18n: {
+    pt: {
+      "page.title": "Diário de Sono",
+      "crumb": "Ferramentas",
+      "intro.lead": "O sono é o alicerce da regulação emocional. Registar as horas e a qualidade torna visível aquilo que o cansaço esconde.",
+      "today.title": "A noite passada",
+      "f.bed": "Fui para a cama às",
+      "f.wake": "Acordei às",
+      "f.quality": "Qualidade do sono",
+      "f.note": "Nota (opcional)",
+      "f.note.ph": "café tarde, sonhos, despertares...",
+      "btn.save": "Guardar a noite",
+      "saved": "Noite guardada 🌙",
+      "pick.q": "Escolhe primeiro a qualidade",
+      "dur.label": "Duração: ",
+      "stat.avg": "Média de sono (14 noites)",
+      "stat.q": "Qualidade média",
+      "stat.n": "Noites registadas",
+      "chart.title": "Últimas 14 noites",
+      "chart.empty": "O gráfico aparece quando guardares a primeira noite.",
+      "tips.title": "Higiene do sono, em resumo",
+      "tip.1": "Horários regulares valem mais do que noites longas ocasionais: o relógio biológico adora rotina.",
+      "tip.2": "Luz forte de manhã e penumbra à noite ajudam a acertar o ritmo circadiano.",
+      "tip.3": "Cafeína tem uma semi-vida de 5 a 6 horas: o café das 16h ainda está no sangue à meia-noite.",
+      "tip.4": "A cama serve para dormir. Se não adormeceres em 20 minutos, levanta-te e volta quando tiveres sono.",
+      "q1": "Péssima", "q2": "Fraca", "q3": "Razoável", "q4": "Boa", "q5": "Óptima",
+      "hist.title": "Noites anteriores",
+      "del.confirm": "Apagar este registo?",
+      "h.short": "h"
+    },
+    en: {
+      "page.title": "Sleep Diary",
+      "crumb": "Tools",
+      "intro.lead": "Sleep is the foundation of emotional regulation. Logging your hours and quality makes visible what tiredness hides.",
+      "today.title": "Last night",
+      "f.bed": "I went to bed at",
+      "f.wake": "I woke up at",
+      "f.quality": "Sleep quality",
+      "f.note": "Note (optional)",
+      "f.note.ph": "late coffee, dreams, awakenings...",
+      "btn.save": "Save the night",
+      "saved": "Night saved 🌙",
+      "pick.q": "Pick the quality first",
+      "dur.label": "Duration: ",
+      "stat.avg": "Average sleep (14 nights)",
+      "stat.q": "Average quality",
+      "stat.n": "Nights logged",
+      "chart.title": "Last 14 nights",
+      "chart.empty": "The chart appears once you save your first night.",
+      "tips.title": "Sleep hygiene, in short",
+      "tip.1": "Regular times beat occasional long nights: the body clock loves routine.",
+      "tip.2": "Bright light in the morning and dim light at night help set the circadian rhythm.",
+      "tip.3": "Caffeine has a half-life of 5 to 6 hours: a 4 p.m. coffee is still in your blood at midnight.",
+      "tip.4": "The bed is for sleeping. If you are not asleep in 20 minutes, get up and come back when sleepy.",
+      "q1": "Awful", "q2": "Poor", "q3": "Fair", "q4": "Good", "q5": "Great",
+      "hist.title": "Previous nights",
+      "del.confirm": "Delete this entry?",
+      "h.short": "h"
+    }
+  }
+};
+</script>
+<script src="../js/app.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var data = PL.load("sleep", {});
+  var selQ = 0;
+
+  function isoDaysAgo(n) {
+    var d = new Date();
+    d.setDate(d.getDate() - n);
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
+
+  function durationH(bed, wake) {
+    var b = bed.split(":"), w = wake.split(":");
+    var mins = (parseInt(w[0], 10) * 60 + parseInt(w[1], 10)) - (parseInt(b[0], 10) * 60 + parseInt(b[1], 10));
+    if (mins <= 0) mins += 24 * 60;
+    return mins / 60;
+  }
+
+  function fmtH(h) {
+    var hh = Math.floor(h), mm = Math.round((h - hh) * 60);
+    return hh + PL.t("h.short") + (mm ? String(mm).padStart(2, "0") : "");
+  }
+
+  function preview() {
+    $("duration-preview").textContent = PL.t("dur.label") + fmtH(durationH($("f-bed").value, $("f-wake").value));
+  }
+
+  function renderQuality() {
+    var box = $("quality");
+    box.innerHTML = "";
+    for (var i = 1; i <= 5; i++) {
+      (function (i) {
+        var b = document.createElement("button");
+        b.innerHTML = "<span style='display:block;font-size:1.05rem;font-weight:800'>" + i + "</span>" + PL.t("q" + i);
+        if (selQ === i) b.classList.add("sel");
+        b.addEventListener("click", function () { selQ = i; renderQuality(); });
+        box.appendChild(b);
+      })(i);
+    }
+  }
+
+  function renderToday() {
+    var t = data[PL.todayISO()];
+    if (t) {
+      $("f-bed").value = t.b;
+      $("f-wake").value = t.w;
+      selQ = t.q;
+      $("f-note").value = t.note || "";
+    }
+    renderQuality();
+    preview();
+  }
+
+  function last14() {
+    var out = [];
+    for (var i = 13; i >= 0; i--) {
+      var iso = isoDaysAgo(i);
+      out.push({ iso: iso, e: data[iso] || null });
+    }
+    return out;
+  }
+
+  function renderStats() {
+    var nights = last14().filter(function (d) { return d.e; });
+    $("stat-n").textContent = nights.length;
+    if (!nights.length) {
+      $("stat-avg").textContent = "—";
+      $("stat-q").textContent = "—";
+      return;
+    }
+    var avgH = nights.reduce(function (a, d) { return a + durationH(d.e.b, d.e.w); }, 0) / nights.length;
+    var avgQ = nights.reduce(function (a, d) { return a + d.e.q; }, 0) / nights.length;
+    $("stat-avg").textContent = fmtH(avgH);
+    $("stat-q").textContent = avgQ.toFixed(1) + "/5";
+  }
+
+  function renderChart() {
+    var days = last14();
+    var logged = days.filter(function (d) { return d.e; });
+    $("empty-msg").classList.toggle("hidden", logged.length > 0);
+    if (!logged.length) { $("chart").innerHTML = ""; return; }
+
+    var W = 640, H = 240, L = 40, R = 14, T = 14, B = 30;
+    var iw = W - L - R, ih = H - T - B;
+    var maxH = 11;
+    function y(h) { return T + (1 - Math.min(h, maxH) / maxH) * ih; }
+    var bw = iw / 14 * 0.62;
+
+    var grid = "", ylab = "";
+    [2, 4, 6, 8, 10].forEach(function (h) {
+      grid += "<line x1='" + L + "' y1='" + y(h) + "' x2='" + (W - R) + "' y2='" + y(h) + "' style='stroke:var(--grid)' stroke-width='1'/>";
+      ylab += "<text x='" + (L - 8) + "' y='" + (y(h) + 4) + "' text-anchor='end' font-size='11' style='fill:var(--ink-3)'>" + h + PL.t("h.short") + "</text>";
+    });
+    var target = "<line x1='" + L + "' y1='" + y(8) + "' x2='" + (W - R) + "' y2='" + y(8) +
+      "' style='stroke:var(--chart-2)' stroke-width='1.5' stroke-dasharray='5 4'/>";
+
+    var bars = "", xlab = "";
+    days.forEach(function (d, i) {
+      var cx = L + (i + 0.5) / 14 * iw;
+      if (d.e) {
+        var h = durationH(d.e.b, d.e.w);
+        var top = y(h);
+        bars += "<rect x='" + (cx - bw / 2) + "' y='" + top + "' width='" + bw + "' height='" + Math.max(2, (H - B) - top) +
+          "' rx='4' style='fill:var(--chart-1)'><title>" + PL.fmtDate(d.iso) + ": " + fmtH(h) + " · " + d.e.q + "/5</title></rect>";
+      }
+      if (i % 3 === 0) {
+        var dt = new Date(d.iso + "T12:00:00");
+        xlab += "<text x='" + cx + "' y='" + (H - 8) + "' text-anchor='middle' font-size='10' style='fill:var(--ink-3)'>" + dt.getDate() + "/" + (dt.getMonth() + 1) + "</text>";
+      }
+    });
+
+    $("chart").innerHTML = "<svg viewBox='0 0 " + W + " " + H + "'>" + grid + target + ylab + bars + xlab + "</svg>";
+  }
+
+  function renderHistory() {
+    var keys = Object.keys(data).sort().reverse().slice(0, 14);
+    var html = "";
+    keys.forEach(function (iso) {
+      var e = data[iso];
+      html += "<div class='entry'><div class='entry-head'>" +
+        "<span style='font-size:1.2rem'>🌙</span>" +
+        "<span class='entry-date'>" + PL.fmtDate(iso) + "</span>" +
+        "<span class='chip'>" + e.b + " → " + e.w + "</span>" +
+        "<span class='chip'>" + fmtH(durationH(e.b, e.w)) + "</span>" +
+        "<span class='chip'>" + e.q + "/5</span>" +
+        "<button class='del' data-iso='" + iso + "'>🗑️</button></div>" +
+        (e.note ? "<p class='small muted' style='margin:8px 0 0'>" + PL.esc(e.note) + "</p>" : "") +
+        "</div>";
+    });
+    $("history").innerHTML = html;
+    $("history").querySelectorAll(".del").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (confirm(PL.t("del.confirm"))) {
+          delete data[b.getAttribute("data-iso")];
+          PL.store("sleep", data);
+          renderAll();
+        }
+      });
+    });
+  }
+
+  function renderTips() {
+    var html = "";
+    ["tip.1", "tip.2", "tip.3", "tip.4"].forEach(function (k) {
+      html += "<li style='margin:8px 0'>" + PL.t(k) + "</li>";
+    });
+    $("tips").innerHTML = html;
+  }
+
+  function renderAll() {
+    renderToday(); renderStats(); renderChart(); renderHistory(); renderTips();
+  }
+
+  $("btn-save").addEventListener("click", function () {
+    if (!selQ) { PL.toast(PL.t("pick.q")); return; }
+    data[PL.todayISO()] = { b: $("f-bed").value, w: $("f-wake").value, q: selQ, note: $("f-note").value.trim() };
+    PL.store("sleep", data);
+    PL.toast(PL.t("saved"));
+    renderAll();
+  });
+  $("f-bed").addEventListener("input", preview);
+  $("f-wake").addEventListener("input", preview);
+
+  document.addEventListener("pl:ready", renderAll);
+  PL.onLang(renderAll);
+})();
+</script>
+</body>
+</html>

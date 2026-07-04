@@ -3,7 +3,7 @@
 const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
 
 (function () {
-  var SYNC_TOOLS = ["mood", "thoughts", "gratitude", "habits"];
+  var SYNC_TOOLS = ["mood", "thoughts", "gratitude", "habits", "sleep", "worries", "scores"];
   var ITERATIONS = 310000;
 
   function configured() {

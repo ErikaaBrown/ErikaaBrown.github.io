@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amplitude de Memória · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>🔢 <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section id="panel-intro" class="panel">
+    <p data-i18n="intro.p1"></p>
+    <p class="small muted" id="best-line"></p>
+    <div class="center mt-2">
+      <button class="btn" id="btn-start" data-i18n="btn.start"></button>
+    </div>
+  </section>
+
+  <section id="panel-game" class="panel">
+    <div class="hidden" id="stage-show">
+      <p class="small muted center" id="level-line"></p>
+      <div class="game-stage" style="min-height:220px">
+        <div class="stroop-word" id="digit" style="color:var(--brand-ink)"></div>
+      </div>
+    </div>
+    <div class="hidden" id="stage-input">
+      <p class="small muted center" data-i18n="input.prompt"></p>
+      <input type="text" id="f-answer" inputmode="numeric" autocomplete="off"
+             style="text-align:center;font-size:1.6rem;letter-spacing:0.35em;font-weight:800;max-width:360px;margin:0 auto;display:block">
+      <div class="center" style="margin-top:16px">
+        <button class="btn" id="btn-check" data-i18n="btn.check"></button>
+      </div>
+    </div>
+  </section>
+
+  <section id="panel-result" class="hidden">
+    <div class="panel center">
+      <h2 style="margin-top:0" data-i18n="res.title"></h2>
+      <div class="tiles" style="max-width:340px;margin:1rem auto">
+        <div class="tile"><div class="num" id="r-span"></div><div class="lbl" data-i18n="res.span"></div></div>
+        <div class="tile"><div class="num" id="r-best"></div><div class="lbl" data-i18n="res.best"></div></div>
+      </div>
+      <p id="r-comment" class="muted" style="max-width:520px;margin:0 auto"></p>
+    </div>
+    <div class="panel panel-soft">
+      <p style="margin:0" data-i18n="res.expl"></p>
+    </div>
+    <div class="center mt-2">
+      <button class="btn" id="btn-again" data-i18n="btn.again"></button>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "games",
+  i18n: {
+    pt: {
+      "page.title": "Amplitude de Memória",
+      "crumb": "Jogos",
+      "intro.lead": "Quantos dígitos consegues manter na cabeça de uma só vez? Este é o teste clássico da memória de trabalho.",
+      "intro.p1": "Vais ver uma sequência de dígitos, um de cada vez. Quando terminar, escreve-a pela mesma ordem. A cada acerto, a sequência cresce. Tens duas tentativas por nível.",
+      "best.prefix": "O teu recorde: ",
+      "btn.start": "Começar",
+      "btn.check": "Verificar",
+      "btn.again": "Jogar outra vez",
+      "level.line": "Memoriza os ",
+      "level.line2": " dígitos",
+      "input.prompt": "Escreve a sequência pela mesma ordem:",
+      "res.title": "Resultado",
+      "res.span": "A tua amplitude",
+      "res.best": "Recorde",
+      "res.c1": "Amplitude excepcional! Estás claramente acima da média, que ronda os 7 dígitos.",
+      "res.c2": "Na média humana clássica: cerca de 7 dígitos, mais ou menos 2. Exactamente o que George Miller descreveu em 1956.",
+      "res.c3": "Um pouco abaixo da média de hoje, mas nota: cansaço, distracções e ansiedade encolhem temporariamente a memória de trabalho.",
+      "res.expl": "🧠 O que se passa: a memória de trabalho é o «bloco de notas» mental, e é minúscula. Miller falava de 7±2 itens; a investigação moderna aponta para cerca de 4 blocos de informação. O truque para a esticar chama-se agrupamento (chunking): 914 25 736 são três blocos, não oito dígitos. É assim que memorizas números de telefone sem dar por isso.",
+      "new.record": "Novo recorde! 🏆"
+    },
+    en: {
+      "page.title": "Memory Span",
+      "crumb": "Games",
+      "intro.lead": "How many digits can you hold in your head at once? This is the classic working memory test.",
+      "intro.p1": "You will see a sequence of digits, one at a time. When it ends, type it back in the same order. Each success makes the sequence grow. You get two tries per level.",
+      "best.prefix": "Your record: ",
+      "btn.start": "Start",
+      "btn.check": "Check",
+      "btn.again": "Play again",
+      "level.line": "Memorise the ",
+      "level.line2": " digits",
+      "input.prompt": "Type the sequence in the same order:",
+      "res.title": "Result",
+      "res.span": "Your span",
+      "res.best": "Record",
+      "res.c1": "Exceptional span! You are clearly above the average, which sits around 7 digits.",
+      "res.c2": "Right at the classic human average: about 7 digits, plus or minus 2. Exactly what George Miller described in 1956.",
+      "res.c3": "A little below today's average, but note: tiredness, distraction and anxiety temporarily shrink working memory.",
+      "res.expl": "🧠 What is going on: working memory is the mind's notepad, and it is tiny. Miller spoke of 7±2 items; modern research points to about 4 chunks of information. The trick to stretch it is called chunking: 914 25 736 is three chunks, not eight digits. That is how you memorise phone numbers without noticing.",
+      "new.record": "New record! 🏆"
+    }
+  }
+};
+</script>
+<script src="../js/app.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var seq = [], level = 3, attempts = 0, span = 0;
+  var state = "intro";
+  var showTimer = null;
+
+  function scores() { return PL.load("scores", {}); }
+
+  function show(p) {
+    $("panel-intro").classList.toggle("hidden", p !== "intro");
+    $("panel-game").classList.toggle("hidden", p !== "game");
+    $("panel-result").classList.toggle("hidden", p !== "result");
+    state = p;
+  }
+
+  function stage(s) {
+    $("stage-show").classList.toggle("hidden", s !== "show");
+    $("stage-input").classList.toggle("hidden", s !== "input");
+  }
+
+  function bestLine() {
+    var b = scores().digitspan || 0;
+    $("best-line").textContent = b ? PL.t("best.prefix") + b : "";
+  }
+
+  function playSequence() {
+    stage("show");
+    $("level-line").textContent = PL.t("level.line") + level + PL.t("level.line2");
+    seq = [];
+    for (var i = 0; i < level; i++) seq.push(Math.floor(Math.random() * 10));
+    var i = 0;
+    var d = $("digit");
+    d.textContent = "";
+    clearInterval(showTimer);
+    showTimer = setInterval(function () {
+      if (i > 0 && i === seq.length) {
+        clearInterval(showTimer);
+        d.textContent = "";
+        setTimeout(askInput, 300);
+        return;
+      }
+      d.textContent = "";
+      setTimeout(function () { d.textContent = seq[i]; i++; }, 130);
+    }, 780);
+  }
+
+  function askInput() {
+    stage("input");
+    $("f-answer").value = "";
+    $("f-answer").focus();
+  }
+
+  function check() {
+    var given = $("f-answer").value.replace(/\D/g, "");
+    if (given === seq.join("")) {
+      span = level;
+      level++;
+      attempts = 0;
+      playSequence();
+    } else {
+      attempts++;
+      if (attempts >= 2) finish();
+      else playSequence();
+    }
+  }
+
+  function finish() {
+    var sc = scores();
+    var isRecord = span > (sc.digitspan || 0);
+    if (isRecord) {
+      sc.digitspan = span;
+      PL.store("scores", sc);
+    }
+    renderResult(isRecord);
+    show("result");
+  }
+
+  function renderResult(isRecord) {
+    $("r-span").textContent = span;
+    $("r-best").textContent = scores().digitspan || span;
+    var c = span >= 9 ? "res.c1" : span >= 6 ? "res.c2" : "res.c3";
+    $("r-comment").textContent = (isRecord ? PL.t("new.record") + " " : "") + PL.t(c);
+  }
+
+  function start() {
+    level = 3; attempts = 0; span = 0;
+    show("game");
+    playSequence();
+  }
+
+  $("btn-start").addEventListener("click", start);
+  $("btn-again").addEventListener("click", function () {
+    start();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  $("btn-check").addEventListener("click", check);
+  $("f-answer").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") check();
+  });
+
+  document.addEventListener("pl:ready", function () {
+    bestLine();
+    show("intro");
+    stage("none");
+  });
+  PL.onLang(function () {
+    bestLine();
+    if (state === "result") renderResult(false);
+  });
+})();
+</script>
+</body>
+</html>
