@@ -1,6 +1,6 @@
 /* PsicoLab — sincronização opcional com cifragem ponta-a-ponta.
    Configuração: substituir API_BASE pelo URL do teu Worker (ver cloudflare/README.md). */
-var API_BASE = "COLA_AQUI_O_URL_DO_WORKER"; // ex.: "https://psicolab-api.exemplo.workers.dev"
+const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
 
 (function () {
   var SYNC_TOOLS = ["mood", "thoughts", "gratitude", "habits"];
