@@ -10,7 +10,9 @@
  * A palavra-passe nunca chega aqui — o cliente envia uma chave de
  * autenticação derivada (PBKDF2), distinta da chave de cifra.
  */
-
+export default {
+  async fetch(request, env) {
+    
 const ALLOWED_ORIGINS = [
   "https://erikaabrown.github.io",
   "http://localhost:8765",
@@ -192,3 +194,6 @@ export default {
     }
   }
 };
+
+    }
+}
