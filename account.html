@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conta · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>👤 <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section id="panel-unconfigured" class="panel hidden">
+    <p style="margin:0" data-i18n="unconf.p"></p>
+  </section>
+
+  <section id="panel-auth" class="hidden">
+    <div class="panel">
+      <div style="display:flex;gap:8px;margin-bottom:18px">
+        <button class="btn btn-sm" id="tab-login" data-i18n="tab.login"></button>
+        <button class="btn btn-ghost btn-sm" id="tab-signup" data-i18n="tab.signup"></button>
+      </div>
+
+      <label class="field-label" for="f-email">Email</label>
+      <input type="email" id="f-email" autocomplete="email" data-i18n-ph="ph.email">
+
+      <label class="field-label" for="f-pass"><span data-i18n="lbl.pass"></span></label>
+      <input type="password" id="f-pass" autocomplete="current-password" data-i18n-ph="ph.pass">
+
+      <div id="signup-extra" class="hidden">
+        <label class="field-label" for="f-pass2"><span data-i18n="lbl.pass2"></span></label>
+        <input type="password" id="f-pass2" autocomplete="new-password">
+        <div class="notice" data-i18n-html="warn.e2e"></div>
+        <label style="display:flex;gap:10px;align-items:flex-start;font-size:0.9rem;cursor:pointer">
+          <input type="checkbox" id="f-ack" style="width:auto;margin-top:4px">
+          <span data-i18n="ack.label"></span>
+        </label>
+      </div>
+
+      <p class="small" id="auth-error" style="color:var(--critical);min-height:1.2em;margin:10px 0 0"></p>
+
+      <div class="center mt-2">
+        <button class="btn" id="btn-submit"></button>
+      </div>
+    </div>
+
+    <div class="panel panel-soft">
+      <h3 style="margin-top:0" data-i18n="how.title"></h3>
+      <p class="small" data-i18n="how.p1" style="margin-bottom:8px"></p>
+      <p class="small" data-i18n="how.p2" style="margin:0"></p>
+    </div>
+  </section>
+
+  <section id="panel-account" class="hidden">
+    <div class="panel">
+      <h3 style="margin-top:0"><span data-i18n="acct.hello"></span> <span id="acct-email" style="color:var(--brand-ink)"></span></h3>
+      <p class="small muted" data-i18n="acct.what"></p>
+      <p class="small" id="sync-status" style="font-weight:700"></p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+        <button class="btn btn-sm" id="btn-sync" data-i18n="btn.sync"></button>
+        <button class="btn btn-ghost btn-sm" id="btn-logout" data-i18n="btn.logout"></button>
+        <button class="btn btn-danger btn-sm" id="btn-delete" data-i18n="btn.delete" style="margin-left:auto"></button>
+      </div>
+    </div>
+    <div class="panel panel-soft">
+      <p class="small" style="margin:0" data-i18n="acct.note"></p>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "",
+  section: "account",
+  i18n: {
+    pt: {
+      "page.title": "A tua conta",
+      "crumb": "PsicoLab",
+      "intro.lead": "Com uma conta, o diário emocional, o registo de pensamentos, a gratidão e os hábitos ficam guardados de forma cifrada — e acompanham-te em qualquer dispositivo.",
+      "unconf.p": "⚙️ O sistema de contas ainda não está activo — falta configurar o backend na Cloudflare (instruções em cloudflare/README.md no repositório).",
+      "tab.login": "Entrar",
+      "tab.signup": "Criar conta",
+      "ph.email": "o.teu@email.com",
+      "lbl.pass": "Palavra-passe",
+      "lbl.pass2": "Repete a palavra-passe",
+      "ph.pass": "mínimo 8 caracteres",
+      "warn.e2e": "<strong>🔐 Importante:</strong> os teus registos são cifrados no teu browser com uma chave derivada da palavra-passe. Nem o servidor nem a administração do site os conseguem ler. Por isso, <strong>se perderes a palavra-passe, os dados guardados no servidor ficam irrecuperáveis</strong> — não há «recuperar palavra-passe».",
+      "ack.label": "Compreendo que, se perder a palavra-passe, os meus dados sincronizados não podem ser recuperados.",
+      "btn.login": "Entrar",
+      "btn.signup": "Criar conta",
+      "how.title": "Como funciona a privacidade",
+      "how.p1": "1. A tua palavra-passe nunca sai do teu browser. A partir dela derivam-se duas chaves: uma para provar quem és ao servidor, outra — que o servidor nunca vê — para cifrar os teus registos (AES-256).",
+      "how.p2": "2. O servidor guarda apenas texto cifrado. Só sincronizamos as ferramentas que precisam de memória: diário emocional, registo de pensamentos, gratidão e hábitos. Os testes e jogos não enviam nada.",
+      "acct.hello": "Sessão iniciada:",
+      "acct.what": "Diário emocional, registo de pensamentos, gratidão e hábitos sincronizam-se automaticamente sempre que guardas algo.",
+      "btn.sync": "Sincronizar agora",
+      "btn.logout": "Terminar sessão",
+      "btn.delete": "Apagar conta e dados",
+      "sync.done": "✔ Sincronizado",
+      "sync.pulled": "✔ Sincronizado — registos mais recentes recebidos",
+      "sync.err": "✖ Falha na sincronização — verifica a ligação",
+      "sync.ing": "A sincronizar...",
+      "acct.note": "🔐 Os dados locais deste browser continuam a existir depois de terminares a sessão. Apagar a conta remove tudo o que está no servidor — os dados locais ficam intactos.",
+      "del.confirm1": "Apagar a conta e TODOS os dados no servidor? Esta acção não pode ser desfeita.",
+      "del.confirm2": "Confirmas mesmo? Os dados cifrados no servidor serão eliminados definitivamente.",
+      "err.bad_credentials": "Email ou palavra-passe incorrectos.",
+      "err.email_taken": "Já existe uma conta com esse email.",
+      "err.invalid_input": "Verifica o email e a palavra-passe (mínimo 8 caracteres).",
+      "err.network": "Não foi possível contactar o servidor. Tenta outra vez.",
+      "err.pass.short": "A palavra-passe deve ter pelo menos 8 caracteres.",
+      "err.pass.match": "As palavras-passe não coincidem.",
+      "err.ack": "Confirma que compreendes o aviso sobre a palavra-passe."
+    },
+    en: {
+      "page.title": "Your account",
+      "crumb": "PsychLab",
+      "intro.lead": "With an account, your mood diary, thought records, gratitude and habits are stored encrypted — and follow you on any device.",
+      "unconf.p": "⚙️ The account system is not active yet — the Cloudflare backend still needs to be configured (instructions in cloudflare/README.md in the repository).",
+      "tab.login": "Sign in",
+      "tab.signup": "Create account",
+      "ph.email": "your@email.com",
+      "lbl.pass": "Password",
+      "lbl.pass2": "Repeat the password",
+      "ph.pass": "minimum 8 characters",
+      "warn.e2e": "<strong>🔐 Important:</strong> your entries are encrypted in your browser with a key derived from your password. Neither the server nor the site administrators can read them. Therefore, <strong>if you lose your password, the data stored on the server becomes unrecoverable</strong> — there is no \"password reset\".",
+      "ack.label": "I understand that if I lose my password, my synced data cannot be recovered.",
+      "btn.login": "Sign in",
+      "btn.signup": "Create account",
+      "how.title": "How privacy works",
+      "how.p1": "1. Your password never leaves your browser. Two keys are derived from it: one to prove who you are to the server, another — which the server never sees — to encrypt your entries (AES-256).",
+      "how.p2": "2. The server stores only ciphertext. We sync only the tools that need memory: mood diary, thought records, gratitude and habits. Tests and games send nothing.",
+      "acct.hello": "Signed in:",
+      "acct.what": "Mood diary, thought records, gratitude and habits sync automatically whenever you save something.",
+      "btn.sync": "Sync now",
+      "btn.logout": "Sign out",
+      "btn.delete": "Delete account and data",
+      "sync.done": "✔ Synced",
+      "sync.pulled": "✔ Synced — newer entries received",
+      "sync.err": "✖ Sync failed — check your connection",
+      "sync.ing": "Syncing...",
+      "acct.note": "🔐 The local data in this browser remains after you sign out. Deleting the account removes everything on the server — local data stays intact.",
+      "del.confirm1": "Delete the account and ALL data on the server? This cannot be undone.",
+      "del.confirm2": "Are you sure? The encrypted data on the server will be permanently deleted.",
+      "err.bad_credentials": "Incorrect email or password.",
+      "err.email_taken": "An account with that email already exists.",
+      "err.invalid_input": "Check the email and password (minimum 8 characters).",
+      "err.network": "Could not reach the server. Try again.",
+      "err.pass.short": "The password must be at least 8 characters.",
+      "err.pass.match": "The passwords do not match.",
+      "err.ack": "Please confirm you understand the password warning."
+    }
+  }
+};
+</script>
+<script src="js/app.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var mode = "login";
+  var ready = false;
+
+  function show(panel) {
+    $("panel-unconfigured").classList.toggle("hidden", panel !== "unconf");
+    $("panel-auth").classList.toggle("hidden", panel !== "auth");
+    $("panel-account").classList.toggle("hidden", panel !== "account");
+  }
+
+  function render() {
+    if (!ready || !window.PLSync) return;
+    if (!PLSync.configured()) { show("unconf"); return; }
+    var u = PLSync.user();
+    if (u) {
+      show("account");
+      $("acct-email").textContent = u.email;
+    } else {
+      show("auth");
+      renderMode();
+    }
+  }
+
+  function renderMode() {
+    var login = mode === "login";
+    $("tab-login").className = login ? "btn btn-sm" : "btn btn-ghost btn-sm";
+    $("tab-signup").className = login ? "btn btn-ghost btn-sm" : "btn btn-sm";
+    $("signup-extra").classList.toggle("hidden", login);
+    $("btn-submit").textContent = PL.t(login ? "btn.login" : "btn.signup");
+    $("f-pass").setAttribute("autocomplete", login ? "current-password" : "new-password");
+    $("auth-error").textContent = "";
+  }
+
+  function fail(code) {
+    var key = "err." + code;
+    var msg = PL.t(key);
+    $("auth-error").textContent = msg === key ? PL.t("err.network") : msg;
+    $("btn-submit").disabled = false;
+  }
+
+  function submit() {
+    var email = $("f-email").value.trim();
+    var pass = $("f-pass").value;
+    $("auth-error").textContent = "";
+    if (pass.length < 8) { fail("pass.short"); return; }
+    if (mode === "signup") {
+      if (pass !== $("f-pass2").value) { fail("pass.match"); return; }
+      if (!$("f-ack").checked) { fail("ack"); return; }
+    }
+    $("btn-submit").disabled = true;
+    var p = mode === "signup" ? PLSync.register(email, pass) : PLSync.login(email, pass);
+    p.then(function () {
+      $("btn-submit").disabled = false;
+      render();
+      PL.toast(PL.t("sync.done"));
+    }).catch(function (e) {
+      fail(e.code || "network");
+    });
+  }
+
+  document.addEventListener("pl:sync-ready", function () {
+    ready = true;
+    render();
+
+    $("tab-login").addEventListener("click", function () { mode = "login"; renderMode(); });
+    $("tab-signup").addEventListener("click", function () { mode = "signup"; renderMode(); });
+    $("btn-submit").addEventListener("click", submit);
+    $("f-pass").addEventListener("keydown", function (e) { if (e.key === "Enter" && mode === "login") submit(); });
+
+    $("btn-sync").addEventListener("click", function () {
+      $("sync-status").textContent = PL.t("sync.ing");
+      PLSync.syncNow().then(function (changed) {
+        $("sync-status").textContent = PL.t(changed > 0 ? "sync.pulled" : "sync.done");
+      }).catch(function () {
+        $("sync-status").textContent = PL.t("sync.err");
+      });
+    });
+    $("btn-logout").addEventListener("click", function () {
+      PLSync.logout();
+      $("sync-status").textContent = "";
+      render();
+    });
+    $("btn-delete").addEventListener("click", function () {
+      if (!confirm(PL.t("del.confirm1"))) return;
+      if (!confirm(PL.t("del.confirm2"))) return;
+      PLSync.deleteAccount().then(render).catch(function () {
+        $("sync-status").textContent = PL.t("sync.err");
+      });
+    });
+  });
+
+  PL.onLang(function () {
+    render();
+  });
+})();
+</script>
+</body>
+</html>
