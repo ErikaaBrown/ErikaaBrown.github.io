@@ -95,7 +95,7 @@ window.PAGE = {
       "added": "Habit added 🌱",
       "name.req": "Give the habit a name",
       "del.confirm": "Delete this habit and all its history?",
-      "why.p": "🔬 Why it works: habits form through repetition in a stable context — on average 66 days according to Lally's study (2010), not the mythical 21. Missing one day ruins nothing: what counts is the trend. The golden rule is \"never miss twice in a row\"."
+      "why.p": "🔬 Why it works: habits form through repetition in a stable context, on average 66 days according to Lally's study (2010), not the mythical 21. Missing one day ruins nothing: what counts is the trend. The golden rule is \"never miss twice in a row\"."
     }
   }
 };
@@ -147,7 +147,7 @@ window.PAGE = {
         rows += "<td><button class='check-cell" + on + "' data-h='" + hi + "' data-iso='" + iso + "'>" + (h.c[iso] ? "✓" : "") + "</button></td>";
       });
       var st = streakOf(h);
-      rows += "<td><span class='streak-flame'>" + (st > 0 ? "🔥 " + st : "—") + "</span></td>";
+      rows += "<td><span class='streak-flame'>" + (st > 0 ? "🔥 " + st : ".") + "</span></td>";
       rows += "<td><button class='del' data-del='" + hi + "' style='background:none;border:none;cursor:pointer;color:var(--ink-3)'>🗑️</button></td></tr>";
     });
 
