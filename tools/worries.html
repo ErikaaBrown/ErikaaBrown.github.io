@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/style.css?v=4">
+<link rel="stylesheet" href="../css/style.css?v=5">
 </head>
 <body>
 <div id="site-header"></div>
@@ -39,7 +39,7 @@
     <div class="tiles">
       <div class="tile"><div class="num" id="stat-open">0</div><div class="lbl" data-i18n="stat.open"></div></div>
       <div class="tile"><div class="num" id="stat-resolved">0</div><div class="lbl" data-i18n="stat.resolved"></div></div>
-      <div class="tile"><div class="num" id="stat-pct">—</div><div class="lbl" data-i18n="stat.pct"></div></div>
+      <div class="tile"><div class="num" id="stat-pct">.</div><div class="lbl" data-i18n="stat.pct"></div></div>
     </div>
     <p class="small muted" id="punchline" style="margin:4px 0 0"></p>
   </section>
@@ -137,7 +137,7 @@ window.PAGE = {
       $("stat-pct").textContent = Math.round(not / resolved.length * 100) + "%";
       $("punchline").textContent = PL.t("punch.some");
     } else {
-      $("stat-pct").textContent = "—";
+      $("stat-pct").textContent = ".";
       $("punchline").textContent = PL.t("punch.none");
     }
   }

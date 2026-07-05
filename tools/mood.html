@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/style.css?v=4">
+<link rel="stylesheet" href="../css/style.css?v=5">
 </head>
 <body>
 <div id="site-header"></div>
@@ -39,7 +39,7 @@
     <div class="tiles">
       <div class="tile"><div class="num" id="stat-streak">0</div><div class="lbl" data-i18n="stat.streak"></div></div>
       <div class="tile"><div class="num" id="stat-count">0</div><div class="lbl" data-i18n="stat.count"></div></div>
-      <div class="tile"><div class="num" id="stat-avg">—</div><div class="lbl" data-i18n="stat.avg"></div></div>
+      <div class="tile"><div class="num" id="stat-avg">.</div><div class="lbl" data-i18n="stat.avg"></div></div>
     </div>
   </section>
 
@@ -72,7 +72,7 @@ window.PAGE = {
     pt: {
       "page.title": "Diário Emocional",
       "crumb": "Ferramentas",
-      "intro.lead": "Registar o humor todos os dias torna visíveis padrões que de outra forma passam despercebidos — e nomear emoções, por si só, ajuda a regulá-las.",
+      "intro.lead": "Registar o humor todos os dias torna visíveis padrões que de outra forma passam despercebidos, e nomear emoções, por si só, ajuda a regulá-las.",
       "today.title": "O registo de hoje",
       "today.q": "Como te sentes hoje, em geral?",
       "today.tags": "Que emoções estiveram presentes? (opcional)",
@@ -85,7 +85,7 @@ window.PAGE = {
       "stat.count": "Registos (30 dias)",
       "stat.avg": "Humor médio",
       "chart.title": "Últimos 30 dias",
-      "chart.empty": "Ainda não há registos suficientes — o gráfico aparece assim que guardares o primeiro dia.",
+      "chart.empty": "Ainda não há registos suficientes: o gráfico aparece assim que guardares o primeiro dia.",
       "chart.view.table": "Ver tabela",
       "chart.view.chart": "Ver gráfico",
       "tbl.date": "Data", "tbl.mood": "Humor", "tbl.tags": "Emoções",
@@ -95,7 +95,7 @@ window.PAGE = {
     en: {
       "page.title": "Mood Diary",
       "crumb": "Tools",
-      "intro.lead": "Logging your mood every day makes visible the patterns that otherwise go unnoticed — and naming emotions, by itself, helps regulate them.",
+      "intro.lead": "Logging your mood every day makes visible the patterns that otherwise go unnoticed, and naming emotions, by itself, helps regulate them.",
       "today.title": "Today's entry",
       "today.q": "How do you feel today, overall?",
       "today.tags": "Which emotions were present? (optional)",
@@ -108,7 +108,7 @@ window.PAGE = {
       "stat.count": "Entries (30 days)",
       "stat.avg": "Average mood",
       "chart.title": "Last 30 days",
-      "chart.empty": "Not enough entries yet — the chart appears as soon as you save your first day.",
+      "chart.empty": "Not enough entries yet: the chart appears as soon as you save your first day.",
       "chart.view.table": "View table",
       "chart.view.chart": "View chart",
       "tbl.date": "Date", "tbl.mood": "Mood", "tbl.tags": "Emotions",
@@ -214,7 +214,7 @@ window.PAGE = {
       var avg = days.reduce(function (a, d) { return a + d.entry.m; }, 0) / days.length;
       $("stat-avg").textContent = MOODS[Math.round(avg) - 1].e;
     } else {
-      $("stat-avg").textContent = "—";
+      $("stat-avg").textContent = ".";
     }
   }
 

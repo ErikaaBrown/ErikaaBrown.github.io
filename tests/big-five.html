@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/style.css?v=4">
+<link rel="stylesheet" href="../css/style.css?v=5">
 </head>
 <body>
 <div id="site-header"></div>
@@ -78,7 +78,7 @@ window.PAGE = {
       "page.title": "Personalidade Big Five",
       "crumb": "Testes",
       "intro.lead": "O modelo dos cinco factores é o modelo de personalidade com maior apoio científico na psicologia actual.",
-      "intro.p1": "Vais responder a 25 afirmações sobre a forma como habitualmente pensas, sentes e ages. Para cada uma, indica até que ponto concordas. Não há respostas certas nem erradas — responde com honestidade, pensando em como és na maioria das situações.",
+      "intro.p1": "Vais responder a 25 afirmações sobre a forma como habitualmente pensas, sentes e ages. Para cada uma, indica até que ponto concordas. Não há respostas certas nem erradas: responde com honestidade, pensando em como és na maioria das situações.",
       "intro.p2": "No fim recebes o teu perfil nos cinco traços: Abertura à Experiência, Conscienciosidade, Extroversão, Amabilidade e Neuroticismo.",
       "intro.notice": "<strong>Lembra-te:</strong> este teste é educativo e recreativo. Um perfil de personalidade rigoroso exige instrumentos validados e interpretação profissional.",
       "btn.start": "Começar o teste",
@@ -87,10 +87,10 @@ window.PAGE = {
       "lk.1": "Discordo totalmente",
       "lk.5": "Concordo totalmente",
       "res.title": "O teu perfil",
-      "res.sub": "Pontuações de 0 a 100 em cada traço. Não há perfis bons ou maus — cada combinação tem forças próprias.",
+      "res.sub": "Pontuações de 0 a 100 em cada traço. Não há perfis bons ou maus: cada combinação tem forças próprias.",
       "res.table": "Em detalhe",
       "tbl.trait": "Traço", "tbl.score": "Pontuação", "tbl.level": "Nível",
-      "res.notice": "<strong>Como ler:</strong> os traços são contínuos e relativamente estáveis, mas não são um destino — o contexto e a experiência também moldam o comportamento.",
+      "res.notice": "<strong>Como ler:</strong> os traços são contínuos e relativamente estáveis, mas não são um destino; o contexto e a experiência também moldam o comportamento.",
       "lvl.low": "Baixo", "lvl.mid": "Moderado", "lvl.high": "Elevado",
       "last.prefix": "Último resultado guardado: "
     },
@@ -98,7 +98,7 @@ window.PAGE = {
       "page.title": "Big Five Personality",
       "crumb": "Tests",
       "intro.lead": "The five-factor model is the personality model with the strongest scientific support in psychology today.",
-      "intro.p1": "You will respond to 25 statements about how you usually think, feel and act. For each one, indicate how much you agree. There are no right or wrong answers — be honest and think about how you are in most situations.",
+      "intro.p1": "You will respond to 25 statements about how you usually think, feel and act. For each one, indicate how much you agree. There are no right or wrong answers: be honest and think about how you are in most situations.",
       "intro.p2": "At the end you will get your profile on the five traits: Openness to Experience, Conscientiousness, Extraversion, Agreeableness and Neuroticism.",
       "intro.notice": "<strong>Remember:</strong> this test is educational and recreational. A rigorous personality profile requires validated instruments and professional interpretation.",
       "btn.start": "Start the test",
@@ -107,10 +107,10 @@ window.PAGE = {
       "lk.1": "Strongly disagree",
       "lk.5": "Strongly agree",
       "res.title": "Your profile",
-      "res.sub": "Scores from 0 to 100 on each trait. There are no good or bad profiles — every combination has its own strengths.",
+      "res.sub": "Scores from 0 to 100 on each trait. There are no good or bad profiles: every combination has its own strengths.",
       "res.table": "In detail",
       "tbl.trait": "Trait", "tbl.score": "Score", "tbl.level": "Level",
-      "res.notice": "<strong>How to read this:</strong> traits are continuous and relatively stable, but they are not destiny — context and experience also shape behaviour.",
+      "res.notice": "<strong>How to read this:</strong> traits are continuous and relatively stable, but they are not destiny; context and experience also shape behaviour.",
       "lvl.low": "Low", "lvl.mid": "Moderate", "lvl.high": "High",
       "last.prefix": "Last saved result: "
     }
@@ -149,7 +149,7 @@ window.PAGE = {
       interp: {
         low:  { pt: "Emocionalmente estável: manténs a calma sob pressão e recuperas depressa de contratempos.", en: "Emotionally stable: you stay calm under pressure and bounce back quickly from setbacks." },
         mid:  { pt: "Sentes stress e preocupação em doses moderadas, como a maioria das pessoas.", en: "You feel stress and worry in moderate doses, like most people." },
-        high: { pt: "Sensível ao stress: as emoções negativas surgem com facilidade — vale a pena investir em estratégias de regulação emocional.", en: "Sensitive to stress: negative emotions arise easily — it is worth investing in emotional-regulation strategies." }
+        high: { pt: "Sensível ao stress: as emoções negativas surgem com facilidade; vale a pena investir em estratégias de regulação emocional.", en: "Sensitive to stress: negative emotions arise easily; it is worth investing in emotional-regulation strategies." }
       } }
   ];
 
@@ -286,7 +286,7 @@ window.PAGE = {
       bars += "<div class='rbar'><div class='rbar-head'><span>" + tr[PL.lang] + "</span><span class='val'>" + v + "%</span></div>" +
         "<div class='track'><div class='fill' style='width:" + v + "%'></div></div></div>";
       rows += "<tr><td>" + tr[PL.lang] + "</td><td>" + v + "%</td><td>" + lvl + "</td></tr>";
-      interps += "<div class='interp'><h3>" + tr[PL.lang] + " — " + lvl + "</h3><p>" + tr.interp[b][PL.lang] + "</p></div>";
+      interps += "<div class='interp'><h3>" + tr[PL.lang] + " · " + lvl + "</h3><p>" + tr.interp[b][PL.lang] + "</p></div>";
     });
     $("bars").innerHTML = bars;
     $("tbody").innerHTML = rows;

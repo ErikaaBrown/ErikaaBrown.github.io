@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/style.css?v=4">
+<link rel="stylesheet" href="../css/style.css?v=5">
 </head>
 <body>
 <div id="site-header"></div>
@@ -46,8 +46,8 @@
 
   <section class="panel">
     <div class="tiles">
-      <div class="tile"><div class="num" id="stat-avg">—</div><div class="lbl" data-i18n="stat.avg"></div></div>
-      <div class="tile"><div class="num" id="stat-q">—</div><div class="lbl" data-i18n="stat.q"></div></div>
+      <div class="tile"><div class="num" id="stat-avg">.</div><div class="lbl" data-i18n="stat.avg"></div></div>
+      <div class="tile"><div class="num" id="stat-q">.</div><div class="lbl" data-i18n="stat.q"></div></div>
       <div class="tile"><div class="num" id="stat-n">0</div><div class="lbl" data-i18n="stat.n"></div></div>
     </div>
     <h3 data-i18n="chart.title"></h3>
@@ -202,8 +202,8 @@ window.PAGE = {
     var nights = last14().filter(function (d) { return d.e; });
     $("stat-n").textContent = nights.length;
     if (!nights.length) {
-      $("stat-avg").textContent = "—";
-      $("stat-q").textContent = "—";
+      $("stat-avg").textContent = ".";
+      $("stat-q").textContent = ".";
       return;
     }
     var avgH = nights.reduce(function (a, d) { return a + durationH(d.e.b, d.e.w); }, 0) / nights.length;

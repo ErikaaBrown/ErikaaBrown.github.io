@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/style.css?v=4">
+<link rel="stylesheet" href="../css/style.css?v=5">
 </head>
 <body>
 <div id="site-header"></div>
@@ -80,7 +80,7 @@ window.PAGE = {
       "page.title": "Registo de Pensamentos",
       "crumb": "Ferramentas",
       "intro.lead": "Uma técnica central da terapia cognitivo-comportamental: examinar um pensamento difícil como um cientista examina uma hipótese.",
-      "model.p": "💡 O modelo cognitivo diz que não são as situações que nos perturbam directamente, mas a interpretação que fazemos delas. Entre a situação e a emoção há sempre um pensamento — e os pensamentos podem ser examinados, testados e reformulados.",
+      "model.p": "💡 O modelo cognitivo diz que não são as situações que nos perturbam directamente, mas a interpretação que fazemos delas. Entre a situação e a emoção há sempre um pensamento, e os pensamentos podem ser examinados, testados e reformulados.",
       "form.title": "Novo registo",
       "f.sit": "1 · A situação",
       "f.sit.ph": "O que aconteceu? Onde, quando, com quem?",
@@ -109,7 +109,7 @@ window.PAGE = {
       "page.title": "Thought Record",
       "crumb": "Tools",
       "intro.lead": "A core technique of cognitive-behavioural therapy: examining a difficult thought the way a scientist examines a hypothesis.",
-      "model.p": "💡 The cognitive model says that situations do not disturb us directly — our interpretation of them does. Between the situation and the emotion there is always a thought — and thoughts can be examined, tested and reworded.",
+      "model.p": "💡 The cognitive model says that situations do not disturb us directly; our interpretation of them does. Between the situation and the emotion there is always a thought, and thoughts can be examined, tested and reworded.",
       "form.title": "New record",
       "f.sit": "1 · The situation",
       "f.sit.ph": "What happened? Where, when, with whom?",
@@ -142,7 +142,7 @@ window.PAGE = {
 (function () {
   var DISTORTIONS = [
     { e: "⚫⚪", pt: ["Tudo-ou-nada", "Ver as coisas em categorias absolutas: ou é perfeito ou é um fracasso."], en: ["All-or-nothing", "Seeing things in absolute categories: either it is perfect or it is a failure."] },
-    { e: "🌪️", pt: ["Catastrofização", "Assumir que vai acontecer o pior cenário possível — e que não vais aguentar."], en: ["Catastrophising", "Assuming the worst possible scenario will happen — and that you will not cope."] },
+    { e: "🌪️", pt: ["Catastrofização", "Assumir que vai acontecer o pior cenário possível, e que não vais aguentar."], en: ["Catastrophising", "Assuming the worst possible scenario will happen, and that you will not cope."] },
     { e: "🔮", pt: ["Leitura de mentes", "Ter a certeza do que os outros estão a pensar de ti, sem provas."], en: ["Mind reading", "Being certain of what others are thinking about you, without evidence."] },
     { e: "🌍", pt: ["Generalização excessiva", "Transformar um caso isolado numa regra universal: «correu mal uma vez, corre sempre mal»."], en: ["Overgeneralisation", "Turning one isolated event into a universal rule: \"it went wrong once, it always goes wrong\"."] },
     { e: "🥅", pt: ["Filtro mental", "Focar apenas no pormenor negativo e ignorar tudo o resto que correu bem."], en: ["Mental filter", "Focusing only on the negative detail and ignoring everything else that went well."] },
@@ -171,7 +171,7 @@ window.PAGE = {
         : "";
       html += "<div class='entry'><div class='entry-head'>" +
         "<span class='entry-date'>" + PL.fmtDate(e.date) + "</span>" +
-        "<span class='chip'>" + PL.esc(e.emo || "—") + " " + e.int1 + "% → " + e.int2 + "%</span>" + deltaBadge +
+        "<span class='chip'>" + PL.esc(e.emo || ".") + " " + e.int1 + "% → " + e.int2 + "%</span>" + deltaBadge +
         "<button class='del' data-i='" + i + "'>🗑️</button></div>" +
         "<p style='margin:10px 0 4px'><strong>💭</strong> " + PL.esc(e.thought) + "</p>" +
         (e.alt ? "<p style='margin:0;color:var(--brand-ink)'><strong>🌱</strong> " + PL.esc(e.alt) + "</p>" : "") +

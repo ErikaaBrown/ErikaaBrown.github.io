@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/style.css?v=4">
+<link rel="stylesheet" href="../css/style.css?v=5">
 </head>
 <body>
 <div id="site-header"></div>
@@ -48,14 +48,14 @@ window.PAGE = {
     pt: {
       "page.title": "Artigos",
       "crumb": "Aprender",
-      "intro.lead": "Leituras curtas sobre a mente, escritas com base na investigação — sem jargão nem promessas milagrosas.",
+      "intro.lead": "Leituras curtas sobre a mente, escritas com base na investigação: sem jargão nem promessas milagrosas.",
       "read.min": " min de leitura",
       "read.open": "Ler artigo ↓",
       "read.close": "Fechar ↑",
       "feed.title": "Da imprensa científica",
       "feed.updated": "actualizado a ",
       "feed.license": "Selecção diária e automática (em inglês). Os artigos do The Conversation são republicados na íntegra ao abrigo da licença Creative Commons BY-ND, com crédito ao autor; das restantes fontes mostramos apenas o resumo e a ligação para o original.",
-      "feed.absent": "A lista de artigos da imprensa ainda não foi gerada — aparece após a primeira execução automática (corre todos os dias).",
+      "feed.absent": "A lista de artigos da imprensa ainda não foi gerada; aparece após a primeira execução automática (corre todos os dias).",
       "feed.read": "Ler aqui ↓",
       "feed.close": "Fechar ↑",
       "feed.readsource": "Ler na fonte ↗",
@@ -67,14 +67,14 @@ window.PAGE = {
     en: {
       "page.title": "Articles",
       "crumb": "Learn",
-      "intro.lead": "Short reads about the mind, grounded in research — no jargon, no miracle promises.",
+      "intro.lead": "Short reads about the mind, grounded in research: no jargon, no miracle promises.",
       "read.min": " min read",
       "read.open": "Read article ↓",
       "read.close": "Close ↑",
       "feed.title": "From the science press",
       "feed.updated": "updated ",
       "feed.license": "Daily automatic selection (in English). The Conversation articles are republished in full under the Creative Commons BY-ND licence, with credit to the author; for the other sources we show only the summary and a link to the original.",
-      "feed.absent": "The press article list has not been generated yet — it appears after the first automatic run (runs daily).",
+      "feed.absent": "The press article list has not been generated yet; it appears after the first automatic run (runs daily).",
       "feed.read": "Read here ↓",
       "feed.close": "Close ↑",
       "feed.readsource": "Read at the source ↗",
@@ -92,58 +92,58 @@ window.PAGE = {
   var ARTICLES = [
     { emoji: "🔍", min: 4,
       t: { pt: "O cérebro que quer ter razão", en: "The brain that wants to be right" },
-      teaser: { pt: "Porque é tão difícil mudar de ideias — e o que fazer quanto a isso.", en: "Why changing your mind is so hard — and what to do about it." },
+      teaser: { pt: "Porque é tão difícil mudar de ideias, e o que fazer quanto a isso.", en: "Why changing your mind is so hard, and what to do about it." },
       body: {
         pt: [
-          "Imagina que acreditas que os cães pequenos são agressivos. A partir desse momento, cada chihuahua que rosna confirma a tua teoria — e os vinte que dormem tranquilamente ao colo dos donos passam despercebidos. Este mecanismo tem nome: viés de confirmação, a tendência para procurar, notar e recordar sobretudo aquilo que confirma o que já acreditamos.",
-          "Não é um defeito de fabrico; é economia de energia. Processar informação que encaixa nas crenças existentes é rápido e barato. Reavaliar uma crença custa esforço — e, pior, custa identidade: admitir que estávamos errados sobre algo importante mexe com a imagem que temos de nós próprios. Na prática, o cérebro prefere sentir que tem razão a garantir que está certo.",
+          "Imagina que acreditas que os cães pequenos são agressivos. A partir desse momento, cada chihuahua que rosna confirma a tua teoria, e os vinte que dormem tranquilamente ao colo dos donos passam despercebidos. Este mecanismo tem nome: viés de confirmação, a tendência para procurar, notar e recordar sobretudo aquilo que confirma o que já acreditamos.",
+          "Não é um defeito de fabrico; é economia de energia. Processar informação que encaixa nas crenças existentes é rápido e barato. Reavaliar uma crença custa esforço; e, pior, custa identidade: admitir que estávamos errados sobre algo importante mexe com a imagem que temos de nós próprios. Na prática, o cérebro prefere sentir que tem razão a garantir que está certo.",
           "As redes sociais industrializaram este viés. O algoritmo aprende aquilo em que acreditas e serve-te mais do mesmo, porque a concordância retém a atenção. O resultado é um ciclo em que as nossas certezas engordam sem nunca serem postas à prova.",
-          "Os antídotos são simples de descrever e difíceis de praticar. Primeiro: procurar activamente a melhor versão do argumento contrário, não a mais fraca. Segundo: fazer a pergunta que os cientistas fazem — «que provas me fariam mudar de ideias?» Se a resposta for «nenhumas», o problema não são as provas. Terceiro: diversificar fontes de informação antes de decidir, não depois.",
+          "Os antídotos são simples de descrever e difíceis de praticar. Primeiro: procurar activamente a melhor versão do argumento contrário, não a mais fraca. Segundo: fazer a pergunta que os cientistas fazem: «que provas me fariam mudar de ideias?» Se a resposta for «nenhumas», o problema não são as provas. Terceiro: diversificar fontes de informação antes de decidir, não depois.",
           "Queres apanhar o teu próprio cérebro em flagrante? Experimenta o Quiz de Vieses Cognitivos na secção de jogos deste site."
         ],
         en: [
-          "Imagine you believe small dogs are aggressive. From that moment on, every growling chihuahua confirms your theory — and the twenty sleeping peacefully on their owners' laps go unnoticed. This mechanism has a name: confirmation bias, the tendency to seek, notice and remember mostly what confirms what we already believe.",
-          "It is not a manufacturing defect; it is energy economy. Processing information that fits existing beliefs is fast and cheap. Re-evaluating a belief costs effort — and worse, costs identity: admitting we were wrong about something important shakes our self-image. In practice, the brain prefers feeling right to being right.",
+          "Imagine you believe small dogs are aggressive. From that moment on, every growling chihuahua confirms your theory, and the twenty sleeping peacefully on their owners' laps go unnoticed. This mechanism has a name: confirmation bias, the tendency to seek, notice and remember mostly what confirms what we already believe.",
+          "It is not a manufacturing defect; it is energy economy. Processing information that fits existing beliefs is fast and cheap. Re-evaluating a belief costs effort; and worse, costs identity: admitting we were wrong about something important shakes our self-image. In practice, the brain prefers feeling right to being right.",
           "Social media industrialised this bias. The algorithm learns what you believe and serves you more of the same, because agreement holds attention. The result is a cycle in which our certainties fatten without ever being tested.",
-          "The antidotes are simple to describe and hard to practise. First: actively seek the best version of the opposing argument, not the weakest. Second: ask the question scientists ask — \"what evidence would change my mind?\" If the answer is \"none\", the problem is not the evidence. Third: diversify your information sources before deciding, not after.",
+          "The antidotes are simple to describe and hard to practise. First: actively seek the best version of the opposing argument, not the weakest. Second: ask the question scientists ask: \"what evidence would change my mind?\" If the answer is \"none\", the problem is not the evidence. Third: diversify your information sources before deciding, not after.",
           "Want to catch your own brain in the act? Try the Cognitive Bias Quiz in the games section of this site."
         ]
       } },
     { emoji: "🌡️", min: 4,
       t: { pt: "Stress: veneno e vitamina", en: "Stress: poison and vitamin" },
-      teaser: { pt: "A resposta de stress não é o inimigo — a dose e a falta de recuperação é que são.", en: "The stress response is not the enemy — the dose and the lack of recovery are." },
+      teaser: { pt: "A resposta de stress não é o inimigo: a dose e a falta de recuperação é que são.", en: "The stress response is not the enemy: the dose and the lack of recovery are." },
       body: {
         pt: [
-          "O stress tem má fama, mas é uma das melhores invenções da evolução: em segundos, mobiliza açúcar para o sangue, acelera o coração e afina a atenção. Sem essa resposta, nenhum antepassado nosso teria sobrevivido ao leão — nem tu ao exame de condução.",
-          "A relação entre activação e desempenho tem a forma de um U invertido, descrita por Yerkes e Dodson em 1908: com activação a menos, há tédio e lentidão; com activação a mais, colapso; no meio, existe uma zona óptima em que se pensa depressa e com foco. Um pouco de nervosismo antes de uma apresentação não é sinal de fraqueza — é o corpo a preparar-se para actuar.",
-          "A diferença entre o stress que fortalece (eustress) e o que adoece (distress) está menos no acontecimento e mais em três factores: a percepção de controlo, a duração e a recuperação. Picos agudos seguidos de descanso treinam o sistema, como o exercício treina o músculo. Já o stress crónico sem pausas mantém o cortisol permanentemente elevado — e isso corrói o sono, a memória e a imunidade.",
+          "O stress tem má fama, mas é uma das melhores invenções da evolução: em segundos, mobiliza açúcar para o sangue, acelera o coração e afina a atenção. Sem essa resposta, nenhum antepassado nosso teria sobrevivido ao leão, nem tu ao exame de condução.",
+          "A relação entre activação e desempenho tem a forma de um U invertido, descrita por Yerkes e Dodson em 1908: com activação a menos, há tédio e lentidão; com activação a mais, colapso; no meio, existe uma zona óptima em que se pensa depressa e com foco. Um pouco de nervosismo antes de uma apresentação não é sinal de fraqueza: é o corpo a preparar-se para actuar.",
+          "A diferença entre o stress que fortalece (eustress) e o que adoece (distress) está menos no acontecimento e mais em três factores: a percepção de controlo, a duração e a recuperação. Picos agudos seguidos de descanso treinam o sistema, como o exercício treina o músculo. Já o stress crónico sem pausas mantém o cortisol permanentemente elevado; e isso corrói o sono, a memória e a imunidade.",
           "Há ainda um truque contra-intuitivo, testado em laboratório: reinterpretar os sintomas. Quem aprende a ler o coração acelerado como «energia disponível» em vez de «pânico» tem melhor desempenho e uma resposta cardiovascular mais saudável do que quem tenta acalmar-se à força.",
           "Na prática: gere a dose, protege a recuperação (sono, pausas, movimento) e reinterpreta a activação. O Termómetro de Stress e a Respiração Guiada aqui do site são bons pontos de partida."
         ],
         en: [
-          "Stress has a bad reputation, but it is one of evolution's finest inventions: within seconds, it mobilises sugar into the blood, speeds up the heart and sharpens attention. Without that response, no ancestor of ours would have survived the lion — nor you your driving test.",
-          "The relationship between arousal and performance is an inverted U, described by Yerkes and Dodson in 1908: with too little arousal, boredom and sluggishness; with too much, collapse; in between lies an optimal zone of fast, focused thinking. A little nervousness before a presentation is not weakness — it is the body preparing to perform.",
-          "The difference between strengthening stress (eustress) and sickening stress (distress) lies less in the event and more in three factors: perceived control, duration and recovery. Acute peaks followed by rest train the system, as exercise trains a muscle. Chronic stress without breaks keeps cortisol permanently high — and that erodes sleep, memory and immunity.",
+          "Stress has a bad reputation, but it is one of evolution's finest inventions: within seconds, it mobilises sugar into the blood, speeds up the heart and sharpens attention. Without that response, no ancestor of ours would have survived the lion, nor you your driving test.",
+          "The relationship between arousal and performance is an inverted U, described by Yerkes and Dodson in 1908: with too little arousal, boredom and sluggishness; with too much, collapse; in between lies an optimal zone of fast, focused thinking. A little nervousness before a presentation is not weakness: it is the body preparing to perform.",
+          "The difference between strengthening stress (eustress) and sickening stress (distress) lies less in the event and more in three factors: perceived control, duration and recovery. Acute peaks followed by rest train the system, as exercise trains a muscle. Chronic stress without breaks keeps cortisol permanently high; and that erodes sleep, memory and immunity.",
           "There is also a counter-intuitive trick, tested in the lab: reinterpreting the symptoms. People who learn to read a racing heart as \"available energy\" instead of \"panic\" perform better and show a healthier cardiovascular response than those who force themselves to calm down.",
           "In practice: manage the dose, protect recovery (sleep, breaks, movement) and reappraise the arousal. The Stress Thermometer and Guided Breathing on this site are good starting points."
         ]
       } },
     { emoji: "🧯", min: 5,
       t: { pt: "Quatro mitos sobre o cérebro", en: "Four myths about the brain" },
-      teaser: { pt: "Usamos só 10%? O lado direito é o criativo? A ciência diz que não — e o que diz em vez disso é mais interessante.", en: "Do we use only 10%? Is the right side the creative one? Science says no — and what it says instead is more interesting." },
+      teaser: { pt: "Usamos só 10%? O lado direito é o criativo? A ciência diz que não, e o que diz em vez disso é mais interessante.", en: "Do we use only 10%? Is the right side the creative one? Science says no, and what it says instead is more interesting." },
       body: {
         pt: [
-          "<strong>Mito 1: «Usamos apenas 10% do cérebro.»</strong> A imagiologia cerebral mostra actividade em praticamente todo o cérebro ao longo de um dia normal — até durante o sono. Um órgão que consome 20% da energia do corpo não manteria 90% de peso morto: a evolução é má gestora, mas não tanto. Lesões pequenas em quase qualquer região têm consequências visíveis.",
-          "<strong>Mito 2: «Hemisfério esquerdo lógico, direito criativo.»</strong> Existem especializações reais (na maioria das pessoas, a linguagem depende mais do lado esquerdo), mas qualquer tarefa complexa — resolver problemas, criar, imaginar — recruta redes distribuídas pelos dois hemisférios, em permanente cooperação pelo corpo caloso. Ninguém é «uma pessoa do lado direito do cérebro».",
+          "<strong>Mito 1: «Usamos apenas 10% do cérebro.»</strong> A imagiologia cerebral mostra actividade em praticamente todo o cérebro ao longo de um dia normal (até durante o sono). Um órgão que consome 20% da energia do corpo não manteria 90% de peso morto: a evolução é má gestora, mas não tanto. Lesões pequenas em quase qualquer região têm consequências visíveis.",
+          "<strong>Mito 2: «Hemisfério esquerdo lógico, direito criativo.»</strong> Existem especializações reais (na maioria das pessoas, a linguagem depende mais do lado esquerdo), mas qualquer tarefa complexa (resolver problemas, criar, imaginar) recruta redes distribuídas pelos dois hemisférios, em permanente cooperação pelo corpo caloso. Ninguém é «uma pessoa do lado direito do cérebro».",
           "<strong>Mito 3: «Cada um aprende melhor no seu estilo: visual, auditivo ou cinestésico.»</strong> É talvez o mito mais caro à educação. As pessoas têm preferências reais, mas dezenas de estudos controlados mostram que ensinar no «estilo preferido» não melhora a aprendizagem. O que melhora, e muito: prática espaçada no tempo, testar-se a si próprio e explicar a matéria por palavras próprias.",
-          "<strong>Mito 4: «A memória é uma gravação.»</strong> Recordar não é reproduzir um ficheiro — é reconstruir a cena de cada vez, preenchendo lacunas com expectativas. Os estudos de Elizabeth Loftus mostraram que uma simples pergunta sugestiva pode implantar pormenores falsos com toda a sensação de autenticidade. Confiança na memória e exactidão da memória são coisas diferentes.",
+          "<strong>Mito 4: «A memória é uma gravação.»</strong> Recordar não é reproduzir um ficheiro: é reconstruir a cena de cada vez, preenchendo lacunas com expectativas. Os estudos de Elizabeth Loftus mostraram que uma simples pergunta sugestiva pode implantar pormenores falsos com toda a sensação de autenticidade. Confiança na memória e exactidão da memória são coisas diferentes.",
           "A moral é a mesma nos quatro casos: o cérebro real é menos arrumado e mais fascinante do que a versão dos posters motivacionais."
         ],
         en: [
-          "<strong>Myth 1: \"We only use 10% of the brain.\"</strong> Brain imaging shows activity across practically the whole brain over a normal day — even during sleep. An organ consuming 20% of the body's energy would not keep 90% dead weight: evolution is a poor manager, but not that poor. Small lesions in almost any region have visible consequences.",
-          "<strong>Myth 2: \"Left hemisphere logical, right hemisphere creative.\"</strong> Real specialisations exist (in most people, language relies more on the left side), but any complex task — problem-solving, creating, imagining — recruits networks distributed across both hemispheres, in constant cooperation through the corpus callosum. Nobody is \"a right-brained person\".",
+          "<strong>Myth 1: \"We only use 10% of the brain.\"</strong> Brain imaging shows activity across practically the whole brain over a normal day (even during sleep). An organ consuming 20% of the body's energy would not keep 90% dead weight: evolution is a poor manager, but not that poor. Small lesions in almost any region have visible consequences.",
+          "<strong>Myth 2: \"Left hemisphere logical, right hemisphere creative.\"</strong> Real specialisations exist (in most people, language relies more on the left side), but any complex task (problem-solving, creating, imagining) recruits networks distributed across both hemispheres, in constant cooperation through the corpus callosum. Nobody is \"a right-brained person\".",
           "<strong>Myth 3: \"Everyone learns best in their own style: visual, auditory or kinaesthetic.\"</strong> Perhaps education's most expensive myth. People do have real preferences, but dozens of controlled studies show that teaching in the \"preferred style\" does not improve learning. What does improve it, a lot: practice spaced over time, testing yourself, and explaining the material in your own words.",
-          "<strong>Myth 4: \"Memory is a recording.\"</strong> Remembering is not replaying a file — it is reconstructing the scene each time, filling gaps with expectations. Elizabeth Loftus's studies showed that a single leading question can implant false details with a full sense of authenticity. Confidence in a memory and accuracy of a memory are different things.",
+          "<strong>Myth 4: \"Memory is a recording.\"</strong> Remembering is not replaying a file: it is reconstructing the scene each time, filling gaps with expectations. Elizabeth Loftus's studies showed that a single leading question can implant false details with a full sense of authenticity. Confidence in a memory and accuracy of a memory are different things.",
           "The moral is the same in all four cases: the real brain is less tidy and more fascinating than the motivational-poster version."
         ]
       } },
@@ -152,18 +152,18 @@ window.PAGE = {
       teaser: { pt: "O que 85 anos de investigação dizem sobre o que realmente aumenta o bem-estar.", en: "What 85 years of research say about what actually increases wellbeing." },
       body: {
         pt: [
-          "Quando a psicologia positiva nasceu, em 1998, a pergunta era simples: passámos um século a estudar o que corre mal na mente — o que sabemos sobre o que corre bem? A resposta, 25 anos depois, contraria bastante a intuição.",
-          "Primeira surpresa: somos maus a prever o que nos fará felizes. Graças à adaptação hedónica, o entusiasmo do carro novo, da promoção ou da casa maior evapora-se em meses — voltamos ao ponto de partida e passamos a comparar-nos com o patamar seguinte. É uma passadeira rolante: corremos, mas o cenário não muda.",
+          "Quando a psicologia positiva nasceu, em 1998, a pergunta era simples: passámos um século a estudar o que corre mal na mente; o que sabemos sobre o que corre bem? A resposta, 25 anos depois, contraria bastante a intuição.",
+          "Primeira surpresa: somos maus a prever o que nos fará felizes. Graças à adaptação hedónica, o entusiasmo do carro novo, da promoção ou da casa maior evapora-se em meses; voltamos ao ponto de partida e passamos a comparar-nos com o patamar seguinte. É uma passadeira rolante: corremos, mas o cenário não muda.",
           "Segunda surpresa: o preditor mais forte não é o dinheiro, o sucesso nem o clima. O Estudo do Desenvolvimento Adulto de Harvard, que acompanha vidas desde 1938, é claro: a qualidade das relações próximas é o que melhor prevê saúde e satisfação décadas mais tarde. A solidão crónica, pelo contrário, é tão nociva como fumar.",
-          "O que funciona, segundo os ensaios experimentais? Registar gratidão (poucas vezes por semana chega), actos de bondade deliberados, movimento físico regular, gastar dinheiro em experiências e nos outros em vez de em coisas, e ter um propósito que ultrapasse o próprio umbigo. Efeitos modestos um a um — mas acumulam.",
-          "Última nota, talvez a mais importante: o objectivo não é estar sempre bem. As emoções negativas têm funções — a tristeza pede apoio, o medo protege, a raiva denuncia injustiças. O bem-estar sólido não é euforia constante; é flexibilidade emocional com uma base de relações fortes. O Diário de Gratidão aqui do site é um bom sítio para começar."
+          "O que funciona, segundo os ensaios experimentais? Registar gratidão (poucas vezes por semana chega), actos de bondade deliberados, movimento físico regular, gastar dinheiro em experiências e nos outros em vez de em coisas, e ter um propósito que ultrapasse o próprio umbigo. Efeitos modestos um a um, mas acumulam.",
+          "Última nota, talvez a mais importante: o objectivo não é estar sempre bem. As emoções negativas têm funções: a tristeza pede apoio, o medo protege, a raiva denuncia injustiças. O bem-estar sólido não é euforia constante; é flexibilidade emocional com uma base de relações fortes. O Diário de Gratidão aqui do site é um bom sítio para começar."
         ],
         en: [
-          "When positive psychology was born, in 1998, the question was simple: we spent a century studying what goes wrong in the mind — what do we know about what goes right? The answer, 25 years later, contradicts intuition quite a bit.",
-          "First surprise: we are bad at predicting what will make us happy. Thanks to hedonic adaptation, the thrill of the new car, the promotion or the bigger house evaporates within months — we return to baseline and start comparing ourselves with the next level up. It is a treadmill: we run, but the scenery does not change.",
+          "When positive psychology was born, in 1998, the question was simple: we spent a century studying what goes wrong in the mind; what do we know about what goes right? The answer, 25 years later, contradicts intuition quite a bit.",
+          "First surprise: we are bad at predicting what will make us happy. Thanks to hedonic adaptation, the thrill of the new car, the promotion or the bigger house evaporates within months; we return to baseline and start comparing ourselves with the next level up. It is a treadmill: we run, but the scenery does not change.",
           "Second surprise: the strongest predictor is not money, success or climate. The Harvard Study of Adult Development, following lives since 1938, is clear: the quality of close relationships is what best predicts health and satisfaction decades later. Chronic loneliness, by contrast, is as harmful as smoking.",
-          "What works, according to experimental trials? Recording gratitude (a few times a week is enough), deliberate acts of kindness, regular physical movement, spending money on experiences and on others rather than on things, and having a purpose bigger than your own navel. Modest effects one by one — but they add up.",
-          "Final note, perhaps the most important: the goal is not to feel good all the time. Negative emotions have functions — sadness asks for support, fear protects, anger denounces injustice. Solid wellbeing is not constant euphoria; it is emotional flexibility on a base of strong relationships. The Gratitude Journal on this site is a good place to start."
+          "What works, according to experimental trials? Recording gratitude (a few times a week is enough), deliberate acts of kindness, regular physical movement, spending money on experiences and on others rather than on things, and having a purpose bigger than your own navel. Modest effects one by one, but they add up.",
+          "Final note, perhaps the most important: the goal is not to feel good all the time. Negative emotions have functions: sadness asks for support, fear protects, anger denounces injustice. Solid wellbeing is not constant euphoria; it is emotional flexibility on a base of strong relationships. The Gratitude Journal on this site is a good place to start."
         ]
       } }
   ];
@@ -201,7 +201,7 @@ window.PAGE = {
 })();
 </script>
 <script>
-/* Feed diário "Da imprensa científica" — lê data/articles.json gerado pela Action */
+/* Feed diário "Da imprensa científica": lê data/articles.json gerado pela Action */
 (function () {
   var $ = function (id) { return document.getElementById(id); };
   var feed = null;

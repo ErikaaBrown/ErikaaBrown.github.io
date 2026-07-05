@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/style.css?v=4">
+<link rel="stylesheet" href="../css/style.css?v=5">
 </head>
 <body>
 <div id="site-header"></div>
@@ -71,13 +71,13 @@ window.PAGE = {
       "add.icon": "Ícone",
       "btn.add": "Adicionar",
       "add.hint": "Dica: formula o hábito pela positiva («ler 10 páginas») e liga-o a uma rotina que já existe («depois do café da manhã»).",
-      "empty": "Ainda não tens hábitos — adiciona o primeiro acima. Começa por um só: pequeno e fácil de cumprir.",
+      "empty": "Ainda não tens hábitos. Adiciona o primeiro acima. Começa por um só: pequeno e fácil de cumprir.",
       "col.habit": "Hábito",
       "col.streak": "Sequência",
       "added": "Hábito adicionado 🌱",
       "name.req": "Dá um nome ao hábito",
       "del.confirm": "Apagar este hábito e todo o seu histórico?",
-      "why.p": "🔬 Porque funciona: os hábitos formam-se por repetição num contexto estável — em média 66 dias, segundo o estudo de Lally (2010), e não os míticos 21. Falhar um dia não estraga nada: o que conta é a tendência. A regra de ouro é «nunca falhar duas vezes seguidas»."
+      "why.p": "🔬 Porque funciona: os hábitos formam-se por repetição num contexto estável, em média 66 dias, segundo o estudo de Lally (2010), e não os míticos 21. Falhar um dia não estraga nada: o que conta é a tendência. A regra de ouro é «nunca falhar duas vezes seguidas»."
     },
     en: {
       "page.title": "Habit Tracker",
@@ -89,13 +89,13 @@ window.PAGE = {
       "add.icon": "Icon",
       "btn.add": "Add",
       "add.hint": "Tip: phrase the habit positively (\"read 10 pages\") and attach it to an existing routine (\"after morning coffee\").",
-      "empty": "No habits yet — add your first one above. Start with just one: small and easy to keep.",
+      "empty": "No habits yet. Add your first one above. Start with just one: small and easy to keep.",
       "col.habit": "Habit",
       "col.streak": "Streak",
       "added": "Habit added 🌱",
       "name.req": "Give the habit a name",
       "del.confirm": "Delete this habit and all its history?",
-      "why.p": "🔬 Why it works: habits form through repetition in a stable context — on average 66 days according to Lally's study (2010), not the mythical 21. Missing one day ruins nothing: what counts is the trend. The golden rule is \"never miss twice in a row\"."
+      "why.p": "🔬 Why it works: habits form through repetition in a stable context, on average 66 days according to Lally's study (2010), not the mythical 21. Missing one day ruins nothing: what counts is the trend. The golden rule is \"never miss twice in a row\"."
     }
   }
 };
@@ -147,7 +147,7 @@ window.PAGE = {
         rows += "<td><button class='check-cell" + on + "' data-h='" + hi + "' data-iso='" + iso + "'>" + (h.c[iso] ? "✓" : "") + "</button></td>";
       });
       var st = streakOf(h);
-      rows += "<td><span class='streak-flame'>" + (st > 0 ? "🔥 " + st : "—") + "</span></td>";
+      rows += "<td><span class='streak-flame'>" + (st > 0 ? "🔥 " + st : ".") + "</span></td>";
       rows += "<td><button class='del' data-del='" + hi + "' style='background:none;border:none;cursor:pointer;color:var(--ink-3)'>🗑️</button></td></tr>";
     });
 

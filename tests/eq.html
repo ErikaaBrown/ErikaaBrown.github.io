@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/style.css?v=4">
+<link rel="stylesheet" href="../css/style.css?v=5">
 </head>
 <body>
 <div id="site-header"></div>
@@ -73,10 +73,10 @@ window.PAGE = {
     pt: {
       "page.title": "Inteligência Emocional",
       "crumb": "Testes",
-      "intro.lead": "A inteligência emocional é a capacidade de reconhecer, compreender e gerir emoções — as tuas e as das outras pessoas.",
+      "intro.lead": "A inteligência emocional é a capacidade de reconhecer, compreender e gerir emoções, as tuas e as das outras pessoas.",
       "intro.p1": "Responde a 16 afirmações sobre como lidas com emoções no dia-a-dia. Indica com que frequência cada frase se aplica a ti.",
       "intro.p2": "O resultado cobre quatro domínios: auto-consciência, auto-regulação, consciência social e gestão de relações.",
-      "intro.notice": "<strong>Lembra-te:</strong> ao contrário do QI, a inteligência emocional treina-se — e melhora com prática deliberada em qualquer idade.",
+      "intro.notice": "<strong>Lembra-te:</strong> ao contrário do QI, a inteligência emocional treina-se, e melhora com prática deliberada em qualquer idade.",
       "btn.start": "Começar o teste",
       "btn.back": "← Anterior",
       "btn.retake": "Repetir o teste",
@@ -84,9 +84,9 @@ window.PAGE = {
       "lk.5": "Quase sempre",
       "res.title": "O teu resultado",
       "res.total": "Pontuação global",
-      "band.dev": "Em desenvolvimento — há bastante espaço para crescer, e a boa notícia é que estas competências respondem muito bem ao treino.",
-      "band.solid": "Sólida — tens uma base boa; o próximo salto está em trabalhar o teu domínio mais fraco.",
-      "band.strong": "Forte — lidas muito bem com o mundo emocional; continua a usar essas competências de forma consciente.",
+      "band.dev": "Em desenvolvimento: há bastante espaço para crescer, e a boa notícia é que estas competências respondem muito bem ao treino.",
+      "band.solid": "Sólida: tens uma base boa; o próximo salto está em trabalhar o teu domínio mais fraco.",
+      "band.strong": "Forte: lidas muito bem com o mundo emocional; continua a usar essas competências de forma consciente.",
       "focus.title": "Onde focar",
       "focus.strong": "Ponto forte",
       "focus.weak": "Área a desenvolver",
@@ -95,10 +95,10 @@ window.PAGE = {
     en: {
       "page.title": "Emotional Intelligence",
       "crumb": "Tests",
-      "intro.lead": "Emotional intelligence is the ability to recognise, understand and manage emotions — your own and other people's.",
+      "intro.lead": "Emotional intelligence is the ability to recognise, understand and manage emotions, your own and other people's.",
       "intro.p1": "Respond to 16 statements about how you deal with emotions in everyday life. Indicate how often each sentence applies to you.",
       "intro.p2": "The result covers four domains: self-awareness, self-regulation, social awareness and relationship management.",
-      "intro.notice": "<strong>Remember:</strong> unlike IQ, emotional intelligence is trainable — and improves with deliberate practice at any age.",
+      "intro.notice": "<strong>Remember:</strong> unlike IQ, emotional intelligence is trainable, and improves with deliberate practice at any age.",
       "btn.start": "Start the test",
       "btn.back": "← Previous",
       "btn.retake": "Retake the test",
@@ -106,9 +106,9 @@ window.PAGE = {
       "lk.5": "Almost always",
       "res.title": "Your result",
       "res.total": "Overall score",
-      "band.dev": "Developing — there is plenty of room to grow, and the good news is that these skills respond very well to training.",
-      "band.solid": "Solid — you have a good base; the next leap lies in working on your weakest domain.",
-      "band.strong": "Strong — you handle the emotional world very well; keep using those skills consciously.",
+      "band.dev": "Developing: there is plenty of room to grow, and the good news is that these skills respond very well to training.",
+      "band.solid": "Solid: you have a good base; the next leap lies in working on your weakest domain.",
+      "band.strong": "Strong: you handle the emotional world very well; keep using those skills consciously.",
       "focus.title": "Where to focus",
       "focus.strong": "Strength",
       "focus.weak": "Area to develop",
@@ -122,14 +122,14 @@ window.PAGE = {
 (function () {
   var DOMAINS = [
     { emoji: "🔍", pt: "Auto-consciência", en: "Self-awareness",
-      tip: { pt: "Experimenta nomear as tuas emoções por escrito — o Diário Emocional aqui do site ajuda. Pôr sentimentos em palavras reduz a sua intensidade.",
-             en: "Try naming your emotions in writing — the Mood Diary on this site helps. Putting feelings into words lowers their intensity." } },
+      tip: { pt: "Experimenta nomear as tuas emoções por escrito. O Diário Emocional aqui do site ajuda. Pôr sentimentos em palavras reduz a sua intensidade.",
+             en: "Try naming your emotions in writing. The Mood Diary on this site helps. Putting feelings into words lowers their intensity." } },
     { emoji: "🛞", pt: "Auto-regulação", en: "Self-regulation",
       tip: { pt: "Técnicas de respiração (como a 4-7-8, na secção Ferramentas) criam o espaço entre o estímulo e a resposta.",
              en: "Breathing techniques (like 4-7-8, in the Tools section) create the space between stimulus and response." } },
     { emoji: "🫶", pt: "Consciência social", en: "Social awareness",
-      tip: { pt: "Nas próximas conversas, tenta resumir o que a outra pessoa disse antes de responderes — escuta activa treina empatia.",
-             en: "In your next conversations, try summarising what the other person said before replying — active listening trains empathy." } },
+      tip: { pt: "Nas próximas conversas, tenta resumir o que a outra pessoa disse antes de responderes. Escuta activa treina empatia.",
+             en: "In your next conversations, try summarising what the other person said before replying. Active listening trains empathy." } },
     { emoji: "🌉", pt: "Gestão de relações", en: "Relationship management",
       tip: { pt: "Usa frases na primeira pessoa («eu sinto que...») em vez de acusações («tu fazes sempre...») nas conversas difíceis.",
              en: "Use first-person sentences (\"I feel that...\") instead of accusations (\"you always...\") in difficult conversations." } }
@@ -146,7 +146,7 @@ window.PAGE = {
     { d: 3, r: false, pt: "As pessoas procuram-me quando precisam de desabafar.", en: "People come to me when they need to vent." },
     { d: 0, r: false, pt: "Reconheço os meus pontos fortes e as minhas limitações.", en: "I recognise my strengths and my limitations." },
     { d: 1, r: false, pt: "Recupero depressa de emoções negativas.", en: "I recover quickly from negative emotions." },
-    { d: 2, r: false, pt: "Noto sinais não verbais — tom de voz, postura, expressões.", en: "I notice non-verbal cues — tone of voice, posture, expressions." },
+    { d: 2, r: false, pt: "Noto sinais não verbais: tom de voz, postura, expressões.", en: "I notice non-verbal cues: tone of voice, posture, expressions." },
     { d: 3, r: false, pt: "Consigo dar feedback difícil sem ferir a outra pessoa.", en: "I can give difficult feedback without hurting the other person." },
     { d: 0, r: true,  pt: "Dou por mim a reagir sem perceber porquê.", en: "I catch myself reacting without understanding why." },
     { d: 1, r: true,  pt: "Digo coisas de que me arrependo quando estou zangado.", en: "I say things I regret when I am angry." },
