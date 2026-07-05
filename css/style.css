@@ -114,6 +114,7 @@ a:hover { text-decoration: underline; }
   background: linear-gradient(135deg, var(--brand), var(--accent));
   display: grid; place-items: center; font-size: 1.25rem;
 }
+.logo .mark img { width: 26px; height: 26px; object-fit: contain; }
 .main-nav { display: flex; gap: 2px; margin-left: auto; overflow-x: auto; }
 .main-nav a {
   padding: 8px 13px; border-radius: 999px; white-space: nowrap;
