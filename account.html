@@ -165,6 +165,43 @@
     <div class="panel panel-soft">
       <p class="small" style="margin:0" data-i18n="acct.note"></p>
     </div>
+
+    <div class="panel hidden" id="pro-links">
+      <h3 style="margin-top:0" data-i18n="pro.links.title"></h3>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn btn-ghost btn-sm hidden" id="link-professional" href="professional.html" data-i18n="pro.links.professional"></a>
+        <a class="btn btn-ghost btn-sm hidden" id="link-admin" href="admin.html" data-i18n="pro.links.admin"></a>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3 style="margin-top:0" data-i18n="conn.title"></h3>
+      <p class="small muted" data-i18n="conn.lead"></p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+        <div style="flex:1;min-width:200px">
+          <label class="field-label" for="f-connect-code" data-i18n="conn.codelabel"></label>
+          <input type="text" id="f-connect-code" data-i18n-ph="ph.code2" style="font-family:monospace;letter-spacing:0.05em;text-transform:uppercase">
+        </div>
+        <button class="btn btn-sm" id="btn-connect" data-i18n="conn.btn"></button>
+      </div>
+      <p class="small" id="connect-error" style="color:var(--critical);min-height:1.2em;margin:10px 0 0"></p>
+    </div>
+
+    <div id="connections-list"></div>
+    <template id="tpl-connection">
+      <div class="panel conn-card">
+        <div class="acct-head">
+          <span class="avatar conn-avatar"></span>
+          <div style="flex:1;min-width:0">
+            <h4 style="margin:0" class="conn-email"></h4>
+            <p class="small muted" style="margin:2px 0 0" data-i18n="conn.since"></p>
+          </div>
+          <button class="btn btn-danger btn-sm conn-disconnect" data-i18n="conn.disconnect"></button>
+        </div>
+        <p class="small muted" style="margin:14px 0 8px" data-i18n="conn.sharewhat"></p>
+        <div class="share-toggles"></div>
+      </div>
+    </template>
   </section>
 </main>
 
@@ -241,7 +278,30 @@ window.PAGE = {
       "err.network": "Não foi possível contactar o servidor. Tenta outra vez.",
       "err.pass.short": "A palavra-passe deve ter pelo menos 8 caracteres.",
       "err.pass.match": "As palavras-passe não coincidem.",
-      "err.code.req": "Introduz o código de recuperação."
+      "err.code.req": "Introduz o código de recuperação.",
+      "pro.links.title": "Acessos",
+      "pro.links.professional": "🩺 Ver os meus pacientes",
+      "pro.links.admin": "🛠️ Administração",
+      "conn.title": "Ligar a um profissional",
+      "conn.lead": "Se o teu psicólogo ou psiquiatra usa o PsicoLab, pede-lhe o código profissional e introduz-o aqui para poderes partilhar dados com ele.",
+      "conn.codelabel": "Código profissional",
+      "ph.code2": "XXXX-XXXX",
+      "conn.btn": "Ligar",
+      "conn.since": "Ligado desde",
+      "conn.disconnect": "Desligar",
+      "conn.sharewhat": "O que queres partilhar com esta pessoa:",
+      "conn.empty": "Ainda não estás ligado a nenhum profissional.",
+      "conn.disconnect.confirm": "Desligar deste profissional? Deixa de poder ver qualquer dado teu.",
+      "conn.connected": "Ligado! Escolhe em baixo o que queres partilhar.",
+      "err.code_not_found": "Não foi encontrado nenhum profissional com esse código.",
+      "err.cannot_connect_self": "Não podes ligar-te a ti próprio.",
+      "cat.test_results": "Resultados de testes",
+      "cat.mood": "Diário emocional",
+      "cat.thoughts": "Registo de pensamentos",
+      "cat.gratitude": "Diário de gratidão",
+      "cat.habits": "Hábitos",
+      "cat.sleep": "Sono",
+      "cat.worries": "Preocupações"
     },
     en: {
       "page.title": "Your account",
@@ -309,7 +369,30 @@ window.PAGE = {
       "err.network": "Could not reach the server. Try again.",
       "err.pass.short": "The password must be at least 8 characters.",
       "err.pass.match": "The passwords do not match.",
-      "err.code.req": "Enter the recovery code."
+      "err.code.req": "Enter the recovery code.",
+      "pro.links.title": "Access",
+      "pro.links.professional": "🩺 View my patients",
+      "pro.links.admin": "🛠️ Administration",
+      "conn.title": "Connect to a professional",
+      "conn.lead": "If your psychologist or psychiatrist uses PsychLab, ask them for their professional code and enter it here so you can share data with them.",
+      "conn.codelabel": "Professional code",
+      "ph.code2": "XXXX-XXXX",
+      "conn.btn": "Connect",
+      "conn.since": "Connected since",
+      "conn.disconnect": "Disconnect",
+      "conn.sharewhat": "What you want to share with this person:",
+      "conn.empty": "You are not connected to any professional yet.",
+      "conn.disconnect.confirm": "Disconnect from this professional? They will lose access to anything of yours.",
+      "conn.connected": "Connected! Choose below what you want to share.",
+      "err.code_not_found": "No professional was found with that code.",
+      "err.cannot_connect_self": "You cannot connect to yourself.",
+      "cat.test_results": "Test results",
+      "cat.mood": "Mood diary",
+      "cat.thoughts": "Thought records",
+      "cat.gratitude": "Gratitude journal",
+      "cat.habits": "Habits",
+      "cat.sleep": "Sleep",
+      "cat.worries": "Worries"
     }
   }
 };
@@ -339,6 +422,10 @@ window.PAGE = {
       show("account");
       $("acct-email").textContent = u.email;
       $("acct-avatar").textContent = (u.email || "?").charAt(0);
+      $("pro-links").classList.toggle("hidden", u.role !== "professional" && u.role !== "admin");
+      $("link-professional").classList.toggle("hidden", u.role !== "professional");
+      $("link-admin").classList.toggle("hidden", u.role !== "admin");
+      renderConnections();
     } else {
       show("auth");
       renderMode();
@@ -501,7 +588,76 @@ window.PAGE = {
         $("sync-status").textContent = PL.t("sync.err");
       });
     });
+
+    $("btn-connect").addEventListener("click", function () {
+      var code = $("f-connect-code").value.trim();
+      $("connect-error").textContent = "";
+      if (!code) return;
+      $("btn-connect").disabled = true;
+      PLSync.connect(code).then(function () {
+        $("btn-connect").disabled = false;
+        $("f-connect-code").value = "";
+        PL.toast(PL.t("conn.connected"));
+        renderConnections();
+      }).catch(function (e) {
+        $("btn-connect").disabled = false;
+        var key = "err." + (e.code || "network");
+        var msg = PL.t(key);
+        $("connect-error").textContent = msg === key ? PL.t("err.network") : msg;
+      });
+    });
   });
+
+  function renderConnections() {
+    var box = $("connections-list");
+    var tpl = $("tpl-connection");
+    box.innerHTML = "";
+    PLSync.listConnections().then(function (r) {
+      var list = r.asPatient || [];
+      if (!list.length) {
+        var p = document.createElement("p");
+        p.className = "small muted";
+        p.textContent = PL.t("conn.empty");
+        box.appendChild(p);
+        return;
+      }
+      list.forEach(function (conn) {
+        var node = tpl.content.firstElementChild.cloneNode(true);
+        node.querySelector(".conn-avatar").textContent = conn.otherEmail.charAt(0).toUpperCase();
+        node.querySelector(".conn-email").textContent = conn.otherEmail;
+        node.querySelector("[data-i18n='conn.since']").textContent =
+          PL.t("conn.since") + " " + PL.fmtDate(String(conn.since).slice(0, 10));
+        node.querySelector(".conn-disconnect").textContent = PL.t("conn.disconnect");
+        node.querySelector("[data-i18n='conn.sharewhat']").textContent = PL.t("conn.sharewhat");
+        node.querySelector(".conn-disconnect").addEventListener("click", function () {
+          if (!confirm(PL.t("conn.disconnect.confirm"))) return;
+          PLSync.disconnect(conn.connectionId).then(renderConnections);
+        });
+
+        var togglesBox = node.querySelector(".share-toggles");
+        PLSync.getShareStatus(conn.connectionId).then(function (onMap) {
+          PLSync.shareCategories().forEach(function (cat) {
+            var b = document.createElement("button");
+            b.className = "tag-btn" + (onMap[cat] ? " sel" : "");
+            b.textContent = PL.t("cat." + cat);
+            b.addEventListener("click", function () {
+              var turningOn = !b.classList.contains("sel");
+              b.disabled = true;
+              PLSync.setShare(conn.connectionId, cat, conn.otherPub, turningOn).then(function () {
+                b.disabled = false;
+                b.classList.toggle("sel", turningOn);
+              }).catch(function () {
+                b.disabled = false;
+              });
+            });
+            togglesBox.appendChild(b);
+          });
+        });
+
+        box.appendChild(node);
+      });
+    });
+  }
 
   PL.onLang(function () {
     render();

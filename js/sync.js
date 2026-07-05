@@ -3,7 +3,8 @@
 const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
 
 (function () {
-  var SYNC_TOOLS = ["mood", "thoughts", "gratitude", "habits", "sleep", "worries", "scores"];
+  var SYNC_TOOLS = ["mood", "thoughts", "gratitude", "habits", "sleep", "worries", "scores", "test_results"];
+  var SHARE_CATEGORIES = ["test_results", "mood", "thoughts", "gratitude", "habits", "sleep", "worries"];
   var ITERATIONS = 310000;
   var RECOVERY_ALPHABET = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"; // Crockford base32, sem I/L/O/U
 
@@ -24,8 +25,9 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
   function saveMeta(m) { localStorage.setItem("pl_sync_meta", JSON.stringify(m)); }
 
   var acct = loadAcct();
-  var encKey = null; // CryptoKey da DEK, em memória (importada do jwk guardado)
-  var pending = null; // { email, uid-less token de recuperação, dek } enquanto se define a palavra-passe nova
+  var encKey = null;   // CryptoKey da DEK, em memória (importada do jwk guardado)
+  var ecdhPriv = null; // CryptoKey privada ECDH, em memória (para partilha com profissionais)
+  var pending = null;  // { email, token de recuperação, dek, ecdhPrivRaw } enquanto se define a palavra-passe nova
 
   /* ---------- criptografia (WebCrypto) ---------- */
 
@@ -83,22 +85,58 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
     return deriveSubkeys(email, normalizeRecoveryCode(code), "psicolab-recovery-auth", "psicolab-recovery-enc");
   }
 
+  /* ---- embrulhar/desembrulhar bytes arbitrários com uma chave AES-GCM (DEK ou chave privada ECDH) ---- */
+  function wrapBytes(raw, wrapKey) {
+    var iv = crypto.getRandomValues(new Uint8Array(12));
+    return crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, wrapKey, raw).then(function (ct) {
+      return { iv: b64(iv), ct: b64(ct) };
+    });
+  }
+  function unwrapBytes(ivB64, ctB64, wrapKey) {
+    return crypto.subtle.decrypt({ name: "AES-GCM", iv: new Uint8Array(unb64(ivB64)) }, wrapKey, unb64(ctB64));
+  }
+
   function genDEK() {
     return crypto.subtle.generateKey({ name: "AES-GCM", length: 256 }, true, ["encrypt", "decrypt"]);
   }
   function wrapDEK(dek, wrapKey) {
-    return crypto.subtle.exportKey("raw", dek).then(function (raw) {
-      var iv = crypto.getRandomValues(new Uint8Array(12));
-      return crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, wrapKey, raw).then(function (ct) {
-        return { iv: b64(iv), ct: b64(ct) };
-      });
-    });
+    return crypto.subtle.exportKey("raw", dek).then(function (raw) { return wrapBytes(raw, wrapKey); });
   }
   function unwrapDEK(ivB64, ctB64, wrapKey) {
-    return crypto.subtle.decrypt({ name: "AES-GCM", iv: new Uint8Array(unb64(ivB64)) }, wrapKey, unb64(ctB64))
-      .then(function (raw) {
-        return crypto.subtle.importKey("raw", raw, { name: "AES-GCM" }, true, ["encrypt", "decrypt"]);
-      });
+    return unwrapBytes(ivB64, ctB64, wrapKey).then(function (raw) {
+      return crypto.subtle.importKey("raw", raw, { name: "AES-GCM" }, true, ["encrypt", "decrypt"]);
+    });
+  }
+
+  /* ---- par de chaves ECDH (P-256), para partilha ponta-a-ponta com profissionais ---- */
+  function genECDHPair() {
+    return crypto.subtle.generateKey({ name: "ECDH", namedCurve: "P-256" }, true, ["deriveKey", "deriveBits"]);
+  }
+  function exportECDHPub(publicKey) {
+    return crypto.subtle.exportKey("raw", publicKey).then(b64);
+  }
+  function importECDHPub(pubB64) {
+    return crypto.subtle.importKey("raw", unb64(pubB64), { name: "ECDH", namedCurve: "P-256" }, true, []);
+  }
+  function wrapECDHPriv(privateKey, wrapKey) {
+    return crypto.subtle.exportKey("pkcs8", privateKey).then(function (raw) { return wrapBytes(raw, wrapKey); });
+  }
+  function unwrapECDHPriv(ivB64, ctB64, wrapKey) {
+    return unwrapBytes(ivB64, ctB64, wrapKey).then(function (raw) {
+      return crypto.subtle.importKey("pkcs8", raw, { name: "ECDH", namedCurve: "P-256" }, true, ["deriveKey", "deriveBits"]);
+    });
+  }
+  function deriveShareKey(myPriv, otherPubB64) {
+    return importECDHPub(otherPubB64).then(function (peerPub) {
+      return crypto.subtle.deriveBits({ name: "ECDH", public: peerPub }, myPriv, 256);
+    }).then(function (secretBits) {
+      return crypto.subtle.importKey("raw", secretBits, "HKDF", false, ["deriveKey"]);
+    }).then(function (hkdfKey) {
+      return crypto.subtle.deriveKey(
+        { name: "HKDF", hash: "SHA-256", salt: new Uint8Array(0), info: new TextEncoder().encode("psicolab-share-v1") },
+        hkdfKey, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]
+      );
+    });
   }
 
   function ensureKey() {
@@ -107,24 +145,27 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
     return crypto.subtle.importKey("jwk", acct.dek, { name: "AES-GCM" }, true, ["encrypt", "decrypt"])
       .then(function (k) { encKey = k; return k; });
   }
-
-  function encryptJSON(obj) {
-    return ensureKey().then(function (key) {
-      var iv = crypto.getRandomValues(new Uint8Array(12));
-      var data = new TextEncoder().encode(JSON.stringify(obj));
-      return crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, key, data).then(function (ct) {
-        return { iv: b64(iv), ct: b64(ct) };
-      });
-    });
+  function ensureECDHPriv() {
+    if (ecdhPriv) return Promise.resolve(ecdhPriv);
+    if (!acct || !acct.ecdhPriv) return Promise.reject(new Error("no-ecdh-key"));
+    return crypto.subtle.importKey("jwk", acct.ecdhPriv, { name: "ECDH", namedCurve: "P-256" }, true, ["deriveKey", "deriveBits"])
+      .then(function (k) { ecdhPriv = k; return k; });
   }
 
-  function decryptJSON(ivB64, ctB64) {
-    return ensureKey().then(function (key) {
-      return crypto.subtle.decrypt({ name: "AES-GCM", iv: new Uint8Array(unb64(ivB64)) }, key, unb64(ctB64));
-    }).then(function (plain) {
-      return JSON.parse(new TextDecoder().decode(plain));
+  function encryptWith(key, obj) {
+    var iv = crypto.getRandomValues(new Uint8Array(12));
+    var data = new TextEncoder().encode(JSON.stringify(obj));
+    return crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, key, data).then(function (ct) {
+      return { iv: b64(iv), ct: b64(ct) };
     });
   }
+  function decryptWith(key, ivB64, ctB64) {
+    return crypto.subtle.decrypt({ name: "AES-GCM", iv: new Uint8Array(unb64(ivB64)) }, key, unb64(ctB64))
+      .then(function (plain) { return JSON.parse(new TextDecoder().decode(plain)); });
+  }
+
+  function encryptJSON(obj) { return ensureKey().then(function (key) { return encryptWith(key, obj); }); }
+  function decryptJSON(ivB64, ctB64) { return ensureKey().then(function (key) { return decryptWith(key, ivB64, ctB64); }); }
 
   /* ---------- API ---------- */
 
@@ -148,7 +189,7 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
     });
   }
 
-  /* ---------- sincronização ---------- */
+  /* ---------- sincronização pessoal (ferramentas) ---------- */
 
   function pushTool(tool) {
     var raw = localStorage.getItem("pl_" + tool);
@@ -195,34 +236,45 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
     });
   }
 
-  /* ---------- upgrade automático de contas criadas antes da recuperação ---------- */
+  /* ---------- upgrade automático de contas criadas antes da recuperação/partilha ---------- */
 
   function upgradeLegacyAccount(email, legacyKey) {
     encKey = legacyKey; // as ferramentas já sincronizadas foram cifradas directamente com esta chave
+    var recoveryCode = genRecoveryCode();
     return pullAll().then(function () {
-      return genDEK().then(function (dek) {
-        var recoveryCode = genRecoveryCode();
-        return Promise.all([
-          wrapDEK(dek, legacyKey),
-          deriveRecoveryKeys(email, recoveryCode)
-        ]).then(function (r) {
-          var dekPass = r[0], recKeys = r[1];
-          return wrapDEK(dek, recKeys.wrapKey).then(function (dekRecovery) {
+      return Promise.all([genDEK(), genECDHPair(), deriveRecoveryKeys(email, recoveryCode)])
+        .then(function (r) {
+          var dek = r[0], ecdh = r[1], recKeys = r[2];
+          return Promise.all([
+            wrapDEK(dek, legacyKey),
+            wrapDEK(dek, recKeys.wrapKey),
+            exportECDHPub(ecdh.publicKey),
+            wrapECDHPriv(ecdh.privateKey, legacyKey),
+            wrapECDHPriv(ecdh.privateKey, recKeys.wrapKey)
+          ]).then(function (w) {
+            var dekPass = w[0], dekRecovery = w[1], ecdhPub = w[2], ecdhPrivPass = w[3], ecdhPrivRecovery = w[4];
             return api("/account/keys", "PUT", {
               dekPassIv: dekPass.iv, dekPassCt: dekPass.ct,
               recoveryAuthKey: recKeys.authKey,
-              dekRecoveryIv: dekRecovery.iv, dekRecoveryCt: dekRecovery.ct
+              dekRecoveryIv: dekRecovery.iv, dekRecoveryCt: dekRecovery.ct,
+              ecdhPub: ecdhPub,
+              ecdhPrivPassIv: ecdhPrivPass.iv, ecdhPrivPassCt: ecdhPrivPass.ct,
+              ecdhPrivRecoveryIv: ecdhPrivRecovery.iv, ecdhPrivRecoveryCt: ecdhPrivRecovery.ct
             }).then(function () {
               encKey = dek;
-              return crypto.subtle.exportKey("jwk", dek);
-            }).then(function (jwk) {
-              acct.dek = jwk;
+              ecdhPriv = ecdh.privateKey;
+              return Promise.all([
+                crypto.subtle.exportKey("jwk", dek),
+                crypto.subtle.exportKey("jwk", ecdh.privateKey)
+              ]);
+            }).then(function (jwks) {
+              acct.dek = jwks[0];
+              acct.ecdhPriv = jwks[1];
               saveAcct(acct);
               return pushAll().then(function () { return recoveryCode; });
             });
           });
         });
-      });
     });
   }
 
@@ -248,7 +300,7 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
 
   window.PLSync = {
     configured: configured,
-    user: function () { return acct ? { email: acct.email } : null; },
+    user: function () { return acct ? { email: acct.email, role: acct.role || "user", professionalCode: acct.professionalCode || "" } : null; },
 
     register: function (email, password) {
       email = email.toLowerCase().trim();
@@ -256,25 +308,34 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
       return Promise.all([derivePassKeys(email, password), deriveRecoveryKeys(email, recoveryCode)])
         .then(function (r) {
           var passKeys = r[0], recKeys = r[1];
-          return genDEK().then(function (dek) {
-            return Promise.all([wrapDEK(dek, passKeys.wrapKey), wrapDEK(dek, recKeys.wrapKey)])
-              .then(function (w) {
-                var dekPass = w[0], dekRecovery = w[1];
-                return api("/auth/register", "POST", {
-                  email: email, authKey: passKeys.authKey,
-                  dekPassIv: dekPass.iv, dekPassCt: dekPass.ct,
-                  recoveryAuthKey: recKeys.authKey,
-                  dekRecoveryIv: dekRecovery.iv, dekRecoveryCt: dekRecovery.ct
-                }).then(function (r2) {
-                  return crypto.subtle.exportKey("jwk", dek).then(function (jwk) {
-                    acct = { token: r2.token, email: r2.email, dek: jwk };
+          return Promise.all([genDEK(), genECDHPair()]).then(function (g) {
+            var dek = g[0], ecdh = g[1];
+            return Promise.all([
+              wrapDEK(dek, passKeys.wrapKey), wrapDEK(dek, recKeys.wrapKey),
+              exportECDHPub(ecdh.publicKey),
+              wrapECDHPriv(ecdh.privateKey, passKeys.wrapKey), wrapECDHPriv(ecdh.privateKey, recKeys.wrapKey)
+            ]).then(function (w) {
+              var dekPass = w[0], dekRecovery = w[1], ecdhPub = w[2], ecdhPrivPass = w[3], ecdhPrivRecovery = w[4];
+              return api("/auth/register", "POST", {
+                email: email, authKey: passKeys.authKey,
+                dekPassIv: dekPass.iv, dekPassCt: dekPass.ct,
+                recoveryAuthKey: recKeys.authKey,
+                dekRecoveryIv: dekRecovery.iv, dekRecoveryCt: dekRecovery.ct,
+                ecdhPub: ecdhPub,
+                ecdhPrivPassIv: ecdhPrivPass.iv, ecdhPrivPassCt: ecdhPrivPass.ct,
+                ecdhPrivRecoveryIv: ecdhPrivRecovery.iv, ecdhPrivRecoveryCt: ecdhPrivRecovery.ct
+              }).then(function (r2) {
+                return Promise.all([crypto.subtle.exportKey("jwk", dek), crypto.subtle.exportKey("jwk", ecdh.privateKey)])
+                  .then(function (jwks) {
+                    acct = { token: r2.token, email: r2.email, role: r2.role || "user", dek: jwks[0], ecdhPriv: jwks[1] };
                     encKey = dek;
+                    ecdhPriv = ecdh.privateKey;
                     saveAcct(acct);
                     saveMeta({});
                     return pushAll().then(function () { return { recoveryCode: recoveryCode }; });
                   });
-                });
               });
+            });
           });
         });
     },
@@ -285,21 +346,26 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
         return api("/auth/login", "POST", { email: email, authKey: passKeys.authKey }).then(function (r) {
           // fica só em memória até a DEK ser desembrulhada com sucesso — saveAcct() só
           // no fim, para nunca persistir uma conta "a meio" sem chave utilizável
-          acct = { token: r.token, email: r.email, dek: null };
+          acct = { token: r.token, email: r.email, role: r.role || "user", professionalCode: r.professionalCode || "", dek: null, ecdhPriv: null };
           saveMeta({});
 
           if (!r.dekPassCt) {
-            // conta anterior à funcionalidade de recuperação: sobe de nível de forma transparente
+            // conta anterior à funcionalidade de recuperação/partilha: sobe de nível de forma transparente
             return upgradeLegacyAccount(email, passKeys.wrapKey).then(function (recoveryCode) {
               return { recoveryCode: recoveryCode, upgraded: true };
             });
           }
 
-          return unwrapDEK(r.dekPassIv, r.dekPassCt, passKeys.wrapKey).then(function (dek) {
-            encKey = dek;
-            return crypto.subtle.exportKey("jwk", dek);
-          }).then(function (jwk) {
-            acct.dek = jwk;
+          return Promise.all([
+            unwrapDEK(r.dekPassIv, r.dekPassCt, passKeys.wrapKey),
+            unwrapECDHPriv(r.ecdhPrivPassIv, r.ecdhPrivPassCt, passKeys.wrapKey)
+          ]).then(function (keys) {
+            encKey = keys[0];
+            ecdhPriv = keys[1];
+            return Promise.all([crypto.subtle.exportKey("jwk", keys[0]), crypto.subtle.exportKey("jwk", keys[1])]);
+          }).then(function (jwks) {
+            acct.dek = jwks[0];
+            acct.ecdhPriv = jwks[1];
             saveAcct(acct);
             return pullAll().then(function (changed) {
               return pushAll().then(function () { return { changed: changed }; });
@@ -312,6 +378,7 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
     logout: function () {
       acct = null;
       encKey = null;
+      ecdhPriv = null;
       saveAcct(null);
       saveMeta({});
     },
@@ -325,7 +392,7 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
 
     deleteAccount: function () {
       return api("/account", "DELETE").then(function () {
-        acct = null; encKey = null;
+        acct = null; encKey = null; ecdhPriv = null;
         saveAcct(null); saveMeta({});
       });
     },
@@ -336,8 +403,11 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
       email = email.toLowerCase().trim();
       return deriveRecoveryKeys(email, code).then(function (recKeys) {
         return api("/auth/recover/start", "POST", { email: email, recoveryAuthKey: recKeys.authKey }).then(function (r) {
-          return unwrapDEK(r.dekRecoveryIv, r.dekRecoveryCt, recKeys.wrapKey).then(function (dek) {
-            pending = { email: email, token: r.token, dek: dek };
+          return Promise.all([
+            unwrapDEK(r.dekRecoveryIv, r.dekRecoveryCt, recKeys.wrapKey),
+            unwrapECDHPriv(r.ecdhPrivRecoveryIv, r.ecdhPrivRecoveryCt, recKeys.wrapKey)
+          ]).then(function (keys) {
+            pending = { email: email, token: r.token, dek: keys[0], ecdhPriv: keys[1] };
             return true;
           });
         });
@@ -346,28 +416,107 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
 
     recoverSetPassword: function (newPassword) {
       if (!pending) return Promise.reject(new Error("no-pending-recovery"));
-      var email = pending.email, dek = pending.dek, token = pending.token;
+      var email = pending.email, dek = pending.dek, priv = pending.ecdhPriv, token = pending.token;
       return derivePassKeys(email, newPassword).then(function (passKeys) {
-        return wrapDEK(dek, passKeys.wrapKey).then(function (dekPass) {
+        return Promise.all([wrapDEK(dek, passKeys.wrapKey), wrapECDHPriv(priv, passKeys.wrapKey)]).then(function (w) {
+          var dekPass = w[0], ecdhPrivPass = w[1];
           return api("/auth/recover/reset", "POST", {
-            newAuthKey: passKeys.authKey, dekPassIv: dekPass.iv, dekPassCt: dekPass.ct
+            newAuthKey: passKeys.authKey,
+            dekPassIv: dekPass.iv, dekPassCt: dekPass.ct,
+            ecdhPrivPassIv: ecdhPrivPass.iv, ecdhPrivPassCt: ecdhPrivPass.ct
           }, token).then(function (r) {
-            return crypto.subtle.exportKey("jwk", dek).then(function (jwk) {
-              acct = { token: r.token, email: email, dek: jwk };
-              encKey = dek;
-              saveAcct(acct);
-              saveMeta({});
-              pending = null;
-              return pullAll().then(function (changed) {
-                return pushAll().then(function () { return changed; });
+            return Promise.all([crypto.subtle.exportKey("jwk", dek), crypto.subtle.exportKey("jwk", priv)])
+              .then(function (jwks) {
+                acct = { token: r.token, email: r.email || email, role: r.role || "user", professionalCode: r.professionalCode || "", dek: jwks[0], ecdhPriv: jwks[1] };
+                encKey = dek;
+                ecdhPriv = priv;
+                saveAcct(acct);
+                saveMeta({});
+                pending = null;
+                return pullAll().then(function (changed) {
+                  return pushAll().then(function () { return changed; });
+                });
               });
-            });
           });
         });
       });
     },
 
-    recoverCancel: function () { pending = null; }
+    recoverCancel: function () { pending = null; },
+
+    /* ---- ligação e partilha com profissionais ---- */
+
+    shareCategories: function () { return SHARE_CATEGORIES.slice(); },
+
+    connect: function (professionalCode) {
+      return api("/connections", "POST", { professionalCode: professionalCode.toUpperCase().trim() });
+    },
+
+    listConnections: function () {
+      return api("/connections");
+    },
+
+    disconnect: function (connectionId) {
+      return api("/connections/" + connectionId, "DELETE");
+    },
+
+    getShareStatus: function (connectionId) {
+      return api("/shares/" + connectionId).then(function (r) {
+        var on = {};
+        (r.shares || []).forEach(function (s) { on[s.category] = s.updated; });
+        return on;
+      });
+    },
+
+    setShare: function (connectionId, category, otherPub, on) {
+      if (!on) return api("/shares/" + connectionId + "/" + category, "DELETE");
+      return ensureECDHPriv().then(function (priv) {
+        return deriveShareKey(priv, otherPub).then(function (shareKey) {
+          var raw = localStorage.getItem("pl_" + category);
+          var value = null;
+          try { value = raw !== null ? JSON.parse(raw) : (category === "test_results" ? [] : {}); } catch (e) { value = {}; }
+          return encryptWith(shareKey, value).then(function (encd) {
+            return api("/shares/" + connectionId + "/" + category, "PUT", { iv: encd.iv, ct: encd.ct, updated: Date.now() });
+          });
+        });
+      });
+    },
+
+    refreshShares: function (connectionId, otherPub, categories) {
+      return categories.reduce(function (p, cat) {
+        return p.then(function () { return PLSync.setShare(connectionId, cat, otherPub, true); });
+      }, Promise.resolve());
+    },
+
+    readShared: function (connectionId, otherPub) {
+      return ensureECDHPriv().then(function (priv) {
+        return deriveShareKey(priv, otherPub).then(function (shareKey) {
+          return api("/shares/" + connectionId).then(function (r) {
+            var out = {};
+            var chain = Promise.resolve();
+            (r.shares || []).forEach(function (s) {
+              chain = chain.then(function () {
+                return decryptWith(shareKey, s.iv, s.ct).then(function (value) {
+                  out[s.category] = { value: value, updated: s.updated };
+                }).catch(function () {
+                  console.debug("[PsicoLab sync] não foi possível decifrar partilha:", s.category);
+                });
+              });
+            });
+            return chain.then(function () { return out; });
+          });
+        });
+      });
+    },
+
+    /* ---- administração (gestão de contas profissionais) ---- */
+
+    adminSearchUsers: function (query) {
+      return api("/admin/users?q=" + encodeURIComponent(query || ""));
+    },
+    adminSetRole: function (userId, role) {
+      return api("/admin/users/" + userId + "/role", "PUT", { role: role });
+    }
   };
 
   /* ---------- arranque ---------- */

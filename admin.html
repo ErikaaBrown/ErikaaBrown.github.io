@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administração · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>🛠️ <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section id="panel-notadmin" class="panel hidden">
+    <p style="margin:0" data-i18n="notadmin.p"></p>
+    <div class="center mt-2"><a class="btn btn-ghost" href="account.html" data-i18n="btn.toaccount"></a></div>
+  </section>
+
+  <section id="panel-main" class="hidden">
+    <div class="panel">
+      <label class="field-label" for="f-search" data-i18n="search.label"></label>
+      <div style="display:flex;gap:10px">
+        <input type="text" id="f-search" data-i18n-ph="search.ph" style="flex:1">
+        <button class="btn btn-sm" id="btn-search" data-i18n="btn.search"></button>
+      </div>
+    </div>
+
+    <div class="table-scroll">
+      <table class="data" id="users-table">
+        <thead><tr>
+          <th data-i18n="col.email"></th>
+          <th data-i18n="col.role"></th>
+          <th data-i18n="col.code"></th>
+          <th data-i18n="col.since"></th>
+          <th></th>
+        </tr></thead>
+        <tbody id="users-body"></tbody>
+      </table>
+    </div>
+    <p class="small muted hidden" id="results-empty" data-i18n="results.empty"></p>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "",
+  section: "admin",
+  i18n: {
+    pt: {
+      "page.title": "Administração",
+      "crumb": "PsicoLab",
+      "intro.lead": "Atribui o estatuto de profissional às contas de psicólogos, psiquiatras e outros técnicos. Só a tua conta consegue fazer isto.",
+      "notadmin.p": "Esta página é restrita à administração do PsicoLab.",
+      "btn.toaccount": "← Voltar à conta",
+      "search.label": "Procurar por email",
+      "search.ph": "parte do email...",
+      "btn.search": "Procurar",
+      "col.email": "Email", "col.role": "Papel", "col.code": "Código", "col.since": "Criada em",
+      "results.empty": "Sem resultados.",
+      "role.user": "Utilizador", "role.professional": "Profissional", "role.admin": "Administrador",
+      "btn.makepro": "Tornar profissional",
+      "btn.makeuser": "Reverter para utilizador",
+      "confirm.makepro": "Marcar esta conta como profissional? Vai receber um código para os pacientes se ligarem.",
+      "confirm.makeuser": "Reverter esta conta para utilizador normal? O código profissional deixa de poder ser usado para novas ligações.",
+      "code.generated": "Código gerado: "
+    },
+    en: {
+      "page.title": "Administration",
+      "crumb": "PsicoLab",
+      "intro.lead": "Grant professional status to psychologist, psychiatrist and other clinician accounts. Only your account can do this.",
+      "notadmin.p": "This page is restricted to PsychLab administration.",
+      "btn.toaccount": "← Back to account",
+      "search.label": "Search by email",
+      "search.ph": "part of the email...",
+      "btn.search": "Search",
+      "col.email": "Email", "col.role": "Role", "col.code": "Code", "col.since": "Created at",
+      "results.empty": "No results.",
+      "role.user": "User", "role.professional": "Professional", "role.admin": "Admin",
+      "btn.makepro": "Make professional",
+      "btn.makeuser": "Revert to user",
+      "confirm.makepro": "Mark this account as professional? They will receive a code for patients to connect with.",
+      "confirm.makeuser": "Revert this account to a normal user? The professional code stops working for new connections.",
+      "code.generated": "Generated code: "
+    }
+  }
+};
+</script>
+<script src="js/app.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+
+  function show(panel) {
+    $("panel-notadmin").classList.toggle("hidden", panel !== "notadmin");
+    $("panel-main").classList.toggle("hidden", panel !== "main");
+  }
+
+  function renderRows(users) {
+    var body = $("users-body");
+    body.innerHTML = "";
+    $("results-empty").classList.toggle("hidden", users.length > 0);
+    users.forEach(function (u) {
+      var tr = document.createElement("tr");
+      var actions = "";
+      if (u.role !== "admin") {
+        actions = u.role === "professional"
+          ? "<button class='btn btn-ghost btn-sm' data-act='demote' data-id='" + u.id + "'>" + PL.t("btn.makeuser") + "</button>"
+          : "<button class='btn btn-sm' data-act='promote' data-id='" + u.id + "'>" + PL.t("btn.makepro") + "</button>";
+      }
+      tr.innerHTML =
+        "<td>" + PL.esc(u.email) + "</td>" +
+        "<td>" + PL.t("role." + u.role) + "</td>" +
+        "<td style='font-family:monospace'>" + (u.professional_code || "—") + "</td>" +
+        "<td>" + PL.fmtDate(String(u.created_at).slice(0, 10)) + "</td>" +
+        "<td>" + actions + "</td>";
+      body.appendChild(tr);
+    });
+    body.querySelectorAll("[data-act]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var id = b.getAttribute("data-id");
+        var promote = b.getAttribute("data-act") === "promote";
+        if (!confirm(PL.t(promote ? "confirm.makepro" : "confirm.makeuser"))) return;
+        b.disabled = true;
+        PLSync.adminSetRole(id, promote ? "professional" : "user").then(function (r) {
+          if (promote && r.professionalCode) PL.toast(PL.t("code.generated") + r.professionalCode);
+          runSearch();
+        }).catch(function () {
+          b.disabled = false;
+        });
+      });
+    });
+  }
+
+  function runSearch() {
+    PLSync.adminSearchUsers($("f-search").value.trim()).then(function (r) {
+      renderRows(r.users || []);
+    });
+  }
+
+  function render() {
+    if (!window.PLSync || !PLSync.configured()) return;
+    var u = PLSync.user();
+    if (!u || u.role !== "admin") { show("notadmin"); return; }
+    show("main");
+    runSearch();
+  }
+
+  document.addEventListener("pl:sync-ready", function () {
+    render();
+    $("btn-search").addEventListener("click", runSearch);
+    $("f-search").addEventListener("keydown", function (e) { if (e.key === "Enter") runSearch(); });
+  });
+
+  PL.onLang(render);
+})();
+</script>
+</body>
+</html>

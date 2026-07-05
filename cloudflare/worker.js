@@ -1,5 +1,5 @@
 /**
- * PsicoLab — API de contas e sincronização (Cloudflare Worker, ficheiro único)
+ * PsicoLab — API de contas, sincronização e partilha profissional (Cloudflare Worker)
  *
  * Requisitos configurados no dashboard:
  * - Binding D1 com o nome "DB" (base de dados criada com schema.sql)
@@ -12,8 +12,15 @@
  * Recuperação de conta: os dados são cifrados com uma chave aleatória (DEK)
  * gerada no browser. Essa DEK fica guardada aqui duas vezes, cifrada por
  * chaves diferentes: uma derivada da palavra-passe, outra derivada do
- * código de recuperação. Nenhuma das duas chaves originais (password ou
- * código) chega ao servidor — só as suas derivações de autenticação.
+ * código de recuperação.
+ *
+ * Partilha com profissionais: cada conta tem também um par de chaves ECDH
+ * (P-256). A chave pública é guardada em claro (não é secreta); a privada
+ * segue exactamente o mesmo esquema de protecção da DEK. Quando um
+ * paciente liga a um profissional, ambos os browsers derivam a MESMA
+ * chave partilhada por ECDH (Diffie-Hellman) — o servidor nunca a vê e
+ * nunca vê os dados partilhados em claro. As flags de "profissional" só
+ * podem ser atribuídas por uma conta com role = 'admin'.
  */
 
 const ALLOWED_ORIGINS = [
@@ -22,9 +29,12 @@ const ALLOWED_ORIGINS = [
   "http://127.0.0.1:8765"
 ];
 
-const TOOLS = ["mood", "thoughts", "gratitude", "habits", "sleep", "worries", "scores"];
-const MAX_BLOB = 300 * 1024; // 300 KB por ferramenta
-const MAX_WRAP = 2 * 1024; // wrapped DEK: bem menor que um blob de dados
+const TOOLS = ["mood", "thoughts", "gratitude", "habits", "sleep", "worries", "scores", "test_results"];
+const SHARE_CATEGORIES = ["test_results", "mood", "thoughts", "gratitude", "habits", "sleep", "worries"];
+const CODE_ALPHABET = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"; // Crockford base32, sem I/L/O/U
+const MAX_BLOB = 300 * 1024; // 300 KB por ferramenta/partilha
+const MAX_WRAP = 2 * 1024; // wrapped DEK/chave privada: bem menor que um blob de dados
+const MAX_PUB = 200; // chave pública ECDH exportada (raw, base64)
 const FULL_TTL_S = 60 * 60 * 24 * 30; // 30 dias
 const RECOVERY_TTL_S = 60 * 15; // 15 minutos — janela curta para trocar a password
 
@@ -88,22 +98,43 @@ async function checkToken(env, req) {
 function validEmail(e) {
   return typeof e === "string" && e.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e);
 }
-
 function validAuthKey(k) {
   return typeof k === "string" && /^[0-9a-f]{64}$/.test(k);
 }
-
 function validWrap(s) {
   return typeof s === "string" && s.length > 0 && s.length <= MAX_WRAP;
 }
+function validPub(s) {
+  return typeof s === "string" && s.length > 0 && s.length <= MAX_PUB;
+}
+function validCode(s) {
+  return typeof s === "string" && /^[0-9A-Z]{4}-[0-9A-Z]{4}$/.test(s);
+}
 
-/* ---------- handlers ---------- */
+function genCode() {
+  const bytes = crypto.getRandomValues(new Uint8Array(5)); // 40 bits, 8 símbolos base32
+  let bits = "";
+  for (let i = 0; i < bytes.length; i++) bits += bytes[i].toString(2).padStart(8, "0");
+  let out = "";
+  for (let j = 0; j < bits.length; j += 5) out += CODE_ALPHABET[parseInt(bits.substr(j, 5), 2)];
+  return out.slice(0, 4) + "-" + out.slice(4, 8);
+}
+
+async function requireRole(env, uid, role) {
+  const row = await env.DB.prepare("SELECT role FROM users WHERE id = ?").bind(uid).first();
+  return !!row && row.role === role;
+}
+
+/* ---------- auth: registo, login, recuperação ---------- */
 
 async function register(env, body, origin) {
   if (!validEmail(body.email) || !validAuthKey(body.authKey) ||
       !validWrap(body.dekPassIv) || !validWrap(body.dekPassCt) ||
       !validAuthKey(body.recoveryAuthKey) ||
-      !validWrap(body.dekRecoveryIv) || !validWrap(body.dekRecoveryCt)) {
+      !validWrap(body.dekRecoveryIv) || !validWrap(body.dekRecoveryCt) ||
+      !validPub(body.ecdhPub) ||
+      !validWrap(body.ecdhPrivPassIv) || !validWrap(body.ecdhPrivPassCt) ||
+      !validWrap(body.ecdhPrivRecoveryIv) || !validWrap(body.ecdhPrivRecoveryCt)) {
     return json({ error: "invalid_input" }, 400, origin);
   }
   const email = body.email.toLowerCase().trim();
@@ -113,11 +144,15 @@ async function register(env, body, origin) {
   const rHash = await sha256hex(rSalt + "|" + body.recoveryAuthKey);
   try {
     const r = await env.DB.prepare(
-      "INSERT INTO users (email, auth_salt, auth_hash, recovery_salt, recovery_hash, dek_pass_iv, dek_pass_ct, dek_recovery_iv, dek_recovery_ct) " +
-      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
-    ).bind(email, salt, hash, rSalt, rHash, body.dekPassIv, body.dekPassCt, body.dekRecoveryIv, body.dekRecoveryCt).run();
+      "INSERT INTO users (email, auth_salt, auth_hash, recovery_salt, recovery_hash, " +
+      "dek_pass_iv, dek_pass_ct, dek_recovery_iv, dek_recovery_ct, " +
+      "ecdh_pub, ecdh_priv_pass_iv, ecdh_priv_pass_ct, ecdh_priv_recovery_iv, ecdh_priv_recovery_ct) " +
+      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    ).bind(email, salt, hash, rSalt, rHash, body.dekPassIv, body.dekPassCt, body.dekRecoveryIv, body.dekRecoveryCt,
+      body.ecdhPub, body.ecdhPrivPassIv, body.ecdhPrivPassCt, body.ecdhPrivRecoveryIv, body.ecdhPrivRecoveryCt
+    ).run();
     const uid = r.meta.last_row_id;
-    return json({ token: await makeToken(env, uid, "full"), email }, 200, origin);
+    return json({ token: await makeToken(env, uid, "full"), email, role: "user" }, 200, origin);
   } catch (e) {
     return json({ error: "email_taken" }, 409, origin);
   }
@@ -129,7 +164,8 @@ async function login(env, body, origin) {
   }
   const email = body.email.toLowerCase().trim();
   const row = await env.DB.prepare(
-    "SELECT id, auth_salt, auth_hash, dek_pass_iv, dek_pass_ct FROM users WHERE email = ?"
+    "SELECT id, auth_salt, auth_hash, role, professional_code, dek_pass_iv, dek_pass_ct, " +
+    "ecdh_pub, ecdh_priv_pass_iv, ecdh_priv_pass_ct FROM users WHERE email = ?"
   ).bind(email).first();
   if (!row) return json({ error: "bad_credentials" }, 401, origin);
   const hash = await sha256hex(row.auth_salt + "|" + body.authKey);
@@ -137,8 +173,13 @@ async function login(env, body, origin) {
   return json({
     token: await makeToken(env, row.id, "full"),
     email: email,
+    role: row.role,
+    professionalCode: row.professional_code || "",
     dekPassIv: row.dek_pass_iv || "",
-    dekPassCt: row.dek_pass_ct || ""
+    dekPassCt: row.dek_pass_ct || "",
+    ecdhPub: row.ecdh_pub || "",
+    ecdhPrivPassIv: row.ecdh_priv_pass_iv || "",
+    ecdhPrivPassCt: row.ecdh_priv_pass_ct || ""
   }, 200, origin);
 }
 
@@ -148,7 +189,8 @@ async function recoverStart(env, body, origin) {
   }
   const email = body.email.toLowerCase().trim();
   const row = await env.DB.prepare(
-    "SELECT id, recovery_salt, recovery_hash, dek_recovery_iv, dek_recovery_ct FROM users WHERE email = ?"
+    "SELECT id, recovery_salt, recovery_hash, dek_recovery_iv, dek_recovery_ct, ecdh_priv_recovery_iv, ecdh_priv_recovery_ct " +
+    "FROM users WHERE email = ?"
   ).bind(email).first();
   if (!row || !row.recovery_hash) return json({ error: "bad_recovery" }, 401, origin);
   const hash = await sha256hex(row.recovery_salt + "|" + body.recoveryAuthKey);
@@ -156,35 +198,52 @@ async function recoverStart(env, body, origin) {
   return json({
     token: await makeToken(env, row.id, "recovery"),
     dekRecoveryIv: row.dek_recovery_iv,
-    dekRecoveryCt: row.dek_recovery_ct
+    dekRecoveryCt: row.dek_recovery_ct,
+    ecdhPrivRecoveryIv: row.ecdh_priv_recovery_iv,
+    ecdhPrivRecoveryCt: row.ecdh_priv_recovery_ct
   }, 200, origin);
 }
 
 async function recoverReset(env, uid, body, origin) {
-  if (!validAuthKey(body.newAuthKey) || !validWrap(body.dekPassIv) || !validWrap(body.dekPassCt)) {
+  if (!validAuthKey(body.newAuthKey) || !validWrap(body.dekPassIv) || !validWrap(body.dekPassCt) ||
+      !validWrap(body.ecdhPrivPassIv) || !validWrap(body.ecdhPrivPassCt)) {
     return json({ error: "invalid_input" }, 400, origin);
   }
   const salt = hex(crypto.getRandomValues(new Uint8Array(16)));
   const hash = await sha256hex(salt + "|" + body.newAuthKey);
   await env.DB.prepare(
-    "UPDATE users SET auth_salt = ?, auth_hash = ?, dek_pass_iv = ?, dek_pass_ct = ? WHERE id = ?"
-  ).bind(salt, hash, body.dekPassIv, body.dekPassCt, uid).run();
-  return json({ token: await makeToken(env, uid, "full") }, 200, origin);
+    "UPDATE users SET auth_salt = ?, auth_hash = ?, dek_pass_iv = ?, dek_pass_ct = ?, " +
+    "ecdh_priv_pass_iv = ?, ecdh_priv_pass_ct = ? WHERE id = ?"
+  ).bind(salt, hash, body.dekPassIv, body.dekPassCt, body.ecdhPrivPassIv, body.ecdhPrivPassCt, uid).run();
+  const row = await env.DB.prepare("SELECT email, role, professional_code FROM users WHERE id = ?").bind(uid).first();
+  return json({
+    token: await makeToken(env, uid, "full"),
+    email: row.email, role: row.role, professionalCode: row.professional_code || ""
+  }, 200, origin);
 }
 
 async function upgradeKeys(env, uid, body, origin) {
   if (!validWrap(body.dekPassIv) || !validWrap(body.dekPassCt) ||
       !validAuthKey(body.recoveryAuthKey) ||
-      !validWrap(body.dekRecoveryIv) || !validWrap(body.dekRecoveryCt)) {
+      !validWrap(body.dekRecoveryIv) || !validWrap(body.dekRecoveryCt) ||
+      !validPub(body.ecdhPub) ||
+      !validWrap(body.ecdhPrivPassIv) || !validWrap(body.ecdhPrivPassCt) ||
+      !validWrap(body.ecdhPrivRecoveryIv) || !validWrap(body.ecdhPrivRecoveryCt)) {
     return json({ error: "invalid_input" }, 400, origin);
   }
   const rSalt = hex(crypto.getRandomValues(new Uint8Array(16)));
   const rHash = await sha256hex(rSalt + "|" + body.recoveryAuthKey);
   await env.DB.prepare(
-    "UPDATE users SET dek_pass_iv = ?, dek_pass_ct = ?, recovery_salt = ?, recovery_hash = ?, dek_recovery_iv = ?, dek_recovery_ct = ? WHERE id = ?"
-  ).bind(body.dekPassIv, body.dekPassCt, rSalt, rHash, body.dekRecoveryIv, body.dekRecoveryCt, uid).run();
+    "UPDATE users SET dek_pass_iv = ?, dek_pass_ct = ?, recovery_salt = ?, recovery_hash = ?, " +
+    "dek_recovery_iv = ?, dek_recovery_ct = ?, ecdh_pub = ?, ecdh_priv_pass_iv = ?, ecdh_priv_pass_ct = ?, " +
+    "ecdh_priv_recovery_iv = ?, ecdh_priv_recovery_ct = ? WHERE id = ?"
+  ).bind(body.dekPassIv, body.dekPassCt, rSalt, rHash, body.dekRecoveryIv, body.dekRecoveryCt,
+    body.ecdhPub, body.ecdhPrivPassIv, body.ecdhPrivPassCt, body.ecdhPrivRecoveryIv, body.ecdhPrivRecoveryCt, uid
+  ).run();
   return json({ ok: true }, 200, origin);
 }
+
+/* ---------- dados das ferramentas ---------- */
 
 async function getData(env, uid, origin) {
   const rows = await env.DB.prepare(
@@ -213,8 +272,135 @@ async function putData(env, uid, tool, body, origin) {
 }
 
 async function deleteAccount(env, uid, origin) {
+  await env.DB.prepare("DELETE FROM shares WHERE connection_id IN " +
+    "(SELECT id FROM connections WHERE patient_id = ? OR professional_id = ?)").bind(uid, uid).run();
+  await env.DB.prepare("DELETE FROM connections WHERE patient_id = ? OR professional_id = ?").bind(uid, uid).run();
   await env.DB.prepare("DELETE FROM blobs WHERE user_id = ?").bind(uid).run();
   await env.DB.prepare("DELETE FROM users WHERE id = ?").bind(uid).run();
+  return json({ ok: true }, 200, origin);
+}
+
+/* ---------- ligações paciente ↔ profissional ---------- */
+
+async function createConnection(env, uid, body, origin) {
+  if (!validCode(body.professionalCode)) return json({ error: "invalid_input" }, 400, origin);
+  const pro = await env.DB.prepare(
+    "SELECT id, email, ecdh_pub FROM users WHERE professional_code = ? AND role = 'professional'"
+  ).bind(body.professionalCode.toUpperCase()).first();
+  if (!pro) return json({ error: "code_not_found" }, 404, origin);
+  if (pro.id === uid) return json({ error: "cannot_connect_self" }, 400, origin);
+  await env.DB.prepare(
+    "INSERT INTO connections (patient_id, professional_id) VALUES (?, ?) " +
+    "ON CONFLICT(patient_id, professional_id) DO NOTHING"
+  ).bind(uid, pro.id).run();
+  const conn = await env.DB.prepare(
+    "SELECT id FROM connections WHERE patient_id = ? AND professional_id = ?"
+  ).bind(uid, pro.id).first();
+  return json({
+    connectionId: conn.id,
+    professional: { id: pro.id, email: pro.email, ecdhPub: pro.ecdh_pub }
+  }, 200, origin);
+}
+
+async function listConnections(env, uid, origin) {
+  const asPatient = await env.DB.prepare(
+    "SELECT c.id, c.professional_id AS other_id, u.email AS other_email, u.ecdh_pub AS other_pub, c.created_at " +
+    "FROM connections c JOIN users u ON u.id = c.professional_id WHERE c.patient_id = ?"
+  ).bind(uid).all();
+  const asProfessional = await env.DB.prepare(
+    "SELECT c.id, c.patient_id AS other_id, u.email AS other_email, u.ecdh_pub AS other_pub, c.created_at " +
+    "FROM connections c JOIN users u ON u.id = c.patient_id WHERE c.professional_id = ?"
+  ).bind(uid).all();
+  const shape = (r) => ({ connectionId: r.id, otherId: r.other_id, otherEmail: r.other_email, otherPub: r.other_pub, since: r.created_at });
+  return json({
+    asPatient: (asPatient.results || []).map(shape),
+    asProfessional: (asProfessional.results || []).map(shape)
+  }, 200, origin);
+}
+
+async function deleteConnection(env, uid, connId, origin) {
+  const conn = await env.DB.prepare(
+    "SELECT id FROM connections WHERE id = ? AND (patient_id = ? OR professional_id = ?)"
+  ).bind(connId, uid, uid).first();
+  if (!conn) return json({ error: "not_found" }, 404, origin);
+  await env.DB.prepare("DELETE FROM shares WHERE connection_id = ?").bind(connId).run();
+  await env.DB.prepare("DELETE FROM connections WHERE id = ?").bind(connId).run();
+  return json({ ok: true }, 200, origin);
+}
+
+/* ---------- partilha selectiva de categorias ---------- */
+
+async function connectionRoleOf(env, uid, connId) {
+  const conn = await env.DB.prepare(
+    "SELECT patient_id, professional_id FROM connections WHERE id = ?"
+  ).bind(connId).first();
+  if (!conn) return null;
+  if (conn.patient_id === uid) return "patient";
+  if (conn.professional_id === uid) return "professional";
+  return null;
+}
+
+async function getShares(env, uid, connId, origin) {
+  const role = await connectionRoleOf(env, uid, connId);
+  if (!role) return json({ error: "not_found" }, 404, origin);
+  const rows = await env.DB.prepare(
+    "SELECT category, iv, ct, updated FROM shares WHERE connection_id = ?"
+  ).bind(connId).all();
+  return json({ shares: rows.results || [] }, 200, origin);
+}
+
+async function putShare(env, uid, connId, category, body, origin) {
+  if (!SHARE_CATEGORIES.includes(category)) return json({ error: "unknown_category" }, 400, origin);
+  const role = await connectionRoleOf(env, uid, connId);
+  if (role !== "patient") return json({ error: "not_found" }, 404, origin);
+  if (typeof body.iv !== "string" || typeof body.ct !== "string" ||
+      typeof body.updated !== "number" || body.ct.length > MAX_BLOB) {
+    return json({ error: "invalid_input" }, 400, origin);
+  }
+  await env.DB.prepare(
+    "INSERT INTO shares (connection_id, category, iv, ct, updated) VALUES (?, ?, ?, ?, ?) " +
+    "ON CONFLICT(connection_id, category) DO UPDATE SET iv = ?, ct = ?, updated = ?"
+  ).bind(connId, category, body.iv, body.ct, body.updated, body.iv, body.ct, body.updated).run();
+  return json({ ok: true }, 200, origin);
+}
+
+async function deleteShare(env, uid, connId, category, origin) {
+  const role = await connectionRoleOf(env, uid, connId);
+  if (role !== "patient") return json({ error: "not_found" }, 404, origin);
+  await env.DB.prepare("DELETE FROM shares WHERE connection_id = ? AND category = ?").bind(connId, category).run();
+  return json({ ok: true }, 200, origin);
+}
+
+/* ---------- administração (flag de profissional) ---------- */
+
+async function adminSearchUsers(env, uid, query, origin) {
+  if (!(await requireRole(env, uid, "admin"))) return json({ error: "forbidden" }, 403, origin);
+  const q = "%" + (query || "").toLowerCase().trim().slice(0, 100) + "%";
+  const rows = await env.DB.prepare(
+    "SELECT id, email, role, professional_code, created_at FROM users WHERE lower(email) LIKE ? ORDER BY created_at DESC LIMIT 25"
+  ).bind(q).all();
+  return json({ users: rows.results || [] }, 200, origin);
+}
+
+async function adminSetRole(env, uid, targetId, body, origin) {
+  if (!(await requireRole(env, uid, "admin"))) return json({ error: "forbidden" }, 403, origin);
+  if (!["user", "professional", "admin"].includes(body.role)) return json({ error: "invalid_input" }, 400, origin);
+  if (body.role === "professional") {
+    const row = await env.DB.prepare("SELECT professional_code FROM users WHERE id = ?").bind(targetId).first();
+    if (!row) return json({ error: "not_found" }, 404, origin);
+    let code = row.professional_code;
+    if (!code) {
+      for (let i = 0; i < 5; i++) {
+        const candidate = genCode();
+        const clash = await env.DB.prepare("SELECT id FROM users WHERE professional_code = ?").bind(candidate).first();
+        if (!clash) { code = candidate; break; }
+      }
+      if (!code) return json({ error: "server_error" }, 500, origin);
+    }
+    await env.DB.prepare("UPDATE users SET role = 'professional', professional_code = ? WHERE id = ?").bind(code, targetId).run();
+    return json({ ok: true, professionalCode: code }, 200, origin);
+  }
+  await env.DB.prepare("UPDATE users SET role = ? WHERE id = ?").bind(body.role, targetId).run();
   return json({ ok: true }, 200, origin);
 }
 
@@ -251,23 +437,57 @@ export default {
 
       // a partir daqui, só o token "full" (sessão normal) tem acesso
       if (auth.scope !== "full") return json({ error: "unauthorized" }, 401, origin);
+      const uid = auth.uid;
 
       if (req.method === "PUT" && path === "/account/keys") {
         let body;
         try { body = await req.json(); } catch (e) { return json({ error: "invalid_json" }, 400, origin); }
-        return upgradeKeys(env, auth.uid, body, origin);
+        return upgradeKeys(env, uid, body, origin);
       }
 
-      if (req.method === "GET" && path === "/data") return getData(env, auth.uid, origin);
+      if (req.method === "GET" && path === "/data") return getData(env, uid, origin);
 
-      const putMatch = path.match(/^\/data\/([a-z]+)$/);
+      const putMatch = path.match(/^\/data\/([a-z_]+)$/);
       if (req.method === "PUT" && putMatch) {
         let body;
         try { body = await req.json(); } catch (e) { return json({ error: "invalid_json" }, 400, origin); }
-        return putData(env, auth.uid, putMatch[1], body, origin);
+        return putData(env, uid, putMatch[1], body, origin);
       }
 
-      if (req.method === "DELETE" && path === "/account") return deleteAccount(env, auth.uid, origin);
+      if (req.method === "DELETE" && path === "/account") return deleteAccount(env, uid, origin);
+
+      if (req.method === "POST" && path === "/connections") {
+        let body;
+        try { body = await req.json(); } catch (e) { return json({ error: "invalid_json" }, 400, origin); }
+        return createConnection(env, uid, body, origin);
+      }
+      if (req.method === "GET" && path === "/connections") return listConnections(env, uid, origin);
+      const delConnMatch = path.match(/^\/connections\/(\d+)$/);
+      if (req.method === "DELETE" && delConnMatch) return deleteConnection(env, uid, parseInt(delConnMatch[1], 10), origin);
+
+      const sharesGetMatch = path.match(/^\/shares\/(\d+)$/);
+      if (req.method === "GET" && sharesGetMatch) return getShares(env, uid, parseInt(sharesGetMatch[1], 10), origin);
+
+      const sharesPutMatch = path.match(/^\/shares\/(\d+)\/([a-z_]+)$/);
+      if (sharesPutMatch) {
+        const connId = parseInt(sharesPutMatch[1], 10), category = sharesPutMatch[2];
+        if (req.method === "PUT") {
+          let body;
+          try { body = await req.json(); } catch (e) { return json({ error: "invalid_json" }, 400, origin); }
+          return putShare(env, uid, connId, category, body, origin);
+        }
+        if (req.method === "DELETE") return deleteShare(env, uid, connId, category, origin);
+      }
+
+      if (req.method === "GET" && path === "/admin/users") {
+        return adminSearchUsers(env, uid, url.searchParams.get("q"), origin);
+      }
+      const adminRoleMatch = path.match(/^\/admin\/users\/(\d+)\/role$/);
+      if (req.method === "PUT" && adminRoleMatch) {
+        let body;
+        try { body = await req.json(); } catch (e) { return json({ error: "invalid_json" }, 400, origin); }
+        return adminSetRole(env, uid, parseInt(adminRoleMatch[1], 10), body, origin);
+      }
 
       return json({ error: "not_found" }, 404, origin);
     } catch (e) {

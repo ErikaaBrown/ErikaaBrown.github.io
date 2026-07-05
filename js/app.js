@@ -183,6 +183,14 @@
     });
   }
 
+  function saveTestResult(test, scores) {
+    var hist = load("test_results", []);
+    if (!Array.isArray(hist)) hist = [];
+    hist.push({ test: test, date: todayISO(), scores: scores });
+    if (hist.length > 100) hist = hist.slice(hist.length - 100);
+    store("test_results", hist);
+  }
+
   let toastEl = null;
   let toastTimer = null;
   function toast(msg) {
@@ -208,6 +216,7 @@
     fmtDate: fmtDate,
     esc: esc,
     toast: toast,
+    saveTestResult: saveTestResult,
     onLang: function (fn) { document.addEventListener("pl:lang", fn); },
     onTheme: function (fn) { document.addEventListener("pl:theme", fn); }
   };

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel do Profissional · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>🩺 <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section id="panel-notpro" class="panel hidden">
+    <p style="margin:0" data-i18n="notpro.p"></p>
+    <div class="center mt-2"><a class="btn btn-ghost" href="account.html" data-i18n="btn.toaccount"></a></div>
+  </section>
+
+  <section id="panel-main" class="hidden">
+    <div class="panel">
+      <h3 style="margin-top:0" data-i18n="code.title"></h3>
+      <p class="small muted" data-i18n="code.lead"></p>
+      <div class="recovery-code-box" id="my-code" style="font-size:1.5rem"></div>
+      <div class="center mt-2">
+        <button class="btn btn-ghost btn-sm" id="btn-copy-code" data-i18n="btn.copy"></button>
+        <span class="small" id="copy-feedback" style="margin-left:10px;color:var(--brand-ink);font-weight:700"></span>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <h2 data-i18n="patients.title"></h2>
+      <span class="sub" id="patients-count"></span>
+    </div>
+    <p class="small muted hidden" id="patients-empty" data-i18n="patients.empty"></p>
+    <div id="patients-list"></div>
+
+    <template id="tpl-patient">
+      <div class="panel patient-card" style="margin-bottom:18px">
+        <div class="acct-head">
+          <span class="avatar patient-avatar"></span>
+          <div>
+            <h3 style="margin:0" class="patient-email"></h3>
+            <p class="small muted patient-since" style="margin:2px 0 0"></p>
+          </div>
+        </div>
+        <div class="patient-body" style="margin-top:16px"></div>
+        <p class="small muted patient-empty-share hidden" data-i18n="share.none"></p>
+      </div>
+    </template>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "",
+  section: "professional",
+  i18n: {
+    pt: {
+      "page.title": "Painel do Profissional",
+      "crumb": "PsicoLab",
+      "intro.lead": "Vê aqui os dados que os teus pacientes escolheram partilhar contigo. Só tu e cada paciente conseguem decifrar o que aparece nesta página.",
+      "notpro.p": "Esta página é exclusiva para contas profissionais. Se pensas que devias ter acesso, contacta a administração do PsicoLab.",
+      "btn.toaccount": "← Voltar à conta",
+      "code.title": "O teu código profissional",
+      "code.lead": "Partilha este código com os teus pacientes. Eles introduzem-no na conta deles para se ligarem a ti.",
+      "btn.copy": "📋 Copiar código",
+      "copied": "Copiado ✔",
+      "patients.title": "Pacientes ligados",
+      "patients.empty": "Ainda não tens pacientes ligados. Partilha o teu código profissional para começares.",
+      "conn.since": "Ligado desde",
+      "share.none": "Este paciente ainda não partilhou nada contigo.",
+      "cat.test_results": "Resultados de testes",
+      "cat.mood": "Diário emocional",
+      "cat.thoughts": "Registo de pensamentos",
+      "cat.gratitude": "Diário de gratidão",
+      "cat.habits": "Hábitos",
+      "cat.sleep": "Sono",
+      "cat.worries": "Preocupações",
+      "updated": "actualizado",
+      "test.bigfive": "Big Five", "test.attachment": "Vinculação", "test.eq": "Inteligência Emocional", "test.stress": "Stress",
+      "worry.open": "em aberto", "worry.happened": "aconteceu", "worry.nothappened": "não aconteceu",
+      "habit.days": "dias cumpridos"
+    },
+    en: {
+      "page.title": "Professional Dashboard",
+      "crumb": "PsicoLab",
+      "intro.lead": "See here the data your patients chose to share with you. Only you and each patient can decrypt what appears on this page.",
+      "notpro.p": "This page is exclusive to professional accounts. If you think you should have access, contact PsychLab's administration.",
+      "btn.toaccount": "← Back to account",
+      "code.title": "Your professional code",
+      "code.lead": "Share this code with your patients. They enter it in their account to connect to you.",
+      "btn.copy": "📋 Copy code",
+      "copied": "Copied ✔",
+      "patients.title": "Connected patients",
+      "patients.empty": "You have no connected patients yet. Share your professional code to get started.",
+      "conn.since": "Connected since",
+      "share.none": "This patient has not shared anything with you yet.",
+      "cat.test_results": "Test results",
+      "cat.mood": "Mood diary",
+      "cat.thoughts": "Thought records",
+      "cat.gratitude": "Gratitude journal",
+      "cat.habits": "Habits",
+      "cat.sleep": "Sleep",
+      "cat.worries": "Worries",
+      "updated": "updated",
+      "test.bigfive": "Big Five", "test.attachment": "Attachment", "test.eq": "Emotional Intelligence", "test.stress": "Stress",
+      "worry.open": "open", "worry.happened": "happened", "worry.nothappened": "did not happen",
+      "habit.days": "days completed"
+    }
+  }
+};
+</script>
+<script src="js/app.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var myCode = "";
+
+  function show(panel) {
+    $("panel-notpro").classList.toggle("hidden", panel !== "notpro");
+    $("panel-main").classList.toggle("hidden", panel !== "main");
+  }
+
+  /* ---------- formatadores por categoria ---------- */
+
+  function fmtTestResults(arr) {
+    if (!Array.isArray(arr) || !arr.length) return "";
+    var rows = arr.slice(-10).reverse().map(function (e) {
+      var summary = Array.isArray(e.scores)
+        ? e.scores.map(function (n) { return Math.round(n); }).join(" / ")
+        : (e.scores + "/40");
+      return "<tr><td>" + PL.t("test." + e.test) + "</td><td>" + PL.fmtDate(e.date) + "</td><td>" + summary + "</td></tr>";
+    }).join("");
+    return "<table class='data'><tbody>" + rows + "</tbody></table>";
+  }
+  function fmtMood(obj) {
+    var keys = Object.keys(obj || {}).sort().reverse().slice(0, 10);
+    if (!keys.length) return "";
+    return "<ul style='margin:0;padding-left:20px'>" + keys.map(function (iso) {
+      var e = obj[iso];
+      return "<li><strong>" + PL.fmtDate(iso) + "</strong> — " + e.m + "/5" + (e.note ? " · " + PL.esc(e.note) : "") + "</li>";
+    }).join("") + "</ul>";
+  }
+  function fmtGratitude(obj) {
+    var keys = Object.keys(obj || {}).sort().reverse().slice(0, 10);
+    if (!keys.length) return "";
+    return "<ul style='margin:0;padding-left:20px'>" + keys.map(function (iso) {
+      var items = (obj[iso] || []).filter(Boolean).map(PL.esc).join("; ");
+      return "<li><strong>" + PL.fmtDate(iso) + "</strong> — " + items + "</li>";
+    }).join("") + "</ul>";
+  }
+  function fmtSleep(obj) {
+    var keys = Object.keys(obj || {}).sort().reverse().slice(0, 10);
+    if (!keys.length) return "";
+    return "<ul style='margin:0;padding-left:20px'>" + keys.map(function (iso) {
+      var e = obj[iso];
+      return "<li><strong>" + PL.fmtDate(iso) + "</strong> — " + e.b + "→" + e.w + " · " + e.q + "/5" + (e.note ? " · " + PL.esc(e.note) : "") + "</li>";
+    }).join("") + "</ul>";
+  }
+  function fmtHabits(arr) {
+    if (!Array.isArray(arr) || !arr.length) return "";
+    return "<ul style='margin:0;padding-left:20px'>" + arr.map(function (h) {
+      var days = Object.keys(h.c || {}).filter(function (k) { return h.c[k]; }).length;
+      return "<li>" + h.e + " " + PL.esc(h.n) + " — " + days + " " + PL.t("habit.days") + "</li>";
+    }).join("") + "</ul>";
+  }
+  function fmtWorries(arr) {
+    if (!Array.isArray(arr) || !arr.length) return "";
+    return "<ul style='margin:0;padding-left:20px'>" + arr.slice(-15).reverse().map(function (w) {
+      var tag = !w.done ? PL.t("worry.open") : (w.happened ? PL.t("worry.happened") : PL.t("worry.nothappened"));
+      return "<li>" + PL.esc(w.text) + " <span class='chip'>" + tag + "</span></li>";
+    }).join("") + "</ul>";
+  }
+  function fmtThoughts(arr) {
+    if (!Array.isArray(arr) || !arr.length) return "";
+    return "<ul style='margin:0;padding-left:20px'>" + arr.slice(-10).reverse().map(function (t) {
+      var delta = (typeof t.int1 === "number" && typeof t.int2 === "number") ? (t.int1 + "% → " + t.int2 + "%") : "";
+      return "<li><strong>" + PL.fmtDate(t.date) + "</strong> — " + PL.esc(t.thought) + (delta ? " <span class='chip'>" + delta + "</span>" : "") + "</li>";
+    }).join("") + "</ul>";
+  }
+  var FORMATTERS = {
+    test_results: fmtTestResults, mood: fmtMood, gratitude: fmtGratitude,
+    sleep: fmtSleep, habits: fmtHabits, worries: fmtWorries, thoughts: fmtThoughts
+  };
+
+  function renderPatients() {
+    var box = $("patients-list");
+    var tpl = $("tpl-patient");
+    box.innerHTML = "";
+    PLSync.listConnections().then(function (r) {
+      var list = r.asProfessional || [];
+      $("patients-count").textContent = list.length;
+      $("patients-empty").classList.toggle("hidden", list.length > 0);
+      list.forEach(function (conn) {
+        var node = tpl.content.firstElementChild.cloneNode(true);
+        node.querySelector(".patient-avatar").textContent = conn.otherEmail.charAt(0).toUpperCase();
+        node.querySelector(".patient-email").textContent = conn.otherEmail;
+        node.querySelector(".patient-since").textContent =
+          PL.t("conn.since") + " " + PL.fmtDate(String(conn.since).slice(0, 10));
+        var bodyEl = node.querySelector(".patient-body");
+        box.appendChild(node);
+
+        PLSync.readShared(conn.connectionId, conn.otherPub).then(function (shared) {
+          var cats = Object.keys(shared);
+          node.querySelector(".patient-empty-share").classList.toggle("hidden", cats.length > 0);
+          var html = "";
+          PLSync.shareCategories().forEach(function (cat) {
+            if (!shared[cat]) return;
+            var fmt = FORMATTERS[cat];
+            var body = fmt ? fmt(shared[cat].value) : "";
+            if (!body) return;
+            html += "<div class='interp'><h3>" + PL.t("cat." + cat) +
+              " <span class='small muted' style='font-weight:400'>(" + PL.t("updated") + " " +
+              PL.fmtDate(new Date(shared[cat].updated).toISOString().slice(0, 10)) + ")</span></h3>" + body + "</div>";
+          });
+          bodyEl.innerHTML = html;
+        });
+      });
+    });
+  }
+
+  function render() {
+    if (!window.PLSync || !PLSync.configured()) return;
+    var u = PLSync.user();
+    if (!u || u.role !== "professional") { show("notpro"); return; }
+    show("main");
+    myCode = u.professionalCode || "";
+    $("my-code").textContent = myCode || "—";
+    renderPatients();
+  }
+
+  document.addEventListener("pl:sync-ready", function () {
+    render();
+    $("btn-copy-code").addEventListener("click", function () {
+      if (!myCode) return;
+      navigator.clipboard.writeText(myCode).then(function () {
+        $("copy-feedback").textContent = PL.t("copied");
+        setTimeout(function () { $("copy-feedback").textContent = ""; }, 2000);
+      });
+    });
+  });
+
+  PL.onLang(render);
+})();
+</script>
+</body>
+</html>
