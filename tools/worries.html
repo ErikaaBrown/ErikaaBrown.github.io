@@ -39,7 +39,7 @@
     <div class="tiles">
       <div class="tile"><div class="num" id="stat-open">0</div><div class="lbl" data-i18n="stat.open"></div></div>
       <div class="tile"><div class="num" id="stat-resolved">0</div><div class="lbl" data-i18n="stat.resolved"></div></div>
-      <div class="tile"><div class="num" id="stat-pct">—</div><div class="lbl" data-i18n="stat.pct"></div></div>
+      <div class="tile"><div class="num" id="stat-pct">.</div><div class="lbl" data-i18n="stat.pct"></div></div>
     </div>
     <p class="small muted" id="punchline" style="margin:4px 0 0"></p>
   </section>
@@ -137,7 +137,7 @@ window.PAGE = {
       $("stat-pct").textContent = Math.round(not / resolved.length * 100) + "%";
       $("punchline").textContent = PL.t("punch.some");
     } else {
-      $("stat-pct").textContent = "—";
+      $("stat-pct").textContent = ".";
       $("punchline").textContent = PL.t("punch.none");
     }
   }
