@@ -36,25 +36,38 @@
       </div>
     </div>
 
-    <div class="section-head">
-      <h2 data-i18n="patients.title"></h2>
-      <span class="sub" id="patients-count"></span>
-    </div>
-    <p class="small muted hidden" id="patients-empty" data-i18n="patients.empty"></p>
-    <div id="patients-list"></div>
-
-    <template id="tpl-patient">
-      <div class="panel patient-card" style="margin-bottom:18px">
-        <div class="acct-head">
-          <span class="avatar patient-avatar"></span>
-          <div>
-            <h3 style="margin:0" class="patient-email"></h3>
-            <p class="small muted patient-since" style="margin:2px 0 0"></p>
-          </div>
-        </div>
-        <div class="patient-body" style="margin-top:16px"></div>
-        <p class="small muted patient-empty-share hidden" data-i18n="share.none"></p>
+    <div id="view-list">
+      <div class="section-head">
+        <h2 data-i18n="patients.title"></h2>
+        <span class="sub" id="patients-count"></span>
       </div>
+      <p class="small muted hidden" id="patients-empty" data-i18n="patients.empty"></p>
+      <div id="patients-list"></div>
+    </div>
+
+    <div id="view-detail" class="hidden">
+      <p class="small" style="margin-top:0"><a href="#" id="link-back" data-i18n="btn.back"></a></p>
+      <div class="acct-head" style="margin-bottom:20px">
+        <span class="avatar" id="detail-avatar"></span>
+        <div>
+          <h2 style="margin:0" id="detail-email"></h2>
+          <p class="small muted" id="detail-since" style="margin:2px 0 0"></p>
+        </div>
+      </div>
+      <p class="small muted hidden" id="detail-empty" data-i18n="share.none"></p>
+      <div id="detail-body"></div>
+    </div>
+
+    <template id="tpl-patient-row">
+      <a href="#" class="panel patient-row" style="display:flex;align-items:center;gap:16px;margin-bottom:12px;text-decoration:none;color:inherit">
+        <span class="avatar patient-avatar" style="width:46px;height:46px;font-size:1.1rem"></span>
+        <div style="flex:1;min-width:0">
+          <h3 style="margin:0" class="patient-email"></h3>
+          <p class="small muted patient-since" style="margin:2px 0 0"></p>
+        </div>
+        <span class="chip patient-share-count"></span>
+        <span aria-hidden="true" style="color:var(--ink-3);font-size:1.2rem">›</span>
+      </a>
     </template>
   </section>
 </main>
@@ -80,6 +93,11 @@ window.PAGE = {
       "patients.empty": "Ainda não tens pacientes ligados. Partilha o teu código profissional para começares.",
       "conn.since": "Ligado desde",
       "share.none": "Este paciente ainda não partilhou nada contigo.",
+      "btn.back": "← Voltar aos pacientes",
+      "loading": "A carregar…",
+      "shared.zero": "nada partilhado",
+      "shared.one": "categoria partilhada",
+      "shared.many": "categorias partilhadas",
       "cat.test_results": "Resultados de testes",
       "cat.mood": "Diário emocional",
       "cat.thoughts": "Registo de pensamentos",
@@ -106,6 +124,11 @@ window.PAGE = {
       "patients.empty": "You have no connected patients yet. Share your professional code to get started.",
       "conn.since": "Connected since",
       "share.none": "This patient has not shared anything with you yet.",
+      "btn.back": "← Back to patients",
+      "loading": "Loading…",
+      "shared.zero": "nothing shared",
+      "shared.one": "category shared",
+      "shared.many": "categories shared",
       "cat.test_results": "Test results",
       "cat.mood": "Mood diary",
       "cat.thoughts": "Thought records",
@@ -193,41 +216,77 @@ window.PAGE = {
     test_results: fmtTestResults, mood: fmtMood, gratitude: fmtGratitude,
     sleep: fmtSleep, habits: fmtHabits, worries: fmtWorries, thoughts: fmtThoughts
   };
+  var CAT_ICONS = {
+    test_results: "📊", mood: "📔", thoughts: "💭", gratitude: "🙏",
+    habits: "✅", sleep: "😴", worries: "📦"
+  };
 
-  function renderPatients() {
+  var connections = [];
+
+  function shareCountLabel(n) {
+    var word = n === 0 ? PL.t("shared.zero") : PL.t(n === 1 ? "shared.one" : "shared.many");
+    return (n === 0 ? "" : n + " ") + word;
+  }
+
+  function renderList() {
     var box = $("patients-list");
-    var tpl = $("tpl-patient");
+    var tpl = $("tpl-patient-row");
     box.innerHTML = "";
     PLSync.listConnections().then(function (r) {
-      var list = r.asProfessional || [];
-      $("patients-count").textContent = list.length;
-      $("patients-empty").classList.toggle("hidden", list.length > 0);
-      list.forEach(function (conn) {
+      connections = r.asProfessional || [];
+      $("patients-count").textContent = connections.length;
+      $("patients-empty").classList.toggle("hidden", connections.length > 0);
+      connections.forEach(function (conn) {
         var node = tpl.content.firstElementChild.cloneNode(true);
         node.querySelector(".patient-avatar").textContent = conn.otherEmail.charAt(0).toUpperCase();
         node.querySelector(".patient-email").textContent = conn.otherEmail;
         node.querySelector(".patient-since").textContent =
           PL.t("conn.since") + " " + PL.fmtDate(String(conn.since).slice(0, 10));
-        var bodyEl = node.querySelector(".patient-body");
+        var chip = node.querySelector(".patient-share-count");
+        node.addEventListener("click", function (e) { e.preventDefault(); openPatient(conn.connectionId); });
         box.appendChild(node);
-
-        PLSync.readShared(conn.connectionId, conn.otherPub).then(function (shared) {
-          var cats = Object.keys(shared);
-          node.querySelector(".patient-empty-share").classList.toggle("hidden", cats.length > 0);
-          var html = "";
-          PLSync.shareCategories().forEach(function (cat) {
-            if (!shared[cat]) return;
-            var fmt = FORMATTERS[cat];
-            var body = fmt ? fmt(shared[cat].value) : "";
-            if (!body) return;
-            html += "<div class='interp'><h3>" + PL.t("cat." + cat) +
-              " <span class='small muted' style='font-weight:400'>(" + PL.t("updated") + " " +
-              PL.fmtDate(new Date(shared[cat].updated).toISOString().slice(0, 10)) + ")</span></h3>" + body + "</div>";
-          });
-          bodyEl.innerHTML = html;
+        PLSync.getShareStatus(conn.connectionId).then(function (status) {
+          chip.textContent = shareCountLabel(Object.keys(status).length);
         });
       });
+      var hashMatch = location.hash.match(/^#patient=(\d+)$/);
+      if (hashMatch) openPatient(Number(hashMatch[1]));
     });
+  }
+
+  function openPatient(connectionId) {
+    var conn = connections.filter(function (c) { return c.connectionId === connectionId; })[0];
+    if (!conn) return;
+    location.hash = "patient=" + connectionId;
+    $("view-list").classList.add("hidden");
+    $("view-detail").classList.remove("hidden");
+    $("detail-avatar").textContent = conn.otherEmail.charAt(0).toUpperCase();
+    $("detail-email").textContent = conn.otherEmail;
+    $("detail-since").textContent = PL.t("conn.since") + " " + PL.fmtDate(String(conn.since).slice(0, 10));
+    $("detail-empty").classList.add("hidden");
+    var bodyEl = $("detail-body");
+    bodyEl.innerHTML = "<p class='small muted'>" + PL.t("loading") + "</p>";
+    PLSync.readShared(conn.connectionId, conn.otherPub).then(function (shared) {
+      var cats = Object.keys(shared);
+      $("detail-empty").classList.toggle("hidden", cats.length > 0);
+      var html = "";
+      PLSync.shareCategories().forEach(function (cat) {
+        if (!shared[cat]) return;
+        var fmt = FORMATTERS[cat];
+        var body = fmt ? fmt(shared[cat].value) : "";
+        if (!body) return;
+        html += "<div class='interp'><h3>" + (CAT_ICONS[cat] || "") + " " + PL.t("cat." + cat) +
+          " <span class='small muted' style='font-weight:400'>(" + PL.t("updated") + " " +
+          PL.fmtDate(new Date(shared[cat].updated).toISOString().slice(0, 10)) + ")</span></h3>" + body + "</div>";
+      });
+      bodyEl.innerHTML = html;
+    });
+  }
+
+  function closeDetail() {
+    location.hash = "";
+    $("view-detail").classList.add("hidden");
+    $("view-list").classList.remove("hidden");
   }
 
   function render() {
@@ -237,7 +296,7 @@ window.PAGE = {
     show("main");
     myCode = u.professionalCode || "";
     $("my-code").textContent = myCode || "—";
-    renderPatients();
+    renderList();
   }
 
   document.addEventListener("pl:sync-ready", function () {
@@ -248,6 +307,10 @@ window.PAGE = {
         $("copy-feedback").textContent = PL.t("copied");
         setTimeout(function () { $("copy-feedback").textContent = ""; }, 2000);
       });
+    });
+    $("link-back").addEventListener("click", function (e) { e.preventDefault(); closeDetail(); });
+    window.addEventListener("hashchange", function () {
+      if (!location.hash) closeDetail();
     });
   });
 
