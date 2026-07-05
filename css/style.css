@@ -406,6 +406,8 @@ table.data td { padding: 9px 10px; border-bottom: 1px solid var(--line); font-va
 .flash-bad { animation: flashbad 0.45s; }
 @keyframes flashok { 0% { background: color-mix(in srgb, var(--good) 22%, var(--surface)); } 100% { background: var(--surface); } }
 @keyframes flashbad { 0% { background: color-mix(in srgb, var(--critical) 18%, var(--surface)); } 100% { background: var(--surface); } }
+.btn.tapped { animation: taptap 0.3s ease; }
+@keyframes taptap { 0% { transform: scale(0.94); } 60% { transform: scale(1.04); } 100% { transform: scale(1); } }
 
 /* ---------- glossary ---------- */
 .search-bar { position: relative; margin: 1rem 0 1.4rem; }
