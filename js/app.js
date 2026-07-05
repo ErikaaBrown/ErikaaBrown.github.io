@@ -75,7 +75,7 @@
     }).join("");
     el.innerHTML =
       "<header class=\"site-header\"><div class=\"bar\">" +
-      "<a class=\"logo\" href=\"" + ROOT + "index.html\"><span class=\"mark\">🧠</span><span data-i18n=\"site.name\"></span></a>" +
+      "<a class=\"logo\" href=\"" + ROOT + "index.html\"><span class=\"mark\"><img src=\"" + ROOT + "img/logo-tree.png\" alt=\"\"></span><span data-i18n=\"site.name\"></span></a>" +
       "<nav class=\"main-nav\">" + links + "</nav>" +
       "<div class=\"header-actions\">" +
       "<a id=\"account-btn\" class=\"icon-btn\" href=\"" + ROOT + "account.html\" style=\"text-decoration:none\">👤</a>" +
