@@ -72,4 +72,4 @@ The account layer is entirely optional. To enable it, follow the step-by-step (d
 
 ## License
 
-No license file is included; all rights reserved by the repository owner.
+Licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) (Attribution-NonCommercial-ShareAlike). You're free to share and adapt this project with credit, as long as it's non-commercial and any derivative is shared under the same license. See [`LICENSE`](LICENSE) for the full terms.
