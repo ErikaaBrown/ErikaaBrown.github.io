@@ -340,7 +340,7 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
       } : null;
     },
 
-    register: function (email, password) {
+    register: function (email, password, honeypot) {
       email = email.toLowerCase().trim();
       var recoveryCode = genRecoveryCode();
       return Promise.all([derivePassKeys(email, password), deriveRecoveryKeys(email, recoveryCode)])
@@ -355,7 +355,7 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
             ]).then(function (w) {
               var dekPass = w[0], dekRecovery = w[1], ecdhPub = w[2], ecdhPrivPass = w[3], ecdhPrivRecovery = w[4];
               return api("/auth/register", "POST", {
-                email: email, authKey: passKeys.authKey,
+                email: email, authKey: passKeys.authKey, hp: honeypot || "",
                 dekPassIv: dekPass.iv, dekPassCt: dekPass.ct,
                 recoveryAuthKey: recKeys.authKey,
                 dekRecoveryIv: dekRecovery.iv, dekRecoveryCt: dekRecovery.ct,

@@ -41,6 +41,58 @@ const MAX_AVATAR = 60 * 1024; // base64 de uma miniatura JPEG ~200x200, folga ge
 const FULL_TTL_S = 60 * 60 * 24 * 30; // 30 dias
 const RECOVERY_TTL_S = 60 * 15; // 15 minutos — janela curta para trocar a password
 
+/* ---------- protecção contra abuso: bloqueio progressivo + armadilhas para scanners ---------- */
+
+const LOCKOUT_THRESHOLD = 5; // tentativas falhadas antes de começar a bloquear a conta
+const LOCKOUT_BASE_S = 30;
+const LOCKOUT_MAX_S = 60 * 60; // 1 hora, no máximo
+const DUMMY_HASH_SALT = "0000000000000000"; // usado só para igualar o tempo de resposta, nunca comparado
+const IP_BLOCK_S = 60 * 60; // 1 hora bloqueado depois de cair numa armadilha
+const CONN_GUESS_THRESHOLD = 8; // tentativas erradas de código profissional antes de bloquear o IP
+
+// caminhos que esta API nunca serve a sério - só existem para apanhar scanners automáticos
+const DECOY_PATHS = [
+  "/wp-login.php", "/wp-admin", "/wp-admin/", "/xmlrpc.php", "/.env", "/.env.local",
+  "/.git/config", "/.git/HEAD", "/phpmyadmin", "/phpMyAdmin", "/admin.php", "/administrator",
+  "/config.json", "/config.php", "/.aws/credentials", "/server-status", "/actuator/health",
+  "/.ssh/id_rsa", "/console", "/wp-config.php", "/wp-config.php.bak", "/.DS_Store",
+  "/backup.sql", "/db.sql", "/.htaccess", "/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php"
+];
+const DECOY_PATTERN = /\.(php|env|bak|sql)$/i;
+
+function looksLikeScan(path) {
+  return DECOY_PATHS.includes(path) || DECOY_PATTERN.test(path) || path.indexOf("/.git/") === 0;
+}
+
+function sleep(ms) {
+  return new Promise(function (resolve) { setTimeout(resolve, ms); });
+}
+
+function lockoutSeconds(failedCount) {
+  if (failedCount < LOCKOUT_THRESHOLD) return 0;
+  const extra = failedCount - LOCKOUT_THRESHOLD;
+  return Math.min(LOCKOUT_BASE_S * Math.pow(2, extra), LOCKOUT_MAX_S);
+}
+
+async function isIpBlocked(env, ip) {
+  const row = await env.DB.prepare("SELECT blocked_until FROM blocked_ips WHERE ip = ?").bind(ip).first();
+  return !!row && row.blocked_until > Math.floor(Date.now() / 1000);
+}
+
+// regista uma ocorrência suspeita deste IP; só bloqueia de facto ao atingir o limiar
+// (1 para armadilhas óbvias - qualquer acesso já é malicioso; mais alto para adivinhar códigos,
+// onde um erro isolado pode ser só um engano de digitação)
+async function flagIp(env, ip, reason, threshold) {
+  const now = Math.floor(Date.now() / 1000);
+  const row = await env.DB.prepare("SELECT hit_count FROM blocked_ips WHERE ip = ?").bind(ip).first();
+  const count = (row ? row.hit_count : 0) + 1;
+  const until = count >= threshold ? now + IP_BLOCK_S : (row ? row.blocked_until : 0);
+  await env.DB.prepare(
+    "INSERT INTO blocked_ips (ip, reason, hit_count, blocked_until) VALUES (?, ?, ?, ?) " +
+    "ON CONFLICT(ip) DO UPDATE SET hit_count = ?, blocked_until = ?, reason = ?"
+  ).bind(ip, reason, count, until, count, until, reason).run();
+}
+
 /* ---------- utilidades ---------- */
 
 function corsHeaders(origin) {
@@ -140,6 +192,11 @@ async function requireRole(env, uid, role) {
 /* ---------- auth: registo, login, recuperação ---------- */
 
 async function register(env, body, origin) {
+  if (body.hp) {
+    // campo-armadilha do formulário: só um robô o preenche. Finge sucesso sem criar nada,
+    // para não lhe dar nenhuma pista de que foi apanhado
+    return json({ token: "0.0.full.0", email: (body.email || "").toLowerCase().trim(), role: "user" }, 200, origin);
+  }
   if (!validEmail(body.email) || !validAuthKey(body.authKey) ||
       !validWrap(body.dekPassIv) || !validWrap(body.dekPassCt) ||
       !validAuthKey(body.recoveryAuthKey) ||
@@ -177,11 +234,30 @@ async function login(env, body, origin) {
   const email = body.email.toLowerCase().trim();
   const row = await env.DB.prepare(
     "SELECT id, auth_salt, auth_hash, role, professional_code, dek_pass_iv, dek_pass_ct, " +
-    "ecdh_pub, ecdh_priv_pass_iv, ecdh_priv_pass_ct, display_name, avatar, bio FROM users WHERE email = ?"
+    "ecdh_pub, ecdh_priv_pass_iv, ecdh_priv_pass_ct, display_name, avatar, bio, failed_logins, locked_until FROM users WHERE email = ?"
   ).bind(email).first();
-  if (!row) return json({ error: "bad_credentials" }, 401, origin);
+  if (!row) {
+    // faz o mesmo trabalho de hash de qualquer forma, para o tempo de resposta não denunciar
+    // que este email não existe (o resultado nunca é comparado com nada)
+    await sha256hex(DUMMY_HASH_SALT + "|" + body.authKey);
+    return json({ error: "bad_credentials" }, 401, origin);
+  }
+  const now = Math.floor(Date.now() / 1000);
+  if (row.locked_until > now) {
+    // demasiadas tentativas falhadas recentemente - rejeita sem revelar que é por causa disto
+    return json({ error: "bad_credentials" }, 401, origin);
+  }
   const hash = await sha256hex(row.auth_salt + "|" + body.authKey);
-  if (hash !== row.auth_hash) return json({ error: "bad_credentials" }, 401, origin);
+  if (hash !== row.auth_hash) {
+    const failed = row.failed_logins + 1;
+    const lockSecs = lockoutSeconds(failed);
+    await env.DB.prepare("UPDATE users SET failed_logins = ?, locked_until = ? WHERE id = ?")
+      .bind(failed, lockSecs ? now + lockSecs : 0, row.id).run();
+    return json({ error: "bad_credentials" }, 401, origin);
+  }
+  if (row.failed_logins > 0) {
+    await env.DB.prepare("UPDATE users SET failed_logins = 0, locked_until = 0 WHERE id = ?").bind(row.id).run();
+  }
   return json({
     token: await makeToken(env, row.id, "full"),
     email: email,
@@ -207,7 +283,10 @@ async function recoverStart(env, body, origin) {
     "SELECT id, recovery_salt, recovery_hash, dek_recovery_iv, dek_recovery_ct, ecdh_priv_recovery_iv, ecdh_priv_recovery_ct " +
     "FROM users WHERE email = ?"
   ).bind(email).first();
-  if (!row || !row.recovery_hash) return json({ error: "bad_recovery" }, 401, origin);
+  if (!row || !row.recovery_hash) {
+    await sha256hex(DUMMY_HASH_SALT + "|" + body.recoveryAuthKey);
+    return json({ error: "bad_recovery" }, 401, origin);
+  }
   const hash = await sha256hex(row.recovery_salt + "|" + body.recoveryAuthKey);
   if (hash !== row.recovery_hash) return json({ error: "bad_recovery" }, 401, origin);
   return json({
@@ -315,12 +394,16 @@ async function deleteAccount(env, uid, origin) {
 
 /* ---------- ligações paciente ↔ profissional ---------- */
 
-async function createConnection(env, uid, body, origin) {
+async function createConnection(env, uid, body, origin, ip) {
   if (!validCode(body.professionalCode)) return json({ error: "invalid_input" }, 400, origin);
   const pro = await env.DB.prepare(
     "SELECT id, email, ecdh_pub FROM users WHERE professional_code = ? AND role = 'professional'"
   ).bind(body.professionalCode.toUpperCase()).first();
-  if (!pro) return json({ error: "code_not_found" }, 404, origin);
+  if (!pro) {
+    // uma adivinha errada isolada é normal (engano de digitação); só bloqueia ao fim de várias
+    await flagIp(env, ip, "professional_code_guess", CONN_GUESS_THRESHOLD);
+    return json({ error: "code_not_found" }, 404, origin);
+  }
   if (pro.id === uid) return json({ error: "cannot_connect_self" }, 400, origin);
   await env.DB.prepare(
     "INSERT INTO connections (patient_id, professional_id) VALUES (?, ?) " +
@@ -450,12 +533,25 @@ export default {
     const origin = req.headers.get("Origin") || "";
     const url = new URL(req.url);
     const path = url.pathname.replace(/\/+$/, "");
+    const ip = req.headers.get("CF-Connecting-IP") || "unknown";
 
     if (req.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: corsHeaders(origin) });
     }
 
     try {
+      if (looksLikeScan(path)) {
+        // esta API nunca serve estes caminhos a sério - só um scanner automático os visita.
+        // regista o IP (bloqueia-o de imediato) e responde devagar com um 404 comum, sem
+        // denunciar que caiu numa armadilha
+        await flagIp(env, ip, "decoy_path:" + path, 1);
+        await sleep(2000 + Math.floor(Math.random() * 3000));
+        return json({ error: "not_found" }, 404, origin);
+      }
+      if (await isIpBlocked(env, ip)) {
+        return json({ error: "not_found" }, 404, origin);
+      }
+
       if (req.method === "POST" && (path === "/auth/register" || path === "/auth/login" || path === "/auth/recover/start")) {
         let body;
         try { body = await req.json(); } catch (e) { return json({ error: "invalid_json" }, 400, origin); }
@@ -504,7 +600,7 @@ export default {
       if (req.method === "POST" && path === "/connections") {
         let body;
         try { body = await req.json(); } catch (e) { return json({ error: "invalid_json" }, 400, origin); }
-        return createConnection(env, uid, body, origin);
+        return createConnection(env, uid, body, origin, ip);
       }
       if (req.method === "GET" && path === "/connections") return listConnections(env, uid, origin);
       const delConnMatch = path.match(/^\/connections\/(\d+)$/);

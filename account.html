@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev; base-uri 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Conta · PsicoLab</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -64,6 +66,11 @@
               <button type="button" class="pass-eye" id="eye-2" aria-label="mostrar">👁️</button>
             </div>
             <div class="notice" data-i18n-html="warn.e2e"></div>
+          </div>
+
+          <div style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
+            <label for="f-hp">Website</label>
+            <input type="text" id="f-hp" name="website" tabindex="-1" autocomplete="off">
           </div>
 
           <p class="small" id="auth-error" style="color:var(--critical);min-height:1.2em;margin:12px 0 0"></p>
@@ -552,7 +559,7 @@ window.PAGE = {
     if (pass.length < 8) { fail("auth-error", "pass.short"); return; }
     if (mode === "signup" && pass !== $("f-pass2").value) { fail("auth-error", "pass.match"); return; }
     $("btn-submit").disabled = true;
-    var p = mode === "signup" ? PLSync.register(email, pass) : PLSync.login(email, pass);
+    var p = mode === "signup" ? PLSync.register(email, pass, $("f-hp").value) : PLSync.login(email, pass);
     p.then(function (r) {
       $("btn-submit").disabled = false;
       if (r && r.recoveryCode) {
