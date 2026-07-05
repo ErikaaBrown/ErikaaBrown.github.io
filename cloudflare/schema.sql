@@ -24,6 +24,11 @@ CREATE TABLE IF NOT EXISTS users (
   ecdh_priv_recovery_iv  TEXT NOT NULL DEFAULT '',
   ecdh_priv_recovery_ct  TEXT NOT NULL DEFAULT '',
   role                   TEXT NOT NULL DEFAULT 'user',
+  display_name           TEXT NOT NULL DEFAULT '',
+  avatar                 TEXT NOT NULL DEFAULT '',
+  bio                    TEXT NOT NULL DEFAULT '',
+  failed_logins          INTEGER NOT NULL DEFAULT 0,
+  locked_until           INTEGER NOT NULL DEFAULT 0,
   created_at             TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
@@ -66,3 +71,11 @@ CREATE TABLE IF NOT EXISTS shares (
 );
 
 CREATE INDEX IF NOT EXISTS idx_shares_connection ON shares(connection_id);
+
+CREATE TABLE IF NOT EXISTS blocked_ips (
+  ip             TEXT PRIMARY KEY,
+  reason         TEXT NOT NULL,
+  hit_count      INTEGER NOT NULL DEFAULT 1,
+  first_seen     TEXT NOT NULL DEFAULT (datetime('now')),
+  blocked_until  INTEGER NOT NULL
+);

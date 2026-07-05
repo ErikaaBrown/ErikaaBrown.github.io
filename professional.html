@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev; base-uri 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Painel do Profissional · PsicoLab</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -54,6 +56,7 @@
           <p class="small muted" id="detail-since" style="margin:2px 0 0"></p>
         </div>
       </div>
+      <p class="small muted hidden" id="detail-bio" style="margin:0 0 18px"></p>
       <p class="small muted hidden" id="detail-empty" data-i18n="share.none"></p>
       <div id="detail-body"></div>
     </div>
@@ -238,8 +241,8 @@ window.PAGE = {
       $("patients-empty").classList.toggle("hidden", connections.length > 0);
       connections.forEach(function (conn) {
         var node = tpl.content.firstElementChild.cloneNode(true);
-        node.querySelector(".patient-avatar").textContent = conn.otherEmail.charAt(0).toUpperCase();
-        node.querySelector(".patient-email").textContent = conn.otherEmail;
+        PL.avatarInto(node.querySelector(".patient-avatar"), { displayName: conn.otherDisplayName, email: conn.otherEmail, avatar: conn.otherAvatar });
+        node.querySelector(".patient-email").textContent = conn.otherDisplayName || conn.otherEmail;
         node.querySelector(".patient-since").textContent =
           PL.t("conn.since") + " " + PL.fmtDate(String(conn.since).slice(0, 10));
         var chip = node.querySelector(".patient-share-count");
@@ -260,9 +263,12 @@ window.PAGE = {
     location.hash = "patient=" + connectionId;
     $("view-list").classList.add("hidden");
     $("view-detail").classList.remove("hidden");
-    $("detail-avatar").textContent = conn.otherEmail.charAt(0).toUpperCase();
-    $("detail-email").textContent = conn.otherEmail;
+    PL.avatarInto($("detail-avatar"), { displayName: conn.otherDisplayName, email: conn.otherEmail, avatar: conn.otherAvatar });
+    $("detail-email").textContent = conn.otherDisplayName || conn.otherEmail;
     $("detail-since").textContent = PL.t("conn.since") + " " + PL.fmtDate(String(conn.since).slice(0, 10));
+    var bioEl = $("detail-bio");
+    bioEl.textContent = conn.otherBio || "";
+    bioEl.classList.toggle("hidden", !conn.otherBio);
     $("detail-empty").classList.add("hidden");
     var bodyEl = $("detail-body");
     bodyEl.innerHTML = "<p class='small muted'>" + PL.t("loading") + "</p>";
