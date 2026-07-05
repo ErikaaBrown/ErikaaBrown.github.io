@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev; base-uri 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Resiliência · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=2">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>🌳 <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section id="panel-intro" class="panel">
+    <p data-i18n="intro.p1"></p>
+    <p data-i18n="intro.p2"></p>
+    <div class="notice" data-i18n-html="intro.notice"></div>
+    <div class="center mt-2">
+      <button class="btn" id="btn-start" data-i18n="btn.start"></button>
+    </div>
+  </section>
+
+  <section id="panel-quiz" class="panel hidden">
+    <div class="progress-track"><div class="progress-fill" id="pfill" style="width:0%"></div></div>
+    <p class="small muted" id="qcount"></p>
+    <p class="quiz-q" id="qtext"></p>
+    <div class="likert" id="likert"></div>
+    <div class="scale-hints">
+      <span data-i18n="lk.1"></span>
+      <span data-i18n="lk.5"></span>
+    </div>
+    <div class="quiz-nav">
+      <button class="btn btn-ghost btn-sm" id="btn-back" data-i18n="btn.back"></button>
+      <span></span>
+    </div>
+  </section>
+
+  <section id="panel-result" class="hidden">
+    <div class="panel">
+      <h2 style="margin-top:0" data-i18n="res.title"></h2>
+      <div class="tiles">
+        <div class="tile"><div class="num" id="total-num"></div><div class="lbl" data-i18n="res.total"></div></div>
+      </div>
+      <p id="band-text" class="muted"></p>
+      <div id="bars"></div>
+    </div>
+    <div class="panel" id="focus"></div>
+    <div class="notice" data-i18n-html="res.notice"></div>
+    <div class="center mt-2">
+      <button class="btn btn-ghost" id="btn-retake" data-i18n="btn.retake"></button>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tests",
+  i18n: {
+    pt: {
+      "page.title": "Resiliência",
+      "crumb": "Testes",
+      "intro.lead": "Resiliência não é «não sofrer» — é a capacidade de te recompores depois de dificuldades e de te adaptares quando as coisas mudam.",
+      "intro.p1": "Responde a 12 afirmações sobre como costumas reagir a contratempos e mudanças. Indica com que frequência cada uma se aplica a ti.",
+      "intro.p2": "O resultado cobre três áreas: recuperação, adaptação e apoio/sentido.",
+      "intro.notice": "<strong>Boa notícia:</strong> ao contrário de traços mais estáveis, a resiliência treina-se activamente — com hábitos, apoio social e experiência.",
+      "btn.start": "Começar",
+      "btn.back": "← Anterior",
+      "btn.retake": "Repetir",
+      "lk.1": "Quase nunca",
+      "lk.5": "Quase sempre",
+      "res.title": "O teu resultado",
+      "res.total": "Pontuação global",
+      "band.dev": "Em desenvolvimento — contratempos ainda pesam bastante. É uma área muito treinável, e pequenos hábitos fazem diferença real.",
+      "band.solid": "Sólida — já tens estratégias que funcionam; o próximo passo é reforçar a tua área mais fraca.",
+      "band.strong": "Forte — recuperas bem de dificuldades e adaptas-te quando é preciso. Continua a proteger o que te sustenta.",
+      "focus.title": "Onde focar",
+      "focus.strong": "Ponto forte",
+      "focus.weak": "Área a desenvolver",
+      "res.notice": "<strong>Nota:</strong> resiliência não significa enfrentar tudo sozinho/a — pedir apoio é, aliás, uma das componentes mais fortes da resiliência real."
+    },
+    en: {
+      "page.title": "Resilience",
+      "crumb": "Tests",
+      "intro.lead": "Resilience is not \"not suffering\" — it is the ability to bounce back after difficulties and adapt when things change.",
+      "intro.p1": "Answer 12 statements about how you usually react to setbacks and change. Indicate how often each one applies to you.",
+      "intro.p2": "The result covers three areas: recovery, adaptation, and support/meaning.",
+      "intro.notice": "<strong>Good news:</strong> unlike more stable traits, resilience is actively trainable — through habits, social support and experience.",
+      "btn.start": "Start",
+      "btn.back": "← Previous",
+      "btn.retake": "Retake",
+      "lk.1": "Almost never",
+      "lk.5": "Almost always",
+      "res.title": "Your result",
+      "res.total": "Overall score",
+      "band.dev": "Developing — setbacks still weigh heavily. This is a very trainable area, and small habits make a real difference.",
+      "band.solid": "Solid — you already have strategies that work; the next step is strengthening your weakest area.",
+      "band.strong": "Strong — you recover well from difficulties and adapt when needed. Keep protecting what sustains you.",
+      "focus.title": "Where to focus",
+      "focus.strong": "Strength",
+      "focus.weak": "Area to develop",
+      "res.notice": "<strong>Note:</strong> resilience does not mean facing everything alone — asking for support is, in fact, one of the strongest components of real resilience."
+    }
+  }
+};
+</script>
+<script src="../js/app.js?v=2"></script>
+<script>
+(function () {
+  var DOMAINS = [
+    { emoji: "🔄", pt: "Recuperação", en: "Recovery",
+      tip: { pt: "Depois de um dia mau, experimenta escrever uma frase sobre o que correu mal e uma sobre o que já está melhor. Pequeno, mas ajuda a virar a página.",
+             en: "After a bad day, try writing one sentence about what went wrong and one about what is already better. Small, but it helps turn the page." } },
+    { emoji: "🌱", pt: "Adaptação", en: "Adaptation",
+      tip: { pt: "Quando um plano falha, pergunta «o que ainda está ao meu alcance?» em vez de «porque é que isto aconteceu comigo?».",
+             en: "When a plan fails, ask \"what is still within my control?\" instead of \"why did this happen to me?\"." } },
+    { emoji: "🤝", pt: "Apoio e sentido", en: "Support and meaning",
+      tip: { pt: "Identifica uma pessoa a quem podes pedir ajuda concreta esta semana. Resiliência não é fazer tudo sozinho/a.",
+             en: "Identify one person you could ask for concrete help this week. Resilience is not doing everything alone." } }
+  ];
+
+  var ITEMS = [
+    { d: 0, r: false, pt: "Depois de um revés, consigo recompor-me em poucos dias.", en: "After a setback, I can pick myself back up within a few days." },
+    { d: 1, r: false, pt: "Quando os planos mudam de repente, adapto-me sem grande drama.", en: "When plans change suddenly, I adapt without much drama." },
+    { d: 2, r: false, pt: "Sei a quem recorrer quando preciso mesmo de ajuda.", en: "I know who to turn to when I really need help." },
+    { d: 0, r: false, pt: "Consigo ver dificuldades passadas como algo que ultrapassei, não como algo que me define.", en: "I can see past difficulties as things I overcame, not as things that define me." },
+    { d: 1, r: false, pt: "Encaro mudanças inesperadas como parte normal da vida.", en: "I treat unexpected change as a normal part of life." },
+    { d: 2, r: false, pt: "Consigo encontrar sentido ou aprendizagem mesmo em situações difíceis.", en: "I can find meaning or learning even in difficult situations." },
+    { d: 0, r: true,  pt: "Um contratempo consegue deitar-me abaixo durante semanas.", en: "A setback can knock me down for weeks." },
+    { d: 1, r: true,  pt: "Resisto a mudar de plano mesmo quando já não faz sentido continuar.", en: "I resist changing plans even when it no longer makes sense to continue." },
+    { d: 2, r: true,  pt: "Custa-me muito pedir ajuda, mesmo quando preciso dela.", en: "I find it very hard to ask for help, even when I need it." },
+    { d: 0, r: false, pt: "Confio na minha capacidade de lidar com o que a vida trouxer a seguir.", en: "I trust my ability to handle whatever life brings next." },
+    { d: 1, r: false, pt: "Consigo experimentar uma abordagem diferente quando a primeira não resulta.", en: "I can try a different approach when the first one does not work." },
+    { d: 2, r: false, pt: "Tenho pelo menos uma relação em que me sinto verdadeiramente apoiado/a.", en: "I have at least one relationship where I feel truly supported." }
+  ];
+
+  var LIKERT = {
+    pt: ["Quase nunca", "Raramente", "Às vezes", "Muitas vezes", "Quase sempre"],
+    en: ["Almost never", "Rarely", "Sometimes", "Often", "Almost always"]
+  };
+
+  var answers = new Array(ITEMS.length).fill(0);
+  var idx = 0;
+  var state = "intro";
+  var $ = function (id) { return document.getElementById(id); };
+
+  function show(panel) {
+    $("panel-intro").classList.toggle("hidden", panel !== "intro");
+    $("panel-quiz").classList.toggle("hidden", panel !== "quiz");
+    $("panel-result").classList.toggle("hidden", panel !== "result");
+    state = panel;
+  }
+
+  function renderQuestion() {
+    var item = ITEMS[idx];
+    $("qtext").textContent = item[PL.lang];
+    $("qcount").textContent = (idx + 1) + " / " + ITEMS.length;
+    $("pfill").style.width = (idx / ITEMS.length * 100) + "%";
+    var lk = $("likert");
+    lk.innerHTML = "";
+    LIKERT[PL.lang].forEach(function (label, i) {
+      var b = document.createElement("button");
+      b.innerHTML = "<span style='display:block;font-size:1.15rem;font-weight:800'>" + (i + 1) + "</span>" + label;
+      if (answers[idx] === i + 1) b.classList.add("sel");
+      b.addEventListener("click", function () {
+        answers[idx] = i + 1;
+        b.classList.add("sel");
+        setTimeout(function () {
+          if (idx < ITEMS.length - 1) { idx++; renderQuestion(); }
+          else { finish(); }
+        }, 220);
+      });
+      lk.appendChild(b);
+    });
+    $("btn-back").disabled = idx === 0;
+  }
+
+  function scores() {
+    var sums = [0, 0, 0];
+    ITEMS.forEach(function (item, i) {
+      var v = answers[i];
+      if (item.r) v = 6 - v;
+      sums[item.d] += v;
+    });
+    return sums.map(function (s) { return Math.round((s - 4) / 16 * 100); });
+  }
+
+  function renderResult(sc) {
+    var total = Math.round(sc.reduce(function (a, b) { return a + b; }, 0) / 3);
+    $("total-num").textContent = total + "%";
+    var bandKey = total < 45 ? "band.dev" : total <= 70 ? "band.solid" : "band.strong";
+    $("band-text").textContent = PL.t(bandKey);
+
+    var bars = "";
+    sc.forEach(function (v, i) {
+      var d = DOMAINS[i];
+      bars += "<div class='rbar'><div class='rbar-head'><span>" + d.emoji + " " + d[PL.lang] + "</span><span class='val'>" + v + "%</span></div>" +
+        "<div class='track'><div class='fill' style='width:" + v + "%'></div></div></div>";
+    });
+    $("bars").innerHTML = bars;
+
+    var maxI = sc.indexOf(Math.max.apply(null, sc));
+    var minI = sc.indexOf(Math.min.apply(null, sc));
+    $("focus").innerHTML =
+      "<h3 style='margin-top:0'>" + PL.t("focus.title") + "</h3>" +
+      "<div class='interp'><h3>💪 " + PL.t("focus.strong") + ": " + DOMAINS[maxI][PL.lang] + "</h3></div>" +
+      "<div class='interp'><h3>🌱 " + PL.t("focus.weak") + ": " + DOMAINS[minI][PL.lang] + "</h3>" +
+      "<p>" + DOMAINS[minI].tip[PL.lang] + "</p></div>";
+  }
+
+  function finish() {
+    $("pfill").style.width = "100%";
+    var sc = scores();
+    PL.saveTestResult("resilience", sc);
+    renderResult(sc);
+    show("result");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  $("btn-start").addEventListener("click", function () {
+    answers.fill(0); idx = 0; show("quiz"); renderQuestion();
+  });
+  $("btn-back").addEventListener("click", function () {
+    if (idx > 0) { idx--; renderQuestion(); }
+  });
+  $("btn-retake").addEventListener("click", function () {
+    answers.fill(0); idx = 0; show("quiz"); renderQuestion();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  PL.onLang(function () {
+    if (state === "quiz") renderQuestion();
+    if (state === "result") renderResult(scores());
+  });
+})();
+</script>
+</body>
+</html>

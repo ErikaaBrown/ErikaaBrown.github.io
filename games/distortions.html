@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev; base-uri 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Apanha a Distorção · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=2">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>🕳️ <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section id="panel-intro" class="panel">
+    <p data-i18n="intro.p1"></p>
+    <p class="small muted" id="best-line"></p>
+    <div class="center mt-2">
+      <button class="btn" id="btn-start" data-i18n="btn.start"></button>
+    </div>
+  </section>
+
+  <section id="panel-game" class="panel hidden">
+    <div class="progress-track"><div class="progress-fill" id="pfill" style="width:0%"></div></div>
+    <p class="small muted" id="qcount"></p>
+    <div class="scenario-box" id="scene" style="max-width:none;margin-bottom:16px"></div>
+    <p class="small muted" data-i18n="q.which"></p>
+    <div class="opt-list" id="opts"></div>
+    <div id="feedback" class="hidden" style="margin-top:16px">
+      <div class="notice" id="feedback-text"></div>
+      <div class="center">
+        <button class="btn btn-sm" id="btn-next" data-i18n="btn.next"></button>
+      </div>
+    </div>
+  </section>
+
+  <section id="panel-result" class="hidden">
+    <div class="panel center">
+      <h2 style="margin-top:0" data-i18n="res.title"></h2>
+      <div class="tiles" style="max-width:340px;margin:1rem auto">
+        <div class="tile"><div class="num" id="r-score"></div><div class="lbl" data-i18n="res.score"></div></div>
+        <div class="tile"><div class="num" id="r-best"></div><div class="lbl" data-i18n="res.best"></div></div>
+      </div>
+      <p id="r-comment" class="muted"></p>
+    </div>
+    <div class="panel">
+      <h3 style="margin-top:0" data-i18n="guide.title"></h3>
+      <div id="guide"></div>
+    </div>
+    <div class="panel panel-soft">
+      <p style="margin:0" data-i18n="res.expl"></p>
+    </div>
+    <div class="center mt-2">
+      <button class="btn" id="btn-again" data-i18n="btn.again"></button>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "games",
+  i18n: {
+    pt: {
+      "page.title": "Apanha a Distorção",
+      "crumb": "Jogos",
+      "intro.lead": "Distorções cognitivas são padrões de pensamento que soam convincentes mas distorcem a realidade — a base de trabalho da terapia cognitivo-comportamental.",
+      "intro.p1": "Vais ler 10 pensamentos, na primeira pessoa. Em cada um, identifica a distorção cognitiva em acção. No fim recebes um guia rápido com todas.",
+      "best.prefix": "O teu recorde: ",
+      "btn.start": "Começar",
+      "btn.next": "Seguinte →",
+      "btn.again": "Jogar outra vez",
+      "q.which": "Que distorção está em acção?",
+      "fb.right": "✔️ Certo! ",
+      "fb.wrong": "✖️ Era «",
+      "fb.wrong2": "». ",
+      "res.title": "Resultado",
+      "res.score": "em 10",
+      "res.best": "Recorde",
+      "res.c1": "Excelente olho clínico! Reconheces estes padrões com facilidade.",
+      "res.c2": "Bom trabalho. As distorções que falhaste são das mais difíceis de apanhar em nós próprios.",
+      "res.c3": "Estas distorções são traiçoeiras precisamente porque soam a verdade. O guia em baixo ajuda a reconhecê-las da próxima vez.",
+      "guide.title": "Guia rápido das 10 distorções",
+      "new.record": "Novo recorde! 🏆",
+      "res.expl": "🧠 Porque interessa: reconhecer a distorção não significa que o pensamento seja mentira pura — significa que está exagerado, generalizado ou seleccionado de forma enviesada. O primeiro passo da TCC é exactamente este: dar um nome ao padrão antes de o desafiar. Experimenta o Registo de Pensamentos aqui do site para praticar isto com os teus próprios pensamentos."
+    },
+    en: {
+      "page.title": "Catch the Distortion",
+      "crumb": "Games",
+      "intro.lead": "Cognitive distortions are thought patterns that sound convincing but distort reality — the working basis of cognitive behavioural therapy.",
+      "intro.p1": "You will read 10 first-person thoughts. In each one, identify the cognitive distortion at work. At the end you get a quick guide to all of them.",
+      "best.prefix": "Your record: ",
+      "btn.start": "Start",
+      "btn.next": "Next →",
+      "btn.again": "Play again",
+      "q.which": "Which distortion is at work?",
+      "fb.right": "✔️ Correct! ",
+      "fb.wrong": "✖️ It was \"",
+      "fb.wrong2": "\". ",
+      "res.title": "Result",
+      "res.score": "out of 10",
+      "res.best": "Record",
+      "res.c1": "Excellent clinical eye! You recognise these patterns with ease.",
+      "res.c2": "Good work. The ones you missed are among the hardest to catch in ourselves.",
+      "res.c3": "These distortions are tricky precisely because they sound like the truth. The guide below helps you spot them next time.",
+      "guide.title": "Quick guide to the 10 distortions",
+      "new.record": "New record! 🏆",
+      "res.expl": "🧠 Why it matters: recognising the distortion does not mean the thought is a pure lie — it means it is exaggerated, generalised, or selectively filtered. The first step in CBT is exactly this: naming the pattern before challenging it. Try the Thought Record on this site to practise this with your own thoughts."
+    }
+  }
+};
+</script>
+<script src="../js/app.js?v=2"></script>
+<script>
+(function () {
+  var D = {
+    catastrophizing: { pt: "Catastrofização", en: "Catastrophizing",
+      g: { pt: "Saltar directamente para o pior cenário possível, como se fosse o mais provável.", en: "Jumping straight to the worst possible outcome, as if it were the most likely one." } },
+    allnone: { pt: "Pensamento tudo-ou-nada", en: "All-or-nothing thinking",
+      g: { pt: "Ver tudo em categorias extremas: perfeito ou fracasso total, sem meio-termo.", en: "Seeing everything in extreme categories: perfect or a total failure, with no middle ground." } },
+    overgeneral: { pt: "Generalização excessiva", en: "Overgeneralization",
+      g: { pt: "Tirar uma regra geral («nunca», «sempre») a partir de um único acontecimento.", en: "Drawing a general rule (\"never\", \"always\") from a single event." } },
+    mindread: { pt: "Leitura da mente", en: "Mind reading",
+      g: { pt: "Assumir que sabemos o que os outros estão a pensar, sem qualquer prova.", en: "Assuming we know what others are thinking, without any evidence." } },
+    fortune: { pt: "Adivinhação do futuro", en: "Fortune telling",
+      g: { pt: "Prever que algo vai correr mal como se fosse um facto já decidido.", en: "Predicting that something will go badly as if it were already a settled fact." } },
+    personalization: { pt: "Personalização", en: "Personalization",
+      g: { pt: "Assumir a culpa por algo que não depende só de nós, ou não depende de nós.", en: "Taking the blame for something that does not depend only on us, or not on us at all." } },
+    filter: { pt: "Filtro mental", en: "Mental filter",
+      g: { pt: "Fixar-se num único detalhe negativo e deixar que ele apague tudo o resto.", en: "Fixating on a single negative detail and letting it blot out everything else." } },
+    discount: { pt: "Desqualificar o positivo", en: "Discounting the positive",
+      g: { pt: "Recusar experiências positivas, insistindo que «não contam».", en: "Rejecting positive experiences, insisting they \"don't count\"." } },
+    emotional: { pt: "Raciocínio emocional", en: "Emotional reasoning",
+      g: { pt: "Assumir que, se sentimos algo com intensidade, isso torna esse algo verdade.", en: "Assuming that feeling something intensely makes it true." } },
+    should: { pt: "Afirmações de «dever»", en: "Should statements",
+      g: { pt: "Impor a nós próprios ou aos outros regras rígidas de como as coisas «deviam» ser.", en: "Imposing rigid rules on ourselves or others about how things \"should\" be." } }
+  };
+
+  var ROUNDS = [
+    { ans: "catastrophizing", opts: ["catastrophizing", "mindread", "allnone", "should"],
+      s: { pt: "Recebi um email do meu chefe a dizer «precisamos de falar». Já sei que vou ser despedido.",
+           en: "I got an email from my boss saying \"we need to talk\". I already know I'm getting fired." },
+      ex: { pt: "Um pedido neutro é lido automaticamente como o pior desfecho possível, sem nenhuma prova para isso.", en: "A neutral request is automatically read as the worst possible outcome, with no evidence for it." } },
+    { ans: "allnone", opts: ["allnone", "catastrophizing", "should", "filter"],
+      s: { pt: "Se não correr tudo perfeito nesta apresentação, foi um fracasso completo.",
+           en: "If this presentation doesn't go perfectly, it was a complete failure." },
+      ex: { pt: "Entre «perfeito» e «fracasso total» há um espaço enorme — mas o pensamento salta por cima dele.", en: "Between \"perfect\" and \"total failure\" there is a huge space — but the thought jumps right over it." } },
+    { ans: "overgeneral", opts: ["overgeneral", "catastrophizing", "emotional", "mindread"],
+      s: { pt: "Falhei uma entrevista de emprego. Nunca mais vou conseguir arranjar trabalho.",
+           en: "I failed one job interview. I'm never going to find work again." },
+      ex: { pt: "Um único acontecimento vira uma regra permanente sobre todo o futuro.", en: "A single event becomes a permanent rule about the whole future." } },
+    { ans: "mindread", opts: ["mindread", "personalization", "fortune", "allnone"],
+      s: { pt: "Ele não respondeu à minha mensagem em dez minutos. Deve estar chateado comigo.",
+           en: "He didn't reply to my message in ten minutes. He must be upset with me." },
+      ex: { pt: "Há dezenas de razões possíveis para uma resposta demorada — nenhuma delas foi verificada.", en: "There are dozens of possible reasons for a slow reply — none of them were checked." } },
+    { ans: "fortune", opts: ["fortune", "catastrophizing", "emotional", "discount"],
+      s: { pt: "Já sei que a consulta vai correr mal, nem vale a pena ir.",
+           en: "I already know the appointment is going to go badly, it's not even worth going." },
+      ex: { pt: "O futuro é tratado como já decidido, sem margem para ser diferente do previsto.", en: "The future is treated as already decided, with no room to turn out differently than predicted." } },
+    { ans: "personalization", opts: ["personalization", "discount", "should", "overgeneral"],
+      s: { pt: "O meu filho tirou uma nota má no teste. Sou um mau pai.",
+           en: "My son got a bad grade on his test. I'm a bad parent." },
+      ex: { pt: "O resultado de outra pessoa é atribuído inteiramente a nós, ignorando todos os outros factores.", en: "Someone else's outcome is attributed entirely to us, ignoring every other factor involved." } },
+    { ans: "filter", opts: ["filter", "discount", "allnone", "overgeneral"],
+      s: { pt: "A avaliação teve nove comentários positivos e um negativo. Só consigo pensar no negativo.",
+           en: "The review had nine positive comments and one negative one. I can only think about the negative one." },
+      ex: { pt: "Um único detalhe negativo domina a atenção, apagando um quadro geral claramente positivo.", en: "A single negative detail dominates attention, erasing a clearly positive overall picture." } },
+    { ans: "discount", opts: ["discount", "filter", "emotional", "mindread"],
+      s: { pt: "Disseram-me que fiz um bom trabalho, mas devem ter dito isso só por simpatia.",
+           en: "They told me I did a good job, but they probably only said that to be nice." },
+      ex: { pt: "Em vez de aceitar o elogio, arranja-se uma razão para o descartar por completo.", en: "Instead of accepting the compliment, a reason is found to dismiss it entirely." } },
+    { ans: "emotional", opts: ["emotional", "should", "allnone", "catastrophizing"],
+      s: { pt: "Sinto-me um fracasso hoje, portanto devo ser mesmo um fracasso.",
+           en: "I feel like a failure today, so I must really be one." },
+      ex: { pt: "Um sentimento passageiro é tratado como prova objectiva de um facto sobre nós.", en: "A passing feeling is treated as objective proof of a fact about ourselves." } },
+    { ans: "should", opts: ["should", "personalization", "discount", "filter"],
+      s: { pt: "Eu devia conseguir gerir tudo sozinho, sem nunca pedir ajuda a ninguém.",
+           en: "I should be able to handle everything alone, without ever asking anyone for help." },
+      ex: { pt: "Uma regra rígida e exigente é imposta a nós próprios, ignorando o que é realista ou saudável.", en: "A rigid, demanding rule is imposed on ourselves, ignoring what is realistic or healthy." } }
+  ];
+
+  var $ = function (id) { return document.getElementById(id); };
+  var idx = 0, score = 0, state = "intro", answered = false;
+  var currentOrder = [];
+
+  function scores() { return PL.load("scores", {}); }
+
+  function show(p) {
+    $("panel-intro").classList.toggle("hidden", p !== "intro");
+    $("panel-game").classList.toggle("hidden", p !== "game");
+    $("panel-result").classList.toggle("hidden", p !== "result");
+    state = p;
+  }
+
+  function bestLine() {
+    var b = scores().distortions || 0;
+    $("best-line").textContent = b ? PL.t("best.prefix") + b + "/10" : "";
+  }
+
+  function shuffle(a) {
+    a = a.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function renderRound(reshuffle) {
+    var r = ROUNDS[idx];
+    answered = false;
+    $("qcount").textContent = (idx + 1) + " / " + ROUNDS.length;
+    $("pfill").style.width = (idx / ROUNDS.length * 100) + "%";
+    $("feedback").classList.add("hidden");
+    $("scene").textContent = "«" + r.s[PL.lang] + "»";
+    if (reshuffle) currentOrder = shuffle(r.opts);
+    var box = $("opts");
+    box.innerHTML = "";
+    currentOrder.forEach(function (key) {
+      var b = document.createElement("button");
+      b.className = "opt-btn";
+      b.textContent = D[key][PL.lang];
+      b.addEventListener("click", function () { pick(key, b); });
+      box.appendChild(b);
+    });
+  }
+
+  function pick(key, btn) {
+    if (answered) return;
+    answered = true;
+    var r = ROUNDS[idx];
+    var right = key === r.ans;
+    if (right) score++;
+    $("opts").querySelectorAll(".opt-btn").forEach(function (b) {
+      if (b.textContent === D[r.ans][PL.lang]) b.classList.add("correct");
+    });
+    if (!right) btn.classList.add("wrong");
+    var prefix = right ? PL.t("fb.right") : PL.t("fb.wrong") + D[r.ans][PL.lang] + PL.t("fb.wrong2");
+    $("feedback-text").textContent = prefix + r.ex[PL.lang];
+    $("feedback").classList.remove("hidden");
+  }
+
+  function renderGuide() {
+    var html = "";
+    ROUNDS.forEach(function (r) {
+      var d = D[r.ans];
+      html += "<div class='interp'><h3>" + d[PL.lang] + "</h3><p>" + d.g[PL.lang] + "</p></div>";
+    });
+    $("guide").innerHTML = html;
+  }
+
+  function next() {
+    idx++;
+    if (idx >= ROUNDS.length) {
+      var sc = scores();
+      var isRecord = score > (sc.distortions || 0);
+      if (isRecord) { sc.distortions = score; PL.store("scores", sc); }
+      $("r-score").textContent = score;
+      $("r-best").textContent = (scores().distortions || score) + "/10";
+      $("r-comment").textContent = (isRecord ? PL.t("new.record") + " " : "") + PL.t(score >= 9 ? "res.c1" : score >= 6 ? "res.c2" : "res.c3");
+      renderGuide();
+      show("result");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      renderRound(true);
+    }
+  }
+
+  function start() {
+    idx = 0; score = 0;
+    show("game");
+    renderRound(true);
+  }
+
+  $("btn-start").addEventListener("click", start);
+  $("btn-again").addEventListener("click", function () {
+    start();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  $("btn-next").addEventListener("click", next);
+
+  document.addEventListener("pl:ready", bestLine);
+  PL.onLang(function () {
+    bestLine();
+    if (state === "game" && !answered) renderRound(false);
+    if (state === "result") {
+      $("r-comment").textContent = PL.t(score >= 9 ? "res.c1" : score >= 6 ? "res.c2" : "res.c3");
+      renderGuide();
+    }
+  });
+})();
+</script>
+</body>
+</html>

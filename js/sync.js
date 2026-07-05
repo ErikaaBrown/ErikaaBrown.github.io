@@ -333,6 +333,7 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
 
   window.PLSync = {
     configured: configured,
+    syncedTools: function () { return SYNC_TOOLS.slice(); },
     user: function () {
       return acct ? {
         email: acct.email, role: acct.role || "user", professionalCode: acct.professionalCode || "",

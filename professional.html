@@ -110,6 +110,7 @@ window.PAGE = {
       "cat.worries": "Preocupações",
       "updated": "actualizado",
       "test.bigfive": "Big Five", "test.attachment": "Vinculação", "test.eq": "Inteligência Emocional", "test.stress": "Stress",
+      "test.rosenberg": "Auto-Estima", "test.resilience": "Resiliência", "test.panas": "PANAS",
       "worry.open": "em aberto", "worry.happened": "aconteceu", "worry.nothappened": "não aconteceu",
       "habit.days": "dias cumpridos"
     },
@@ -141,6 +142,7 @@ window.PAGE = {
       "cat.worries": "Worries",
       "updated": "updated",
       "test.bigfive": "Big Five", "test.attachment": "Attachment", "test.eq": "Emotional Intelligence", "test.stress": "Stress",
+      "test.rosenberg": "Self-Esteem", "test.resilience": "Resilience", "test.panas": "PANAS",
       "worry.open": "open", "worry.happened": "happened", "worry.nothappened": "did not happen",
       "habit.days": "days completed"
     }
@@ -160,16 +162,81 @@ window.PAGE = {
 
   /* ---------- formatadores por categoria ---------- */
 
+  var SCALAR_TEST_MAX = { stress: 40, rosenberg: 30 };
+
   function fmtTestResults(arr) {
     if (!Array.isArray(arr) || !arr.length) return "";
     var rows = arr.slice(-10).reverse().map(function (e) {
       var summary = Array.isArray(e.scores)
         ? e.scores.map(function (n) { return Math.round(n); }).join(" / ")
-        : (e.scores + "/40");
+        : (e.scores + (SCALAR_TEST_MAX[e.test] ? "/" + SCALAR_TEST_MAX[e.test] : ""));
       return "<tr><td>" + PL.t("test." + e.test) + "</td><td>" + PL.fmtDate(e.date) + "</td><td>" + summary + "</td></tr>";
     }).join("");
     return "<table class='data'><tbody>" + rows + "</tbody></table>";
   }
+  function last30Days() {
+    var out = [];
+    for (var i = 29; i >= 0; i--) {
+      var d = new Date();
+      d.setDate(d.getDate() - i);
+      out.push(d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"));
+    }
+    return out;
+  }
+
+  function svgTrendChart(days, valueOf, maxVal, targetVal, unitSuffix) {
+    var has = days.some(function (iso) { return valueOf(iso) != null; });
+    if (!has) return "";
+    var W = 640, H = 190, L = 32, R = 12, T = 12, B = 24;
+    var iw = W - L - R, ih = H - T - B;
+    function y(v) { return T + (1 - Math.min(v, maxVal) / maxVal) * ih; }
+    var bw = iw / days.length * 0.62;
+
+    var grid = "", ylab = "";
+    var steps = maxVal <= 5 ? [1, 2, 3, 4, 5] : [2, 4, 6, 8, 10];
+    steps.forEach(function (v) {
+      if (v > maxVal) return;
+      grid += "<line x1='" + L + "' y1='" + y(v) + "' x2='" + (W - R) + "' y2='" + y(v) + "' style='stroke:var(--grid)' stroke-width='1'/>";
+      ylab += "<text x='" + (L - 6) + "' y='" + (y(v) + 4) + "' text-anchor='end' font-size='10' style='fill:var(--ink-3)'>" + v + "</text>";
+    });
+    var target = targetVal ? "<line x1='" + L + "' y1='" + y(targetVal) + "' x2='" + (W - R) + "' y2='" + y(targetVal) +
+      "' style='stroke:var(--chart-2)' stroke-width='1.5' stroke-dasharray='5 4'/>" : "";
+
+    var bars = "", xlab = "";
+    days.forEach(function (iso, i) {
+      var v = valueOf(iso);
+      var cx = L + (i + 0.5) / days.length * iw;
+      if (v != null) {
+        var top = y(v);
+        bars += "<rect x='" + (cx - bw / 2) + "' y='" + top + "' width='" + bw + "' height='" + Math.max(2, (H - B) - top) +
+          "' rx='3' style='fill:var(--chart-1)'><title>" + PL.fmtDate(iso) + ": " + v + unitSuffix + "</title></rect>";
+      }
+      if (i % 5 === 0) {
+        var dt = new Date(iso + "T12:00:00");
+        xlab += "<text x='" + cx + "' y='" + (H - 6) + "' text-anchor='middle' font-size='9' style='fill:var(--ink-3)'>" + dt.getDate() + "/" + (dt.getMonth() + 1) + "</text>";
+      }
+    });
+    return "<div class='chart-wrap' style='margin-bottom:10px'><svg viewBox='0 0 " + W + " " + H + "'>" + grid + target + ylab + bars + xlab + "</svg></div>";
+  }
+
+  function chartMood(obj) {
+    var days = last30Days();
+    return svgTrendChart(days, function (iso) { return obj[iso] ? obj[iso].m : null; }, 5, 0, "/5");
+  }
+
+  function chartSleep(obj) {
+    var days = last30Days();
+    function durationH(bed, wake) {
+      var b = bed.split(":"), w = wake.split(":");
+      var mins = (parseInt(w[0], 10) * 60 + parseInt(w[1], 10)) - (parseInt(b[0], 10) * 60 + parseInt(b[1], 10));
+      if (mins <= 0) mins += 24 * 60;
+      return mins / 60;
+    }
+    return svgTrendChart(days, function (iso) { return obj[iso] ? durationH(obj[iso].b, obj[iso].w) : null; }, 11, 8, "h");
+  }
+
+  var CHART_RENDERERS = { mood: chartMood, sleep: chartSleep };
+
   function fmtMood(obj) {
     var keys = Object.keys(obj || {}).sort().reverse().slice(0, 10);
     if (!keys.length) return "";
@@ -281,9 +348,11 @@ window.PAGE = {
         var fmt = FORMATTERS[cat];
         var body = fmt ? fmt(shared[cat].value) : "";
         if (!body) return;
+        var chartFn = CHART_RENDERERS[cat];
+        var chart = chartFn ? chartFn(shared[cat].value) : "";
         html += "<div class='interp'><h3>" + (CAT_ICONS[cat] || "") + " " + PL.t("cat." + cat) +
           " <span class='small muted' style='font-weight:400'>(" + PL.t("updated") + " " +
-          PL.fmtDate(new Date(shared[cat].updated).toISOString().slice(0, 10)) + ")</span></h3>" + body + "</div>";
+          PL.fmtDate(new Date(shared[cat].updated).toISOString().slice(0, 10)) + ")</span></h3>" + chart + body + "</div>";
       });
       bodyEl.innerHTML = html;
     });

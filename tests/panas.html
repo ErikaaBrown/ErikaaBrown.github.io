@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev; base-uri 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>PANAS · Afecto Positivo e Negativo · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=2">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>🌗 <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section id="panel-intro" class="panel">
+    <p data-i18n="intro.p1"></p>
+    <div class="notice" data-i18n-html="intro.notice"></div>
+    <div class="center mt-2">
+      <button class="btn" id="btn-start" data-i18n="btn.start"></button>
+    </div>
+  </section>
+
+  <section id="panel-quiz" class="panel hidden">
+    <div class="progress-track"><div class="progress-fill" id="pfill" style="width:0%"></div></div>
+    <p class="small muted" id="qcount"></p>
+    <p class="small muted" data-i18n="quiz.frame"></p>
+    <p class="quiz-q" id="qtext"></p>
+    <div class="likert" id="likert"></div>
+    <div class="scale-hints">
+      <span data-i18n="lk.1"></span>
+      <span data-i18n="lk.5"></span>
+    </div>
+    <div class="quiz-nav">
+      <button class="btn btn-ghost btn-sm" id="btn-back" data-i18n="btn.back"></button>
+      <span></span>
+    </div>
+  </section>
+
+  <section id="panel-result" class="hidden">
+    <div class="panel">
+      <h2 style="margin-top:0" data-i18n="res.title"></h2>
+      <div id="bars"></div>
+      <p id="combo-text" class="muted" style="margin-top:14px"></p>
+    </div>
+    <div class="notice" data-i18n-html="res.notice"></div>
+    <div class="center mt-2">
+      <button class="btn btn-ghost" id="btn-retake" data-i18n="btn.retake"></button>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tests",
+  i18n: {
+    pt: {
+      "page.title": "PANAS · Afecto Positivo e Negativo",
+      "crumb": "Testes",
+      "intro.lead": "Este questionário separa duas dimensões independentes do teu estado emocional: quanto afecto positivo e quanto afecto negativo sentes — porque não são opostos, podes sentir os dois ao mesmo tempo.",
+      "intro.p1": "Vais ver 20 palavras que descrevem sentimentos. Para cada uma, indica o quanto a sentiste, em geral, nas últimas semanas.",
+      "intro.notice": "<strong>Importante:</strong> este é o PANAS (Watson, Clark &amp; Tellegen, 1988), um dos instrumentos mais usados em investigação sobre emoções. É educativo, não diagnóstico.",
+      "btn.start": "Começar",
+      "btn.back": "← Anterior",
+      "btn.retake": "Repetir",
+      "quiz.frame": "Em geral, nas últimas semanas, senti-me...",
+      "lk.1": "Nada ou muito pouco",
+      "lk.5": "Muitíssimo",
+      "res.title": "O teu perfil emocional",
+      "lbl.pa": "Afecto positivo",
+      "lbl.na": "Afecto negativo",
+      "combo.hh": "Sentes bastante afecto positivo e também bastante afecto negativo — um período emocionalmente intenso, com altos e baixos vividos com força. Isto é comum em fases de mudança ou de grande envolvimento com a vida.",
+      "combo.hl": "Afecto positivo elevado e afecto negativo baixo — um perfil de bem-estar: sentes-te envolvido/a e com energia, sem grande peso emocional negativo.",
+      "combo.lh": "Afecto positivo baixo e afecto negativo elevado — as últimas semanas parecem ter pesado mais do que animado. Vale a pena reparar no que está a alimentar isto, e considerar apoio se persistir.",
+      "combo.ll": "Afecto positivo e negativo, ambos baixos — uma fase mais «achatada», com pouca intensidade emocional em qualquer direcção. Pode reflectir cansaço, rotina ou uma pausa tranquila.",
+      "res.notice": "<strong>Porque interessa a distinção:</strong> baixo afecto positivo (falta de entusiasmo, energia) não é o mesmo que alto afecto negativo (ansiedade, irritação) — e cada um pede respostas diferentes. Se algum dos dois te preocupa, falar com um psicólogo ajuda a perceber o que está por trás."
+    },
+    en: {
+      "page.title": "PANAS · Positive and Negative Affect",
+      "crumb": "Tests",
+      "intro.lead": "This questionnaire separates two independent dimensions of your emotional state: how much positive affect and how much negative affect you feel — they are not opposites, you can feel both at once.",
+      "intro.p1": "You will see 20 words describing feelings. For each one, indicate how much you have felt it, in general, over the past few weeks.",
+      "intro.notice": "<strong>Important:</strong> this is the PANAS (Watson, Clark &amp; Tellegen, 1988), one of the most widely used instruments in emotion research. It is educational, not diagnostic.",
+      "btn.start": "Start",
+      "btn.back": "← Previous",
+      "btn.retake": "Retake",
+      "quiz.frame": "In general, over the past few weeks, I have felt...",
+      "lk.1": "Very slightly or not at all",
+      "lk.5": "Extremely",
+      "res.title": "Your emotional profile",
+      "lbl.pa": "Positive affect",
+      "lbl.na": "Negative affect",
+      "combo.hh": "You have quite a lot of positive affect and quite a lot of negative affect too — an emotionally intense period, with highs and lows felt strongly. This is common during change or deep engagement with life.",
+      "combo.hl": "High positive affect and low negative affect — a well-being profile: you feel engaged and energised, without much negative emotional weight.",
+      "combo.lh": "Low positive affect and high negative affect — the past few weeks seem to have weighed more than they lifted. It is worth noticing what is feeding this, and considering support if it persists.",
+      "combo.ll": "Both positive and negative affect are low — a flatter phase, with little emotional intensity in either direction. It could reflect tiredness, routine, or a quiet lull.",
+      "res.notice": "<strong>Why the distinction matters:</strong> low positive affect (lack of enthusiasm, energy) is not the same as high negative affect (anxiety, irritation) — and each calls for a different response. If either one worries you, talking to a psychologist helps make sense of what is behind it."
+    }
+  }
+};
+</script>
+<script src="../js/app.js?v=2"></script>
+<script>
+(function () {
+  var ITEMS = [
+    { d: 0, pt: "Interessado/a", en: "Interested" },
+    { d: 1, pt: "Perturbado/a", en: "Distressed" },
+    { d: 0, pt: "Entusiasmado/a", en: "Excited" },
+    { d: 1, pt: "Transtornado/a", en: "Upset" },
+    { d: 0, pt: "Forte", en: "Strong" },
+    { d: 1, pt: "Culpado/a", en: "Guilty" },
+    { d: 1, pt: "Assustado/a", en: "Scared" },
+    { d: 0, pt: "Hostil", en: "Hostile" },
+    { d: 0, pt: "Entusiástico/a", en: "Enthusiastic" },
+    { d: 0, pt: "Orgulhoso/a", en: "Proud" },
+    { d: 1, pt: "Irritável", en: "Irritable" },
+    { d: 0, pt: "Atento/a", en: "Alert" },
+    { d: 1, pt: "Envergonhado/a", en: "Ashamed" },
+    { d: 0, pt: "Inspirado/a", en: "Inspired" },
+    { d: 1, pt: "Nervoso/a", en: "Nervous" },
+    { d: 0, pt: "Determinado/a", en: "Determined" },
+    { d: 1, pt: "Agitado/a", en: "Jittery" },
+    { d: 0, pt: "Concentrado/a", en: "Attentive" },
+    { d: 1, pt: "Com medo", en: "Afraid" },
+    { d: 0, pt: "Activo/a", en: "Active" }
+  ];
+
+  var LIKERT = {
+    pt: ["Nada ou muito pouco", "Um pouco", "Moderadamente", "Bastante", "Muitíssimo"],
+    en: ["Very slightly or not at all", "A little", "Moderately", "Quite a bit", "Extremely"]
+  };
+
+  var answers = new Array(ITEMS.length).fill(0);
+  var idx = 0;
+  var state = "intro";
+  var $ = function (id) { return document.getElementById(id); };
+
+  function show(panel) {
+    $("panel-intro").classList.toggle("hidden", panel !== "intro");
+    $("panel-quiz").classList.toggle("hidden", panel !== "quiz");
+    $("panel-result").classList.toggle("hidden", panel !== "result");
+    state = panel;
+  }
+
+  function renderQuestion() {
+    var item = ITEMS[idx];
+    $("qtext").textContent = item[PL.lang];
+    $("qcount").textContent = (idx + 1) + " / " + ITEMS.length;
+    $("pfill").style.width = (idx / ITEMS.length * 100) + "%";
+    var lk = $("likert");
+    lk.innerHTML = "";
+    LIKERT[PL.lang].forEach(function (label, i) {
+      var b = document.createElement("button");
+      b.innerHTML = "<span style='display:block;font-size:1.15rem;font-weight:800'>" + (i + 1) + "</span>" + label;
+      if (answers[idx] === i + 1) b.classList.add("sel");
+      b.addEventListener("click", function () {
+        answers[idx] = i + 1;
+        b.classList.add("sel");
+        setTimeout(function () {
+          if (idx < ITEMS.length - 1) { idx++; renderQuestion(); }
+          else { finish(); }
+        }, 220);
+      });
+      lk.appendChild(b);
+    });
+    $("btn-back").disabled = idx === 0;
+  }
+
+  function scores() {
+    var sums = [0, 0];
+    ITEMS.forEach(function (item, i) {
+      sums[item.d] += answers[i];
+    });
+    return sums.map(function (s) { return Math.round((s - 10) / 40 * 100); });
+  }
+
+  function renderResult(sc) {
+    var pa = sc[0], na = sc[1];
+    var bars =
+      "<div class='rbar'><div class='rbar-head'><span>🌞 " + PL.t("lbl.pa") + "</span><span class='val'>" + pa + "%</span></div>" +
+      "<div class='track'><div class='fill' style='width:" + pa + "%'></div></div></div>" +
+      "<div class='rbar'><div class='rbar-head'><span>🌧️ " + PL.t("lbl.na") + "</span><span class='val'>" + na + "%</span></div>" +
+      "<div class='track'><div class='fill' style='width:" + na + "%;background:var(--chart-2)'></div></div></div>";
+    $("bars").innerHTML = bars;
+
+    var comboKey = (pa >= 50 ? "h" : "l") + (na >= 50 ? "h" : "l");
+    $("combo-text").textContent = PL.t("combo." + comboKey);
+  }
+
+  function finish() {
+    $("pfill").style.width = "100%";
+    var sc = scores();
+    PL.saveTestResult("panas", sc);
+    renderResult(sc);
+    show("result");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  $("btn-start").addEventListener("click", function () {
+    answers.fill(0); idx = 0; show("quiz"); renderQuestion();
+  });
+  $("btn-back").addEventListener("click", function () {
+    if (idx > 0) { idx--; renderQuestion(); }
+  });
+  $("btn-retake").addEventListener("click", function () {
+    answers.fill(0); idx = 0; show("quiz"); renderQuestion();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  PL.onLang(function () {
+    if (state === "quiz") renderQuestion();
+    if (state === "result") renderResult(scores());
+  });
+})();
+</script>
+</body>
+</html>

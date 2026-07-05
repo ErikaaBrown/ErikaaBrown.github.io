@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev; base-uri 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Relaxamento Muscular Progressivo · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=2">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>🧎 <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section class="panel">
+    <p class="small muted" id="group-count"></p>
+
+    <div class="breath-stage">
+      <div class="breath-circle" id="circle"><span id="phase-count"></span></div>
+    </div>
+    <p class="breath-phase-label" id="phase-label"></p>
+    <p class="center small muted" id="group-label" style="font-weight:800;font-size:1.05rem"></p>
+
+    <div class="center">
+      <button class="btn" id="btn-toggle" data-i18n="btn.start"></button>
+    </div>
+  </section>
+
+  <section class="panel panel-soft">
+    <h3 style="margin-top:0" data-i18n="tips.title"></h3>
+    <ul style="margin:0;padding-left:20px" id="tips"></ul>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tools",
+  i18n: {
+    pt: {
+      "page.title": "Relaxamento Muscular Progressivo",
+      "crumb": "Ferramentas",
+      "intro.lead": "Tensiona e depois relaxa cada grupo muscular, um de cada vez, para libertares tensão física que se acumula sem dares por isso.",
+      "btn.start": "Começar",
+      "btn.stop": "Parar",
+      "phase.tense": "Tensiona",
+      "phase.relax": "Relaxa",
+      "phase.ready": "Prepara-te...",
+      "phase.done": "Sessão completa 🌿",
+      "group.hands": "Mãos e antebraços",
+      "group.arms": "Braços e bicípetes",
+      "group.shoulders": "Ombros",
+      "group.face": "Rosto (testa, olhos, maxilar)",
+      "group.neck": "Pescoço",
+      "group.chest": "Peito e costas",
+      "group.abdomen": "Abdómen",
+      "group.legs": "Pernas e coxas",
+      "group.feet": "Pés",
+      "of.groups": "grupos musculares",
+      "tips.title": "Como fazer",
+      "tip.1": "Senta-te ou deita-te num sítio confortável, sem roupa apertada.",
+      "tip.2": "Quando o círculo crescer, tensiona o grupo indicado com força (mas sem doer) durante os segundos mostrados.",
+      "tip.3": "Quando encolher, larga toda a tensão de repente e nota a diferença entre tenso e relaxado — é essa diferença que o corpo aprende a reconhecer.",
+      "tip.4": "Se algum grupo muscular te causar dor, salta-o e passa ao seguinte."
+    },
+    en: {
+      "page.title": "Progressive Muscle Relaxation",
+      "crumb": "Tools",
+      "intro.lead": "Tense and then release each muscle group, one at a time, to let go of physical tension that builds up without you noticing.",
+      "btn.start": "Start",
+      "btn.stop": "Stop",
+      "phase.tense": "Tense",
+      "phase.relax": "Release",
+      "phase.ready": "Get ready...",
+      "phase.done": "Session complete 🌿",
+      "group.hands": "Hands and forearms",
+      "group.arms": "Arms and biceps",
+      "group.shoulders": "Shoulders",
+      "group.face": "Face (forehead, eyes, jaw)",
+      "group.neck": "Neck",
+      "group.chest": "Chest and back",
+      "group.abdomen": "Abdomen",
+      "group.legs": "Legs and thighs",
+      "group.feet": "Feet",
+      "of.groups": "muscle groups",
+      "tips.title": "How to do it",
+      "tip.1": "Sit or lie down somewhere comfortable, without tight clothing.",
+      "tip.2": "When the circle grows, tense the indicated group firmly (but not to the point of pain) for the seconds shown.",
+      "tip.3": "When it shrinks, let go of all the tension at once and notice the difference between tense and relaxed — that difference is what the body learns to recognise.",
+      "tip.4": "If any muscle group causes pain, skip it and move to the next one."
+    }
+  }
+};
+</script>
+<script src="../js/app.js?v=2"></script>
+<script>
+(function () {
+  var GROUPS = ["hands", "arms", "shoulders", "face", "neck", "chest", "abdomen", "legs", "feet"];
+  var TENSE_S = 7, RELAX_S = 20;
+
+  var $ = function (id) { return document.getElementById(id); };
+  var running = false;
+  var timer = null;
+  var groupIdx = 0, phase = "tense", phaseLeft = TENSE_S;
+
+  function setCircle(p, dur) {
+    var c = $("circle");
+    c.style.transition = "transform " + dur + "s cubic-bezier(0.4, 0, 0.4, 1)";
+    c.style.transform = p === "tense" ? "scale(1)" : "scale(0.72)";
+  }
+
+  function startPhase() {
+    phaseLeft = phase === "tense" ? TENSE_S : RELAX_S;
+    $("phase-label").textContent = PL.t("phase." + phase);
+    $("group-label").textContent = PL.t("group." + GROUPS[groupIdx]);
+    $("phase-count").textContent = phaseLeft;
+    $("group-count").textContent = (groupIdx + 1) + " / " + GROUPS.length + " " + PL.t("of.groups");
+    setCircle(phase, phaseLeft);
+  }
+
+  function tick() {
+    phaseLeft--;
+    if (phaseLeft <= 0) {
+      if (phase === "tense") {
+        phase = "relax";
+      } else {
+        phase = "tense";
+        groupIdx++;
+        if (groupIdx >= GROUPS.length) { stop(true); return; }
+      }
+      startPhase();
+    } else {
+      $("phase-count").textContent = phaseLeft;
+    }
+  }
+
+  function start() {
+    running = true;
+    groupIdx = 0;
+    phase = "tense";
+    $("btn-toggle").textContent = PL.t("btn.stop");
+    startPhase();
+    timer = setInterval(tick, 1000);
+  }
+
+  function stop(done) {
+    running = false;
+    clearInterval(timer);
+    $("btn-toggle").textContent = PL.t("btn.start");
+    $("phase-label").textContent = done ? PL.t("phase.done") : "";
+    $("phase-count").textContent = "";
+    $("group-label").textContent = "";
+    $("group-count").textContent = "";
+    var c = $("circle");
+    c.style.transition = "transform 1.2s ease";
+    c.style.transform = "scale(0.72)";
+  }
+
+  $("btn-toggle").addEventListener("click", function () {
+    if (running) stop(false); else start();
+  });
+
+  function renderTips() {
+    var html = "";
+    ["tip.1", "tip.2", "tip.3", "tip.4"].forEach(function (k) {
+      html += "<li style='margin:8px 0'>" + PL.t(k) + "</li>";
+    });
+    $("tips").innerHTML = html;
+  }
+
+  document.addEventListener("pl:ready", renderTips);
+  PL.onLang(function () {
+    renderTips();
+    if (running) {
+      $("phase-label").textContent = PL.t("phase." + phase);
+      $("group-label").textContent = PL.t("group." + GROUPS[groupIdx]);
+      $("btn-toggle").textContent = PL.t("btn.stop");
+      $("group-count").textContent = (groupIdx + 1) + " / " + GROUPS.length + " " + PL.t("of.groups");
+    }
+  });
+})();
+</script>
+</body>
+</html>
