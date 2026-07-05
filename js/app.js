@@ -2,6 +2,7 @@
 (function () {
   const PAGE = window.PAGE || {};
   const ROOT = PAGE.root || "";
+  const APP_SCRIPT = document.currentScript;
 
   const CHROME = {
     pt: {
@@ -273,7 +274,8 @@
     wireTableScroll();
     document.dispatchEvent(new CustomEvent("pl:ready", { detail: { lang: lang } }));
     var s = document.createElement("script");
-    s.src = ROOT + "js/sync.js";
+    var verMatch = APP_SCRIPT && APP_SCRIPT.src.match(/[?&]v=([^&]+)/);
+    s.src = ROOT + "js/sync.js" + (verMatch ? "?v=" + verMatch[1] : "");
     document.body.appendChild(s);
   }
   if (document.readyState === "loading") {
