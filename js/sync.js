@@ -238,6 +238,39 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
 
   /* ---------- upgrade automático de contas criadas antes da recuperação/partilha ---------- */
 
+  function upgradeAddECDH(email, dek, passWrapKey, existingDekPass) {
+    // conta que já tinha DEK + recuperação (upgrade anterior a esta funcionalidade),
+    // mas ainda não tinha par ECDH — gera-o agora e roda o código de recuperação
+    var recoveryCode = genRecoveryCode();
+    return deriveRecoveryKeys(email, recoveryCode).then(function (recKeys) {
+      return Promise.all([genECDHPair(), wrapDEK(dek, recKeys.wrapKey)]).then(function (r) {
+        var ecdh = r[0], dekRecovery = r[1];
+        return Promise.all([
+          exportECDHPub(ecdh.publicKey),
+          wrapECDHPriv(ecdh.privateKey, passWrapKey),
+          wrapECDHPriv(ecdh.privateKey, recKeys.wrapKey)
+        ]).then(function (w) {
+          var ecdhPub = w[0], ecdhPrivPass = w[1], ecdhPrivRecovery = w[2];
+          return api("/account/keys", "PUT", {
+            dekPassIv: existingDekPass.iv, dekPassCt: existingDekPass.ct,
+            recoveryAuthKey: recKeys.authKey,
+            dekRecoveryIv: dekRecovery.iv, dekRecoveryCt: dekRecovery.ct,
+            ecdhPub: ecdhPub,
+            ecdhPrivPassIv: ecdhPrivPass.iv, ecdhPrivPassCt: ecdhPrivPass.ct,
+            ecdhPrivRecoveryIv: ecdhPrivRecovery.iv, ecdhPrivRecoveryCt: ecdhPrivRecovery.ct
+          }).then(function () {
+            ecdhPriv = ecdh.privateKey;
+            return crypto.subtle.exportKey("jwk", ecdh.privateKey);
+          }).then(function (jwk) {
+            acct.ecdhPriv = jwk;
+            saveAcct(acct);
+            return recoveryCode;
+          });
+        });
+      });
+    });
+  }
+
   function upgradeLegacyAccount(email, legacyKey) {
     encKey = legacyKey; // as ferramentas já sincronizadas foram cifradas directamente com esta chave
     var recoveryCode = genRecoveryCode();
@@ -356,19 +389,32 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
             });
           }
 
-          return Promise.all([
-            unwrapDEK(r.dekPassIv, r.dekPassCt, passKeys.wrapKey),
-            unwrapECDHPriv(r.ecdhPrivPassIv, r.ecdhPrivPassCt, passKeys.wrapKey)
-          ]).then(function (keys) {
-            encKey = keys[0];
-            ecdhPriv = keys[1];
-            return Promise.all([crypto.subtle.exportKey("jwk", keys[0]), crypto.subtle.exportKey("jwk", keys[1])]);
-          }).then(function (jwks) {
-            acct.dek = jwks[0];
-            acct.ecdhPriv = jwks[1];
-            saveAcct(acct);
-            return pullAll().then(function (changed) {
-              return pushAll().then(function () { return { changed: changed }; });
+          return unwrapDEK(r.dekPassIv, r.dekPassCt, passKeys.wrapKey).then(function (dek) {
+            encKey = dek;
+            if (!r.ecdhPrivPassCt) {
+              // já tinha DEK + recuperação (upgrade anterior a esta funcionalidade), mas ainda
+              // não tinha par ECDH — gera-o agora, sem perder a DEK nem os dados já cifrados
+              return crypto.subtle.exportKey("jwk", dek).then(function (dekJwk) {
+                acct.dek = dekJwk;
+                return upgradeAddECDH(email, dek, passKeys.wrapKey, { iv: r.dekPassIv, ct: r.dekPassCt });
+              }).then(function (recoveryCode) {
+                return pullAll().then(function (changed) {
+                  return pushAll().then(function () {
+                    return { recoveryCode: recoveryCode, upgraded: true, changed: changed };
+                  });
+                });
+              });
+            }
+            return unwrapECDHPriv(r.ecdhPrivPassIv, r.ecdhPrivPassCt, passKeys.wrapKey).then(function (priv) {
+              ecdhPriv = priv;
+              return Promise.all([crypto.subtle.exportKey("jwk", dek), crypto.subtle.exportKey("jwk", priv)]);
+            }).then(function (jwks) {
+              acct.dek = jwks[0];
+              acct.ecdhPriv = jwks[1];
+              saveAcct(acct);
+              return pullAll().then(function (changed) {
+                return pushAll().then(function () { return { changed: changed }; });
+              });
             });
           });
         });
