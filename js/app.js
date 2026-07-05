@@ -212,11 +212,31 @@
     onTheme: function (fn) { document.addEventListener("pl:theme", fn); }
   };
 
+  /* ---------- indicador de scroll horizontal em tabelas largas ---------- */
+  function wireTableScroll() {
+    function sync(el) {
+      el.classList.toggle("has-more", el.scrollWidth - el.clientWidth - el.scrollLeft > 4);
+    }
+    function scan() {
+      document.querySelectorAll(".table-scroll").forEach(function (el) {
+        sync(el);
+        if (!el._plScrollWired) {
+          el._plScrollWired = true;
+          el.addEventListener("scroll", function () { sync(el); });
+        }
+      });
+    }
+    scan();
+    window.addEventListener("resize", scan);
+    new MutationObserver(scan).observe(document.body, { childList: true, subtree: true });
+  }
+
   /* ---------- arranque ---------- */
   function boot() {
     renderHeader();
     renderFooter();
     applyI18n();
+    wireTableScroll();
     document.dispatchEvent(new CustomEvent("pl:ready", { detail: { lang: lang } }));
     var s = document.createElement("script");
     s.src = ROOT + "js/sync.js";
