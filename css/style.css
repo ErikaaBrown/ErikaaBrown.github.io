@@ -133,6 +133,7 @@ a:hover { text-decoration: underline; }
 
 /* ---------- hero ---------- */
 .hero { padding: 72px 0 30px; text-align: center; }
+.hero-emblem { width: 130px; height: auto; display: block; margin: 0 auto 14px; }
 .hero .kicker {
   display: inline-block; padding: 6px 16px; border-radius: 999px;
   background: var(--brand-soft); color: var(--brand-ink);
@@ -178,6 +179,7 @@ a.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); bord
   width: 48px; height: 48px; border-radius: 14px; font-size: 1.5rem;
   background: var(--brand-soft); display: grid; place-items: center; margin-bottom: 4px;
 }
+.card .icon .icon-img { width: 30px; height: 30px; object-fit: contain; }
 .card h3 { margin: 0; font-size: 1.12rem; }
 .card p { margin: 0; color: var(--ink-2); font-size: 0.92rem; flex-grow: 1; }
 .card .meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
@@ -540,6 +542,7 @@ dialog.crop-dialog::backdrop { background: rgba(15, 23, 21, 0.55); backdrop-filt
 .page-hero { padding: 46px 0 8px; }
 .page-hero .crumb { font-size: 0.85rem; font-weight: 800; color: var(--brand-ink); text-transform: uppercase; letter-spacing: 0.05em; }
 .page-hero h1 { font-size: clamp(1.7rem, 4vw, 2.5rem); margin: 0.25em 0 0.3em; }
+.page-hero h1 img { height: 0.85em; width: auto; vertical-align: -0.1em; margin-right: 0.12em; }
 .page-hero p { color: var(--ink-2); max-width: 640px; margin: 0; }
 
 /* ---------- responsive ---------- */
