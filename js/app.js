@@ -145,7 +145,7 @@
     if (d["page.title"]) {
       document.title = d["page.title"] + " · " + d["site.name"];
     } else {
-      document.title = d["site.name"] + " — " + d["site.tagline"];
+      document.title = d["site.name"] + " · " + d["site.tagline"];
     }
     syncButtons();
   }

@@ -73,7 +73,7 @@ window.PAGE = {
     pt: {
       "page.title": "Reconhecer Emoções",
       "crumb": "Jogos",
-      "intro.lead": "Ler emoções — em caras e em contextos — é uma competência treinável, e a base da empatia.",
+      "intro.lead": "Ler emoções (em caras e em contextos) é uma competência treinável, e a base da empatia.",
       "intro.p1": "Vais ver 12 rondas: umas mostram uma expressão facial, outras descrevem uma situação. Escolhe a emoção que melhor corresponde. No fim de cada ronda explicamos as pistas.",
       "btn.start": "Começar",
       "btn.next": "Seguinte →",
@@ -86,14 +86,14 @@ window.PAGE = {
       "res.title": "Resultado",
       "res.score": "em 12",
       "res.c1": "Um olho clínico para emoções! A tua leitura de pistas emocionais é muito fina.",
-      "res.c2": "Boa leitura emocional — as rondas que falhaste são as distinções mais difíceis (e mais interessantes).",
-      "res.c3": "As emoções confundem-se mesmo umas com as outras — e distingui-las treina-se. Repete o jogo e repara nas pistas das explicações.",
-      "res.expl": "🧠 Porque importa: a capacidade de distinguir emoções com precisão chama-se granularidade emocional. A investigação de Lisa Feldman Barrett mostra que pessoas com maior granularidade regulam melhor as emoções — dizer «estou frustrado» em vez de «estou mal» já muda a forma como o cérebro responde."
+      "res.c2": "Boa leitura emocional: as rondas que falhaste são as distinções mais difíceis (e mais interessantes).",
+      "res.c3": "As emoções confundem-se mesmo umas com as outras, e distingui-las treina-se. Repete o jogo e repara nas pistas das explicações.",
+      "res.expl": "🧠 Porque importa: a capacidade de distinguir emoções com precisão chama-se granularidade emocional. A investigação de Lisa Feldman Barrett mostra que pessoas com maior granularidade regulam melhor as emoções: dizer «estou frustrado» em vez de «estou mal» já muda a forma como o cérebro responde."
     },
     en: {
       "page.title": "Reading Emotions",
       "crumb": "Games",
-      "intro.lead": "Reading emotions — in faces and in contexts — is a trainable skill, and the foundation of empathy.",
+      "intro.lead": "Reading emotions (in faces and in contexts) is a trainable skill, and the foundation of empathy.",
       "intro.p1": "You will play 12 rounds: some show a facial expression, others describe a situation. Choose the emotion that fits best. After each round we explain the cues.",
       "btn.start": "Start",
       "btn.next": "Next →",
@@ -106,9 +106,9 @@ window.PAGE = {
       "res.title": "Result",
       "res.score": "out of 12",
       "res.c1": "A clinical eye for emotions! Your reading of emotional cues is very sharp.",
-      "res.c2": "Good emotional reading — the rounds you missed are the hardest (and most interesting) distinctions.",
-      "res.c3": "Emotions genuinely blur into each other — and telling them apart is trainable. Play again and note the cues in the explanations.",
-      "res.expl": "🧠 Why it matters: the ability to distinguish emotions precisely is called emotional granularity. Lisa Feldman Barrett's research shows that people with higher granularity regulate emotions better — saying \"I'm frustrated\" instead of \"I feel bad\" already changes how the brain responds."
+      "res.c2": "Good emotional reading: the rounds you missed are the hardest (and most interesting) distinctions.",
+      "res.c3": "Emotions genuinely blur into each other, and telling them apart is trainable. Play again and note the cues in the explanations.",
+      "res.expl": "🧠 Why it matters: the ability to distinguish emotions precisely is called emotional granularity. Lisa Feldman Barrett's research shows that people with higher granularity regulate emotions better: saying \"I'm frustrated\" instead of \"I feel bad\" already changes how the brain responds."
     }
   }
 };
@@ -133,34 +133,34 @@ window.PAGE = {
 
   var ROUNDS = [
     { face: "😊", ans: "joy", opts: ["joy", "serenity", "surprise", "shame"],
-      ex: { pt: "O sorriso genuíno (de Duchenne) envolve também os olhos — as «rugas» nos cantos são a pista.", en: "A genuine (Duchenne) smile also involves the eyes — the crinkles at the corners are the cue." } },
+      ex: { pt: "O sorriso genuíno (de Duchenne) envolve também os olhos: as «rugas» nos cantos são a pista.", en: "A genuine (Duchenne) smile also involves the eyes: the crinkles at the corners are the cue." } },
     { scene: { pt: "O João recebe uma mensagem do chefe: «Precisamos de falar amanhã.» Passa a noite a imaginar cenários.", en: "João gets a message from his boss: \"We need to talk tomorrow.\" He spends the night imagining scenarios." },
       ans: "anxiety", opts: ["anxiety", "fear", "anger", "sadness"],
       ex: { pt: "Ameaça difusa, futura e incerta = ansiedade. O medo responde a um perigo presente e concreto.", en: "A diffuse, future, uncertain threat = anxiety. Fear responds to a present, concrete danger." } },
     { face: "😢", ans: "sadness", opts: ["sadness", "dejection", "fear", "shame"],
-      ex: { pt: "Lágrimas e cantos da boca descaídos. A tristeza sinaliza perda — e convida os outros a aproximarem-se.", en: "Tears and downturned mouth corners. Sadness signals loss — and invites others to come closer." } },
+      ex: { pt: "Lágrimas e cantos da boca descaídos. A tristeza sinaliza perda, e convida os outros a aproximarem-se.", en: "Tears and downturned mouth corners. Sadness signals loss, and invites others to come closer." } },
     { scene: { pt: "A Marta conta uma piada na reunião e ninguém se ri. Sente a cara a aquecer e só quer desaparecer.", en: "Marta tells a joke in a meeting and nobody laughs. She feels her face heating up and just wants to disappear." },
       ans: "shame", opts: ["shame", "sadness", "anger", "anxiety"],
       ex: { pt: "Falha social perante uma audiência + rubor: a assinatura do embaraço, uma emoção especificamente social.", en: "A social slip before an audience + blushing: the signature of embarrassment, a specifically social emotion." } },
     { face: "😠", ans: "anger", opts: ["anger", "disgust", "frustration", "fear"],
       ex: { pt: "Sobrancelhas franzidas e puxadas para baixo, lábios cerrados. A raiva mobiliza energia contra um obstáculo ou injustiça.", en: "Brows drawn down and together, pressed lips. Anger mobilises energy against an obstacle or injustice." } },
-    { scene: { pt: "O Pedro emprestou dinheiro a um amigo. O amigo nunca pagou — e agora publica fotos de férias caras.", en: "Pedro lent money to a friend. The friend never paid it back — and now posts photos of expensive holidays." },
+    { scene: { pt: "O Pedro emprestou dinheiro a um amigo. O amigo nunca pagou, e agora publica fotos de férias caras.", en: "Pedro lent money to a friend. The friend never paid it back, and now posts photos of expensive holidays." },
       ans: "anger", opts: ["anger", "disgust", "sadness", "surprise"],
       ex: { pt: "Injustiça percebida e quebra de confiança: o gatilho clássico da raiva.", en: "Perceived injustice and broken trust: the classic trigger of anger." } },
     { face: "😨", ans: "fear", opts: ["fear", "surprise", "anxiety", "disgust"],
       ex: { pt: "Olhos muito abertos e sobrancelhas levantadas: o medo alarga o campo visual para captar mais informação sobre a ameaça.", en: "Wide-open eyes and raised brows: fear widens the visual field to gather more information about the threat." } },
     { face: "🤢", ans: "disgust", opts: ["disgust", "anger", "sadness", "boredom"],
-      ex: { pt: "Nariz franzido e lábio superior levantado. O nojo evoluiu para nos proteger de contaminação — física e moral.", en: "Wrinkled nose and raised upper lip. Disgust evolved to protect us from contamination — physical and moral." } },
+      ex: { pt: "Nariz franzido e lábio superior levantado. O nojo evoluiu para nos proteger de contaminação: física e moral.", en: "Wrinkled nose and raised upper lip. Disgust evolved to protect us from contamination: physical and moral." } },
     { scene: { pt: "A Sofia trabalhou meses num projecto. A uma semana do fim, a empresa cancela-o sem explicação.", en: "Sofia worked for months on a project. One week before the end, the company cancels it without explanation." },
       ans: "frustration", opts: ["frustration", "sadness", "boredom", "serenity"],
-      ex: { pt: "Objectivo bloqueado mesmo à beira da meta: é a definição de frustração — parente próxima da raiva, mas virada para o obstáculo.", en: "A goal blocked right at the finish line: the definition of frustration — a close relative of anger, aimed at the obstacle." } },
+      ex: { pt: "Objectivo bloqueado mesmo à beira da meta: é a definição de frustração, parente próxima da raiva, mas virada para o obstáculo.", en: "A goal blocked right at the finish line: the definition of frustration, a close relative of anger, aimed at the obstacle." } },
     { face: "😌", ans: "serenity", opts: ["serenity", "joy", "boredom", "sadness"],
-      ex: { pt: "Músculos faciais soltos, pálpebras suaves. Calma não é ausência de emoção — é uma emoção de baixa activação e valência positiva.", en: "Loose facial muscles, soft eyelids. Calm is not the absence of emotion — it is a low-arousal, positive-valence emotion." } },
+      ex: { pt: "Músculos faciais soltos, pálpebras suaves. Calma não é ausência de emoção; é uma emoção de baixa activação e valência positiva.", en: "Loose facial muscles, soft eyelids. Calm is not the absence of emotion; it is a low-arousal, positive-valence emotion." } },
     { scene: { pt: "Domingo à tarde. O Miguel salta de série em série, nada lhe apetece, o tempo arrasta-se.", en: "Sunday afternoon. Miguel hops from show to show, nothing appeals, time drags." },
       ans: "boredom", opts: ["boredom", "sadness", "dejection", "serenity"],
       ex: { pt: "Baixa activação sem perda associada: tédio, não tristeza. O tédio sinaliza falta de sentido na actividade actual.", en: "Low arousal with no associated loss: boredom, not sadness. Boredom signals a lack of meaning in the current activity." } },
     { face: "😳", ans: "shame", opts: ["shame", "surprise", "fear", "anger"],
-      ex: { pt: "Rubor e olhar que quer fugir: o embaraço pede desculpa ao grupo sem palavras — e por isso desarma julgamentos.", en: "Blushing and an averted gaze: embarrassment apologises to the group without words — which is why it disarms judgement." } }
+      ex: { pt: "Rubor e olhar que quer fugir: o embaraço pede desculpa ao grupo sem palavras, e por isso desarma julgamentos.", en: "Blushing and an averted gaze: embarrassment apologises to the group without words, which is why it disarms judgement." } }
   ];
 
   var $ = function (id) { return document.getElementById(id); };

@@ -242,7 +242,7 @@ window.PAGE = {
     if (!keys.length) return "";
     return "<ul style='margin:0;padding-left:20px'>" + keys.map(function (iso) {
       var e = obj[iso];
-      return "<li><strong>" + PL.fmtDate(iso) + "</strong> — " + e.m + "/5" + (e.note ? " · " + PL.esc(e.note) : "") + "</li>";
+      return "<li><strong>" + PL.fmtDate(iso) + "</strong> · " + e.m + "/5" + (e.note ? " · " + PL.esc(e.note) : "") + "</li>";
     }).join("") + "</ul>";
   }
   function fmtGratitude(obj) {
@@ -250,7 +250,7 @@ window.PAGE = {
     if (!keys.length) return "";
     return "<ul style='margin:0;padding-left:20px'>" + keys.map(function (iso) {
       var items = (obj[iso] || []).filter(Boolean).map(PL.esc).join("; ");
-      return "<li><strong>" + PL.fmtDate(iso) + "</strong> — " + items + "</li>";
+      return "<li><strong>" + PL.fmtDate(iso) + "</strong> · " + items + "</li>";
     }).join("") + "</ul>";
   }
   function fmtSleep(obj) {
@@ -258,14 +258,14 @@ window.PAGE = {
     if (!keys.length) return "";
     return "<ul style='margin:0;padding-left:20px'>" + keys.map(function (iso) {
       var e = obj[iso];
-      return "<li><strong>" + PL.fmtDate(iso) + "</strong> — " + e.b + "→" + e.w + " · " + e.q + "/5" + (e.note ? " · " + PL.esc(e.note) : "") + "</li>";
+      return "<li><strong>" + PL.fmtDate(iso) + "</strong> · " + e.b + "→" + e.w + " · " + e.q + "/5" + (e.note ? " · " + PL.esc(e.note) : "") + "</li>";
     }).join("") + "</ul>";
   }
   function fmtHabits(arr) {
     if (!Array.isArray(arr) || !arr.length) return "";
     return "<ul style='margin:0;padding-left:20px'>" + arr.map(function (h) {
       var days = Object.keys(h.c || {}).filter(function (k) { return h.c[k]; }).length;
-      return "<li>" + h.e + " " + PL.esc(h.n) + " — " + days + " " + PL.t("habit.days") + "</li>";
+      return "<li>" + h.e + " " + PL.esc(h.n) + " · " + days + " " + PL.t("habit.days") + "</li>";
     }).join("") + "</ul>";
   }
   function fmtWorries(arr) {
@@ -279,7 +279,7 @@ window.PAGE = {
     if (!Array.isArray(arr) || !arr.length) return "";
     return "<ul style='margin:0;padding-left:20px'>" + arr.slice(-10).reverse().map(function (t) {
       var delta = (typeof t.int1 === "number" && typeof t.int2 === "number") ? (t.int1 + "% → " + t.int2 + "%") : "";
-      return "<li><strong>" + PL.fmtDate(t.date) + "</strong> — " + PL.esc(t.thought) + (delta ? " <span class='chip'>" + delta + "</span>" : "") + "</li>";
+      return "<li><strong>" + PL.fmtDate(t.date) + "</strong> · " + PL.esc(t.thought) + (delta ? " <span class='chip'>" + delta + "</span>" : "") + "</li>";
     }).join("") + "</ul>";
   }
   var FORMATTERS = {
@@ -370,7 +370,7 @@ window.PAGE = {
     if (!u || u.role !== "professional") { show("notpro"); return; }
     show("main");
     myCode = u.professionalCode || "";
-    $("my-code").textContent = myCode || "—";
+    $("my-code").textContent = myCode || "…";
     renderList();
   }
 

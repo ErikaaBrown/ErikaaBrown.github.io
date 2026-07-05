@@ -126,7 +126,7 @@ window.PAGE = {
       tr.innerHTML =
         "<td>" + who + "</td>" +
         "<td>" + PL.t("role." + u.role) + "</td>" +
-        "<td style='font-family:monospace'>" + (u.professional_code || "—") + "</td>" +
+        "<td style='font-family:monospace'>" + (u.professional_code || "") + "</td>" +
         "<td>" + PL.fmtDate(String(u.created_at).slice(0, 10)) + "</td>" +
         "<td>" + actions + "</td>";
       body.appendChild(tr);
