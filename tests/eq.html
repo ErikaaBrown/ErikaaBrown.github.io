@@ -228,7 +228,9 @@ window.PAGE = {
 
   function finish() {
     $("pfill").style.width = "100%";
-    renderResult(scores());
+    var sc = scores();
+    PL.saveTestResult("eq", sc);
+    renderResult(sc);
     show("result");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }

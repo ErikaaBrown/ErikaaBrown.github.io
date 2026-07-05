@@ -268,6 +268,7 @@ window.PAGE = {
     $("pfill").style.width = "100%";
     var sc = scores();
     PL.store("bigfive", { date: PL.todayISO(), scores: sc });
+    PL.saveTestResult("bigfive", sc);
     renderResult(sc);
     show("result");
     window.scrollTo({ top: 0, behavior: "smooth" });

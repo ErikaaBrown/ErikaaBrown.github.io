@@ -241,6 +241,7 @@ window.PAGE = {
 
   function finish() {
     $("pfill").style.width = "100%";
+    PL.saveTestResult("stress", score());
     renderResult();
     show("result");
     window.scrollTo({ top: 0, behavior: "smooth" });

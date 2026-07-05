@@ -464,6 +464,8 @@ table.data td { padding: 9px 10px; border-bottom: 1px solid var(--line); font-va
 .privacy-step h4 { margin: 0 0 3px; font-size: 0.98rem; font-family: var(--font-body); font-weight: 800; }
 .privacy-step p { margin: 0; font-size: 0.92rem; color: var(--ink-2); }
 .acct-head { display: flex; gap: 16px; align-items: center; }
+.share-toggles { display: flex; flex-wrap: wrap; gap: 8px; }
+.conn-card { margin-top: 14px; }
 .recovery-code-box {
   font-family: monospace; font-size: 1.25rem; font-weight: 700; letter-spacing: 0.06em;
   background: var(--surface-2); border: 1.5px dashed var(--brand); border-radius: var(--radius-sm);
