@@ -4,10 +4,14 @@ A API vive num **Cloudflare Worker** e os dados numa base **D1** (SQLite).
 O site continua na GitHub Pages — só chama a API.
 
 **Privacidade por desenho:** os registos das ferramentas são cifrados no
-browser (AES-GCM) com uma chave derivada da palavra-passe do utilizador.
-O servidor guarda apenas texto cifrado — nem o administrador consegue ler.
-A palavra-passe nunca é enviada: o browser deriva duas chaves distintas
-(uma para autenticar, outra para cifrar) e só a primeira sai da máquina.
+browser (AES-GCM) com uma chave de dados aleatória (DEK), gerada localmente
+e nunca enviada ao servidor. O servidor guarda apenas texto cifrado — nem
+o administrador consegue ler. Essa DEK fica guardada, cifrada, de duas
+formas: uma vez com uma chave derivada da palavra-passe, e outra vez com
+uma chave derivada do código de recuperação mostrado ao utilizador no
+registo. Assim, perder a palavra-passe já não significa perder os dados —
+o código de recuperação permite desbloquear a mesma DEK e definir uma
+palavra-passe nova, mesmo num dispositivo novo.
 
 ## Configuração passo a passo (dashboard, sem linha de comandos)
 
@@ -17,8 +21,12 @@ A palavra-passe nunca é enviada: o browser deriva duas chaves distintas
 3. Abre a base criada, separador **Console**, cola o conteúdo de
    `schema.sql` e executa.
    - Se a consola reclamar, executa cada instrução separadamente
-     (os dois `CREATE TABLE` e o `CREATE INDEX`, um de cada vez).
+     (os `CREATE TABLE` e o `CREATE INDEX`, um de cada vez).
      Voltar a executar não faz mal — os `IF NOT EXISTS` protegem.
+   - **Já tinhas esta base de dados criada antes desta funcionalidade?**
+     Não coles o `schema.sql` outra vez — cola antes o conteúdo de
+     `migrations/0002_recovery_codes.sql` na consola. Adiciona as colunas
+     novas sem tocar nas contas já existentes.
 
 ### 2. Criar o Worker
 1. **Compute (Workers) → Workers & Pages → Create → Create Worker**.
@@ -41,9 +49,15 @@ A palavra-passe nunca é enviada: o browser deriva duas chaves distintas
 3. Commit + push. Pronto — a página **Conta** do site fica funcional.
 
 ## Notas importantes
-- **Palavra-passe perdida = dados perdidos.** É o preço da cifragem
-  ponta-a-ponta: não existe "recuperar palavra-passe" que devolva os dados.
-  O site avisa o utilizador no registo. (Código de recuperação: fase 2.)
+- **Palavra-passe perdida, mas código de recuperação guardado = tudo bem.**
+  O código de recuperação (mostrado uma única vez, no registo) permite
+  desbloquear os dados e definir uma palavra-passe nova. Só se **ambos**
+  se perderem é que os dados ficam mesmo irrecuperáveis — o site avisa
+  disso com clareza.
+- Contas criadas antes desta funcionalidade fazem um "upgrade" automático
+  e transparente no próximo login: o site gera a DEK, mostra um código de
+  recuperação novo e continua a funcionar sem pedir nada extra ao
+  utilizador.
 - O plano gratuito chega de sobra: 100 000 pedidos/dia no Worker e
   5 milhões de leituras/dia na D1.
 - A coluna `role` em `users` já existe para as fases futuras

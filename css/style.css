@@ -282,6 +282,13 @@ input[type="range"] { width: 100%; accent-color: var(--brand); padding: 0; borde
 .viz-tooltip .tt-title { font-weight: 800; }
 .viz-tooltip .tt-val { color: var(--ink-2); }
 
+/* ---------- contentores com scroll horizontal (tabelas largas em ecrãs pequenos) ---------- */
+.table-scroll { position: relative; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.table-scroll.has-more::after {
+  content: ""; position: absolute; top: 0; right: 0; bottom: 0; width: 30px;
+  background: linear-gradient(to right, transparent, var(--surface));
+  pointer-events: none;
+}
 /* ---------- data table ---------- */
 table.data { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
 table.data th { text-align: left; color: var(--ink-2); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; padding: 8px 10px; border-bottom: 2px solid var(--line); }
@@ -457,6 +464,12 @@ table.data td { padding: 9px 10px; border-bottom: 1px solid var(--line); font-va
 .privacy-step h4 { margin: 0 0 3px; font-size: 0.98rem; font-family: var(--font-body); font-weight: 800; }
 .privacy-step p { margin: 0; font-size: 0.92rem; color: var(--ink-2); }
 .acct-head { display: flex; gap: 16px; align-items: center; }
+.recovery-code-box {
+  font-family: monospace; font-size: 1.25rem; font-weight: 700; letter-spacing: 0.06em;
+  background: var(--surface-2); border: 1.5px dashed var(--brand); border-radius: var(--radius-sm);
+  padding: 18px 20px; text-align: center; word-break: break-all; color: var(--brand-ink);
+  user-select: all;
+}
 .avatar {
   width: 54px; height: 54px; border-radius: 50%; flex-shrink: 0;
   background: linear-gradient(135deg, var(--brand), var(--accent));

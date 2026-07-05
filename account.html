@@ -32,41 +32,72 @@
         <ul>
           <li>📱 <span data-i18n="side.b1"></span></li>
           <li>🔒 <span data-i18n="side.b2"></span></li>
-          <li>🕊️ <span data-i18n="side.b3"></span></li>
+          <li>🗝️ <span data-i18n="side.b5"></span></li>
           <li>🗑️ <span data-i18n="side.b4"></span></li>
         </ul>
       </div>
       <div class="auth-main">
-        <div class="seg">
+        <div class="seg" id="tabs-row">
           <button id="tab-login" class="active" data-i18n="tab.login"></button>
           <button id="tab-signup" data-i18n="tab.signup"></button>
         </div>
 
-        <label class="field-label" for="f-email">Email</label>
-        <input type="email" id="f-email" autocomplete="email" data-i18n-ph="ph.email">
+        <!-- Entrar / Criar conta -->
+        <div id="view-credentials">
+          <label class="field-label" for="f-email">Email</label>
+          <input type="email" id="f-email" autocomplete="email" data-i18n-ph="ph.email">
 
-        <label class="field-label" for="f-pass"><span data-i18n="lbl.pass"></span></label>
-        <div class="pass-wrap">
-          <input type="password" id="f-pass" autocomplete="current-password" data-i18n-ph="ph.pass">
-          <button type="button" class="pass-eye" id="eye-1" aria-label="mostrar">👁️</button>
-        </div>
-
-        <div id="signup-extra" class="hidden">
-          <label class="field-label" for="f-pass2"><span data-i18n="lbl.pass2"></span></label>
+          <label class="field-label" for="f-pass"><span data-i18n="lbl.pass"></span></label>
           <div class="pass-wrap">
-            <input type="password" id="f-pass2" autocomplete="new-password">
-            <button type="button" class="pass-eye" id="eye-2" aria-label="mostrar">👁️</button>
+            <input type="password" id="f-pass" autocomplete="current-password" data-i18n-ph="ph.pass">
+            <button type="button" class="pass-eye" id="eye-1" aria-label="mostrar">👁️</button>
           </div>
-          <div class="notice" data-i18n-html="warn.e2e"></div>
-          <label style="display:flex;gap:10px;align-items:flex-start;font-size:0.9rem;cursor:pointer">
-            <input type="checkbox" id="f-ack" style="width:auto;margin-top:4px">
-            <span data-i18n="ack.label"></span>
-          </label>
+
+          <p class="small" id="forgot-link" style="margin:8px 0 0">
+            <a href="#" id="link-forgot" data-i18n="link.forgot"></a>
+          </p>
+
+          <div id="signup-extra" class="hidden">
+            <label class="field-label" for="f-pass2"><span data-i18n="lbl.pass2"></span></label>
+            <div class="pass-wrap">
+              <input type="password" id="f-pass2" autocomplete="new-password">
+              <button type="button" class="pass-eye" id="eye-2" aria-label="mostrar">👁️</button>
+            </div>
+            <div class="notice" data-i18n-html="warn.e2e"></div>
+          </div>
+
+          <p class="small" id="auth-error" style="color:var(--critical);min-height:1.2em;margin:12px 0 0"></p>
+
+          <button class="btn" id="btn-submit" style="width:100%;margin-top:10px"></button>
         </div>
 
-        <p class="small" id="auth-error" style="color:var(--critical);min-height:1.2em;margin:12px 0 0"></p>
+        <!-- Recuperar acesso: passo 1 -->
+        <div id="view-recover-start" class="hidden">
+          <p class="small muted" data-i18n="rec.intro" style="margin-top:0"></p>
+          <label class="field-label" for="r-email">Email</label>
+          <input type="email" id="r-email" autocomplete="email" data-i18n-ph="ph.email">
+          <label class="field-label" for="r-code"><span data-i18n="lbl.code"></span></label>
+          <input type="text" id="r-code" data-i18n-ph="ph.code" style="font-family:monospace;letter-spacing:0.05em;text-transform:uppercase">
+          <p class="small" id="rec-error" style="color:var(--critical);min-height:1.2em;margin:12px 0 0"></p>
+          <button class="btn" id="btn-rec-start" style="width:100%;margin-top:10px" data-i18n="btn.continue"></button>
+          <p class="small center" style="margin-top:14px">
+            <a href="#" id="link-back-1" data-i18n="link.back"></a>
+          </p>
+        </div>
 
-        <button class="btn" id="btn-submit" style="width:100%;margin-top:10px"></button>
+        <!-- Recuperar acesso: passo 2 -->
+        <div id="view-recover-reset" class="hidden">
+          <p class="small muted" data-i18n="rec.step2" style="margin-top:0"></p>
+          <label class="field-label" for="r-pass"><span data-i18n="lbl.newpass"></span></label>
+          <div class="pass-wrap">
+            <input type="password" id="r-pass" autocomplete="new-password" data-i18n-ph="ph.pass">
+            <button type="button" class="pass-eye" id="eye-3" aria-label="mostrar">👁️</button>
+          </div>
+          <label class="field-label" for="r-pass2"><span data-i18n="lbl.pass2"></span></label>
+          <input type="password" id="r-pass2" autocomplete="new-password">
+          <p class="small" id="rec2-error" style="color:var(--critical);min-height:1.2em;margin:12px 0 0"></p>
+          <button class="btn" id="btn-rec-reset" style="width:100%;margin-top:10px" data-i18n="btn.setpass"></button>
+        </div>
       </div>
     </div>
 
@@ -89,6 +120,27 @@
           <span class="ico">🧭</span>
           <div><h4 data-i18n="how.4t"></h4><p data-i18n="how.4p"></p></div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mostrar o código de recuperação uma única vez -->
+  <section id="panel-reveal" class="hidden">
+    <div class="panel">
+      <h2 style="margin-top:0" id="reveal-title"></h2>
+      <p class="muted" id="reveal-lead"></p>
+      <div class="recovery-code-box" id="reveal-code"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin:14px 0">
+        <button class="btn btn-ghost btn-sm" id="btn-copy-code" data-i18n="btn.copy"></button>
+        <span class="small" id="copy-feedback" style="align-self:center;color:var(--brand-ink);font-weight:700"></span>
+      </div>
+      <div class="notice" data-i18n-html="reveal.warn"></div>
+      <label style="display:flex;gap:10px;align-items:flex-start;font-size:0.92rem;cursor:pointer;margin-top:14px">
+        <input type="checkbox" id="reveal-ack" style="width:auto;margin-top:4px">
+        <span data-i18n="reveal.ack"></span>
+      </label>
+      <div class="center mt-2">
+        <button class="btn" id="btn-reveal-continue" disabled data-i18n="btn.continue2"></button>
       </div>
     </div>
   </section>
@@ -132,25 +184,42 @@ window.PAGE = {
       "side.sub": "Em qualquer dispositivo, sempre protegidos.",
       "side.b1": "Acede no telemóvel e no computador",
       "side.b2": "Tudo cifrado antes de sair do teu browser",
-      "side.b3": "Sem anúncios, sem partilha de dados, sem custos",
+      "side.b5": "Um código de recuperação evita perderes tudo",
       "side.b4": "Podes apagar tudo quando quiseres",
       "tab.login": "Entrar",
       "tab.signup": "Criar conta",
       "ph.email": "o.teu@email.com",
       "lbl.pass": "Palavra-passe",
       "lbl.pass2": "Repete a palavra-passe",
+      "lbl.newpass": "Palavra-passe nova",
+      "lbl.code": "Código de recuperação",
       "ph.pass": "mínimo 8 caracteres",
-      "warn.e2e": "<strong>🔐 Guarda bem a tua palavra-passe.</strong> Os teus registos são fechados com uma chave criada a partir dela, e ninguém tem essa chave a não ser tu. Se te esqueceres da palavra-passe, não conseguimos recuperar o que está guardado na conta.",
-      "ack.label": "Compreendo que, se perder a palavra-passe, os registos guardados na conta não podem ser recuperados.",
+      "ph.code": "XXXX-XXXX-XXXX-XXXX-XXXX-XXXX",
+      "link.forgot": "Esqueci-me da palavra-passe",
+      "link.back": "← Voltar a entrar",
+      "warn.e2e": "<strong>🔐 A tua palavra-passe fecha os teus registos.</strong> Ao criar a conta vais receber um código de recuperação único. Guarda-o num sítio seguro: é a única forma de recuperares o acesso se te esqueceres da palavra-passe.",
       "btn.login": "Entrar",
       "btn.signup": "Criar conta",
+      "btn.continue": "Continuar",
+      "btn.setpass": "Definir nova palavra-passe",
+      "btn.copy": "📋 Copiar código",
+      "btn.continue2": "Já guardei o código, continuar",
+      "rec.intro": "Introduz o teu email e o código de recuperação que guardaste quando criaste a conta.",
+      "rec.step2": "Código confirmado. Define agora uma palavra-passe nova para esta conta.",
+      "reveal.title.new": "A tua conta está pronta 🌿",
+      "reveal.title.upgrade": "Boas notícias: a tua conta ficou mais segura 🌿",
+      "reveal.lead.new": "Este é o teu código de recuperação. É a única forma de recuperares os teus registos se um dia te esqueceres da palavra-passe — guarda-o num local seguro (um gestor de palavras-passe, por exemplo). Não o vamos voltar a mostrar.",
+      "reveal.lead.upgrade": "Agora que a tua conta suporta recuperação, gerámos um código novo para ti. Guarda-o num local seguro — é a única forma de recuperares o acesso se um dia te esqueceres da palavra-passe. Não o vamos voltar a mostrar.",
+      "reveal.warn": "<strong>⚠️ Não partilhes este código.</strong> Quem o tiver, junto com o teu email, consegue aceder aos teus registos.",
+      "reveal.ack": "Guardei o código de recuperação num local seguro.",
+      "copied": "Copiado ✔",
       "how.title": "A tua privacidade, explicada de forma simples",
       "how.1t": "A chave é só tua",
-      "how.1p": "Quando crias a conta, o teu browser cria uma chave secreta a partir da tua palavra-passe. Essa chave nunca sai do teu dispositivo.",
+      "how.1p": "Quando crias a conta, o teu browser gera uma chave secreta aleatória para os teus registos. Essa chave nunca sai do teu dispositivo em texto simples — nem para nós.",
       "how.2t": "Guardamos um cofre fechado",
       "how.2p": "Antes de saírem do teu browser, os registos são fechados nesse cofre digital. O que chega ao servidor é ilegível: parece uma sequência de letras e números sem sentido.",
       "how.3t": "Nem nós conseguimos ler",
-      "how.3p": "Sem a tua chave, ninguém abre o cofre. Nem a equipa do PsicoLab, nem a empresa onde ele fica guardado.",
+      "how.3p": "Sem a tua palavra-passe ou o teu código de recuperação, ninguém abre o cofre. Nem a equipa do PsicoLab, nem a empresa onde ele fica guardado.",
       "how.4t": "Guardamos só o essencial",
       "how.4p": "Apenas o teu email e os registos das ferramentas (diário, pensamentos, gratidão e hábitos). Os testes e os jogos não enviam nada. Podes apagar a conta a qualquer momento.",
       "acct.hello": "Olá! 🌿",
@@ -166,12 +235,13 @@ window.PAGE = {
       "del.confirm1": "Apagar a conta e TODOS os dados no servidor? Esta acção não pode ser desfeita.",
       "del.confirm2": "Confirmas mesmo? Os dados no servidor serão eliminados definitivamente.",
       "err.bad_credentials": "Email ou palavra-passe incorrectos.",
+      "err.bad_recovery": "Email ou código de recuperação incorrectos.",
       "err.email_taken": "Já existe uma conta com esse email.",
-      "err.invalid_input": "Verifica o email e a palavra-passe (mínimo 8 caracteres).",
+      "err.invalid_input": "Verifica os dados introduzidos (palavra-passe: mínimo 8 caracteres).",
       "err.network": "Não foi possível contactar o servidor. Tenta outra vez.",
       "err.pass.short": "A palavra-passe deve ter pelo menos 8 caracteres.",
       "err.pass.match": "As palavras-passe não coincidem.",
-      "err.ack": "Confirma que compreendes o aviso sobre a palavra-passe."
+      "err.code.req": "Introduz o código de recuperação."
     },
     en: {
       "page.title": "Your account",
@@ -182,25 +252,42 @@ window.PAGE = {
       "side.sub": "On any device, always protected.",
       "side.b1": "Use it on your phone and your computer",
       "side.b2": "Everything is locked before it leaves your browser",
-      "side.b3": "No ads, no data sharing, no costs",
+      "side.b5": "A recovery code means you never lose everything",
       "side.b4": "You can delete everything whenever you want",
       "tab.login": "Sign in",
       "tab.signup": "Create account",
       "ph.email": "your@email.com",
       "lbl.pass": "Password",
       "lbl.pass2": "Repeat the password",
+      "lbl.newpass": "New password",
+      "lbl.code": "Recovery code",
       "ph.pass": "minimum 8 characters",
-      "warn.e2e": "<strong>🔐 Keep your password safe.</strong> Your entries are locked with a key created from it, and nobody has that key except you. If you forget your password, we cannot recover what is stored in the account.",
-      "ack.label": "I understand that if I lose my password, the entries stored in the account cannot be recovered.",
+      "ph.code": "XXXX-XXXX-XXXX-XXXX-XXXX-XXXX",
+      "link.forgot": "Forgot your password?",
+      "link.back": "← Back to sign in",
+      "warn.e2e": "<strong>🔐 Your password locks your entries.</strong> When you create the account you will get a unique recovery code. Keep it somewhere safe: it is the only way to get back in if you ever forget your password.",
       "btn.login": "Sign in",
       "btn.signup": "Create account",
+      "btn.continue": "Continue",
+      "btn.setpass": "Set new password",
+      "btn.copy": "📋 Copy code",
+      "btn.continue2": "I've saved the code, continue",
+      "rec.intro": "Enter your email and the recovery code you saved when you created the account.",
+      "rec.step2": "Code confirmed. Now set a new password for this account.",
+      "reveal.title.new": "Your account is ready 🌿",
+      "reveal.title.upgrade": "Good news: your account just got safer 🌿",
+      "reveal.lead.new": "This is your recovery code. It is the only way to get your entries back if you ever forget your password, so save it somewhere safe (a password manager, for example). We will not show it again.",
+      "reveal.lead.upgrade": "Now that your account supports recovery, we generated a new code for you. Save it somewhere safe: it is the only way to get back in if you ever forget your password. We will not show it again.",
+      "reveal.warn": "<strong>⚠️ Do not share this code.</strong> Anyone who has it, together with your email, can access your entries.",
+      "reveal.ack": "I have saved the recovery code somewhere safe.",
+      "copied": "Copied ✔",
       "how.title": "Your privacy, explained simply",
       "how.1t": "The key is yours alone",
-      "how.1p": "When you create the account, your browser creates a secret key from your password. That key never leaves your device.",
+      "how.1p": "When you create the account, your browser generates a random secret key for your entries. That key never leaves your device in plain form, not even to us.",
       "how.2t": "We store a locked safe",
       "how.2p": "Before they leave your browser, your entries are locked inside that digital safe. What reaches the server is unreadable: it looks like a meaningless string of letters and numbers.",
       "how.3t": "Not even we can read it",
-      "how.3p": "Without your key, nobody can open the safe. Not the PsychLab team, and not the company where it is stored.",
+      "how.3p": "Without your password or your recovery code, nobody can open the safe. Not the PsychLab team, and not the company where it is stored.",
       "how.4t": "We keep only the essentials",
       "how.4p": "Just your email and the entries from the tools (diary, thoughts, gratitude and habits). Tests and games send nothing. You can delete the account at any time.",
       "acct.hello": "Hello! 🌿",
@@ -216,12 +303,13 @@ window.PAGE = {
       "del.confirm1": "Delete the account and ALL data on the server? This cannot be undone.",
       "del.confirm2": "Are you sure? The data on the server will be permanently deleted.",
       "err.bad_credentials": "Incorrect email or password.",
+      "err.bad_recovery": "Incorrect email or recovery code.",
       "err.email_taken": "An account with that email already exists.",
-      "err.invalid_input": "Check the email and password (minimum 8 characters).",
+      "err.invalid_input": "Check the details you entered (password: minimum 8 characters).",
       "err.network": "Could not reach the server. Try again.",
       "err.pass.short": "The password must be at least 8 characters.",
       "err.pass.match": "The passwords do not match.",
-      "err.ack": "Please confirm you understand the password warning."
+      "err.code.req": "Enter the recovery code."
     }
   }
 };
@@ -230,18 +318,22 @@ window.PAGE = {
 <script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
-  var mode = "login";
+  var mode = "login"; // login | signup | recover-start | recover-reset
   var ready = false;
+  var revealCode = null;
+  var revealKind = "new"; // new | upgrade
 
   function show(panel) {
     $("panel-unconfigured").classList.toggle("hidden", panel !== "unconf");
     $("panel-auth").classList.toggle("hidden", panel !== "auth");
+    $("panel-reveal").classList.toggle("hidden", panel !== "reveal");
     $("panel-account").classList.toggle("hidden", panel !== "account");
   }
 
   function render() {
     if (!ready || !window.PLSync) return;
     if (!PLSync.configured()) { show("unconf"); return; }
+    if (revealCode) { show("reveal"); renderReveal(); return; }
     var u = PLSync.user();
     if (u) {
       show("account");
@@ -254,39 +346,89 @@ window.PAGE = {
   }
 
   function renderMode() {
-    var login = mode === "login";
-    $("tab-login").classList.toggle("active", login);
-    $("tab-signup").classList.toggle("active", !login);
-    $("signup-extra").classList.toggle("hidden", login);
-    $("btn-submit").textContent = PL.t(login ? "btn.login" : "btn.signup");
-    $("f-pass").setAttribute("autocomplete", login ? "current-password" : "new-password");
-    $("auth-error").textContent = "";
+    var isCred = mode === "login" || mode === "signup";
+    $("tabs-row").classList.toggle("hidden", !isCred);
+    $("view-credentials").classList.toggle("hidden", !isCred);
+    $("view-recover-start").classList.toggle("hidden", mode !== "recover-start");
+    $("view-recover-reset").classList.toggle("hidden", mode !== "recover-reset");
+
+    if (isCred) {
+      var login = mode === "login";
+      $("tab-login").classList.toggle("active", login);
+      $("tab-signup").classList.toggle("active", !login);
+      $("signup-extra").classList.toggle("hidden", login);
+      $("forgot-link").classList.toggle("hidden", !login);
+      $("btn-submit").textContent = PL.t(login ? "btn.login" : "btn.signup");
+      $("f-pass").setAttribute("autocomplete", login ? "current-password" : "new-password");
+      $("auth-error").textContent = "";
+    }
   }
 
-  function fail(code) {
+  function renderReveal() {
+    $("reveal-title").textContent = PL.t(revealKind === "upgrade" ? "reveal.title.upgrade" : "reveal.title.new");
+    $("reveal-lead").textContent = PL.t(revealKind === "upgrade" ? "reveal.lead.upgrade" : "reveal.lead.new");
+    $("reveal-code").textContent = revealCode;
+  }
+
+  function fail(elId, code) {
     var key = "err." + code;
     var msg = PL.t(key);
-    $("auth-error").textContent = msg === key ? PL.t("err.network") : msg;
-    $("btn-submit").disabled = false;
+    $(elId).textContent = msg === key ? PL.t("err.network") : msg;
   }
 
   function submit() {
     var email = $("f-email").value.trim();
     var pass = $("f-pass").value;
     $("auth-error").textContent = "";
-    if (pass.length < 8) { fail("pass.short"); return; }
-    if (mode === "signup") {
-      if (pass !== $("f-pass2").value) { fail("pass.match"); return; }
-      if (!$("f-ack").checked) { fail("ack"); return; }
-    }
+    if (pass.length < 8) { fail("auth-error", "pass.short"); return; }
+    if (mode === "signup" && pass !== $("f-pass2").value) { fail("auth-error", "pass.match"); return; }
     $("btn-submit").disabled = true;
     var p = mode === "signup" ? PLSync.register(email, pass) : PLSync.login(email, pass);
-    p.then(function () {
+    p.then(function (r) {
       $("btn-submit").disabled = false;
+      if (r && r.recoveryCode) {
+        revealCode = r.recoveryCode;
+        revealKind = r.upgraded ? "upgrade" : "new";
+      } else {
+        PL.toast(PL.t("sync.done"));
+      }
       render();
-      PL.toast(PL.t("sync.done"));
     }).catch(function (e) {
-      fail(e.code || "network");
+      $("btn-submit").disabled = false;
+      fail("auth-error", e.code || "network");
+    });
+  }
+
+  function recoverStart() {
+    var email = $("r-email").value.trim();
+    var code = $("r-code").value.trim();
+    $("rec-error").textContent = "";
+    if (!code) { fail("rec-error", "code.req"); return; }
+    $("btn-rec-start").disabled = true;
+    PLSync.recoverStart(email, code).then(function () {
+      $("btn-rec-start").disabled = false;
+      mode = "recover-reset";
+      renderMode();
+    }).catch(function (e) {
+      $("btn-rec-start").disabled = false;
+      fail("rec-error", e.code || "network");
+    });
+  }
+
+  function recoverReset() {
+    var pass = $("r-pass").value;
+    $("rec2-error").textContent = "";
+    if (pass.length < 8) { fail("rec2-error", "pass.short"); return; }
+    if (pass !== $("r-pass2").value) { fail("rec2-error", "pass.match"); return; }
+    $("btn-rec-reset").disabled = true;
+    PLSync.recoverSetPassword(pass).then(function () {
+      $("btn-rec-reset").disabled = false;
+      PL.toast(PL.t("sync.done"));
+      mode = "login";
+      render();
+    }).catch(function (e) {
+      $("btn-rec-reset").disabled = false;
+      fail("rec2-error", e.code || "network");
     });
   }
 
@@ -308,6 +450,36 @@ window.PAGE = {
     $("f-pass").addEventListener("keydown", function (e) { if (e.key === "Enter" && mode === "login") submit(); });
     eye("eye-1", "f-pass");
     eye("eye-2", "f-pass2");
+    eye("eye-3", "r-pass");
+
+    $("link-forgot").addEventListener("click", function (e) {
+      e.preventDefault();
+      $("r-email").value = $("f-email").value.trim();
+      mode = "recover-start";
+      renderMode();
+    });
+    $("link-back-1").addEventListener("click", function (e) {
+      e.preventDefault();
+      PLSync.recoverCancel();
+      mode = "login";
+      renderMode();
+    });
+    $("btn-rec-start").addEventListener("click", recoverStart);
+    $("btn-rec-reset").addEventListener("click", recoverReset);
+
+    $("reveal-ack").addEventListener("change", function () {
+      $("btn-reveal-continue").disabled = !this.checked;
+    });
+    $("btn-copy-code").addEventListener("click", function () {
+      navigator.clipboard.writeText(revealCode).then(function () {
+        $("copy-feedback").textContent = PL.t("copied");
+        setTimeout(function () { $("copy-feedback").textContent = ""; }, 2000);
+      });
+    });
+    $("btn-reveal-continue").addEventListener("click", function () {
+      revealCode = null;
+      render();
+    });
 
     $("btn-sync").addEventListener("click", function () {
       $("sync-status").textContent = PL.t("sync.ing");

@@ -8,6 +8,12 @@
  * Privacidade: o servidor só guarda blobs cifrados no browser (AES-GCM).
  * A palavra-passe nunca chega aqui — o cliente envia uma chave de
  * autenticação derivada (PBKDF2), distinta da chave de cifra.
+ *
+ * Recuperação de conta: os dados são cifrados com uma chave aleatória (DEK)
+ * gerada no browser. Essa DEK fica guardada aqui duas vezes, cifrada por
+ * chaves diferentes: uma derivada da palavra-passe, outra derivada do
+ * código de recuperação. Nenhuma das duas chaves originais (password ou
+ * código) chega ao servidor — só as suas derivações de autenticação.
  */
 
 const ALLOWED_ORIGINS = [
@@ -18,7 +24,9 @@ const ALLOWED_ORIGINS = [
 
 const TOOLS = ["mood", "thoughts", "gratitude", "habits", "sleep", "worries", "scores"];
 const MAX_BLOB = 300 * 1024; // 300 KB por ferramenta
-const TOKEN_TTL_S = 60 * 60 * 24 * 30; // 30 dias
+const MAX_WRAP = 2 * 1024; // wrapped DEK: bem menor que um blob de dados
+const FULL_TTL_S = 60 * 60 * 24 * 30; // 30 dias
+const RECOVERY_TTL_S = 60 * 15; // 15 minutos — janela curta para trocar a password
 
 /* ---------- utilidades ---------- */
 
@@ -56,23 +64,25 @@ async function hmacHex(secret, msg) {
   return hex(await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(msg)));
 }
 
-async function makeToken(env, uid) {
-  const exp = Math.floor(Date.now() / 1000) + TOKEN_TTL_S;
-  const sig = await hmacHex(env.SESSION_SECRET, uid + "." + exp);
-  return uid + "." + exp + "." + sig;
+async function makeToken(env, uid, scope) {
+  scope = scope || "full";
+  const ttl = scope === "recovery" ? RECOVERY_TTL_S : FULL_TTL_S;
+  const exp = Math.floor(Date.now() / 1000) + ttl;
+  const sig = await hmacHex(env.SESSION_SECRET, uid + "." + exp + "." + scope);
+  return uid + "." + exp + "." + scope + "." + sig;
 }
 
 async function checkToken(env, req) {
   const auth = req.headers.get("Authorization") || "";
-  const m = auth.match(/^Bearer (\d+)\.(\d+)\.([0-9a-f]+)$/);
+  const m = auth.match(/^Bearer (\d+)\.(\d+)\.(full|recovery)\.([0-9a-f]+)$/);
   if (!m) return null;
-  const [, uid, exp, sig] = m;
+  const [, uid, exp, scope, sig] = m;
   if (parseInt(exp, 10) < Math.floor(Date.now() / 1000)) return null;
-  const good = await hmacHex(env.SESSION_SECRET, uid + "." + exp);
+  const good = await hmacHex(env.SESSION_SECRET, uid + "." + exp + "." + scope);
   if (sig.length !== good.length) return null;
   let diff = 0;
   for (let i = 0; i < sig.length; i++) diff |= sig.charCodeAt(i) ^ good.charCodeAt(i);
-  return diff === 0 ? parseInt(uid, 10) : null;
+  return diff === 0 ? { uid: parseInt(uid, 10), scope: scope } : null;
 }
 
 function validEmail(e) {
@@ -83,21 +93,31 @@ function validAuthKey(k) {
   return typeof k === "string" && /^[0-9a-f]{64}$/.test(k);
 }
 
+function validWrap(s) {
+  return typeof s === "string" && s.length > 0 && s.length <= MAX_WRAP;
+}
+
 /* ---------- handlers ---------- */
 
 async function register(env, body, origin) {
-  if (!validEmail(body.email) || !validAuthKey(body.authKey)) {
+  if (!validEmail(body.email) || !validAuthKey(body.authKey) ||
+      !validWrap(body.dekPassIv) || !validWrap(body.dekPassCt) ||
+      !validAuthKey(body.recoveryAuthKey) ||
+      !validWrap(body.dekRecoveryIv) || !validWrap(body.dekRecoveryCt)) {
     return json({ error: "invalid_input" }, 400, origin);
   }
   const email = body.email.toLowerCase().trim();
   const salt = hex(crypto.getRandomValues(new Uint8Array(16)));
   const hash = await sha256hex(salt + "|" + body.authKey);
+  const rSalt = hex(crypto.getRandomValues(new Uint8Array(16)));
+  const rHash = await sha256hex(rSalt + "|" + body.recoveryAuthKey);
   try {
     const r = await env.DB.prepare(
-      "INSERT INTO users (email, auth_salt, auth_hash) VALUES (?, ?, ?)"
-    ).bind(email, salt, hash).run();
+      "INSERT INTO users (email, auth_salt, auth_hash, recovery_salt, recovery_hash, dek_pass_iv, dek_pass_ct, dek_recovery_iv, dek_recovery_ct) " +
+      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    ).bind(email, salt, hash, rSalt, rHash, body.dekPassIv, body.dekPassCt, body.dekRecoveryIv, body.dekRecoveryCt).run();
     const uid = r.meta.last_row_id;
-    return json({ token: await makeToken(env, uid), email }, 200, origin);
+    return json({ token: await makeToken(env, uid, "full"), email }, 200, origin);
   } catch (e) {
     return json({ error: "email_taken" }, 409, origin);
   }
@@ -109,12 +129,61 @@ async function login(env, body, origin) {
   }
   const email = body.email.toLowerCase().trim();
   const row = await env.DB.prepare(
-    "SELECT id, auth_salt, auth_hash FROM users WHERE email = ?"
+    "SELECT id, auth_salt, auth_hash, dek_pass_iv, dek_pass_ct FROM users WHERE email = ?"
   ).bind(email).first();
   if (!row) return json({ error: "bad_credentials" }, 401, origin);
   const hash = await sha256hex(row.auth_salt + "|" + body.authKey);
   if (hash !== row.auth_hash) return json({ error: "bad_credentials" }, 401, origin);
-  return json({ token: await makeToken(env, row.id), email }, 200, origin);
+  return json({
+    token: await makeToken(env, row.id, "full"),
+    email: email,
+    dekPassIv: row.dek_pass_iv || "",
+    dekPassCt: row.dek_pass_ct || ""
+  }, 200, origin);
+}
+
+async function recoverStart(env, body, origin) {
+  if (!validEmail(body.email) || !validAuthKey(body.recoveryAuthKey)) {
+    return json({ error: "invalid_input" }, 400, origin);
+  }
+  const email = body.email.toLowerCase().trim();
+  const row = await env.DB.prepare(
+    "SELECT id, recovery_salt, recovery_hash, dek_recovery_iv, dek_recovery_ct FROM users WHERE email = ?"
+  ).bind(email).first();
+  if (!row || !row.recovery_hash) return json({ error: "bad_recovery" }, 401, origin);
+  const hash = await sha256hex(row.recovery_salt + "|" + body.recoveryAuthKey);
+  if (hash !== row.recovery_hash) return json({ error: "bad_recovery" }, 401, origin);
+  return json({
+    token: await makeToken(env, row.id, "recovery"),
+    dekRecoveryIv: row.dek_recovery_iv,
+    dekRecoveryCt: row.dek_recovery_ct
+  }, 200, origin);
+}
+
+async function recoverReset(env, uid, body, origin) {
+  if (!validAuthKey(body.newAuthKey) || !validWrap(body.dekPassIv) || !validWrap(body.dekPassCt)) {
+    return json({ error: "invalid_input" }, 400, origin);
+  }
+  const salt = hex(crypto.getRandomValues(new Uint8Array(16)));
+  const hash = await sha256hex(salt + "|" + body.newAuthKey);
+  await env.DB.prepare(
+    "UPDATE users SET auth_salt = ?, auth_hash = ?, dek_pass_iv = ?, dek_pass_ct = ? WHERE id = ?"
+  ).bind(salt, hash, body.dekPassIv, body.dekPassCt, uid).run();
+  return json({ token: await makeToken(env, uid, "full") }, 200, origin);
+}
+
+async function upgradeKeys(env, uid, body, origin) {
+  if (!validWrap(body.dekPassIv) || !validWrap(body.dekPassCt) ||
+      !validAuthKey(body.recoveryAuthKey) ||
+      !validWrap(body.dekRecoveryIv) || !validWrap(body.dekRecoveryCt)) {
+    return json({ error: "invalid_input" }, 400, origin);
+  }
+  const rSalt = hex(crypto.getRandomValues(new Uint8Array(16)));
+  const rHash = await sha256hex(rSalt + "|" + body.recoveryAuthKey);
+  await env.DB.prepare(
+    "UPDATE users SET dek_pass_iv = ?, dek_pass_ct = ?, recovery_salt = ?, recovery_hash = ?, dek_recovery_iv = ?, dek_recovery_ct = ? WHERE id = ?"
+  ).bind(body.dekPassIv, body.dekPassCt, rSalt, rHash, body.dekRecoveryIv, body.dekRecoveryCt, uid).run();
+  return json({ ok: true }, 200, origin);
 }
 
 async function getData(env, uid, origin) {
@@ -162,27 +231,43 @@ export default {
     }
 
     try {
-      if (req.method === "POST" && (path === "/auth/register" || path === "/auth/login")) {
+      if (req.method === "POST" && (path === "/auth/register" || path === "/auth/login" || path === "/auth/recover/start")) {
         let body;
         try { body = await req.json(); } catch (e) { return json({ error: "invalid_json" }, 400, origin); }
-        return path === "/auth/register"
-          ? register(env, body, origin)
-          : login(env, body, origin);
+        if (path === "/auth/register") return register(env, body, origin);
+        if (path === "/auth/login") return login(env, body, origin);
+        return recoverStart(env, body, origin);
       }
 
-      const uid = await checkToken(env, req);
-      if (!uid) return json({ error: "unauthorized" }, 401, origin);
+      const auth = await checkToken(env, req);
+      if (!auth) return json({ error: "unauthorized" }, 401, origin);
 
-      if (req.method === "GET" && path === "/data") return getData(env, uid, origin);
+      if (req.method === "POST" && path === "/auth/recover/reset") {
+        if (auth.scope !== "recovery" && auth.scope !== "full") return json({ error: "unauthorized" }, 401, origin);
+        let body;
+        try { body = await req.json(); } catch (e) { return json({ error: "invalid_json" }, 400, origin); }
+        return recoverReset(env, auth.uid, body, origin);
+      }
+
+      // a partir daqui, só o token "full" (sessão normal) tem acesso
+      if (auth.scope !== "full") return json({ error: "unauthorized" }, 401, origin);
+
+      if (req.method === "PUT" && path === "/account/keys") {
+        let body;
+        try { body = await req.json(); } catch (e) { return json({ error: "invalid_json" }, 400, origin); }
+        return upgradeKeys(env, auth.uid, body, origin);
+      }
+
+      if (req.method === "GET" && path === "/data") return getData(env, auth.uid, origin);
 
       const putMatch = path.match(/^\/data\/([a-z]+)$/);
       if (req.method === "PUT" && putMatch) {
         let body;
         try { body = await req.json(); } catch (e) { return json({ error: "invalid_json" }, 400, origin); }
-        return putData(env, uid, putMatch[1], body, origin);
+        return putData(env, auth.uid, putMatch[1], body, origin);
       }
 
-      if (req.method === "DELETE" && path === "/account") return deleteAccount(env, uid, origin);
+      if (req.method === "DELETE" && path === "/account") return deleteAccount(env, auth.uid, origin);
 
       return json({ error: "not_found" }, 404, origin);
     } catch (e) {
