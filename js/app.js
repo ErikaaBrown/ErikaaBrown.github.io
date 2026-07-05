@@ -183,6 +183,29 @@
     });
   }
 
+  /* ---------- avatar: iniciais por omissão, foto se o utilizador tiver uma ---------- */
+  function initials(displayName, email) {
+    var name = (displayName || "").trim();
+    if (name) {
+      var parts = name.split(/\s+/).filter(Boolean);
+      if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+      return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+    }
+    return (email || "?").charAt(0).toUpperCase();
+  }
+  function avatarInto(el, profile) {
+    profile = profile || {};
+    if (profile.avatar) {
+      el.textContent = "";
+      var img = document.createElement("img");
+      img.src = "data:image/jpeg;base64," + profile.avatar;
+      img.alt = "";
+      el.appendChild(img);
+    } else {
+      el.textContent = initials(profile.displayName, profile.email);
+    }
+  }
+
   function saveTestResult(test, scores) {
     var hist = load("test_results", []);
     if (!Array.isArray(hist)) hist = [];
@@ -216,6 +239,8 @@
     fmtDate: fmtDate,
     esc: esc,
     toast: toast,
+    initials: initials,
+    avatarInto: avatarInto,
     saveTestResult: saveTestResult,
     onLang: function (fn) { document.addEventListener("pl:lang", fn); },
     onTheme: function (fn) { document.addEventListener("pl:theme", fn); }

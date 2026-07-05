@@ -54,6 +54,7 @@
           <p class="small muted" id="detail-since" style="margin:2px 0 0"></p>
         </div>
       </div>
+      <p class="small muted hidden" id="detail-bio" style="margin:0 0 18px"></p>
       <p class="small muted hidden" id="detail-empty" data-i18n="share.none"></p>
       <div id="detail-body"></div>
     </div>
@@ -238,8 +239,8 @@ window.PAGE = {
       $("patients-empty").classList.toggle("hidden", connections.length > 0);
       connections.forEach(function (conn) {
         var node = tpl.content.firstElementChild.cloneNode(true);
-        node.querySelector(".patient-avatar").textContent = conn.otherEmail.charAt(0).toUpperCase();
-        node.querySelector(".patient-email").textContent = conn.otherEmail;
+        PL.avatarInto(node.querySelector(".patient-avatar"), { displayName: conn.otherDisplayName, email: conn.otherEmail, avatar: conn.otherAvatar });
+        node.querySelector(".patient-email").textContent = conn.otherDisplayName || conn.otherEmail;
         node.querySelector(".patient-since").textContent =
           PL.t("conn.since") + " " + PL.fmtDate(String(conn.since).slice(0, 10));
         var chip = node.querySelector(".patient-share-count");
@@ -260,9 +261,12 @@ window.PAGE = {
     location.hash = "patient=" + connectionId;
     $("view-list").classList.add("hidden");
     $("view-detail").classList.remove("hidden");
-    $("detail-avatar").textContent = conn.otherEmail.charAt(0).toUpperCase();
-    $("detail-email").textContent = conn.otherEmail;
+    PL.avatarInto($("detail-avatar"), { displayName: conn.otherDisplayName, email: conn.otherEmail, avatar: conn.otherAvatar });
+    $("detail-email").textContent = conn.otherDisplayName || conn.otherEmail;
     $("detail-since").textContent = PL.t("conn.since") + " " + PL.fmtDate(String(conn.since).slice(0, 10));
+    var bioEl = $("detail-bio");
+    bioEl.textContent = conn.otherBio || "";
+    bioEl.classList.toggle("hidden", !conn.otherBio);
     $("detail-empty").classList.add("hidden");
     var bodyEl = $("detail-body");
     bodyEl.innerHTML = "<p class='small muted'>" + PL.t("loading") + "</p>";

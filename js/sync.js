@@ -333,7 +333,12 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
 
   window.PLSync = {
     configured: configured,
-    user: function () { return acct ? { email: acct.email, role: acct.role || "user", professionalCode: acct.professionalCode || "" } : null; },
+    user: function () {
+      return acct ? {
+        email: acct.email, role: acct.role || "user", professionalCode: acct.professionalCode || "",
+        displayName: acct.displayName || "", avatar: acct.avatar || "", bio: acct.bio || ""
+      } : null;
+    },
 
     register: function (email, password) {
       email = email.toLowerCase().trim();
@@ -360,7 +365,11 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
               }).then(function (r2) {
                 return Promise.all([crypto.subtle.exportKey("jwk", dek), crypto.subtle.exportKey("jwk", ecdh.privateKey)])
                   .then(function (jwks) {
-                    acct = { token: r2.token, email: r2.email, role: r2.role || "user", dek: jwks[0], ecdhPriv: jwks[1] };
+                    acct = {
+                      token: r2.token, email: r2.email, role: r2.role || "user",
+                      displayName: "", avatar: "", bio: "",
+                      dek: jwks[0], ecdhPriv: jwks[1]
+                    };
                     encKey = dek;
                     ecdhPriv = ecdh.privateKey;
                     saveAcct(acct);
@@ -379,7 +388,11 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
         return api("/auth/login", "POST", { email: email, authKey: passKeys.authKey }).then(function (r) {
           // fica só em memória até a DEK ser desembrulhada com sucesso — saveAcct() só
           // no fim, para nunca persistir uma conta "a meio" sem chave utilizável
-          acct = { token: r.token, email: r.email, role: r.role || "user", professionalCode: r.professionalCode || "", dek: null, ecdhPriv: null };
+          acct = {
+            token: r.token, email: r.email, role: r.role || "user", professionalCode: r.professionalCode || "",
+            displayName: r.displayName || "", avatar: r.avatar || "", bio: r.bio || "",
+            dek: null, ecdhPriv: null
+          };
           saveMeta({});
 
           if (!r.dekPassCt) {
@@ -436,6 +449,20 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
       });
     },
 
+    updateProfile: function (profile) {
+      var displayName = (profile.displayName || "").trim().slice(0, 60);
+      var bio = (profile.bio || "").trim().slice(0, 500);
+      var avatar = profile.avatar || "";
+      return api("/account/profile", "PUT", { displayName: displayName, bio: bio, avatar: avatar }).then(function () {
+        if (acct) {
+          acct.displayName = displayName;
+          acct.bio = bio;
+          acct.avatar = avatar;
+          saveAcct(acct);
+        }
+      });
+    },
+
     deleteAccount: function () {
       return api("/account", "DELETE").then(function () {
         acct = null; encKey = null; ecdhPriv = null;
@@ -473,7 +500,11 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
           }, token).then(function (r) {
             return Promise.all([crypto.subtle.exportKey("jwk", dek), crypto.subtle.exportKey("jwk", priv)])
               .then(function (jwks) {
-                acct = { token: r.token, email: r.email || email, role: r.role || "user", professionalCode: r.professionalCode || "", dek: jwks[0], ecdhPriv: jwks[1] };
+                acct = {
+                  token: r.token, email: r.email || email, role: r.role || "user", professionalCode: r.professionalCode || "",
+                  displayName: r.displayName || "", avatar: r.avatar || "", bio: r.bio || "",
+                  dek: jwks[0], ecdhPriv: jwks[1]
+                };
                 encKey = dek;
                 ecdhPriv = priv;
                 saveAcct(acct);

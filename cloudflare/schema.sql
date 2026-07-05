@@ -24,6 +24,9 @@ CREATE TABLE IF NOT EXISTS users (
   ecdh_priv_recovery_iv  TEXT NOT NULL DEFAULT '',
   ecdh_priv_recovery_ct  TEXT NOT NULL DEFAULT '',
   role                   TEXT NOT NULL DEFAULT 'user',
+  display_name           TEXT NOT NULL DEFAULT '',
+  avatar                 TEXT NOT NULL DEFAULT '',
+  bio                    TEXT NOT NULL DEFAULT '',
   created_at             TEXT NOT NULL DEFAULT (datetime('now'))
 );
 

@@ -35,6 +35,9 @@ const CODE_ALPHABET = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"; // Crockford base32, s
 const MAX_BLOB = 300 * 1024; // 300 KB por ferramenta/partilha
 const MAX_WRAP = 2 * 1024; // wrapped DEK/chave privada: bem menor que um blob de dados
 const MAX_PUB = 200; // chave pública ECDH exportada (raw, base64)
+const MAX_DISPLAY_NAME = 60;
+const MAX_BIO = 500;
+const MAX_AVATAR = 60 * 1024; // base64 de uma miniatura JPEG ~200x200, folga generosa
 const FULL_TTL_S = 60 * 60 * 24 * 30; // 30 dias
 const RECOVERY_TTL_S = 60 * 15; // 15 minutos — janela curta para trocar a password
 
@@ -110,6 +113,15 @@ function validPub(s) {
 function validCode(s) {
   return typeof s === "string" && /^[0-9A-Z]{4}-[0-9A-Z]{4}$/.test(s);
 }
+function validDisplayName(s) {
+  return typeof s === "string" && s.length <= MAX_DISPLAY_NAME;
+}
+function validBio(s) {
+  return typeof s === "string" && s.length <= MAX_BIO;
+}
+function validAvatar(s) {
+  return typeof s === "string" && s.length <= MAX_AVATAR && (s === "" || /^[A-Za-z0-9+/]+=*$/.test(s));
+}
 
 function genCode() {
   const bytes = crypto.getRandomValues(new Uint8Array(5)); // 40 bits, 8 símbolos base32
@@ -165,7 +177,7 @@ async function login(env, body, origin) {
   const email = body.email.toLowerCase().trim();
   const row = await env.DB.prepare(
     "SELECT id, auth_salt, auth_hash, role, professional_code, dek_pass_iv, dek_pass_ct, " +
-    "ecdh_pub, ecdh_priv_pass_iv, ecdh_priv_pass_ct FROM users WHERE email = ?"
+    "ecdh_pub, ecdh_priv_pass_iv, ecdh_priv_pass_ct, display_name, avatar, bio FROM users WHERE email = ?"
   ).bind(email).first();
   if (!row) return json({ error: "bad_credentials" }, 401, origin);
   const hash = await sha256hex(row.auth_salt + "|" + body.authKey);
@@ -179,7 +191,10 @@ async function login(env, body, origin) {
     dekPassCt: row.dek_pass_ct || "",
     ecdhPub: row.ecdh_pub || "",
     ecdhPrivPassIv: row.ecdh_priv_pass_iv || "",
-    ecdhPrivPassCt: row.ecdh_priv_pass_ct || ""
+    ecdhPrivPassCt: row.ecdh_priv_pass_ct || "",
+    displayName: row.display_name || "",
+    avatar: row.avatar || "",
+    bio: row.bio || ""
   }, 200, origin);
 }
 
@@ -215,10 +230,13 @@ async function recoverReset(env, uid, body, origin) {
     "UPDATE users SET auth_salt = ?, auth_hash = ?, dek_pass_iv = ?, dek_pass_ct = ?, " +
     "ecdh_priv_pass_iv = ?, ecdh_priv_pass_ct = ? WHERE id = ?"
   ).bind(salt, hash, body.dekPassIv, body.dekPassCt, body.ecdhPrivPassIv, body.ecdhPrivPassCt, uid).run();
-  const row = await env.DB.prepare("SELECT email, role, professional_code FROM users WHERE id = ?").bind(uid).first();
+  const row = await env.DB.prepare(
+    "SELECT email, role, professional_code, display_name, avatar, bio FROM users WHERE id = ?"
+  ).bind(uid).first();
   return json({
     token: await makeToken(env, uid, "full"),
-    email: row.email, role: row.role, professionalCode: row.professional_code || ""
+    email: row.email, role: row.role, professionalCode: row.professional_code || "",
+    displayName: row.display_name || "", avatar: row.avatar || "", bio: row.bio || ""
   }, 200, origin);
 }
 
@@ -240,6 +258,21 @@ async function upgradeKeys(env, uid, body, origin) {
   ).bind(body.dekPassIv, body.dekPassCt, rSalt, rHash, body.dekRecoveryIv, body.dekRecoveryCt,
     body.ecdhPub, body.ecdhPrivPassIv, body.ecdhPrivPassCt, body.ecdhPrivRecoveryIv, body.ecdhPrivRecoveryCt, uid
   ).run();
+  return json({ ok: true }, 200, origin);
+}
+
+/* ---------- perfil opcional (nome, foto, biografia — em claro, não cifrado) ---------- */
+
+async function updateProfile(env, uid, body, origin) {
+  const displayName = typeof body.displayName === "string" ? body.displayName.trim() : "";
+  const bio = typeof body.bio === "string" ? body.bio.trim() : "";
+  const avatar = typeof body.avatar === "string" ? body.avatar : "";
+  if (!validDisplayName(displayName) || !validBio(bio) || !validAvatar(avatar)) {
+    return json({ error: "invalid_input" }, 400, origin);
+  }
+  await env.DB.prepare(
+    "UPDATE users SET display_name = ?, bio = ?, avatar = ? WHERE id = ?"
+  ).bind(displayName, bio, avatar, uid).run();
   return json({ ok: true }, 200, origin);
 }
 
@@ -304,14 +337,20 @@ async function createConnection(env, uid, body, origin) {
 
 async function listConnections(env, uid, origin) {
   const asPatient = await env.DB.prepare(
-    "SELECT c.id, c.professional_id AS other_id, u.email AS other_email, u.ecdh_pub AS other_pub, c.created_at " +
+    "SELECT c.id, c.professional_id AS other_id, u.email AS other_email, u.ecdh_pub AS other_pub, " +
+    "u.display_name AS other_name, u.avatar AS other_avatar, u.bio AS other_bio, c.created_at " +
     "FROM connections c JOIN users u ON u.id = c.professional_id WHERE c.patient_id = ?"
   ).bind(uid).all();
   const asProfessional = await env.DB.prepare(
-    "SELECT c.id, c.patient_id AS other_id, u.email AS other_email, u.ecdh_pub AS other_pub, c.created_at " +
+    "SELECT c.id, c.patient_id AS other_id, u.email AS other_email, u.ecdh_pub AS other_pub, " +
+    "u.display_name AS other_name, u.avatar AS other_avatar, u.bio AS other_bio, c.created_at " +
     "FROM connections c JOIN users u ON u.id = c.patient_id WHERE c.professional_id = ?"
   ).bind(uid).all();
-  const shape = (r) => ({ connectionId: r.id, otherId: r.other_id, otherEmail: r.other_email, otherPub: r.other_pub, since: r.created_at });
+  const shape = (r) => ({
+    connectionId: r.id, otherId: r.other_id, otherEmail: r.other_email, otherPub: r.other_pub,
+    otherDisplayName: r.other_name || "", otherAvatar: r.other_avatar || "", otherBio: r.other_bio || "",
+    since: r.created_at
+  });
   return json({
     asPatient: (asPatient.results || []).map(shape),
     asProfessional: (asProfessional.results || []).map(shape)
@@ -377,7 +416,7 @@ async function adminSearchUsers(env, uid, query, origin) {
   if (!(await requireRole(env, uid, "admin"))) return json({ error: "forbidden" }, 403, origin);
   const q = "%" + (query || "").toLowerCase().trim().slice(0, 100) + "%";
   const rows = await env.DB.prepare(
-    "SELECT id, email, role, professional_code, created_at FROM users WHERE lower(email) LIKE ? ORDER BY created_at DESC LIMIT 25"
+    "SELECT id, email, role, professional_code, display_name, created_at FROM users WHERE lower(email) LIKE ? ORDER BY created_at DESC LIMIT 25"
   ).bind(q).all();
   return json({ users: rows.results || [] }, 200, origin);
 }
@@ -443,6 +482,12 @@ export default {
         let body;
         try { body = await req.json(); } catch (e) { return json({ error: "invalid_json" }, 400, origin); }
         return upgradeKeys(env, uid, body, origin);
+      }
+
+      if (req.method === "PUT" && path === "/account/profile") {
+        let body;
+        try { body = await req.json(); } catch (e) { return json({ error: "invalid_json" }, 400, origin); }
+        return updateProfile(env, uid, body, origin);
       }
 
       if (req.method === "GET" && path === "/data") return getData(env, uid, origin);

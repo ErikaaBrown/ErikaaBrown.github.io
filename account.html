@@ -166,6 +166,43 @@
       <p class="small" style="margin:0" data-i18n="acct.note"></p>
     </div>
 
+    <div class="panel">
+      <h3 style="margin-top:0" data-i18n="profile.title"></h3>
+      <p class="small muted" data-i18n="profile.lead"></p>
+
+      <div class="acct-head" style="margin:16px 0">
+        <span class="avatar avatar-lg" id="profile-avatar"></span>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-sm" id="btn-avatar-change" data-i18n="profile.avatar.change"></button>
+          <button class="btn btn-ghost btn-sm hidden" id="btn-avatar-remove" data-i18n="profile.avatar.remove"></button>
+        </div>
+        <input type="file" id="input-avatar-file" accept="image/*" class="hidden">
+      </div>
+
+      <label class="field-label" for="f-displayname" data-i18n="profile.name.label"></label>
+      <input type="text" id="f-displayname" maxlength="60" data-i18n-ph="profile.name.ph">
+
+      <label class="field-label" for="f-bio" data-i18n="profile.bio.label"></label>
+      <textarea id="f-bio" maxlength="500" data-i18n-ph="profile.bio.ph"></textarea>
+
+      <div style="display:flex;gap:10px;align-items:center;margin-top:12px">
+        <button class="btn btn-sm" id="btn-save-profile" data-i18n="profile.btn.save"></button>
+        <span class="small" id="profile-save-status" style="font-weight:700"></span>
+      </div>
+    </div>
+
+    <dialog class="crop-dialog" id="dlg-crop">
+      <h3 style="margin-top:0" data-i18n="crop.title"></h3>
+      <p class="small muted" style="margin:0" data-i18n="crop.lead"></p>
+      <div class="crop-stage" id="crop-stage"><img id="crop-img" alt=""></div>
+      <input type="range" id="crop-zoom" min="0" max="100" value="0">
+      <p class="small" id="crop-error" style="color:var(--critical);min-height:1.2em;margin:6px 0 0"></p>
+      <div class="crop-actions">
+        <button class="btn btn-ghost btn-sm" id="btn-crop-cancel" data-i18n="crop.cancel"></button>
+        <button class="btn btn-sm" id="btn-crop-save" data-i18n="crop.save"></button>
+      </div>
+    </dialog>
+
     <div class="panel hidden" id="pro-links">
       <h3 style="margin-top:0" data-i18n="pro.links.title"></h3>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
@@ -198,6 +235,7 @@
           </div>
           <button class="btn btn-danger btn-sm conn-disconnect" data-i18n="conn.disconnect"></button>
         </div>
+        <p class="small muted conn-bio hidden" style="margin:10px 0 0"></p>
         <p class="small muted" style="margin:14px 0 8px" data-i18n="conn.sharewhat"></p>
         <div class="share-toggles"></div>
       </div>
@@ -269,6 +307,25 @@ window.PAGE = {
       "sync.err": "✖ Não foi possível sincronizar. Verifica a ligação.",
       "sync.ing": "A sincronizar...",
       "acct.note": "🔐 Os dados guardados neste browser continuam cá depois de terminares a sessão. Se apagares a conta, removemos tudo o que está no servidor.",
+      "profile.title": "O teu perfil",
+      "profile.lead": "Ao contrário dos teus registos, o nome, a foto e a biografia não são cifrados: servem para os profissionais e pacientes a quem te ligares te reconhecerem. Deixa em branco se preferires manter-te anónimo(a).",
+      "profile.avatar.change": "🖼️ Alterar foto",
+      "profile.avatar.remove": "Remover foto",
+      "profile.name.label": "Nome",
+      "profile.name.ph": "Como queres ser identificado(a)",
+      "profile.bio.label": "Sobre mim (opcional)",
+      "profile.bio.ph": "Um pouco sobre ti, se quiseres partilhar...",
+      "profile.btn.save": "Guardar perfil",
+      "profile.saved": "✔ Perfil guardado",
+      "profile.err": "✖ Não foi possível guardar. Tenta outra vez.",
+      "crop.title": "Ajusta a tua foto",
+      "crop.lead": "Arrasta para posicionar e usa o cursor para ampliar.",
+      "crop.cancel": "Cancelar",
+      "crop.save": "Usar esta foto",
+      "crop.err.type": "Escolhe um ficheiro de imagem.",
+      "crop.err.fail": "Não foi possível preparar esta imagem. Tenta outra.",
+      "welcome.back": "Bem-vindo(a) de volta",
+      "welcome.new": "Bem-vindo(a) ao PsicoLab",
       "del.confirm1": "Apagar a conta e TODOS os dados no servidor? Esta acção não pode ser desfeita.",
       "del.confirm2": "Confirmas mesmo? Os dados no servidor serão eliminados definitivamente.",
       "err.bad_credentials": "Email ou palavra-passe incorrectos.",
@@ -360,6 +417,25 @@ window.PAGE = {
       "sync.err": "✖ Could not sync. Check your connection.",
       "sync.ing": "Syncing...",
       "acct.note": "🔐 The data saved in this browser stays here after you sign out. If you delete the account, we remove everything stored on the server.",
+      "profile.title": "Your profile",
+      "profile.lead": "Unlike your entries, your name, photo and bio are not encrypted: they exist so professionals and patients you connect with can recognize you. Leave them blank if you'd rather stay anonymous.",
+      "profile.avatar.change": "🖼️ Change photo",
+      "profile.avatar.remove": "Remove photo",
+      "profile.name.label": "Name",
+      "profile.name.ph": "How you'd like to be identified",
+      "profile.bio.label": "About me (optional)",
+      "profile.bio.ph": "A little about you, if you'd like to share...",
+      "profile.btn.save": "Save profile",
+      "profile.saved": "✔ Profile saved",
+      "profile.err": "✖ Could not save. Try again.",
+      "crop.title": "Adjust your photo",
+      "crop.lead": "Drag to position and use the slider to zoom.",
+      "crop.cancel": "Cancel",
+      "crop.save": "Use this photo",
+      "crop.err.type": "Choose an image file.",
+      "crop.err.fail": "Could not process this image. Try another.",
+      "welcome.back": "Welcome back",
+      "welcome.new": "Welcome to PsychLab",
       "del.confirm1": "Delete the account and ALL data on the server? This cannot be undone.",
       "del.confirm2": "Are you sure? The data on the server will be permanently deleted.",
       "err.bad_credentials": "Incorrect email or password.",
@@ -405,6 +481,7 @@ window.PAGE = {
   var ready = false;
   var revealCode = null;
   var revealKind = "new"; // new | upgrade
+  var currentAvatar = ""; // base64 (sem prefixo), reflecte o que está guardado ou por guardar
 
   function show(panel) {
     $("panel-unconfigured").classList.toggle("hidden", panel !== "unconf");
@@ -421,10 +498,15 @@ window.PAGE = {
     if (u) {
       show("account");
       $("acct-email").textContent = u.email;
-      $("acct-avatar").textContent = (u.email || "?").charAt(0);
+      PL.avatarInto($("acct-avatar"), u);
       $("pro-links").classList.toggle("hidden", u.role !== "professional" && u.role !== "admin");
       $("link-professional").classList.toggle("hidden", u.role !== "professional");
       $("link-admin").classList.toggle("hidden", u.role !== "admin");
+      currentAvatar = u.avatar || "";
+      PL.avatarInto($("profile-avatar"), u);
+      $("btn-avatar-remove").classList.toggle("hidden", !currentAvatar);
+      $("f-displayname").value = u.displayName || "";
+      $("f-bio").value = u.bio || "";
       renderConnections();
     } else {
       show("auth");
@@ -477,7 +559,9 @@ window.PAGE = {
         revealCode = r.recoveryCode;
         revealKind = r.upgraded ? "upgrade" : "new";
       } else {
-        PL.toast(PL.t("sync.done"));
+        var u = PLSync.user();
+        var name = u && (u.displayName || u.email.split("@")[0]);
+        PL.toast(PL.t("welcome.back") + (name ? ", " + name : "") + " 🌿");
       }
       render();
     }).catch(function (e) {
@@ -527,6 +611,116 @@ window.PAGE = {
     });
   }
 
+  /* ---------- recorte da foto de perfil (arrastar + zoom, tudo local) ---------- */
+  var STAGE_SIZE = 260;
+  var OUTPUT_SIZE = 200;
+  var MAX_AVATAR_B64 = 58000; // margem de segurança abaixo do limite do servidor
+  var cropState = null; // { natW, natH, scale, minScale, maxScale, x, y }
+
+  function openCropDialog(file) {
+    if (!file || file.type.indexOf("image/") !== 0) {
+      $("crop-error").textContent = PL.t("crop.err.type");
+      return;
+    }
+    $("crop-error").textContent = "";
+    var reader = new FileReader();
+    reader.onload = function () {
+      var img = $("crop-img");
+      img.onload = function () {
+        var natW = img.naturalWidth, natH = img.naturalHeight;
+        var minScale = Math.max(STAGE_SIZE / natW, STAGE_SIZE / natH);
+        cropState = {
+          natW: natW, natH: natH, minScale: minScale, maxScale: minScale * 3, scale: minScale,
+          x: (STAGE_SIZE - natW * minScale) / 2, y: (STAGE_SIZE - natH * minScale) / 2
+        };
+        $("crop-zoom").value = 0;
+        applyCropTransform();
+        $("dlg-crop").showModal();
+      };
+      img.onerror = function () { $("crop-error").textContent = PL.t("crop.err.fail"); };
+      img.src = reader.result;
+    };
+    reader.onerror = function () { $("crop-error").textContent = PL.t("crop.err.fail"); };
+    reader.readAsDataURL(file);
+  }
+
+  function clampCropPosition() {
+    var w = cropState.natW * cropState.scale, h = cropState.natH * cropState.scale;
+    cropState.x = Math.min(0, Math.max(STAGE_SIZE - w, cropState.x));
+    cropState.y = Math.min(0, Math.max(STAGE_SIZE - h, cropState.y));
+  }
+
+  function applyCropTransform() {
+    if (!cropState) return;
+    clampCropPosition();
+    var img = $("crop-img");
+    img.style.width = (cropState.natW * cropState.scale) + "px";
+    img.style.height = (cropState.natH * cropState.scale) + "px";
+    img.style.left = cropState.x + "px";
+    img.style.top = cropState.y + "px";
+  }
+
+  function wireCropInteraction() {
+    var stage = $("crop-stage");
+    var dragging = false, startPX = 0, startPY = 0, startX = 0, startY = 0;
+    stage.addEventListener("pointerdown", function (e) {
+      if (!cropState) return;
+      dragging = true;
+      startPX = e.clientX; startPY = e.clientY;
+      startX = cropState.x; startY = cropState.y;
+      if (stage.setPointerCapture) stage.setPointerCapture(e.pointerId);
+    });
+    stage.addEventListener("pointermove", function (e) {
+      if (!dragging || !cropState) return;
+      cropState.x = startX + (e.clientX - startPX);
+      cropState.y = startY + (e.clientY - startPY);
+      applyCropTransform();
+    });
+    stage.addEventListener("pointerup", function () { dragging = false; });
+    stage.addEventListener("pointercancel", function () { dragging = false; });
+
+    $("crop-zoom").addEventListener("input", function () {
+      if (!cropState) return;
+      var t = Number(this.value) / 100;
+      var newScale = cropState.minScale + t * (cropState.maxScale - cropState.minScale);
+      var cx = STAGE_SIZE / 2, cy = STAGE_SIZE / 2;
+      var relX = (cx - cropState.x) / cropState.scale, relY = (cy - cropState.y) / cropState.scale;
+      cropState.scale = newScale;
+      cropState.x = cx - relX * newScale;
+      cropState.y = cy - relY * newScale;
+      applyCropTransform();
+    });
+  }
+
+  function exportCroppedAvatar() {
+    var img = $("crop-img");
+    var canvas = document.createElement("canvas");
+    canvas.width = OUTPUT_SIZE;
+    canvas.height = OUTPUT_SIZE;
+    var ctx = canvas.getContext("2d");
+    var srcX = -cropState.x / cropState.scale, srcY = -cropState.y / cropState.scale;
+    var srcSize = STAGE_SIZE / cropState.scale;
+    ctx.drawImage(img, srcX, srcY, srcSize, srcSize, 0, 0, OUTPUT_SIZE, OUTPUT_SIZE);
+    var quality = 0.85;
+    var base64 = canvas.toDataURL("image/jpeg", quality).split(",")[1];
+    while (base64.length > MAX_AVATAR_B64 && quality > 0.35) {
+      quality -= 0.15;
+      base64 = canvas.toDataURL("image/jpeg", quality).split(",")[1];
+    }
+    return base64.length <= MAX_AVATAR_B64 ? base64 : null;
+  }
+
+  function saveProfile(overrides) {
+    var payload = {
+      displayName: $("f-displayname").value, bio: $("f-bio").value,
+      avatar: overrides && "avatar" in overrides ? overrides.avatar : currentAvatar
+    };
+    return PLSync.updateProfile(payload).then(function () {
+      currentAvatar = payload.avatar;
+      return payload;
+    });
+  }
+
   document.addEventListener("pl:sync-ready", function () {
     ready = true;
     render();
@@ -564,8 +758,13 @@ window.PAGE = {
       });
     });
     $("btn-reveal-continue").addEventListener("click", function () {
+      var wasNew = revealKind === "new";
       revealCode = null;
       render();
+      if (wasNew) {
+        var u = PLSync.user();
+        PL.toast(PL.t("welcome.new") + (u && u.displayName ? ", " + u.displayName : "") + " 🌿");
+      }
     });
 
     $("btn-sync").addEventListener("click", function () {
@@ -586,6 +785,52 @@ window.PAGE = {
       if (!confirm(PL.t("del.confirm2"))) return;
       PLSync.deleteAccount().then(render).catch(function () {
         $("sync-status").textContent = PL.t("sync.err");
+      });
+    });
+
+    wireCropInteraction();
+    $("btn-avatar-change").addEventListener("click", function () { $("input-avatar-file").click(); });
+    $("input-avatar-file").addEventListener("change", function () {
+      var file = this.files && this.files[0];
+      if (file) openCropDialog(file);
+    });
+    $("btn-crop-cancel").addEventListener("click", function () {
+      $("dlg-crop").close();
+      $("input-avatar-file").value = "";
+      cropState = null;
+    });
+    $("btn-crop-save").addEventListener("click", function () {
+      var base64 = exportCroppedAvatar();
+      if (!base64) { $("crop-error").textContent = PL.t("crop.err.fail"); return; }
+      $("btn-crop-save").disabled = true;
+      saveProfile({ avatar: base64 }).then(function () {
+        $("btn-crop-save").disabled = false;
+        $("dlg-crop").close();
+        $("input-avatar-file").value = "";
+        cropState = null;
+        render();
+        PL.toast(PL.t("profile.saved"));
+      }).catch(function () {
+        $("btn-crop-save").disabled = false;
+        $("crop-error").textContent = PL.t("crop.err.fail");
+      });
+    });
+    $("btn-avatar-remove").addEventListener("click", function () {
+      saveProfile({ avatar: "" }).then(function () {
+        render();
+        PL.toast(PL.t("profile.saved"));
+      });
+    });
+    $("btn-save-profile").addEventListener("click", function () {
+      $("btn-save-profile").disabled = true;
+      $("profile-save-status").textContent = "";
+      saveProfile({}).then(function () {
+        $("btn-save-profile").disabled = false;
+        $("profile-save-status").textContent = PL.t("profile.saved");
+        setTimeout(function () { $("profile-save-status").textContent = ""; }, 2400);
+      }).catch(function () {
+        $("btn-save-profile").disabled = false;
+        $("profile-save-status").textContent = PL.t("profile.err");
       });
     });
 
@@ -623,8 +868,10 @@ window.PAGE = {
       }
       list.forEach(function (conn) {
         var node = tpl.content.firstElementChild.cloneNode(true);
-        node.querySelector(".conn-avatar").textContent = conn.otherEmail.charAt(0).toUpperCase();
-        node.querySelector(".conn-email").textContent = conn.otherEmail;
+        PL.avatarInto(node.querySelector(".conn-avatar"), { displayName: conn.otherDisplayName, email: conn.otherEmail, avatar: conn.otherAvatar });
+        node.querySelector(".conn-email").textContent = conn.otherDisplayName || conn.otherEmail;
+        var bioEl = node.querySelector(".conn-bio");
+        if (conn.otherBio) { bioEl.textContent = conn.otherBio; bioEl.classList.remove("hidden"); }
         node.querySelector("[data-i18n='conn.since']").textContent =
           PL.t("conn.since") + " " + PL.fmtDate(String(conn.since).slice(0, 10));
         node.querySelector(".conn-disconnect").textContent = PL.t("conn.disconnect");

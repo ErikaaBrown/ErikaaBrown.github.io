@@ -118,8 +118,11 @@ window.PAGE = {
           ? "<button class='btn btn-ghost btn-sm' data-act='demote' data-id='" + u.id + "'>" + PL.t("btn.makeuser") + "</button>"
           : "<button class='btn btn-sm' data-act='promote' data-id='" + u.id + "'>" + PL.t("btn.makepro") + "</button>";
       }
+      var who = u.display_name
+        ? "<strong>" + PL.esc(u.display_name) + "</strong><br><span class='small muted'>" + PL.esc(u.email) + "</span>"
+        : PL.esc(u.email);
       tr.innerHTML =
-        "<td>" + PL.esc(u.email) + "</td>" +
+        "<td>" + who + "</td>" +
         "<td>" + PL.t("role." + u.role) + "</td>" +
         "<td style='font-family:monospace'>" + (u.professional_code || "—") + "</td>" +
         "<td>" + PL.fmtDate(String(u.created_at).slice(0, 10)) + "</td>" +
