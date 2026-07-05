@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev; base-uri 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>N-Back · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=2">
+<style>
+.nback-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 300px; margin: 20px auto; }
+.nback-cell { aspect-ratio: 1; border-radius: var(--radius-sm); background: var(--surface-2); border: 1.5px solid var(--line); transition: background 0.12s, border-color 0.12s; }
+.nback-cell.on { background: var(--brand); border-color: var(--brand); }
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>🔲 <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section id="panel-intro" class="panel">
+    <p data-i18n="intro.p1"></p>
+    <label class="field-label" for="f-level" data-i18n="lbl.level"></label>
+    <select id="f-level">
+      <option value="1">1-back</option>
+      <option value="2" selected>2-back</option>
+      <option value="3">3-back</option>
+    </select>
+    <p class="small muted" id="best-line" style="margin-top:10px"></p>
+    <div class="center mt-2">
+      <button class="btn" id="btn-start" data-i18n="btn.start"></button>
+    </div>
+  </section>
+
+  <section id="panel-game" class="panel hidden">
+    <p class="small muted center" id="trial-line"></p>
+    <div class="nback-grid" id="grid"></div>
+    <div class="center">
+      <button class="btn" id="btn-match" data-i18n="btn.match"></button>
+    </div>
+  </section>
+
+  <section id="panel-result" class="hidden">
+    <div class="panel center">
+      <h2 style="margin-top:0" data-i18n="res.title"></h2>
+      <div class="tiles" style="max-width:420px;margin:1rem auto">
+        <div class="tile"><div class="num" id="r-acc"></div><div class="lbl" data-i18n="res.acc"></div></div>
+        <div class="tile"><div class="num" id="r-level"></div><div class="lbl" data-i18n="res.level"></div></div>
+        <div class="tile"><div class="num" id="r-best"></div><div class="lbl" data-i18n="res.best"></div></div>
+      </div>
+      <p id="r-comment" class="muted" style="max-width:520px;margin:0 auto"></p>
+    </div>
+    <div class="panel panel-soft">
+      <p style="margin:0" data-i18n="res.expl"></p>
+    </div>
+    <div class="center mt-2">
+      <button class="btn" id="btn-again" data-i18n="btn.again"></button>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "games",
+  i18n: {
+    pt: {
+      "page.title": "N-Back",
+      "crumb": "Jogos",
+      "intro.lead": "O N-Back é o teste de memória de trabalho mais usado na investigação em neurociência cognitiva.",
+      "intro.p1": "Vais ver uma grelha 3×3 onde uma célula acende, uma de cada vez. A tua tarefa: dizer se a posição actual é igual à de N jogadas atrás. Escolhe a dificuldade e clica em «Igual!» sempre que achares que é uma repetição.",
+      "lbl.level": "Dificuldade",
+      "best.prefix": "O teu nível dominado: ",
+      "btn.start": "Começar",
+      "btn.match": "🔁 Igual!",
+      "btn.again": "Jogar outra vez",
+      "res.title": "Resultado",
+      "res.acc": "Precisão",
+      "res.level": "Nível jogado",
+      "res.best": "Nível dominado",
+      "res.c1": "Excelente precisão — dominaste este nível. Experimenta subir a dificuldade.",
+      "res.c2": "Boa memória de trabalho neste nível. Mais prática deve melhorar ainda mais a precisão.",
+      "res.c3": "Nível exigente para a tua memória de trabalho agora. Talvez valha a pena treinar mais um pouco neste nível antes de subir.",
+      "new.record": "Novo nível dominado! 🏆",
+      "res.expl": "🧠 O que está a ser testado: ao contrário da Amplitude de Memória (que testa quanto consegues guardar), o N-Back testa a memória de trabalho em movimento — tens de guardar informação, actualizá-la a cada jogada e ignorar o que já não é relevante. É um dos preditores mais estudados de capacidade de atenção e raciocínio fluido."
+    },
+    en: {
+      "page.title": "N-Back",
+      "crumb": "Games",
+      "intro.lead": "The N-Back is the working memory test most used in cognitive neuroscience research.",
+      "intro.p1": "You will see a 3×3 grid where one cell lights up at a time. Your task: say whether the current position matches the one from N turns ago. Pick a difficulty and click \"Match!\" whenever you think it's a repeat.",
+      "lbl.level": "Difficulty",
+      "best.prefix": "Your mastered level: ",
+      "btn.start": "Start",
+      "btn.match": "🔁 Match!",
+      "btn.again": "Play again",
+      "res.title": "Result",
+      "res.acc": "Accuracy",
+      "res.level": "Level played",
+      "res.best": "Mastered level",
+      "res.c1": "Excellent accuracy — you mastered this level. Try bumping up the difficulty.",
+      "res.c2": "Good working memory at this level. More practice should improve accuracy further.",
+      "res.c3": "A demanding level for your working memory right now. It may help to train more at this level before moving up.",
+      "new.record": "New mastered level! 🏆",
+      "res.expl": "🧠 What is being tested: unlike Memory Span (which tests how much you can hold), N-Back tests working memory in motion — you must hold information, update it every turn, and discard what is no longer relevant. It is one of the most studied predictors of attention capacity and fluid reasoning."
+    }
+  }
+};
+</script>
+<script src="../js/app.js?v=2"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var GRID_SIZE = 9;
+  var SCORED_TRIALS = 20;
+  var SHOW_MS = 700, TRIAL_MS = 2200;
+
+  var level = 2, seq = [], trialIdx = 0, responded = false, hits = 0, scored = 0;
+  var trialTimer = null, hideTimer = null;
+  var state = "intro";
+
+  function scores() { return PL.load("scores", {}); }
+
+  function show(p) {
+    $("panel-intro").classList.toggle("hidden", p !== "intro");
+    $("panel-game").classList.toggle("hidden", p !== "game");
+    $("panel-result").classList.toggle("hidden", p !== "result");
+    state = p;
+  }
+
+  function bestLine() {
+    var b = scores().nback || 0;
+    $("best-line").textContent = b ? PL.t("best.prefix") + b + "-back" : "";
+  }
+
+  function buildGrid() {
+    var g = $("grid");
+    g.innerHTML = "";
+    for (var i = 0; i < GRID_SIZE; i++) {
+      var cell = document.createElement("div");
+      cell.className = "nback-cell";
+      g.appendChild(cell);
+    }
+  }
+
+  function genSequence(n, total) {
+    var out = [];
+    for (var i = 0; i < total; i++) {
+      if (i >= n && Math.random() < 0.3) {
+        out.push(out[i - n]);
+      } else {
+        var pos;
+        do { pos = Math.floor(Math.random() * GRID_SIZE); } while (i >= n && pos === out[i - n]);
+        out.push(pos);
+      }
+    }
+    return out;
+  }
+
+  function highlight(pos, on) {
+    var cells = $("grid").children;
+    if (cells[pos]) cells[pos].classList.toggle("on", on);
+  }
+
+  function playTrial() {
+    responded = false;
+    var pos = seq[trialIdx];
+    highlight(pos, true);
+    $("trial-line").textContent = (trialIdx - level + 1 > 0 ? (trialIdx - level + 1) : 0) + " / " + SCORED_TRIALS + " · " + level + "-back";
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(function () { highlight(pos, false); }, SHOW_MS);
+    clearTimeout(trialTimer);
+    trialTimer = setTimeout(nextTrial, TRIAL_MS);
+  }
+
+  function nextTrial() {
+    if (trialIdx >= level) {
+      var isMatch = seq[trialIdx] === seq[trialIdx - level];
+      var correct = responded === isMatch;
+      if (correct) hits++;
+      scored++;
+    }
+    trialIdx++;
+    if (trialIdx >= seq.length) { finish(); return; }
+    playTrial();
+  }
+
+  function finish() {
+    var accuracy = scored ? Math.round((hits / scored) * 100) : 0;
+    var mastered = accuracy >= 80;
+    var sc = scores();
+    var prevBest = sc.nback || 0;
+    var isRecord = mastered && level > prevBest;
+    if (isRecord) { sc.nback = level; PL.store("scores", sc); }
+    renderResult(accuracy, isRecord);
+    show("result");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function renderResult(accuracy, isRecord) {
+    $("r-acc").textContent = accuracy + "%";
+    $("r-level").textContent = level + "-back";
+    $("r-best").textContent = (scores().nback || 0) + "-back";
+    var c = accuracy >= 80 ? "res.c1" : accuracy >= 60 ? "res.c2" : "res.c3";
+    $("r-comment").textContent = (isRecord ? PL.t("new.record") + " " : "") + PL.t(c);
+  }
+
+  function start() {
+    level = parseInt($("f-level").value, 10);
+    seq = genSequence(level, level + SCORED_TRIALS);
+    trialIdx = 0; hits = 0; scored = 0;
+    buildGrid();
+    show("game");
+    playTrial();
+  }
+
+  $("btn-start").addEventListener("click", start);
+  $("btn-again").addEventListener("click", function () {
+    show("intro");
+    bestLine();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  $("btn-match").addEventListener("click", function () { responded = true; });
+
+  document.addEventListener("pl:ready", bestLine);
+  PL.onLang(function () {
+    bestLine();
+    if (state === "result") renderResult(parseInt($("r-acc").textContent, 10) || 0, false);
+  });
+})();
+</script>
+</body>
+</html>

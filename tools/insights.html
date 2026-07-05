@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev; base-uri 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Painel de Padrões · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=2">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>🔎 <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section id="panel-empty" class="panel hidden">
+    <p style="margin:0" data-i18n="empty.p"></p>
+  </section>
+
+  <section id="panel-main" class="hidden">
+    <div class="panel">
+      <h3 style="margin-top:0" data-i18n="consistency.title"></h3>
+      <div class="tiles" id="consistency-tiles"></div>
+    </div>
+
+    <div id="patterns-list"></div>
+
+    <div class="panel panel-soft">
+      <p style="margin:0" data-i18n="caveat.p"></p>
+    </div>
+  </section>
+
+  <template id="tpl-pattern">
+    <div class="panel pattern-card">
+      <h3 style="margin-top:0" class="pattern-title"></h3>
+      <div class="tiles" style="max-width:420px">
+        <div class="tile"><div class="num pattern-num-a"></div><div class="lbl pattern-lbl-a"></div></div>
+        <div class="tile"><div class="num pattern-num-b"></div><div class="lbl pattern-lbl-b"></div></div>
+      </div>
+      <p class="muted pattern-sentence" style="margin:10px 0 0"></p>
+    </div>
+  </template>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tools",
+  i18n: {
+    pt: {
+      "page.title": "Painel de Padrões",
+      "crumb": "Ferramentas",
+      "intro.lead": "Cruza os teus próprios registos — humor, hábitos, gratidão e sono — para mostrar padrões simples. Tudo calculado aqui no teu browser, a partir dos dados que já guardaste.",
+      "empty.p": "Ainda não há dados suficientes. Regista o teu humor durante mais alguns dias (e, se quiseres, hábitos, gratidão ou sono) para os padrões começarem a aparecer aqui.",
+      "consistency.title": "A tua consistência (últimos 30 dias)",
+      "c.mood": "Dias com humor registado",
+      "c.habits": "Dias com hábitos marcados",
+      "c.gratitude": "Dias com gratidão escrita",
+      "c.sleep": "Noites de sono registadas",
+      "p.habits.title": "Hábitos e humor",
+      "p.habits.a": "Com pelo menos 1 hábito cumprido",
+      "p.habits.b": "Sem hábitos cumpridos",
+      "p.habits.sentence.up": "Nos dias em que cumpriste pelo menos um hábito, o teu humor médio foi mais alto ({a} vs {b} em 5).",
+      "p.habits.sentence.down": "Nos dias em que cumpriste pelo menos um hábito, o teu humor médio foi mais baixo ({a} vs {b} em 5) — talvez esses fossem dias já mais cheios ou exigentes.",
+      "p.habits.sentence.flat": "O teu humor médio foi semelhante com ou sem hábitos cumpridos ({a} vs {b} em 5).",
+      "p.gratitude.title": "Gratidão e humor",
+      "p.gratitude.a": "Com gratidão escrita",
+      "p.gratitude.b": "Sem gratidão escrita",
+      "p.gratitude.sentence.up": "Nos dias em que escreveste gratidão, o teu humor médio foi mais alto ({a} vs {b} em 5).",
+      "p.gratitude.sentence.down": "Nos dias em que escreveste gratidão, o teu humor médio foi mais baixo ({a} vs {b} em 5) — talvez recorras mais a este exercício precisamente nos dias mais difíceis.",
+      "p.gratitude.sentence.flat": "O teu humor médio foi semelhante com ou sem gratidão escrita ({a} vs {b} em 5).",
+      "p.sleep.title": "Sono e humor",
+      "p.sleep.a": "Depois de sono bom (4-5/5)",
+      "p.sleep.b": "Depois de sono fraco (1-2/5)",
+      "p.sleep.sentence.up": "Nos dias a seguir a uma boa noite de sono, o teu humor médio foi mais alto ({a} vs {b} em 5).",
+      "p.sleep.sentence.down": "Nos dias a seguir a uma boa noite de sono, o teu humor médio foi mais baixo ({a} vs {b} em 5).",
+      "p.sleep.sentence.flat": "O teu humor médio foi semelhante depois de noites boas ou fracas ({a} vs {b} em 5).",
+      "avg.mood": "Humor médio (/5)",
+      "caveat.p": "🔎 Nota: isto mostra correlações simples nos teus próprios dados, não relações de causa-efeito — e com poucos dias registados, um só dia fora do comum pode influenciar bastante a média. Usa isto como ponto de partida para reparar em ti, não como diagnóstico."
+    },
+    en: {
+      "page.title": "Patterns Panel",
+      "crumb": "Tools",
+      "intro.lead": "Cross-references your own entries — mood, habits, gratitude and sleep — to surface simple patterns. Everything is calculated here in your browser, from data you already saved.",
+      "empty.p": "There isn't enough data yet. Log your mood for a few more days (and, if you like, habits, gratitude or sleep) for patterns to start showing up here.",
+      "consistency.title": "Your consistency (last 30 days)",
+      "c.mood": "Days with mood logged",
+      "c.habits": "Days with habits checked",
+      "c.gratitude": "Days with gratitude written",
+      "c.sleep": "Nights of sleep logged",
+      "p.habits.title": "Habits and mood",
+      "p.habits.a": "With at least 1 habit completed",
+      "p.habits.b": "With no habits completed",
+      "p.habits.sentence.up": "On days you completed at least one habit, your average mood was higher ({a} vs {b} out of 5).",
+      "p.habits.sentence.down": "On days you completed at least one habit, your average mood was lower ({a} vs {b} out of 5) — maybe those were already fuller or more demanding days.",
+      "p.habits.sentence.flat": "Your average mood was similar with or without habits completed ({a} vs {b} out of 5).",
+      "p.gratitude.title": "Gratitude and mood",
+      "p.gratitude.a": "With gratitude written",
+      "p.gratitude.b": "Without gratitude written",
+      "p.gratitude.sentence.up": "On days you wrote gratitude, your average mood was higher ({a} vs {b} out of 5).",
+      "p.gratitude.sentence.down": "On days you wrote gratitude, your average mood was lower ({a} vs {b} out of 5) — maybe you reach for this exercise most on harder days.",
+      "p.gratitude.sentence.flat": "Your average mood was similar with or without gratitude written ({a} vs {b} out of 5).",
+      "p.sleep.title": "Sleep and mood",
+      "p.sleep.a": "Following good sleep (4-5/5)",
+      "p.sleep.b": "Following poor sleep (1-2/5)",
+      "p.sleep.sentence.up": "On days following a good night's sleep, your average mood was higher ({a} vs {b} out of 5).",
+      "p.sleep.sentence.down": "On days following a good night's sleep, your average mood was lower ({a} vs {b} out of 5).",
+      "p.sleep.sentence.flat": "Your average mood was similar after good or poor nights ({a} vs {b} out of 5).",
+      "avg.mood": "Average mood (/5)",
+      "caveat.p": "🔎 Note: this shows simple correlations in your own data, not cause-and-effect relationships — and with few days logged, a single unusual day can sway the average quite a bit. Use this as a starting point for noticing yourself, not as a diagnosis."
+    }
+  }
+};
+</script>
+<script src="../js/app.js?v=2"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var MIN_BUCKET = 5; // dias mínimos em cada grupo para mostrar uma comparação
+  var MIN_MOOD_DAYS = 5; // dias mínimos de humor registado para mostrar seja o que for
+
+  function isoDaysAgo(n) {
+    var d = new Date();
+    d.setDate(d.getDate() - n);
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
+  function last30() {
+    var out = [];
+    for (var i = 29; i >= 0; i--) out.push(isoDaysAgo(i));
+    return out;
+  }
+  function avg(arr) { return arr.reduce(function (a, b) { return a + b; }, 0) / arr.length; }
+
+  function habitDaySet(habits) {
+    var set = {};
+    habits.forEach(function (h) {
+      Object.keys(h.c || {}).forEach(function (iso) { if (h.c[iso]) set[iso] = true; });
+    });
+    return set;
+  }
+
+  function renderConsistency(mood, habits, gratitude, sleep) {
+    var days = last30();
+    var habitSet = habitDaySet(habits);
+    var cMood = days.filter(function (d) { return mood[d]; }).length;
+    var cHabits = days.filter(function (d) { return habitSet[d]; }).length;
+    var cGrat = days.filter(function (d) { return (gratitude[d] || []).some(Boolean); }).length;
+    var cSleep = days.filter(function (d) { return sleep[d]; }).length;
+    var tiles = [
+      ["c.mood", cMood], ["c.habits", cHabits], ["c.gratitude", cGrat], ["c.sleep", cSleep]
+    ];
+    $("consistency-tiles").innerHTML = tiles.map(function (t) {
+      return "<div class='tile'><div class='num'>" + t[1] + "</div><div class='lbl'>" + PL.t(t[0]) + "</div></div>";
+    }).join("");
+  }
+
+  function comparison(mood, inGroup) {
+    var withA = [], withoutB = [];
+    Object.keys(mood).forEach(function (iso) {
+      if (inGroup(iso)) withA.push(mood[iso].m); else withoutB.push(mood[iso].m);
+    });
+    if (withA.length < MIN_BUCKET || withoutB.length < MIN_BUCKET) return null;
+    return { a: avg(withA), b: avg(withoutB) };
+  }
+
+  function sentenceKey(a, b) {
+    var diff = a - b;
+    if (diff > 0.25) return "up";
+    if (diff < -0.25) return "down";
+    return "flat";
+  }
+
+  function renderPatterns(mood, habits, gratitude, sleep) {
+    var box = $("patterns-list");
+    var tpl = $("tpl-pattern");
+    box.innerHTML = "";
+
+    var habitSet = habitDaySet(habits);
+    var pHabits = comparison(mood, function (iso) { return !!habitSet[iso]; });
+
+    var pGratitude = comparison(mood, function (iso) { return (gratitude[iso] || []).some(Boolean); });
+
+    var pSleep = null;
+    var goodMood = [], poorMood = [];
+    Object.keys(mood).forEach(function (iso) {
+      var s = sleep[iso];
+      if (!s) return;
+      if (s.q >= 4) goodMood.push(mood[iso].m);
+      else if (s.q <= 2) poorMood.push(mood[iso].m);
+    });
+    if (goodMood.length >= MIN_BUCKET && poorMood.length >= MIN_BUCKET) {
+      pSleep = { a: avg(goodMood), b: avg(poorMood) };
+    }
+
+    var cards = [
+      { key: "habits", data: pHabits },
+      { key: "gratitude", data: pGratitude },
+      { key: "sleep", data: pSleep }
+    ].filter(function (c) { return c.data; });
+
+    if (!cards.length) {
+      box.innerHTML = "<div class='panel panel-soft'><p style='margin:0' data-i18n='empty.p'>" + PL.t("empty.p") + "</p></div>";
+      return;
+    }
+
+    cards.forEach(function (c) {
+      var node = tpl.content.firstElementChild.cloneNode(true);
+      node.querySelector(".pattern-title").textContent = PL.t("p." + c.key + ".title");
+      node.querySelector(".pattern-num-a").textContent = c.data.a.toFixed(1);
+      node.querySelector(".pattern-num-b").textContent = c.data.b.toFixed(1);
+      node.querySelector(".pattern-lbl-a").textContent = PL.t("p." + c.key + ".a");
+      node.querySelector(".pattern-lbl-b").textContent = PL.t("p." + c.key + ".b");
+      var key = sentenceKey(c.data.a, c.data.b);
+      node.querySelector(".pattern-sentence").textContent = PL.t("p." + c.key + ".sentence." + key)
+        .replace("{a}", c.data.a.toFixed(1)).replace("{b}", c.data.b.toFixed(1));
+      box.appendChild(node);
+    });
+  }
+
+  function renderAll() {
+    var mood = PL.load("mood", {});
+    var habits = PL.load("habits", []);
+    var gratitude = PL.load("gratitude", {});
+    var sleep = PL.load("sleep", {});
+
+    var moodDays = Object.keys(mood).length;
+    if (moodDays < MIN_MOOD_DAYS) {
+      $("panel-empty").classList.remove("hidden");
+      $("panel-main").classList.add("hidden");
+      return;
+    }
+    $("panel-empty").classList.add("hidden");
+    $("panel-main").classList.remove("hidden");
+    renderConsistency(mood, habits, gratitude, sleep);
+    renderPatterns(mood, habits, gratitude, sleep);
+  }
+
+  document.addEventListener("pl:ready", renderAll);
+  PL.onLang(renderAll);
+})();
+</script>
+</body>
+</html>

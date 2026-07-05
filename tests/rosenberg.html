@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev; base-uri 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Auto-Estima · PsicoLab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=2">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1>🪞 <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section id="panel-intro" class="panel">
+    <p data-i18n="intro.p1"></p>
+    <div class="notice" data-i18n-html="intro.notice"></div>
+    <div class="center mt-2">
+      <button class="btn" id="btn-start" data-i18n="btn.start"></button>
+    </div>
+  </section>
+
+  <section id="panel-quiz" class="panel hidden">
+    <div class="progress-track"><div class="progress-fill" id="pfill" style="width:0%"></div></div>
+    <p class="small muted" id="qcount"></p>
+    <p class="quiz-q" id="qtext"></p>
+    <div class="likert" id="likert"></div>
+    <div class="scale-hints">
+      <span data-i18n="lk.1"></span>
+      <span data-i18n="lk.4"></span>
+    </div>
+    <div class="quiz-nav">
+      <button class="btn btn-ghost btn-sm" id="btn-back" data-i18n="btn.back"></button>
+      <span></span>
+    </div>
+  </section>
+
+  <section id="panel-result" class="hidden">
+    <div class="panel center">
+      <h2 style="margin-top:0" data-i18n="res.title"></h2>
+      <div class="chart-wrap" id="gauge-wrap" style="max-width:420px;margin:0 auto"></div>
+      <p id="badge-line"></p>
+      <p id="band-text" class="muted" style="max-width:560px;margin:10px auto 0;text-align:left"></p>
+    </div>
+    <div class="panel panel-soft">
+      <p style="margin:0" data-i18n="res.expl"></p>
+    </div>
+    <div class="notice" data-i18n-html="res.notice"></div>
+    <div class="center mt-2">
+      <button class="btn btn-ghost" id="btn-retake" data-i18n="btn.retake"></button>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tests",
+  i18n: {
+    pt: {
+      "page.title": "Auto-Estima",
+      "crumb": "Testes",
+      "intro.lead": "A auto-estima é a avaliação global que fazes de ti próprio/a — o quanto te consideras uma pessoa de valor.",
+      "intro.p1": "Vais responder a 10 afirmações sobre como te vês a ti mesmo/a. Não há respostas certas ou erradas: indica o quanto concordas com cada uma.",
+      "intro.notice": "<strong>Importante:</strong> este é o questionário de Rosenberg, um dos mais usados em investigação. É indicativo e educativo — não substitui uma avaliação profissional.",
+      "btn.start": "Começar",
+      "btn.back": "← Anterior",
+      "btn.retake": "Repetir",
+      "lk.1": "Discordo totalmente",
+      "lk.4": "Concordo totalmente",
+      "res.title": "O teu resultado",
+      "res.notice": "<strong>A auto-estima flutua</strong> — muda com o contexto, as relações e as fases da vida. Se sentes que está persistentemente baixa e a pesar-te, conversar com um psicólogo pode ajudar bastante.",
+      "band.low": "Abaixo do intervalo típico. Muitas pessoas atravessam fases assim, sobretudo sob stress ou após reveses. Vale a pena reparar em como falas contigo mesmo/a nos momentos difíceis.",
+      "band.mid": "Dentro do intervalo típico — é onde se situa a maioria das pessoas. Há espaço para reforçar pontos fortes, como há para toda a gente.",
+      "band.high": "Acima do intervalo típico. Tens uma visão global positiva de ti mesmo/a. Vale sempre a pena manter a auto-crítica saudável, sem deslizar para a auto-exigência excessiva.",
+      "lbl.low": "Baixa", "lbl.mid": "Típica", "lbl.high": "Elevada",
+      "res.expl": "🪞 O que mede: a Escala de Auto-Estima de Rosenberg (1965) avalia a auto-estima global — não áreas específicas como aparência ou competência académica. Foi validada em dezenas de países e é um dos instrumentos mais replicados em psicologia."
+    },
+    en: {
+      "page.title": "Self-Esteem",
+      "crumb": "Tests",
+      "intro.lead": "Self-esteem is the overall evaluation you make of yourself — how much you consider yourself a person of worth.",
+      "intro.p1": "You will answer 10 statements about how you see yourself. There are no right or wrong answers: indicate how much you agree with each one.",
+      "intro.notice": "<strong>Important:</strong> this is the Rosenberg questionnaire, one of the most widely used in research. It is indicative and educational — it does not replace a professional assessment.",
+      "btn.start": "Start",
+      "btn.back": "← Previous",
+      "btn.retake": "Retake",
+      "lk.1": "Strongly disagree",
+      "lk.4": "Strongly agree",
+      "res.title": "Your result",
+      "res.notice": "<strong>Self-esteem fluctuates</strong> — it changes with context, relationships and life stages. If it feels persistently low and is weighing on you, talking to a psychologist can help a lot.",
+      "band.low": "Below the typical range. Many people go through phases like this, especially under stress or after setbacks. It is worth noticing how you talk to yourself in hard moments.",
+      "band.mid": "Within the typical range — where most people sit. There is room to build on strengths, as there is for everyone.",
+      "band.high": "Above the typical range. You hold an overall positive view of yourself. It is still worth keeping healthy self-criticism, without sliding into excessive self-demand.",
+      "lbl.low": "Low", "lbl.mid": "Typical", "lbl.high": "High",
+      "res.expl": "🪞 What it measures: the Rosenberg Self-Esteem Scale (1965) assesses global self-esteem — not specific areas like appearance or academic competence. It has been validated across dozens of countries and is one of the most replicated instruments in psychology."
+    }
+  }
+};
+</script>
+<script src="../js/app.js?v=2"></script>
+<script>
+(function () {
+  var ITEMS = [
+    { r: false, pt: "Sinto que sou uma pessoa de valor, no mínimo tanto quanto os outros.", en: "I feel that I am a person of worth, at least on an equal plane with others." },
+    { r: false, pt: "Sinto que tenho um bom número de qualidades.", en: "I feel that I have a number of good qualities." },
+    { r: true,  pt: "Tudo somado, tenho tendência para sentir que sou um fracasso.", en: "All in all, I am inclined to feel that I am a failure." },
+    { r: false, pt: "Sou capaz de fazer as coisas tão bem como a maioria das pessoas.", en: "I am able to do things as well as most other people." },
+    { r: true,  pt: "Sinto que não tenho muito de que me orgulhar.", en: "I feel I do not have much to be proud of." },
+    { r: false, pt: "Tenho uma atitude positiva em relação a mim mesmo/a.", en: "I take a positive attitude toward myself." },
+    { r: false, pt: "No geral, estou satisfeito/a comigo mesmo/a.", en: "On the whole, I am satisfied with myself." },
+    { r: true,  pt: "Gostava de ter mais respeito por mim mesmo/a.", en: "I wish I could have more respect for myself." },
+    { r: true,  pt: "Por vezes sinto-me mesmo inútil.", en: "I certainly feel useless at times." },
+    { r: true,  pt: "Às vezes penso que não presto para nada.", en: "At times I think I am no good at all." }
+  ];
+
+  var LIKERT = {
+    pt: ["Discordo totalmente", "Discordo", "Concordo", "Concordo totalmente"],
+    en: ["Strongly disagree", "Disagree", "Agree", "Strongly agree"]
+  };
+
+  var BANDS = [
+    { max: 14, key: "low",  color: "var(--serious)",  icon: "🌱" },
+    { max: 25, key: "mid",  color: "var(--brand)",    icon: "🪞" },
+    { max: 30, key: "high", color: "var(--good)",     icon: "✨" }
+  ];
+
+  var answers = new Array(ITEMS.length).fill(-1);
+  var idx = 0;
+  var state = "intro";
+  var $ = function (id) { return document.getElementById(id); };
+
+  function show(panel) {
+    $("panel-intro").classList.toggle("hidden", panel !== "intro");
+    $("panel-quiz").classList.toggle("hidden", panel !== "quiz");
+    $("panel-result").classList.toggle("hidden", panel !== "result");
+    state = panel;
+  }
+
+  function renderQuestion() {
+    var item = ITEMS[idx];
+    $("qtext").textContent = item[PL.lang];
+    $("qcount").textContent = (idx + 1) + " / " + ITEMS.length;
+    $("pfill").style.width = (idx / ITEMS.length * 100) + "%";
+    var lk = $("likert");
+    lk.innerHTML = "";
+    LIKERT[PL.lang].forEach(function (label, i) {
+      var b = document.createElement("button");
+      b.textContent = label;
+      if (answers[idx] === i) b.classList.add("sel");
+      b.addEventListener("click", function () {
+        answers[idx] = i;
+        b.classList.add("sel");
+        setTimeout(function () {
+          if (idx < ITEMS.length - 1) { idx++; renderQuestion(); }
+          else { finish(); }
+        }, 220);
+      });
+      lk.appendChild(b);
+    });
+    $("btn-back").disabled = idx === 0;
+  }
+
+  function score() {
+    var s = 0;
+    ITEMS.forEach(function (item, i) {
+      s += item.r ? 3 - answers[i] : answers[i];
+    });
+    return s;
+  }
+
+  function bandOf(s) {
+    for (var i = 0; i < BANDS.length; i++) if (s <= BANDS[i].max) return BANDS[i];
+    return BANDS[BANDS.length - 1];
+  }
+
+  function gauge(s) {
+    var cx = 210, cy = 200, R = 150, W = 26;
+    function pol(frac) {
+      var a = Math.PI + frac * Math.PI;
+      return [cx + R * Math.cos(a), cy + R * Math.sin(a)];
+    }
+    function arc(f0, f1, color) {
+      var p0 = pol(f0), p1 = pol(f1);
+      var large = (f1 - f0) > 0.5 ? 1 : 0;
+      return "<path d='M" + p0[0] + " " + p0[1] + " A" + R + " " + R + " 0 " + large + " 1 " + p1[0] + " " + p1[1] +
+        "' fill='none' style='stroke:" + color + "' stroke-width='" + W + "'/>";
+    }
+    var gap = 0.008;
+    var stops = [0, 14.5 / 30, 25.5 / 30, 1];
+    var arcs = "";
+    BANDS.forEach(function (b, i) {
+      arcs += arc(stops[i] + (i ? gap : 0), stops[i + 1] - (i < BANDS.length - 1 ? gap : 0), b.color);
+    });
+    var f = Math.max(0.01, Math.min(0.99, s / 30));
+    var tip = pol(f);
+    var innerR = R - W / 2 - 12;
+    var a = Math.PI + f * Math.PI;
+    var base = [cx + innerR * Math.cos(a), cy + innerR * Math.sin(a)];
+    var needle = "<line x1='" + base[0] + "' y1='" + base[1] + "' x2='" + tip[0] + "' y2='" + tip[1] +
+      "' style='stroke:var(--ink)' stroke-width='4' stroke-linecap='round'/>";
+    return "<svg viewBox='0 0 420 240' role='img' aria-label='Gauge'>" + arcs + needle +
+      "<text x='" + cx + "' y='" + (cy - 30) + "' text-anchor='middle' font-size='52' font-weight='800' style='fill:var(--ink)'>" + s + "</text>" +
+      "<text x='" + cx + "' y='" + (cy - 4) + "' text-anchor='middle' font-size='14' style='fill:var(--ink-3)'>/ 30</text>" +
+      "<text x='" + (cx - R) + "' y='" + (cy + 26) + "' text-anchor='middle' font-size='12' style='fill:var(--ink-3)'>0</text>" +
+      "<text x='" + (cx + R) + "' y='" + (cy + 26) + "' text-anchor='middle' font-size='12' style='fill:var(--ink-3)'>30</text>" +
+      "</svg>";
+  }
+
+  function renderResult() {
+    var s = score();
+    var b = bandOf(s);
+    $("gauge-wrap").innerHTML = gauge(s);
+    $("badge-line").innerHTML = "<span class='status-badge'>" + b.icon + " <span style='color:" + b.color + "'>" + PL.t("lbl." + b.key) + "</span></span>";
+    $("band-text").textContent = PL.t("band." + b.key);
+  }
+
+  function finish() {
+    $("pfill").style.width = "100%";
+    PL.saveTestResult("rosenberg", score());
+    renderResult();
+    show("result");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  $("btn-start").addEventListener("click", function () {
+    answers.fill(-1); idx = 0; show("quiz"); renderQuestion();
+  });
+  $("btn-back").addEventListener("click", function () {
+    if (idx > 0) { idx--; renderQuestion(); }
+  });
+  $("btn-retake").addEventListener("click", function () {
+    answers.fill(-1); idx = 0; show("quiz"); renderQuestion();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  PL.onLang(function () {
+    if (state === "quiz") renderQuestion();
+    if (state === "result") renderResult();
+  });
+})();
+</script>
+</body>
+</html>

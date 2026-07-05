@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=2">
 </head>
 <body>
 <div id="site-header"></div>
@@ -196,6 +196,12 @@
         <button class="btn btn-sm" id="btn-save-profile" data-i18n="profile.btn.save"></button>
         <span class="small" id="profile-save-status" style="font-weight:700"></span>
       </div>
+
+      <hr style="border:none;border-top:1px solid var(--line);margin:22px 0">
+      <p class="small muted" style="margin:0" data-i18n="profile.export.lead"></p>
+      <div class="center mt-2">
+        <button class="btn btn-ghost btn-sm" id="btn-export-data" data-i18n="profile.btn.export"></button>
+      </div>
     </div>
 
     <dialog class="crop-dialog" id="dlg-crop">
@@ -325,6 +331,8 @@ window.PAGE = {
       "profile.btn.save": "Guardar perfil",
       "profile.saved": "✔ Perfil guardado",
       "profile.err": "✖ Não foi possível guardar. Tenta outra vez.",
+      "profile.export.lead": "Descarrega uma cópia de tudo o que guardaste — humor, pensamentos, gratidão, hábitos, sono, preocupações e resultados de testes — num ficheiro no teu computador.",
+      "profile.btn.export": "⬇️ Exportar os meus dados",
       "crop.title": "Ajusta a tua foto",
       "crop.lead": "Arrasta para posicionar e usa o cursor para ampliar.",
       "crop.cancel": "Cancelar",
@@ -435,6 +443,8 @@ window.PAGE = {
       "profile.btn.save": "Save profile",
       "profile.saved": "✔ Profile saved",
       "profile.err": "✖ Could not save. Try again.",
+      "profile.export.lead": "Download a copy of everything you've saved — mood, thoughts, gratitude, habits, sleep, worries and test results — as a file on your computer.",
+      "profile.btn.export": "⬇️ Export my data",
       "crop.title": "Adjust your photo",
       "crop.lead": "Drag to position and use the slider to zoom.",
       "crop.cancel": "Cancel",
@@ -480,7 +490,7 @@ window.PAGE = {
   }
 };
 </script>
-<script src="js/app.js"></script>
+<script src="js/app.js?v=2"></script>
 <script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
@@ -839,6 +849,29 @@ window.PAGE = {
         $("btn-save-profile").disabled = false;
         $("profile-save-status").textContent = PL.t("profile.err");
       });
+    });
+
+    $("btn-export-data").addEventListener("click", function () {
+      var u = PLSync.user();
+      var out = {
+        exportedAt: new Date().toISOString(),
+        email: u ? u.email : "",
+        profile: u ? { displayName: u.displayName, bio: u.bio, avatar: u.avatar } : {},
+        data: {}
+      };
+      var LIST_TOOLS = ["habits", "thoughts", "worries", "test_results"];
+      PLSync.syncedTools().forEach(function (tool) {
+        out.data[tool] = PL.load(tool, LIST_TOOLS.indexOf(tool) >= 0 ? [] : {});
+      });
+      var blob = new Blob([JSON.stringify(out, null, 2)], { type: "application/json" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = "psicolab-dados-" + PL.todayISO() + ".json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
     });
 
     $("btn-connect").addEventListener("click", function () {
