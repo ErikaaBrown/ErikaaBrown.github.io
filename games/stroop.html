@@ -86,7 +86,7 @@ window.PAGE = {
       "res.incong": "RT incongruente",
       "res.interf": "Interferência (efeito de Stroop): ",
       "res.interf.na": "Joga mais uma ronda para medir a interferência com fiabilidade.",
-      "res.expl": "🧠 O que se passa: ler é um processo automático: não consegues «desligá-lo». Quando a palavra e a tinta não coincidem, o cérebro tem de suprimir a leitura automática para responder à cor, e isso custa tempo. Essa diferença de milissegundos é o efeito de Stroop, usado há 90 anos para estudar atenção e controlo inibitório."
+      "res.expl": "🧠 O que se passa: ler é um processo automático; não consegues «desligá-lo». Quando a palavra e a tinta não coincidem, o cérebro tem de suprimir a leitura automática para responder à cor, e isso custa tempo. Essa diferença de milissegundos é o efeito de Stroop, usado há 90 anos para estudar atenção e controlo inibitório."
     },
     en: {
       "page.title": "Stroop Test",
@@ -105,7 +105,7 @@ window.PAGE = {
       "res.incong": "Incongruent RT",
       "res.interf": "Interference (Stroop effect): ",
       "res.interf.na": "Play another round to measure interference reliably.",
-      "res.expl": "🧠 What is going on: reading is automatic — you cannot \"switch it off\". When the word and the ink do not match, your brain has to suppress the automatic reading to answer the colour, and that costs time. That millisecond difference is the Stroop effect, used for 90 years to study attention and inhibitory control."
+      "res.expl": "🧠 What is going on: reading is automatic; you cannot \"switch it off\". When the word and the ink do not match, your brain has to suppress the automatic reading to answer the colour, and that costs time. That millisecond difference is the Stroop effect, used for 90 years to study attention and inhibitory control."
     }
   }
 };
@@ -199,10 +199,10 @@ window.PAGE = {
 
   function renderResult() {
     $("r-score").textContent = score;
-    $("r-acc").textContent = total ? Math.round(score / total * 100) + "%" : "—";
+    $("r-acc").textContent = total ? Math.round(score / total * 100) + "%" : "...";
     var c = avg(rts.cong), ic = avg(rts.incong);
-    $("r-cong").textContent = c !== null ? c + " ms" : "—";
-    $("r-incong").textContent = ic !== null ? ic + " ms" : "—";
+    $("r-cong").textContent = c !== null ? c + " ms" : "...";
+    $("r-incong").textContent = ic !== null ? ic + " ms" : "...";
     if (c !== null && ic !== null && rts.cong.length >= 3 && rts.incong.length >= 3) {
       $("interference-line").textContent = PL.t("res.interf") + "+" + Math.max(0, ic - c) + " ms";
     } else {

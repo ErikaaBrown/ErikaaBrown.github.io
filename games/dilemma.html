@@ -165,7 +165,7 @@ window.PAGE = {
       play: function () { return Math.random() < 0.5 ? "C" : "D"; } },
     { id: "pavlov",
       name: { pt: "Pavlov (ganhou-fica, perdeu-muda)", en: "Pavlov (win-stay, lose-shift)" },
-      desc: { pt: "Se a última ronda lhe correu bem, repetiu a jogada; se correu mal, mudou. Uma regra de aprendizagem simples que coopera bem — mas explora quem perdoa demasiado.", en: "If the last round went well for it, it repeated the move; if it went badly, it switched. A simple learning rule that cooperates well — but exploits those who forgive too much." },
+      desc: { pt: "Se a última ronda lhe correu bem, repetiu a jogada; se correu mal, mudou. Uma regra de aprendizagem simples que coopera bem, mas explora quem perdoa demasiado.", en: "If the last round went well for it, it repeated the move; if it went badly, it switched. A simple learning rule that cooperates well, but exploits those who forgive too much." },
       play: function (h) {
         if (!h.opp.length) return "C";
         var o = h.opp[h.opp.length - 1], y = h.you[h.you.length - 1];
