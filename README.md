@@ -1,6 +1,6 @@
 # PsicoLab / PsychLab
 
-A free, bilingual (PT/EN) psychology website: interactive self-knowledge tests, evidence-based tools, and games about the mind — built as a static site with an optional, end-to-end encrypted account layer for saving and syncing your own results across devices.
+A free, bilingual (PT/EN) psychology website: interactive self-knowledge tests, evidence-based tools, and games about the mind, built as a static site with an optional, end-to-end encrypted account layer for saving and syncing your own results across devices.
 
 **Live site:** [erikaabrown.github.io](https://erikaabrown.github.io)
 
@@ -8,13 +8,14 @@ A free, bilingual (PT/EN) psychology website: interactive self-knowledge tests, 
 
 ## Features
 
-- **7 psychological tests** — Big Five personality, Attachment style, Emotional Intelligence, Perceived Stress, Rosenberg Self-Esteem, Resilience, PANAS (positive/negative affect).
-- **10 tools** — mood diary, thought record (CBT), breathing exercise, guided meditation, gratitude journal, habit tracker, sleep diary, worry box, progressive muscle relaxation, and a patterns/insights panel that surfaces trends across your own logged data.
-- **10 games** — Stroop test, reaction time, emotion recognition, cognitive bias quiz, prisoner's dilemma, choose-your-path adventure, digit span, myth-or-fact quiz, N-back, and a cognitive-distortion spotting game.
-- **Learn section** — a 60+ term glossary, a history-of-psychology timeline, and a daily-refreshed page of psychology articles (see [Articles pipeline](#articles-pipeline)).
+- **7 psychological tests**: Big Five personality, Attachment style, Emotional Intelligence, Perceived Stress, Rosenberg Self-Esteem, Resilience, PANAS (positive/negative affect).
+- **10 tools**: mood diary, thought record (CBT), breathing exercise, guided meditation, gratitude journal, habit tracker, sleep diary, worry box, progressive muscle relaxation, and a patterns/insights panel that surfaces trends across your own logged data.
+- **10 games**: Stroop test, reaction time, emotion recognition, cognitive bias quiz, prisoner's dilemma, choose-your-path adventure, digit span, myth-or-fact quiz, N-back, and a cognitive-distortion spotting game.
+- **Learn section**: a 60+ term glossary, a history-of-psychology timeline, and a daily-refreshed page of psychology articles (see [Articles pipeline](#articles-pipeline)).
+- **Custom illustrated artwork** throughout: a hand-drawn tree emblem as the site's hero image, header logo, and favicon, plus a matching custom icon for every single test, tool, game, and Learn page, used both as a page heading icon and as a large, low-opacity background watermark on its homepage card.
 - **Optional account**, end-to-end encrypted:
   - Every tool's data is encrypted client-side (AES-GCM) with a random data encryption key (DEK) that never leaves the browser unencrypted.
-  - **Recovery codes**: the DEK is wrapped twice — once with a key derived from the password, once with a key derived from a one-time recovery code — so a forgotten password doesn't mean lost data.
+  - **Recovery codes**: the DEK is wrapped twice, once with a key derived from the password and once with a key derived from a one-time recovery code, so a forgotten password doesn't mean lost data.
   - **Professional sharing**: an account can connect to a professional (e.g. a psychologist) via a short code and choose exactly which categories to share. Sharing uses pairwise ECDH (P-256) key exchange, so the server only ever stores ciphertext and public keys, never a shared secret or plaintext.
   - An admin-gated panel grants professional status and manages users.
 - **Bilingual (PT/EN) and light/dark theme**, both persisted locally.
@@ -22,9 +23,9 @@ A free, bilingual (PT/EN) psychology website: interactive self-knowledge tests, 
 
 ## Tech stack
 
-- **Frontend**: static HTML/CSS/vanilla JavaScript. No framework, no build step, no dependencies to install — this is intentional, so it deploys as-is on GitHub Pages.
+- **Frontend**: static HTML/CSS/vanilla JavaScript. No framework, no build step, no dependencies to install; this is intentional, so it deploys as-is on GitHub Pages.
 - **Backend** (optional, only needed for the account/sync features): a [Cloudflare Worker](https://developers.cloudflare.com/workers/) + [D1](https://developers.cloudflare.com/d1/) (SQLite) database, both on Cloudflare's free tier. See [`cloudflare/README.md`](cloudflare/README.md) for the full setup walkthrough.
-- **Crypto**: the Web Crypto API (AES-GCM for data encryption, ECDH P-256 for pairwise key exchange, PBKDF2 for password-based key derivation) — no external crypto library.
+- **Crypto**: the Web Crypto API (AES-GCM for data encryption, ECDH P-256 for pairwise key exchange, PBKDF2 for password-based key derivation), no external crypto library.
 
 ## Project structure
 
@@ -43,7 +44,7 @@ css/style.css           Shared design system (light/dark themes)
 js/app.js               Shared i18n, theme, header/footer, small helpers
 js/sync.js              Account/sync client: crypto, API calls, encrypted local cache
 
-img/                    Site artwork (logo, favicon, test icons)
+img/                    Site artwork (hero/logo/favicon, plus a custom icon per test/tool/game/Learn page)
 data/articles.json      Cached articles feed, refreshed daily (see below)
 scripts/fetch-articles.js   Script that regenerates data/articles.json
 .github/workflows/      Daily articles refresh + Cloudflare deploy
@@ -53,14 +54,14 @@ cloudflare/             Worker source, D1 schema, migrations, backend setup guid
 
 ## Running locally
 
-No build step and no dependencies — any static file server works:
+No build step and no dependencies. Any static file server works:
 
 ```bash
 python3 -m http.server 8765
 # then open http://localhost:8765/index.html
 ```
 
-The account/sync features need the Cloudflare backend running (see below); everything else — every test, tool, game, and the Learn section — works fully offline against `localStorage`.
+The account/sync features need the Cloudflare backend running (see below); everything else, every test, tool, game, and the Learn section, works fully offline against `localStorage`.
 
 ## Backend setup
 
