@@ -73,3 +73,8 @@ repete o passo 2 (**Edit code** → colar `worker.js` → **Deploy**).
 - A coluna `role` em `users` já existe para as fases futuras
   (contas profissionais e administração).
 - Se o site mudar de domínio, acrescenta-o a `ALLOWED_ORIGINS` no worker.
+- **Já tens a base de dados criada?** Corre `migrations/0006_ip_flag_decay.sql`
+  na consola D1 antes de actualizares o Worker (o Worker novo já espera a
+  coluna `last_hit_at` em `blocked_ips`; sem ela, os pedidos que caem numa
+  armadilha de scanner ou erram o código de profissional respondem com erro
+  até a migração ser aplicada).

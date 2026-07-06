@@ -49,6 +49,7 @@ const LOCKOUT_MAX_S = 60 * 60; // 1 hora, no máximo
 const DUMMY_HASH_SALT = "0000000000000000"; // usado só para igualar o tempo de resposta, nunca comparado
 const IP_BLOCK_S = 60 * 60; // 1 hora bloqueado depois de cair numa armadilha
 const CONN_GUESS_THRESHOLD = 8; // tentativas erradas de código profissional antes de bloquear o IP
+const IP_FLAG_RESET_S = 60 * 60 * 24; // sem novas ocorrências neste intervalo, o contador reinicia do zero
 
 // caminhos que esta API nunca serve a sério - só existem para apanhar scanners automáticos
 const DECOY_PATHS = [
@@ -84,13 +85,14 @@ async function isIpBlocked(env, ip) {
 // onde um erro isolado pode ser só um engano de digitação)
 async function flagIp(env, ip, reason, threshold) {
   const now = Math.floor(Date.now() / 1000);
-  const row = await env.DB.prepare("SELECT hit_count FROM blocked_ips WHERE ip = ?").bind(ip).first();
-  const count = (row ? row.hit_count : 0) + 1;
-  const until = count >= threshold ? now + IP_BLOCK_S : (row ? row.blocked_until : 0);
+  const row = await env.DB.prepare("SELECT hit_count, last_hit_at FROM blocked_ips WHERE ip = ?").bind(ip).first();
+  const stale = !row || (now - row.last_hit_at) > IP_FLAG_RESET_S;
+  const count = stale ? 1 : row.hit_count + 1;
+  const until = count >= threshold ? now + IP_BLOCK_S : (stale ? 0 : row.blocked_until);
   await env.DB.prepare(
-    "INSERT INTO blocked_ips (ip, reason, hit_count, blocked_until) VALUES (?, ?, ?, ?) " +
-    "ON CONFLICT(ip) DO UPDATE SET hit_count = ?, blocked_until = ?, reason = ?"
-  ).bind(ip, reason, count, until, count, until, reason).run();
+    "INSERT INTO blocked_ips (ip, reason, hit_count, blocked_until, last_hit_at) VALUES (?, ?, ?, ?, ?) " +
+    "ON CONFLICT(ip) DO UPDATE SET hit_count = ?, blocked_until = ?, reason = ?, last_hit_at = ?"
+  ).bind(ip, reason, count, until, now, count, until, reason, now).run();
 }
 
 /* ---------- utilidades ---------- */

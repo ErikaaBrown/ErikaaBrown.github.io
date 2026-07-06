@@ -77,5 +77,6 @@ CREATE TABLE IF NOT EXISTS blocked_ips (
   reason         TEXT NOT NULL,
   hit_count      INTEGER NOT NULL DEFAULT 1,
   first_seen     TEXT NOT NULL DEFAULT (datetime('now')),
-  blocked_until  INTEGER NOT NULL
+  blocked_until  INTEGER NOT NULL,
+  last_hit_at    INTEGER NOT NULL DEFAULT 0
 );
