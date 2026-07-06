@@ -51,6 +51,7 @@ const IP_BLOCK_S = 60 * 60; // 1 hora bloqueado depois de cair numa armadilha
 const CONN_GUESS_THRESHOLD = 8; // tentativas erradas de código profissional antes de bloquear o IP
 const IP_FLAG_RESET_S = 60 * 60 * 24; // sem novas ocorrências neste intervalo, o contador reinicia do zero
 const REGISTER_THRESHOLD = 10; // registos a partir do mesmo IP, num dia, antes de bloquear
+const RECOVERY_GUESS_THRESHOLD = 8; // tentativas erradas de código de recuperação antes de bloquear o IP
 
 // caminhos que esta API nunca serve a sério - só existem para apanhar scanners automáticos
 const DECOY_PATHS = [
@@ -279,7 +280,7 @@ async function login(env, body, origin) {
   }, 200, origin);
 }
 
-async function recoverStart(env, body, origin) {
+async function recoverStart(env, body, origin, ip) {
   if (!validEmail(body.email) || !validAuthKey(body.recoveryAuthKey)) {
     return json({ error: "invalid_input" }, 400, origin);
   }
@@ -290,10 +291,14 @@ async function recoverStart(env, body, origin) {
   ).bind(email).first();
   if (!row || !row.recovery_hash) {
     await sha256hex(DUMMY_HASH_SALT + "|" + body.recoveryAuthKey);
+    await flagIp(env, ip, "recovery_guess", RECOVERY_GUESS_THRESHOLD);
     return json({ error: "bad_recovery" }, 401, origin);
   }
   const hash = await sha256hex(row.recovery_salt + "|" + body.recoveryAuthKey);
-  if (hash !== row.recovery_hash) return json({ error: "bad_recovery" }, 401, origin);
+  if (hash !== row.recovery_hash) {
+    await flagIp(env, ip, "recovery_guess", RECOVERY_GUESS_THRESHOLD);
+    return json({ error: "bad_recovery" }, 401, origin);
+  }
   return json({
     token: await makeToken(env, row.id, "recovery"),
     dekRecoveryIv: row.dek_recovery_iv,
@@ -562,7 +567,7 @@ export default {
         try { body = await req.json(); } catch (e) { return json({ error: "invalid_json" }, 400, origin); }
         if (path === "/auth/register") return register(env, body, origin, ip);
         if (path === "/auth/login") return login(env, body, origin);
-        return recoverStart(env, body, origin);
+        return recoverStart(env, body, origin, ip);
       }
 
       const auth = await checkToken(env, req);
