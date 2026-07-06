@@ -48,6 +48,16 @@ palavra-passe nova, mesmo num dispositivo novo.
    na primeira linha por esse URL.
 3. Commit + push. Pronto — a página **Conta** do site fica funcional.
 
+## Deploys automáticos
+Depois da configuração inicial acima, qualquer push a `main` volta a
+publicar `worker.js` automaticamente, através de
+`.github/workflows/deploy.yml` (usa `wrangler.toml`, que já aponta para
+este Worker e para o binding `DB`). Para isso funcionar, o repositório
+precisa dos secrets `CLOUDFLARE_API_TOKEN` e `SESSION_SECRET` configurados
+em **Settings → Secrets and variables → Actions**. Sem esse deploy
+automático, continua a ser possível actualizar o Worker manualmente:
+repete o passo 2 (**Edit code** → colar `worker.js` → **Deploy**).
+
 ## Notas importantes
 - **Palavra-passe perdida, mas código de recuperação guardado = tudo bem.**
   O código de recuperação (mostrado uma única vez, no registo) permite
