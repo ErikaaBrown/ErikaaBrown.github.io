@@ -4,6 +4,28 @@
   const ROOT = PAGE.root || "";
   const APP_SCRIPT = document.currentScript;
 
+  /* bandeiras em SVG (não emoji): a sequência de emoji de bandeira exige uma fonte com
+     suporte próprio, que falta em muitos sistemas (ex.: Linux mostra só "GB"/"PT") */
+  const FLAG_GB =
+    "<svg class=\"flag\" viewBox=\"0 0 30 20\" width=\"20\" height=\"14\" aria-hidden=\"true\">" +
+    "<clipPath id=\"flag-clip-gb\"><rect width=\"30\" height=\"20\" rx=\"3\"/></clipPath>" +
+    "<g clip-path=\"url(#flag-clip-gb)\">" +
+    "<rect width=\"30\" height=\"20\" fill=\"#00247d\"/>" +
+    "<path d=\"M0,0 L30,20 M30,0 L0,20\" stroke=\"#fff\" stroke-width=\"4\"/>" +
+    "<path d=\"M0,0 L30,20 M30,0 L0,20\" stroke=\"#cf142b\" stroke-width=\"2\"/>" +
+    "<path d=\"M15,0 V20 M0,10 H30\" stroke=\"#fff\" stroke-width=\"7\"/>" +
+    "<path d=\"M15,0 V20 M0,10 H30\" stroke=\"#cf142b\" stroke-width=\"4\"/>" +
+    "</g></svg>";
+  const FLAG_PT =
+    "<svg class=\"flag\" viewBox=\"0 0 30 20\" width=\"20\" height=\"14\" aria-hidden=\"true\">" +
+    "<clipPath id=\"flag-clip-pt\"><rect width=\"30\" height=\"20\" rx=\"3\"/></clipPath>" +
+    "<g clip-path=\"url(#flag-clip-pt)\">" +
+    "<rect width=\"30\" height=\"20\" fill=\"#da291c\"/>" +
+    "<rect width=\"12\" height=\"20\" fill=\"#046a38\"/>" +
+    "<circle cx=\"12\" cy=\"10\" r=\"4.5\" fill=\"#ffcc00\"/>" +
+    "<circle cx=\"12\" cy=\"10\" r=\"3.2\" fill=\"#046a38\"/>" +
+    "</g></svg>";
+
   const CHROME = {
     pt: {
       "site.name": "PsicoLab",
@@ -78,8 +100,8 @@
       "<div class=\"header-actions\">" +
       "<a id=\"account-btn\" class=\"icon-btn\" href=\"" + ROOT + "account.html\" style=\"text-decoration:none\">👤</a>" +
       "<div id=\"lang-toggle\" class=\"lang-toggle\" role=\"group\" aria-label=\"Idioma / Language\">" +
-      "<button type=\"button\" class=\"lang-opt\" data-lang=\"en\" aria-label=\"English\"><span class=\"flag\">🇬🇧</span><span class=\"code\">EN</span></button>" +
-      "<button type=\"button\" class=\"lang-opt\" data-lang=\"pt\" aria-label=\"Português\"><span class=\"flag\">🇵🇹</span><span class=\"code\">PT</span></button>" +
+      "<button type=\"button\" class=\"lang-opt\" data-lang=\"en\" aria-label=\"English\">" + FLAG_GB + "<span class=\"code\">EN</span></button>" +
+      "<button type=\"button\" class=\"lang-opt\" data-lang=\"pt\" aria-label=\"Português\">" + FLAG_PT + "<span class=\"code\">PT</span></button>" +
       "</div>" +
       "<button id=\"theme-btn\" class=\"icon-btn\"></button>" +
       "</div></div></header>";

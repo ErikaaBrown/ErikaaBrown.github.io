@@ -139,7 +139,7 @@ a:hover { text-decoration: underline; }
   font-family: var(--font-body); font-weight: 800; font-size: 0.8rem;
   transition: background 0.2s, color 0.2s;
 }
-.lang-opt .flag { font-size: 1rem; line-height: 1; opacity: 0.6; filter: grayscale(45%); transition: opacity 0.2s, filter 0.2s; }
+.lang-opt .flag { display: block; border-radius: 3px; opacity: 0.55; filter: grayscale(45%); transition: opacity 0.2s, filter 0.2s; }
 .lang-opt:hover { color: var(--ink); }
 .lang-opt.active { background: var(--brand-soft); color: var(--brand-ink); }
 .lang-opt.active .flag { opacity: 1; filter: none; }
