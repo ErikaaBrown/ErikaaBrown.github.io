@@ -16,7 +16,6 @@
       "footer.disclaimer": "<strong>Nota importante:</strong> o PsicoLab é um projecto educativo e recreativo. Os testes e as ferramentas aqui disponíveis não constituem diagnóstico nem substituem a avaliação ou o acompanhamento por profissionais de saúde mental. Se precisares de apoio, fala com um psicólogo ou contacta a linha SNS 24: 808 24 24 24.",
       "footer.privacy": "Privacidade primeiro: os teus registos são cifrados e só tu os consegues ler.",
       "footer.made": "Feito com calma 🌿",
-      "lang.switch": "Switch to English",
       "theme.toggle": "Alternar tema claro/escuro",
       "nav.account": "Conta"
     },
@@ -31,7 +30,6 @@
       "footer.disclaimer": "<strong>Important note:</strong> PsychLab is an educational and recreational project. The tests and tools available here are not a diagnosis and do not replace assessment or care by mental-health professionals. If you need support, talk to a psychologist or reach out to a local helpline.",
       "footer.privacy": "Privacy first: your entries are encrypted and only you can read them.",
       "footer.made": "Made with calm 🌿",
-      "lang.switch": "Mudar para Português",
       "theme.toggle": "Toggle light/dark theme",
       "nav.account": "Account"
     }
@@ -79,11 +77,16 @@
       "<nav class=\"main-nav\">" + links + "</nav>" +
       "<div class=\"header-actions\">" +
       "<a id=\"account-btn\" class=\"icon-btn\" href=\"" + ROOT + "account.html\" style=\"text-decoration:none\">👤</a>" +
-      "<button id=\"lang-btn\" class=\"icon-btn\"></button>" +
+      "<div id=\"lang-toggle\" class=\"lang-toggle\" role=\"group\" aria-label=\"Idioma / Language\">" +
+      "<button type=\"button\" class=\"lang-opt\" data-lang=\"en\" aria-label=\"English\"><span class=\"flag\">🇬🇧</span><span class=\"code\">EN</span></button>" +
+      "<button type=\"button\" class=\"lang-opt\" data-lang=\"pt\" aria-label=\"Português\"><span class=\"flag\">🇵🇹</span><span class=\"code\">PT</span></button>" +
+      "</div>" +
       "<button id=\"theme-btn\" class=\"icon-btn\"></button>" +
       "</div></div></header>";
-    document.getElementById("lang-btn").addEventListener("click", function () {
-      setLang(lang === "pt" ? "en" : "pt");
+    document.querySelectorAll("#lang-toggle .lang-opt").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        setLang(btn.getAttribute("data-lang"));
+      });
     });
     document.getElementById("theme-btn").addEventListener("click", function () {
       theme = theme === "dark" ? "light" : "dark";
@@ -107,13 +110,12 @@
   }
 
   function syncButtons() {
-    const lb = document.getElementById("lang-btn");
     const tb = document.getElementById("theme-btn");
-    if (lb) {
-      lb.textContent = lang === "pt" ? "EN" : "PT";
-      lb.title = t("lang.switch");
-      lb.setAttribute("aria-label", t("lang.switch"));
-    }
+    document.querySelectorAll("#lang-toggle .lang-opt").forEach(function (btn) {
+      const active = btn.getAttribute("data-lang") === lang;
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-pressed", active ? "true" : "false");
+    });
     var ab = document.getElementById("account-btn");
     if (ab) {
       ab.title = t("nav.account");
