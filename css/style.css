@@ -99,6 +99,19 @@ a:hover { text-decoration: underline; }
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--line);
 }
+.whatsnew-banner { background: var(--brand-soft); border-bottom: 1px solid var(--line); }
+.whatsnew-inner {
+  max-width: 1080px; margin: 0 auto; padding: 10px 22px;
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  text-align: center;
+}
+.whatsnew-inner span { color: var(--brand-ink); font-weight: 700; font-size: 0.92rem; }
+.whatsnew-inner button {
+  border: none; background: none; cursor: pointer; flex-shrink: 0;
+  color: var(--brand-ink); opacity: 0.65; font-size: 1rem; line-height: 1; padding: 4px;
+  transition: opacity 0.2s;
+}
+.whatsnew-inner button:hover { opacity: 1; }
 .site-header .bar {
   display: flex; align-items: center; gap: 14px;
   max-width: 1080px; margin: 0 auto; padding: 10px 22px;

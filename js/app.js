@@ -166,6 +166,10 @@
       const k = el.getAttribute("data-i18n-ph");
       if (d[k] !== undefined) el.setAttribute("placeholder", d[k]);
     });
+    document.querySelectorAll("[data-i18n-aria]").forEach(function (el) {
+      const k = el.getAttribute("data-i18n-aria");
+      if (d[k] !== undefined) el.setAttribute("aria-label", d[k]);
+    });
     if (d["page.title"]) {
       document.title = d["page.title"] + " · " + d["site.name"];
     } else {
