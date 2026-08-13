@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=13">
+<link rel="stylesheet" href="css/style.css?v=14">
 </head>
 <body>
 <div id="site-header"></div>
@@ -76,6 +76,12 @@
         <h3 data-i18n="pn.t"></h3>
         <p data-i18n="pn.d"></p>
         <span class="meta"><span class="chip" data-i18n="pn.m1"></span><span class="chip" data-i18n="pn.m2"></span></span>
+      </a>
+      <a class="card card--art" href="tests/selfcompassion.html">
+        <span class="card-bg card-bg-emoji">🤍</span>
+        <h3 data-i18n="sc.t"></h3>
+        <p data-i18n="sc.d"></p>
+        <span class="meta"><span class="chip" data-i18n="sc.m1"></span><span class="chip" data-i18n="sc.m2"></span></span>
       </a>
     </div>
   </section>
@@ -146,6 +152,12 @@
         <p data-i18n="in.d"></p>
         <span class="meta"><span class="chip" data-i18n="chip.insights"></span></span>
       </a>
+      <a class="card card--art" href="tools/copingcards.html">
+        <span class="card-bg card-bg-emoji">🗂️</span>
+        <h3 data-i18n="cc.t"></h3>
+        <p data-i18n="cc.d"></p>
+        <span class="meta"><span class="chip" data-i18n="chip.cbt"></span></span>
+      </a>
     </div>
   </section>
 
@@ -214,6 +226,12 @@
         <h3 data-i18n="di.t"></h3>
         <p data-i18n="di.d"></p>
         <span class="meta"><span class="chip" data-i18n="chip.10r"></span><span class="chip" data-i18n="chip.record"></span></span>
+      </a>
+      <a class="card card--art" href="games/emotionwheel.html">
+        <span class="card-bg card-bg-emoji">🎭</span>
+        <h3 data-i18n="ew.t"></h3>
+        <p data-i18n="ew.d"></p>
+        <span class="meta"><span class="chip" data-i18n="chip.16r"></span><span class="chip" data-i18n="chip.record"></span></span>
       </a>
     </div>
   </section>
@@ -285,6 +303,9 @@ window.PAGE = {
       "pn.t": "PANAS · Afecto Positivo e Negativo",
       "pn.d": "Duas dimensões independentes do teu estado emocional recente.",
       "pn.m1": "20 palavras", "pn.m2": "≈ 4 min",
+      "sc.t": "Autocompaixão",
+      "sc.d": "Como te tratas a ti mesmo/a nos momentos difíceis: com gentileza ou com dureza?",
+      "sc.m1": "12 afirmações", "sc.m2": "≈ 3 min",
       "md.t": "Diário Emocional",
       "md.d": "Regista o teu humor de cada dia e observa padrões ao longo do tempo num gráfico.",
       "th.t": "Registo de Pensamentos",
@@ -305,6 +326,8 @@ window.PAGE = {
       "pmr.d": "Tensiona e relaxa cada grupo muscular, guiado, para libertar tensão física acumulada.",
       "in.t": "Painel de Padrões",
       "in.d": "Cruza o teu humor, hábitos, gratidão e sono para descobrires padrões simples.",
+      "cc.t": "Cartões de Enfrentamento",
+      "cc.d": "Escreve frases que te ajudam nos momentos difíceis, prontas a usar quando mais precisares.",
       "sp.t": "Teste de Stroop",
       "sp.d": "Diz a cor, ignora a palavra. Mais difícil do que parece.",
       "rt.t": "Tempo de Reacção",
@@ -325,6 +348,8 @@ window.PAGE = {
       "nb.d": "O teste de memória de trabalho mais usado em neurociência cognitiva. Escolhe a tua dificuldade.",
       "di.t": "Apanha a Distorção",
       "di.d": "10 pensamentos na primeira pessoa. Identifica a distorção cognitiva por trás de cada um.",
+      "ew.t": "Roda das Emoções",
+      "ew.d": "Amplia o teu vocabulário emocional: identifica a que emoção principal pertence cada palavra.",
       "gl.t": "Glossário",
       "gl.d": "Dezenas de termos de psicologia explicados, em português e inglês.",
       "tl.t": "Cronologia da Psicologia",
@@ -333,7 +358,7 @@ window.PAGE = {
       "ar.d": "Leituras curtas sobre a mente, mitos e bem-estar.",
       "chip.daily": "Uso diário", "chip.cbt": "TCC", "chip.calm": "Relaxamento", "chip.insights": "Análise de padrões",
       "chip.classic": "Clássico", "chip.1min": "≈ 1 min", "chip.12r": "12 rondas",
-      "chip.10r": "10 cenários", "chip.strategy": "Estratégia", "chip.story": "História",
+      "chip.10r": "10 cenários", "chip.16r": "16 rondas", "chip.strategy": "Estratégia", "chip.story": "História",
       "chip.40t": "60+ termos", "chip.history": "História", "chip.reads": "Actualizados diariamente",
       "chip.record": "Com recorde"
     },
@@ -368,6 +393,9 @@ window.PAGE = {
       "pn.t": "PANAS · Positive and Negative Affect",
       "pn.d": "Two independent dimensions of your recent emotional state.",
       "pn.m1": "20 words", "pn.m2": "≈ 4 min",
+      "sc.t": "Self-Compassion",
+      "sc.d": "How you treat yourself in hard moments: with kindness or with harshness?",
+      "sc.m1": "12 statements", "sc.m2": "≈ 3 min",
       "md.t": "Mood Diary",
       "md.d": "Log your mood each day and watch patterns emerge over time in a chart.",
       "th.t": "Thought Record",
@@ -388,6 +416,8 @@ window.PAGE = {
       "pmr.d": "Tense and release each muscle group, guided, to release built-up physical tension.",
       "in.t": "Patterns Panel",
       "in.d": "Cross-reference your mood, habits, gratitude and sleep to find simple patterns.",
+      "cc.t": "Coping Cards",
+      "cc.d": "Write phrases that help you through hard moments, ready to use exactly when you need them.",
       "sp.t": "Stroop Test",
       "sp.d": "Name the colour, ignore the word. Harder than it sounds.",
       "rt.t": "Reaction Time",
@@ -408,6 +438,8 @@ window.PAGE = {
       "nb.d": "The working memory test most used in cognitive neuroscience. Pick your difficulty.",
       "di.t": "Catch the Distortion",
       "di.d": "10 first-person thoughts. Identify the cognitive distortion behind each one.",
+      "ew.t": "Wheel of Emotions",
+      "ew.d": "Expand your emotional vocabulary: identify which primary emotion each word belongs to.",
       "gl.t": "Glossary",
       "gl.d": "Dozens of psychology terms explained, in Portuguese and English.",
       "tl.t": "Timeline of Psychology",
@@ -416,7 +448,7 @@ window.PAGE = {
       "ar.d": "Short reads on the mind, myths and wellbeing.",
       "chip.daily": "Daily use", "chip.cbt": "CBT", "chip.calm": "Relaxation", "chip.insights": "Pattern analysis",
       "chip.classic": "Classic", "chip.1min": "≈ 1 min", "chip.12r": "12 rounds",
-      "chip.10r": "10 scenarios", "chip.strategy": "Strategy", "chip.story": "Story",
+      "chip.10r": "10 scenarios", "chip.16r": "16 rounds", "chip.strategy": "Strategy", "chip.story": "Story",
       "chip.40t": "60+ terms", "chip.history": "History", "chip.reads": "Updated daily",
       "chip.record": "With record"
     }

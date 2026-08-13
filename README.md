@@ -8,9 +8,9 @@ A free, bilingual (PT/EN) psychology website: interactive self-knowledge tests, 
 
 ## Features
 
-- **7 psychological tests**: Big Five personality, Attachment style, Emotional Intelligence, Perceived Stress, Rosenberg Self-Esteem, Resilience, PANAS (positive/negative affect).
-- **10 tools**: mood diary, thought record (CBT), breathing exercise, guided meditation, gratitude journal, habit tracker, sleep diary, worry box, progressive muscle relaxation, and a patterns/insights panel that surfaces trends across your own logged data.
-- **10 games**: Stroop test, reaction time, emotion recognition, cognitive bias quiz, prisoner's dilemma, choose-your-path adventure, digit span, myth-or-fact quiz, N-back, and a cognitive-distortion spotting game.
+- **8 psychological tests**: Big Five personality, Attachment style, Emotional Intelligence, Perceived Stress, Rosenberg Self-Esteem, Resilience, PANAS (positive/negative affect), Self-Compassion.
+- **11 tools**: mood diary, thought record (CBT), breathing exercise, guided meditation, gratitude journal, habit tracker, sleep diary, worry box, progressive muscle relaxation, coping cards, and a patterns/insights panel that surfaces trends across your own logged data.
+- **11 games**: Stroop test, reaction time, emotion recognition, cognitive bias quiz, prisoner's dilemma, choose-your-path adventure, digit span, myth-or-fact quiz, N-back, a cognitive-distortion spotting game, and a wheel-of-emotions vocabulary game.
 - **Learn section**: a 60+ term glossary, a history-of-psychology timeline, and a daily-refreshed page of psychology articles (see [Articles pipeline](#articles-pipeline)).
 - **Custom illustrated artwork** throughout: a hand-drawn tree emblem as the site's hero image, header logo, and favicon, plus a matching custom icon for every single test, tool, game, and Learn page, used both as a page heading icon and as a large, low-opacity background watermark on its homepage card.
 - **Optional account**, end-to-end encrypted:

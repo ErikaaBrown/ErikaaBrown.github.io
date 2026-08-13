@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev; base-uri 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Cartões de Enfrentamento · PsicoLab</title>
+<link rel="icon" type="image/png" href="../img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=14">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1><span style="font-size:2.2rem">🗂️</span> <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section class="panel panel-soft">
+    <p style="margin:0" data-i18n="how.p"></p>
+  </section>
+
+  <section class="panel center">
+    <button class="btn" id="btn-draw" data-i18n="btn.draw"></button>
+    <div id="drawn" class="hidden" style="margin-top:18px">
+      <div class="notice" id="drawn-text" style="text-align:left"></div>
+    </div>
+    <p class="small muted hidden" id="draw-empty" data-i18n="draw.empty"></p>
+  </section>
+
+  <section class="panel">
+    <h3 style="margin-top:0" data-i18n="add.title"></h3>
+    <label class="field-label" for="f-situation" data-i18n="add.label1"></label>
+    <input type="text" id="f-situation" data-i18n-ph="add.ph1" maxlength="80">
+    <label class="field-label" for="f-card" data-i18n="add.label2" style="margin-top:10px;display:block"></label>
+    <textarea id="f-card" data-i18n-ph="add.ph2" style="min-height:70px" maxlength="300"></textarea>
+    <div class="center mt-2">
+      <button class="btn" id="btn-add" data-i18n="btn.add"></button>
+    </div>
+  </section>
+
+  <section>
+    <h2 data-i18n="list.title"></h2>
+    <p class="small muted" id="count-line"></p>
+    <div id="card-list"></div>
+    <p class="small muted hidden" id="list-empty" data-i18n="list.empty"></p>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tools",
+  i18n: {
+    pt: {
+      "page.title": "Cartões de Enfrentamento",
+      "crumb": "Ferramentas",
+      "intro.lead": "Uma técnica clássica da terapia cognitivo-comportamental: escreve, com calma, frases que te ajudam nos momentos difíceis, para as teres à mão precisamente quando mais precisas delas.",
+      "how.p": "💡 Como funciona: escreve os teus cartões num momento tranquilo, não no meio da tempestade. Cada cartão junta uma situação (ex.: «antes de uma apresentação») a uma frase que te ajuda a atravessá-la (ex.: «já fiz isto antes e correu bem; o nervosismo não significa que vou falhar»). Quando a situação acontecer, usa o botão «preciso de uma agora» para tirar um cartão à sorte.",
+      "btn.draw": "🎴 Preciso de uma agora",
+      "draw.empty": "Ainda não tens cartões guardados. Escreve o primeiro em baixo.",
+      "add.title": "Escrever um cartão novo",
+      "add.label1": "Para que situação é este cartão? (opcional)",
+      "add.ph1": "ex.: Antes de falar em público",
+      "add.label2": "A frase que te ajuda",
+      "add.ph2": "ex.: Já ultrapassei isto antes. O nervosismo é desconforto, não perigo.",
+      "btn.add": "Guardar cartão",
+      "added": "Cartão guardado 🌿",
+      "empty.req": "Escreve primeiro a frase do cartão",
+      "list.title": "Os teus cartões",
+      "list.empty": "Ainda não há cartões guardados.",
+      "count.n": " cartões guardados",
+      "count.1": " cartão guardado",
+      "del.confirm": "Apagar este cartão?"
+    },
+    en: {
+      "page.title": "Coping Cards",
+      "crumb": "Tools",
+      "intro.lead": "A classic cognitive-behavioural therapy technique: calmly write down phrases that help you through hard moments, so you have them ready exactly when you need them.",
+      "how.p": "💡 How it works: write your cards in a calm moment, not in the middle of the storm. Each card pairs a situation (e.g. \"before a presentation\") with a phrase that helps you get through it (e.g. \"I've done this before and it went fine; nervousness doesn't mean I'll fail\"). When the situation happens, use the \"I need one now\" button to draw a random card.",
+      "btn.draw": "🎴 I need one now",
+      "draw.empty": "You don't have any saved cards yet. Write your first one below.",
+      "add.title": "Write a new card",
+      "add.label1": "What situation is this card for? (optional)",
+      "add.ph1": "e.g.: Before speaking in public",
+      "add.label2": "The phrase that helps you",
+      "add.ph2": "e.g.: I've gotten through this before. Nervousness is discomfort, not danger.",
+      "btn.add": "Save card",
+      "added": "Card saved 🌿",
+      "empty.req": "Write the card's phrase first",
+      "list.title": "Your cards",
+      "list.empty": "No cards saved yet.",
+      "count.n": " cards saved",
+      "count.1": " card saved",
+      "del.confirm": "Delete this card?"
+    }
+  }
+};
+</script>
+<script src="../js/app.js?v=5"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var cards = PL.load("copingcards", []);
+
+  function save() { PL.store("copingcards", cards); }
+
+  function renderCount() {
+    var n = cards.length;
+    $("count-line").textContent = n === 1 ? "1" + PL.t("count.1") : n + PL.t("count.n");
+  }
+
+  function renderList() {
+    var box = $("card-list");
+    box.innerHTML = "";
+    cards.slice().reverse().forEach(function (c) {
+      var idx = cards.indexOf(c);
+      var div = document.createElement("div");
+      div.className = "entry";
+      var head = c.situation
+        ? "<span class='entry-date'>" + PL.esc(c.situation) + "</span>"
+        : "<span class='entry-date'>" + PL.fmtDate(c.added) + "</span>";
+      div.innerHTML =
+        "<div class='entry-head'>" + head +
+        "<button class='del' data-del='" + idx + "'>🗑️</button></div>" +
+        "<p style='margin:8px 0 0'>" + PL.esc(c.text) + "</p>";
+      box.appendChild(div);
+    });
+    $("list-empty").classList.toggle("hidden", cards.length > 0);
+    document.querySelectorAll(".del").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (confirm(PL.t("del.confirm"))) {
+          cards.splice(parseInt(b.getAttribute("data-del"), 10), 1);
+          save();
+          renderAll();
+        }
+      });
+    });
+  }
+
+  function renderAll() { renderCount(); renderList(); }
+
+  $("btn-add").addEventListener("click", function () {
+    var text = $("f-card").value.trim();
+    if (!text) { PL.toast(PL.t("empty.req")); return; }
+    var situation = $("f-situation").value.trim();
+    cards.push({ situation: situation, text: text, added: PL.todayISO() });
+    save();
+    $("f-card").value = "";
+    $("f-situation").value = "";
+    PL.toast(PL.t("added"));
+    renderAll();
+  });
+
+  $("btn-draw").addEventListener("click", function () {
+    if (!cards.length) {
+      $("draw-empty").classList.remove("hidden");
+      $("drawn").classList.add("hidden");
+      return;
+    }
+    $("draw-empty").classList.add("hidden");
+    var c = cards[Math.floor(Math.random() * cards.length)];
+    var label = c.situation ? "<strong>" + PL.esc(c.situation) + "</strong><br>" : "";
+    $("drawn-text").innerHTML = label + PL.esc(c.text);
+    $("drawn").classList.remove("hidden");
+  });
+
+  document.addEventListener("pl:ready", renderAll);
+  PL.onLang(renderAll);
+})();
+</script>
+</body>
+</html>
