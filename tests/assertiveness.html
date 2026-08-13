@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev; base-uri 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Assertividade · PsicoLab</title>
+<link rel="icon" type="image/png" href="../img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=14">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1><span style="font-size:2.2rem">🗣️</span> <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section id="panel-intro" class="panel">
+    <p data-i18n="intro.p1"></p>
+    <div class="notice" data-i18n-html="intro.notice"></div>
+    <div class="center mt-2">
+      <button class="btn" id="btn-start" data-i18n="btn.start"></button>
+    </div>
+  </section>
+
+  <section id="panel-quiz" class="panel hidden">
+    <div class="progress-track"><div class="progress-fill" id="pfill" style="width:0%"></div></div>
+    <p class="small muted" id="qcount"></p>
+    <p class="quiz-q" id="qtext"></p>
+    <div class="likert" id="likert"></div>
+    <div class="scale-hints">
+      <span data-i18n="lk.1"></span>
+      <span data-i18n="lk.4"></span>
+    </div>
+    <div class="quiz-nav">
+      <button class="btn btn-ghost btn-sm" id="btn-back" data-i18n="btn.back"></button>
+      <span></span>
+    </div>
+  </section>
+
+  <section id="panel-result" class="hidden">
+    <div class="panel center">
+      <h2 style="margin-top:0" data-i18n="res.title"></h2>
+      <div class="chart-wrap" id="gauge-wrap" style="max-width:420px;margin:0 auto"></div>
+      <p id="badge-line"></p>
+      <p id="band-text" class="muted" style="max-width:560px;margin:10px auto 0;text-align:left"></p>
+    </div>
+    <div class="panel panel-soft">
+      <p style="margin:0" data-i18n="res.expl"></p>
+    </div>
+    <div class="notice" data-i18n-html="res.notice"></div>
+    <div class="center mt-2">
+      <button class="btn btn-ghost" id="btn-retake" data-i18n="btn.retake"></button>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tests",
+  i18n: {
+    pt: {
+      "page.title": "Assertividade",
+      "crumb": "Testes",
+      "intro.lead": "Assertividade é o ponto de equilíbrio entre a passividade e a agressividade: expressar-te com clareza, sem te apagares nem atropelares o outro.",
+      "intro.p1": "Vais responder a 12 afirmações sobre como costumas comunicar em situações de desacordo, pedidos ou desconforto. Não há respostas certas ou erradas: indica o quanto concordas com cada uma.",
+      "intro.notice": "<strong>Importante:</strong> este questionário tem fins educativos e é inspirado em modelos estabelecidos de assertividade. Não substitui uma avaliação profissional.",
+      "btn.start": "Começar",
+      "btn.back": "← Anterior",
+      "btn.retake": "Repetir",
+      "lk.1": "Discordo totalmente",
+      "lk.4": "Concordo totalmente",
+      "res.title": "O teu resultado",
+      "res.notice": "<strong>A assertividade treina-se</strong>: é uma competência de comunicação, não um traço de personalidade fixo. Praticar frases curtas e directas em situações de baixo risco ajuda a torná-la mais natural nas situações difíceis.",
+      "band.low": "Abaixo do intervalo típico. É provável que tendas para a passividade (evitar conflito, adiar as tuas necessidades) ou para respostas mais bruscas quando a paciência se esgota. Vale a pena começar por frases pequenas: praticar dizer «prefiro que não» em situações simples.",
+      "band.mid": "Dentro do intervalo típico: um misto de momentos assertivos e momentos em que cedes ou reages mais do que gostarias. Há sempre espaço para reforçar as situações mais difíceis.",
+      "band.high": "Acima do intervalo típico. Tendes a expressar as tuas necessidades e limites com clareza, sem atacar nem te apagares. Vale sempre a pena verificar se isso se mantém também nas relações mais próximas, onde costuma ser mais difícil.",
+      "lbl.low": "Baixa", "lbl.mid": "Moderada", "lbl.high": "Elevada",
+      "res.expl": "🗣️ O que mede: este questionário avalia a tendência para comunicar de forma assertiva, distinta tanto da passividade (apagar as próprias necessidades) como da agressividade (impor-se à custa do outro). A assertividade é geralmente descrita como a forma de comunicação mais eficaz e saudável nas relações."
+    },
+    en: {
+      "page.title": "Assertiveness",
+      "crumb": "Tests",
+      "intro.lead": "Assertiveness is the balance point between passivity and aggression: expressing yourself clearly, without erasing yourself or steamrolling the other person.",
+      "intro.p1": "You will answer 12 statements about how you tend to communicate in situations of disagreement, requests or discomfort. There are no right or wrong answers: indicate how much you agree with each one.",
+      "intro.notice": "<strong>Important:</strong> this questionnaire is for educational purposes and is inspired by established assertiveness models. It does not replace a professional assessment.",
+      "btn.start": "Start",
+      "btn.back": "← Previous",
+      "btn.retake": "Retake",
+      "lk.1": "Strongly disagree",
+      "lk.4": "Strongly agree",
+      "res.title": "Your result",
+      "res.notice": "<strong>Assertiveness can be trained</strong>: it is a communication skill, not a fixed personality trait. Practising short, direct phrases in low-stakes situations helps make it more natural in harder ones.",
+      "band.low": "Below the typical range. You likely lean toward passivity (avoiding conflict, postponing your own needs) or toward sharper responses once patience runs out. It is worth starting with small phrases: practising saying \"I'd rather not\" in simple situations.",
+      "band.mid": "Within the typical range: a mix of assertive moments and moments where you give in or react more than you would like. There is always room to strengthen the harder situations.",
+      "band.high": "Above the typical range. You tend to express your needs and boundaries clearly, without attacking or erasing yourself. Still worth checking whether that holds up in your closest relationships too, where it tends to be hardest.",
+      "lbl.low": "Low", "lbl.mid": "Moderate", "lbl.high": "High",
+      "res.expl": "🗣️ What it measures: this questionnaire assesses the tendency to communicate assertively, distinct from both passivity (erasing one's own needs) and aggression (asserting oneself at the other's expense). Assertiveness is generally described as the most effective and healthy communication style in relationships."
+    }
+  }
+};
+</script>
+<script src="../js/app.js?v=5"></script>
+<script>
+(function () {
+  var ITEMS = [
+    { r: false, pt: "Consigo dizer que não a um pedido, mesmo que isso desiluda a outra pessoa.", en: "I can say no to a request, even if it disappoints the other person." },
+    { r: true,  pt: "Concordo com os outros mesmo quando penso de forma diferente, só para evitar conflito.", en: "I agree with others even when I think differently, just to avoid conflict." },
+    { r: false, pt: "Exprimo a minha opinião mesmo quando sei que pode ser diferente da maioria.", en: "I express my opinion even when I know it may differ from most people's." },
+    { r: true,  pt: "Fico calado/a quando alguém me trata mal, para não causar problemas.", en: "I stay quiet when someone treats me badly, to avoid causing problems." },
+    { r: false, pt: "Consigo pedir ajuda quando preciso, sem me sentir mal por isso.", en: "I can ask for help when I need it, without feeling bad about it." },
+    { r: true,  pt: "Quando estou em desacordo, levanto a voz ou interrompo a outra pessoa.", en: "When I disagree, I raise my voice or interrupt the other person." },
+    { r: false, pt: "Defendo os meus direitos sem atacar os direitos dos outros.", en: "I stand up for my rights without attacking other people's rights." },
+    { r: true,  pt: "Deixo que decidam por mim, mesmo quando tenho uma preferência clara.", en: "I let others decide for me, even when I have a clear preference." },
+    { r: false, pt: "Consigo expressar desagrado de forma directa e respeitosa.", en: "I can express displeasure directly and respectfully." },
+    { r: true,  pt: "Uso a crítica ou a ironia para fazer valer o meu ponto de vista.", en: "I use criticism or sarcasm to make my point." },
+    { r: false, pt: "Sinto-me à vontade a pedir uma mudança quando algo me incomoda.", en: "I feel comfortable asking for a change when something bothers me." },
+    { r: true,  pt: "Prefiro guardar os meus sentimentos a arriscar um desentendimento.", en: "I would rather keep my feelings to myself than risk a disagreement." }
+  ];
+
+  var LIKERT = {
+    pt: ["Discordo totalmente", "Discordo", "Concordo", "Concordo totalmente"],
+    en: ["Strongly disagree", "Disagree", "Agree", "Strongly agree"]
+  };
+
+  var BANDS = [
+    { max: 17, key: "low",  color: "var(--serious)",  icon: "🌱" },
+    { max: 30, key: "mid",  color: "var(--brand)",    icon: "🗣️" },
+    { max: 36, key: "high", color: "var(--good)",     icon: "✨" }
+  ];
+
+  var answers = new Array(ITEMS.length).fill(-1);
+  var idx = 0;
+  var state = "intro";
+  var $ = function (id) { return document.getElementById(id); };
+
+  function show(panel) {
+    $("panel-intro").classList.toggle("hidden", panel !== "intro");
+    $("panel-quiz").classList.toggle("hidden", panel !== "quiz");
+    $("panel-result").classList.toggle("hidden", panel !== "result");
+    state = panel;
+  }
+
+  function renderQuestion() {
+    var item = ITEMS[idx];
+    $("qtext").textContent = item[PL.lang];
+    $("qcount").textContent = (idx + 1) + " / " + ITEMS.length;
+    $("pfill").style.width = (idx / ITEMS.length * 100) + "%";
+    var lk = $("likert");
+    lk.innerHTML = "";
+    LIKERT[PL.lang].forEach(function (label, i) {
+      var b = document.createElement("button");
+      b.textContent = label;
+      if (answers[idx] === i) b.classList.add("sel");
+      b.addEventListener("click", function () {
+        answers[idx] = i;
+        b.classList.add("sel");
+        setTimeout(function () {
+          if (idx < ITEMS.length - 1) { idx++; renderQuestion(); }
+          else { finish(); }
+        }, 220);
+      });
+      lk.appendChild(b);
+    });
+    $("btn-back").disabled = idx === 0;
+  }
+
+  function score() {
+    var s = 0;
+    ITEMS.forEach(function (item, i) {
+      s += item.r ? 3 - answers[i] : answers[i];
+    });
+    return s;
+  }
+
+  function bandOf(s) {
+    for (var i = 0; i < BANDS.length; i++) if (s <= BANDS[i].max) return BANDS[i];
+    return BANDS[BANDS.length - 1];
+  }
+
+  function gauge(s) {
+    var cx = 210, cy = 200, R = 150, W = 26;
+    function pol(frac) {
+      var a = Math.PI + frac * Math.PI;
+      return [cx + R * Math.cos(a), cy + R * Math.sin(a)];
+    }
+    function arc(f0, f1, color) {
+      var p0 = pol(f0), p1 = pol(f1);
+      var large = (f1 - f0) > 0.5 ? 1 : 0;
+      return "<path d='M" + p0[0] + " " + p0[1] + " A" + R + " " + R + " 0 " + large + " 1 " + p1[0] + " " + p1[1] +
+        "' fill='none' style='stroke:" + color + "' stroke-width='" + W + "'/>";
+    }
+    var gap = 0.008;
+    var stops = [0, 17.5 / 36, 30.5 / 36, 1];
+    var arcs = "";
+    BANDS.forEach(function (b, i) {
+      arcs += arc(stops[i] + (i ? gap : 0), stops[i + 1] - (i < BANDS.length - 1 ? gap : 0), b.color);
+    });
+    var f = Math.max(0.01, Math.min(0.99, s / 36));
+    var tip = pol(f);
+    var innerR = R - W / 2 - 12;
+    var a = Math.PI + f * Math.PI;
+    var base = [cx + innerR * Math.cos(a), cy + innerR * Math.sin(a)];
+    var needle = "<line x1='" + base[0] + "' y1='" + base[1] + "' x2='" + tip[0] + "' y2='" + tip[1] +
+      "' style='stroke:var(--ink)' stroke-width='4' stroke-linecap='round'/>";
+    return "<svg viewBox='0 0 420 240' role='img' aria-label='Gauge'>" + arcs + needle +
+      "<text x='" + cx + "' y='" + (cy - 30) + "' text-anchor='middle' font-size='52' font-weight='800' style='fill:var(--ink)'>" + s + "</text>" +
+      "<text x='" + cx + "' y='" + (cy - 4) + "' text-anchor='middle' font-size='14' style='fill:var(--ink-3)'>/ 36</text>" +
+      "<text x='" + (cx - R) + "' y='" + (cy + 26) + "' text-anchor='middle' font-size='12' style='fill:var(--ink-3)'>0</text>" +
+      "<text x='" + (cx + R) + "' y='" + (cy + 26) + "' text-anchor='middle' font-size='12' style='fill:var(--ink-3)'>36</text>" +
+      "</svg>";
+  }
+
+  function renderResult() {
+    var s = score();
+    var b = bandOf(s);
+    $("gauge-wrap").innerHTML = gauge(s);
+    $("badge-line").innerHTML = "<span class='status-badge'>" + b.icon + " <span style='color:" + b.color + "'>" + PL.t("lbl." + b.key) + "</span></span>";
+    $("band-text").textContent = PL.t("band." + b.key);
+  }
+
+  function finish() {
+    $("pfill").style.width = "100%";
+    PL.saveTestResult("assertiveness", score());
+    renderResult();
+    show("result");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  $("btn-start").addEventListener("click", function () {
+    answers.fill(-1); idx = 0; show("quiz"); renderQuestion();
+  });
+  $("btn-back").addEventListener("click", function () {
+    if (idx > 0) { idx--; renderQuestion(); }
+  });
+  $("btn-retake").addEventListener("click", function () {
+    answers.fill(-1); idx = 0; show("quiz"); renderQuestion();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  PL.onLang(function () {
+    if (state === "quiz") renderQuestion();
+    if (state === "result") renderResult();
+  });
+})();
+</script>
+</body>
+</html>
