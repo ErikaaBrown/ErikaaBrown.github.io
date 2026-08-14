@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS users (
   bio                    TEXT NOT NULL DEFAULT '',
   failed_logins          INTEGER NOT NULL DEFAULT 0,
   locked_until           INTEGER NOT NULL DEFAULT 0,
+  token_version          INTEGER NOT NULL DEFAULT 0,
   created_at             TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
