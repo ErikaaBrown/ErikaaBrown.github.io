@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=14">
+<link rel="stylesheet" href="css/style.css?v=15">
 </head>
 <body>
 <div id="site-header"></div>
@@ -331,7 +331,7 @@ window.PAGE = {
       "profile.btn.save": "Guardar perfil",
       "profile.saved": "✔ Perfil guardado",
       "profile.err": "✖ Não foi possível guardar. Tenta outra vez.",
-      "profile.export.lead": "Descarrega uma cópia de tudo o que guardaste (humor, pensamentos, gratidão, hábitos, sono, preocupações, cartões de enfrentamento e resultados de testes) num ficheiro no teu computador.",
+      "profile.export.lead": "Descarrega uma cópia de tudo o que guardaste (humor, pensamentos, gratidão, hábitos, sono, preocupações, cartões de enfrentamento, conquistas, pausas de autocompaixão e resultados de testes) num ficheiro no teu computador.",
       "profile.btn.export": "⬇️ Exportar os meus dados",
       "crop.title": "Ajusta a tua foto",
       "crop.lead": "Arrasta para posicionar e usa o cursor para ampliar.",
@@ -443,7 +443,7 @@ window.PAGE = {
       "profile.btn.save": "Save profile",
       "profile.saved": "✔ Profile saved",
       "profile.err": "✖ Could not save. Try again.",
-      "profile.export.lead": "Download a copy of everything you've saved (mood, thoughts, gratitude, habits, sleep, worries, coping cards and test results) as a file on your computer.",
+      "profile.export.lead": "Download a copy of everything you've saved (mood, thoughts, gratitude, habits, sleep, worries, coping cards, achievements, self-compassion breaks and test results) as a file on your computer.",
       "profile.btn.export": "⬇️ Export my data",
       "crop.title": "Adjust your photo",
       "crop.lead": "Drag to position and use the slider to zoom.",
@@ -490,7 +490,7 @@ window.PAGE = {
   }
 };
 </script>
-<script src="js/app.js?v=5"></script>
+<script src="js/app.js?v=6"></script>
 <script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
@@ -859,7 +859,7 @@ window.PAGE = {
         profile: u ? { displayName: u.displayName, bio: u.bio, avatar: u.avatar } : {},
         data: {}
       };
-      var LIST_TOOLS = ["habits", "thoughts", "worries", "copingcards", "test_results"];
+      var LIST_TOOLS = ["habits", "thoughts", "worries", "copingcards", "achievements", "compassionbreak", "test_results"];
       PLSync.syncedTools().forEach(function (tool) {
         out.data[tool] = PL.load(tool, LIST_TOOLS.indexOf(tool) >= 0 ? [] : {});
       });

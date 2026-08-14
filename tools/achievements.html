@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev; base-uri 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Diário de Conquistas · PsicoLab</title>
+<link rel="icon" type="image/png" href="../img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=15">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1><span style="font-size:2.2rem">🏆</span> <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section class="panel panel-soft">
+    <p style="margin:0" data-i18n="how.p"></p>
+  </section>
+
+  <section class="panel">
+    <h3 style="margin-top:0" data-i18n="add.title"></h3>
+    <label class="field-label" for="f-ach" data-i18n="add.label"></label>
+    <textarea id="f-ach" data-i18n-ph="add.ph" style="min-height:70px" maxlength="300"></textarea>
+    <label class="field-label" style="margin-top:10px" data-i18n="size.label"></label>
+    <div class="opt-list" id="size-picker" style="grid-template-columns:repeat(3,1fr)"></div>
+    <div class="center mt-2">
+      <button class="btn" id="btn-add" data-i18n="btn.add"></button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="tiles">
+      <div class="tile"><div class="num" id="stat-total">0</div><div class="lbl" data-i18n="stat.total"></div></div>
+      <div class="tile"><div class="num" id="stat-week">0</div><div class="lbl" data-i18n="stat.week"></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 data-i18n="list.title"></h2>
+    <div id="list"></div>
+    <p class="small muted hidden" id="list-empty" data-i18n="list.empty"></p>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tools",
+  i18n: {
+    pt: {
+      "page.title": "Diário de Conquistas",
+      "crumb": "Ferramentas",
+      "intro.lead": "Um registo simples das tuas vitórias, grandes e pequenas. A mente tende a fixar-se no que corre mal; isto ajuda a equilibrar a balança.",
+      "how.p": "💡 Como funciona: sempre que fizeres algo de que te orgulhes, mesmo pequeno (mandar aquele email difícil, sair da cama num dia mau, terminar uma tarefa adiada há semanas), regista aqui. Ao fim de algumas semanas, relê a lista inteira, é normalmente surpreendente.",
+      "add.title": "Registar uma conquista",
+      "add.label": "O que conseguiste?",
+      "add.ph": "ex.: Finalmente mandei aquele email que andava a adiar.",
+      "size.label": "Tamanho (opcional)",
+      "size.small": "Pequena", "size.medium": "Média", "size.big": "Grande",
+      "btn.add": "Guardar",
+      "added": "Guardada. Parabéns 🌿",
+      "empty.req": "Escreve primeiro a conquista",
+      "stat.total": "No total", "stat.week": "Esta semana",
+      "list.title": "As tuas conquistas",
+      "list.empty": "Ainda não há nada aqui. A primeira é sempre a mais difícil de escrever.",
+      "del.confirm": "Apagar esta conquista?"
+    },
+    en: {
+      "page.title": "Achievement Log",
+      "crumb": "Tools",
+      "intro.lead": "A simple record of your wins, big and small. The mind tends to fixate on what goes wrong; this helps balance the scale.",
+      "how.p": "💡 How it works: whenever you do something you're proud of, even something small (sending that hard email, getting out of bed on a bad day, finishing a task you'd put off for weeks), log it here. After a few weeks, reread the whole list, it's usually surprising.",
+      "add.title": "Log an achievement",
+      "add.label": "What did you accomplish?",
+      "add.ph": "e.g.: I finally sent that email I kept putting off.",
+      "size.label": "Size (optional)",
+      "size.small": "Small", "size.medium": "Medium", "size.big": "Big",
+      "btn.add": "Save",
+      "added": "Saved. Congratulations 🌿",
+      "empty.req": "Write the achievement first",
+      "stat.total": "Total", "stat.week": "This week",
+      "list.title": "Your achievements",
+      "list.empty": "Nothing here yet. The first one is always the hardest to write.",
+      "del.confirm": "Delete this achievement?"
+    }
+  }
+};
+</script>
+<script src="../js/app.js?v=6"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var items = PL.load("achievements", []);
+  var size = "medium";
+  var SIZES = ["small", "medium", "big"];
+  var SIZE_ICON = { small: "🌱", medium: "🌿", big: "🌳" };
+
+  function save() { PL.store("achievements", items); }
+
+  function renderPicker() {
+    var box = $("size-picker");
+    box.innerHTML = "";
+    SIZES.forEach(function (s) {
+      var b = document.createElement("button");
+      b.className = "opt-btn" + (s === size ? " sel" : "");
+      b.style.textAlign = "center";
+      b.textContent = SIZE_ICON[s] + " " + PL.t("size." + s);
+      b.addEventListener("click", function () { size = s; renderPicker(); });
+      box.appendChild(b);
+    });
+  }
+
+  function weekStart() {
+    var d = new Date();
+    var day = (d.getDay() + 6) % 7;
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() - day);
+    return d;
+  }
+
+  function renderStats() {
+    $("stat-total").textContent = items.length;
+    var ws = weekStart();
+    var week = items.filter(function (a) { return new Date(a.added) >= ws; }).length;
+    $("stat-week").textContent = week;
+  }
+
+  function renderList() {
+    var box = $("list");
+    box.innerHTML = "";
+    items.slice().reverse().forEach(function (a) {
+      var idx = items.indexOf(a);
+      var div = document.createElement("div");
+      div.className = "entry";
+      div.innerHTML =
+        "<div class='entry-head'><span class='entry-date'>" + (SIZE_ICON[a.size] || "🌿") + " " + PL.fmtDate(a.added) + "</span>" +
+        "<button class='del' data-del='" + idx + "'>🗑️</button></div>" +
+        "<p style='margin:8px 0 0'>" + PL.esc(a.text) + "</p>";
+      box.appendChild(div);
+    });
+    $("list-empty").classList.toggle("hidden", items.length > 0);
+    document.querySelectorAll(".del").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (confirm(PL.t("del.confirm"))) {
+          items.splice(parseInt(b.getAttribute("data-del"), 10), 1);
+          save();
+          renderAll();
+        }
+      });
+    });
+  }
+
+  function renderAll() { renderStats(); renderList(); }
+
+  $("btn-add").addEventListener("click", function () {
+    var text = $("f-ach").value.trim();
+    if (!text) { PL.toast(PL.t("empty.req")); return; }
+    items.push({ text: text, size: size, added: PL.todayISO() });
+    save();
+    $("f-ach").value = "";
+    PL.toast(PL.t("added"));
+    renderAll();
+  });
+
+  document.addEventListener("pl:ready", function () { renderPicker(); renderAll(); });
+  PL.onLang(function () { renderPicker(); renderAll(); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev; base-uri 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Pausa de Autocompaixão · PsicoLab</title>
+<link rel="icon" type="image/png" href="../img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=15">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1><span style="font-size:2.2rem">🫶</span> <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section id="panel-intro" class="panel">
+    <p data-i18n="intro.p1"></p>
+    <label class="field-label" for="f-what" data-i18n="what.label"></label>
+    <input type="text" id="f-what" data-i18n-ph="what.ph" maxlength="120">
+    <div class="center mt-2">
+      <button class="btn" id="btn-start" data-i18n="btn.start"></button>
+    </div>
+  </section>
+
+  <section id="panel-steps" class="panel hidden">
+    <div class="progress-track"><div class="progress-fill" id="pfill" style="width:0%"></div></div>
+    <div class="center" style="padding:20px 0">
+      <p class="small muted" id="step-count"></p>
+      <h2 id="step-title" style="margin:6px 0 14px"></h2>
+      <p id="step-line1" style="font-size:1.2rem;max-width:480px;margin:0 auto 8px"></p>
+      <p id="step-line2" class="muted" style="max-width:480px;margin:0 auto"></p>
+    </div>
+    <div class="center mt-2">
+      <button class="btn" id="btn-next"></button>
+    </div>
+  </section>
+
+  <section id="panel-done" class="hidden">
+    <div class="panel center">
+      <h2 style="margin-top:0" data-i18n="done.title"></h2>
+      <p class="muted" data-i18n="done.p"></p>
+      <div class="tiles" style="max-width:260px;margin:1rem auto">
+        <div class="tile"><div class="num" id="stat-count">0</div><div class="lbl" data-i18n="stat.count"></div></div>
+      </div>
+    </div>
+    <div class="center mt-2">
+      <button class="btn btn-ghost" id="btn-again" data-i18n="btn.again"></button>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tools",
+  i18n: {
+    pt: {
+      "page.title": "Pausa de Autocompaixão",
+      "crumb": "Ferramentas",
+      "intro.lead": "Uma prática guiada de 3 passos, para os momentos em que a auto-crítica aperta. Baseada num exercício amplamente usado em programas de autocompaixão.",
+      "intro.p1": "Leva menos de 2 minutos. Se quiseres, escreve numa frase o que está a ser difícil agora, ajuda a tornar os passos seguintes mais concretos (mas é opcional).",
+      "what.label": "O que está a ser difícil? (opcional)",
+      "what.ph": "ex.: Cometi um erro no trabalho e não paro de pensar nisso",
+      "btn.start": "Começar",
+      "s1.title": "1. Atenção plena",
+      "s1.l1": "Este é um momento de sofrimento.",
+      "s1.l2": "Não precisas de exagerar nem de minimizar. Só reconhecer: isto dói.",
+      "s2.title": "2. Humanidade partilhada",
+      "s2.l1": "O sofrimento faz parte de ser humano.",
+      "s2.l2": "Não estás sozinho/a nisto. Outras pessoas já sentiram algo parecido, mesmo que não o vejas.",
+      "s3.title": "3. Gentileza para contigo",
+      "s3.l1": "Que eu seja gentil comigo mesmo/a.",
+      "s3.l2": "Como falarias com um amigo neste momento? Tenta oferecer-te a mesma gentileza.",
+      "btn.next": "Seguinte →",
+      "btn.finish": "Terminar",
+      "done.title": "Pausa concluída 🌿",
+      "done.p": "Podes voltar aqui sempre que precisares. Não há limite de vezes por dia.",
+      "stat.count": "Pausas feitas",
+      "btn.again": "Fazer outra pausa"
+    },
+    en: {
+      "page.title": "Self-Compassion Break",
+      "crumb": "Tools",
+      "intro.lead": "A guided 3-step practice, for moments when self-criticism tightens its grip. Based on an exercise widely used in self-compassion programmes.",
+      "intro.p1": "Takes under 2 minutes. If you want, write a sentence about what's hard right now, it helps make the next steps more concrete (but it's optional).",
+      "what.label": "What's hard right now? (optional)",
+      "what.ph": "e.g.: I made a mistake at work and can't stop thinking about it",
+      "btn.start": "Start",
+      "s1.title": "1. Mindfulness",
+      "s1.l1": "This is a moment of suffering.",
+      "s1.l2": "You don't need to exaggerate or minimise. Just acknowledge: this hurts.",
+      "s2.title": "2. Common humanity",
+      "s2.l1": "Suffering is part of being human.",
+      "s2.l2": "You are not alone in this. Other people have felt something similar, even if you can't see it.",
+      "s3.title": "3. Kindness toward yourself",
+      "s3.l1": "May I be kind to myself.",
+      "s3.l2": "How would you talk to a friend right now? Try offering yourself that same kindness.",
+      "btn.next": "Next →",
+      "btn.finish": "Finish",
+      "done.title": "Break complete 🌿",
+      "done.p": "You can come back here whenever you need to. There's no limit on how many times a day.",
+      "stat.count": "Breaks taken",
+      "btn.again": "Take another break"
+    }
+  }
+};
+</script>
+<script src="../js/app.js?v=6"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var STEPS = ["s1", "s2", "s3"];
+  var step = 0;
+  var log = PL.load("compassionbreak", []);
+
+  function show(panel) {
+    $("panel-intro").classList.toggle("hidden", panel !== "intro");
+    $("panel-steps").classList.toggle("hidden", panel !== "steps");
+    $("panel-done").classList.toggle("hidden", panel !== "done");
+  }
+
+  function renderStep() {
+    var key = STEPS[step];
+    $("step-count").textContent = (step + 1) + " / " + STEPS.length;
+    $("pfill").style.width = (step / STEPS.length * 100) + "%";
+    $("step-title").textContent = PL.t(key + ".title");
+    $("step-line1").textContent = PL.t(key + ".l1");
+    $("step-line2").textContent = PL.t(key + ".l2");
+    $("btn-next").textContent = step === STEPS.length - 1 ? PL.t("btn.finish") : PL.t("btn.next");
+  }
+
+  function renderDone() {
+    $("stat-count").textContent = log.length;
+  }
+
+  $("btn-start").addEventListener("click", function () {
+    step = 0;
+    show("steps");
+    renderStep();
+  });
+
+  $("btn-next").addEventListener("click", function () {
+    if (step < STEPS.length - 1) {
+      step++;
+      renderStep();
+    } else {
+      var note = $("f-what").value.trim();
+      log.push({ date: PL.todayISO(), note: note });
+      if (log.length > 200) log = log.slice(log.length - 200);
+      PL.store("compassionbreak", log);
+      renderDone();
+      show("done");
+    }
+  });
+
+  $("btn-again").addEventListener("click", function () {
+    $("f-what").value = "";
+    show("intro");
+  });
+
+  document.addEventListener("pl:ready", function () { show("intro"); });
+  PL.onLang(function () {
+    if (!$("panel-steps").classList.contains("hidden")) renderStep();
+    if (!$("panel-done").classList.contains("hidden")) renderDone();
+  });
+})();
+</script>
+</body>
+</html>

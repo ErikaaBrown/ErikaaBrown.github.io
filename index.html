@@ -11,10 +11,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=14">
+<link rel="stylesheet" href="css/style.css?v=15">
 </head>
 <body>
 <div id="site-header"></div>
+
+<div id="whatsnew-banner" class="whatsnew-banner">
+  <div class="whatsnew-inner">
+    <span data-i18n="whatsnew.text"></span>
+    <button id="whatsnew-close" data-i18n-aria="whatsnew.close">✕</button>
+  </div>
+</div>
 
 <main class="container">
 
@@ -82,6 +89,18 @@
         <h3 data-i18n="sc.t"></h3>
         <p data-i18n="sc.d"></p>
         <span class="meta"><span class="chip" data-i18n="sc.m1"></span><span class="chip" data-i18n="sc.m2"></span></span>
+      </a>
+      <a class="card card--art" href="tests/assertiveness.html">
+        <span class="card-bg card-bg-emoji">🗣️</span>
+        <h3 data-i18n="as.t"></h3>
+        <p data-i18n="as.d"></p>
+        <span class="meta"><span class="chip" data-i18n="as.m1"></span><span class="chip" data-i18n="as.m2"></span></span>
+      </a>
+      <a class="card card--art" href="tests/gratefulness.html">
+        <span class="card-bg card-bg-emoji">🌻</span>
+        <h3 data-i18n="gf.t"></h3>
+        <p data-i18n="gf.d"></p>
+        <span class="meta"><span class="chip" data-i18n="gf.m1"></span><span class="chip" data-i18n="gf.m2"></span></span>
       </a>
     </div>
   </section>
@@ -158,6 +177,18 @@
         <p data-i18n="cc.d"></p>
         <span class="meta"><span class="chip" data-i18n="chip.cbt"></span></span>
       </a>
+      <a class="card card--art" href="tools/achievements.html">
+        <span class="card-bg card-bg-emoji">🏆</span>
+        <h3 data-i18n="ac.t"></h3>
+        <p data-i18n="ac.d"></p>
+        <span class="meta"><span class="chip" data-i18n="chip.daily"></span></span>
+      </a>
+      <a class="card card--art" href="tools/compassionbreak.html">
+        <span class="card-bg card-bg-emoji">🫶</span>
+        <h3 data-i18n="cb.t"></h3>
+        <p data-i18n="cb.d"></p>
+        <span class="meta"><span class="chip" data-i18n="chip.calm"></span></span>
+      </a>
     </div>
   </section>
 
@@ -233,6 +264,18 @@
         <p data-i18n="ew.d"></p>
         <span class="meta"><span class="chip" data-i18n="chip.16r"></span><span class="chip" data-i18n="chip.record"></span></span>
       </a>
+      <a class="card card--art" href="games/innercritic.html">
+        <span class="card-bg card-bg-emoji">👹</span>
+        <h3 data-i18n="ic.t"></h3>
+        <p data-i18n="ic.d"></p>
+        <span class="meta"><span class="chip" data-i18n="chip.10r"></span><span class="chip" data-i18n="chip.record"></span></span>
+      </a>
+      <a class="card card--art" href="games/assertive.html">
+        <span class="card-bg card-bg-emoji">⚖️</span>
+        <h3 data-i18n="av.t"></h3>
+        <p data-i18n="av.d"></p>
+        <span class="meta"><span class="chip" data-i18n="chip.10r"></span><span class="chip" data-i18n="chip.record"></span></span>
+      </a>
     </div>
   </section>
 
@@ -276,6 +319,8 @@ window.PAGE = {
       "hero.kicker": "Psicologia interactiva",
       "hero.title": "Explora a tua mente.",
       "hero.lead": "Testes, ferramentas e jogos para descobrires como pensas, sentes e decides, com base na ciência psicológica.",
+      "whatsnew.text": "✨ Novidades: novos testes, ferramentas e jogos sobre autocompaixão, assertividade e gratidão. Explora aqui em baixo!",
+      "whatsnew.close": "Fechar aviso de novidades",
       "hero.cta1": "Fazer um teste",
       "hero.cta2": "Explorar ferramentas",
       "s.tests": "Testes", "s.tests.sub": "Auto-conhecimento com base científica",
@@ -306,6 +351,12 @@ window.PAGE = {
       "sc.t": "Autocompaixão",
       "sc.d": "Como te tratas a ti mesmo/a nos momentos difíceis: com gentileza ou com dureza?",
       "sc.m1": "12 afirmações", "sc.m2": "≈ 3 min",
+      "as.t": "Assertividade",
+      "as.d": "O ponto de equilíbrio entre a passividade e a agressividade na tua forma de comunicar.",
+      "as.m1": "12 afirmações", "as.m2": "≈ 3 min",
+      "gf.t": "Gratidão Disposicional",
+      "gf.d": "A tua tendência geral para notar e valorizar o que já tens, para lá de um momento pontual.",
+      "gf.m1": "10 afirmações", "gf.m2": "≈ 3 min",
       "md.t": "Diário Emocional",
       "md.d": "Regista o teu humor de cada dia e observa padrões ao longo do tempo num gráfico.",
       "th.t": "Registo de Pensamentos",
@@ -328,6 +379,10 @@ window.PAGE = {
       "in.d": "Cruza o teu humor, hábitos, gratidão e sono para descobrires padrões simples.",
       "cc.t": "Cartões de Enfrentamento",
       "cc.d": "Escreve frases que te ajudam nos momentos difíceis, prontas a usar quando mais precisares.",
+      "ac.t": "Diário de Conquistas",
+      "ac.d": "Regista as tuas vitórias, grandes e pequenas. A mente foca-se no que corre mal; isto equilibra a balança.",
+      "cb.t": "Pausa de Autocompaixão",
+      "cb.d": "Uma prática guiada de 3 passos para os momentos em que a auto-crítica aperta.",
       "sp.t": "Teste de Stroop",
       "sp.d": "Diz a cor, ignora a palavra. Mais difícil do que parece.",
       "rt.t": "Tempo de Reacção",
@@ -350,6 +405,10 @@ window.PAGE = {
       "di.d": "10 pensamentos na primeira pessoa. Identifica a distorção cognitiva por trás de cada um.",
       "ew.t": "Roda das Emoções",
       "ew.d": "Amplia o teu vocabulário emocional: identifica a que emoção principal pertence cada palavra.",
+      "ic.t": "O Crítico Interno",
+      "ic.d": "10 pensamentos duros contigo mesmo/a. Encontra a resposta mais autocompassiva a cada um.",
+      "av.t": "Assertividade em Acção",
+      "av.d": "10 situações do dia a dia. Identifica a resposta assertiva entre passiva, agressiva e passivo-agressiva.",
       "gl.t": "Glossário",
       "gl.d": "Dezenas de termos de psicologia explicados, em português e inglês.",
       "tl.t": "Cronologia da Psicologia",
@@ -366,6 +425,8 @@ window.PAGE = {
       "hero.kicker": "Interactive psychology",
       "hero.title": "Explore your mind.",
       "hero.lead": "Tests, tools and games to discover how you think, feel and decide, grounded in psychological science.",
+      "whatsnew.text": "✨ New: new tests, tools and games on self-compassion, assertiveness and gratitude. Explore below!",
+      "whatsnew.close": "Close what's new notice",
       "hero.cta1": "Take a test",
       "hero.cta2": "Explore tools",
       "s.tests": "Tests", "s.tests.sub": "Science-based self-knowledge",
@@ -396,6 +457,12 @@ window.PAGE = {
       "sc.t": "Self-Compassion",
       "sc.d": "How you treat yourself in hard moments: with kindness or with harshness?",
       "sc.m1": "12 statements", "sc.m2": "≈ 3 min",
+      "as.t": "Assertiveness",
+      "as.d": "The balance point between passivity and aggression in how you communicate.",
+      "as.m1": "12 statements", "as.m2": "≈ 3 min",
+      "gf.t": "Dispositional Gratitude",
+      "gf.d": "Your general tendency to notice and value what you already have, beyond a one-off moment.",
+      "gf.m1": "10 statements", "gf.m2": "≈ 3 min",
       "md.t": "Mood Diary",
       "md.d": "Log your mood each day and watch patterns emerge over time in a chart.",
       "th.t": "Thought Record",
@@ -418,6 +485,10 @@ window.PAGE = {
       "in.d": "Cross-reference your mood, habits, gratitude and sleep to find simple patterns.",
       "cc.t": "Coping Cards",
       "cc.d": "Write phrases that help you through hard moments, ready to use exactly when you need them.",
+      "ac.t": "Achievement Log",
+      "ac.d": "Record your wins, big and small. The mind fixates on what goes wrong; this balances the scale.",
+      "cb.t": "Self-Compassion Break",
+      "cb.d": "A guided 3-step practice for moments when self-criticism tightens its grip.",
       "sp.t": "Stroop Test",
       "sp.d": "Name the colour, ignore the word. Harder than it sounds.",
       "rt.t": "Reaction Time",
@@ -440,6 +511,10 @@ window.PAGE = {
       "di.d": "10 first-person thoughts. Identify the cognitive distortion behind each one.",
       "ew.t": "Wheel of Emotions",
       "ew.d": "Expand your emotional vocabulary: identify which primary emotion each word belongs to.",
+      "ic.t": "The Inner Critic",
+      "ic.d": "10 harsh thoughts about yourself. Find the most self-compassionate response to each one.",
+      "av.t": "Assertiveness in Action",
+      "av.d": "10 everyday situations. Identify the assertive response among passive, aggressive and passive-aggressive.",
       "gl.t": "Glossary",
       "gl.d": "Dozens of psychology terms explained, in Portuguese and English.",
       "tl.t": "Timeline of Psychology",
@@ -455,6 +530,17 @@ window.PAGE = {
   }
 };
 </script>
-<script src="js/app.js?v=5"></script>
+<script src="js/app.js?v=6"></script>
+<script>
+(function () {
+  var KEY = "pl_dismissed_whatsnew_2026_08";
+  var banner = document.getElementById("whatsnew-banner");
+  if (localStorage.getItem(KEY)) banner.classList.add("hidden");
+  document.getElementById("whatsnew-close").addEventListener("click", function () {
+    localStorage.setItem(KEY, "1");
+    banner.classList.add("hidden");
+  });
+})();
+</script>
 </body>
 </html>

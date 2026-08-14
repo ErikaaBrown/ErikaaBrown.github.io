@@ -3,7 +3,7 @@
 const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
 
 (function () {
-  var SYNC_TOOLS = ["mood", "thoughts", "gratitude", "habits", "sleep", "worries", "copingcards", "scores", "test_results"];
+  var SYNC_TOOLS = ["mood", "thoughts", "gratitude", "habits", "sleep", "worries", "copingcards", "achievements", "compassionbreak", "scores", "test_results"];
   var SHARE_CATEGORIES = ["test_results", "mood", "thoughts", "gratitude", "habits", "sleep", "worries"];
   var ITERATIONS = 310000;
   var RECOVERY_ALPHABET = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"; // Crockford base32, sem I/L/O/U
