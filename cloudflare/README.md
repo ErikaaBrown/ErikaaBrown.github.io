@@ -77,4 +77,7 @@ repete o passo 2 (**Edit code** → colar `worker.js` → **Deploy**).
   na consola D1 antes de actualizares o Worker (o Worker novo já espera a
   coluna `last_hit_at` em `blocked_ips`; sem ela, os pedidos que caem numa
   armadilha de scanner ou erram o código de profissional respondem com erro
-  até a migração ser aplicada).
+  até a migração ser aplicada). Corre também `migrations/0007_token_version.sql`
+  pela mesma razão (a coluna `token_version` em `users` é o que permite
+  revogar sessões antigas ao recuperar o acesso, ou ao usar "terminar sessão
+  em todos os dispositivos"; sem ela, qualquer pedido autenticado falha).

@@ -471,6 +471,14 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
       });
     },
 
+    logoutAllDevices: function () {
+      // invalida todos os tokens já emitidos (incluindo os de outros dispositivos) e
+      // guarda logo o token novo devolvido, para esta sessão continuar com sessão iniciada
+      return api("/account/logout-all", "POST").then(function (r) {
+        if (acct) { acct.token = r.token; saveAcct(acct); }
+      });
+    },
+
     /* ---- recuperação de acesso (esqueci-me da palavra-passe) ---- */
 
     recoverStart: function (email, code) {

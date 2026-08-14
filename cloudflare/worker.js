@@ -29,7 +29,7 @@ const ALLOWED_ORIGINS = [
   "http://127.0.0.1:8765"
 ];
 
-const TOOLS = ["mood", "thoughts", "gratitude", "habits", "sleep", "worries", "scores", "test_results"];
+const TOOLS = ["mood", "thoughts", "gratitude", "habits", "sleep", "worries", "copingcards", "achievements", "compassionbreak", "scores", "test_results"];
 const SHARE_CATEGORIES = ["test_results", "mood", "thoughts", "gratitude", "habits", "sleep", "worries"];
 const CODE_ALPHABET = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"; // Crockford base32, sem I/L/O/U
 const MAX_BLOB = 300 * 1024; // 300 KB por ferramenta/partilha
@@ -52,6 +52,7 @@ const CONN_GUESS_THRESHOLD = 8; // tentativas erradas de código profissional an
 const IP_FLAG_RESET_S = 60 * 60 * 24; // sem novas ocorrências neste intervalo, o contador reinicia do zero
 const REGISTER_THRESHOLD = 10; // registos a partir do mesmo IP, num dia, antes de bloquear
 const RECOVERY_GUESS_THRESHOLD = 8; // tentativas erradas de código de recuperação antes de bloquear o IP
+const LOGIN_IP_THRESHOLD = 20; // logins falhados a partir do mesmo IP, num dia, antes de bloquear (independente da conta)
 
 // caminhos que esta API nunca serve a sério - só existem para apanhar scanners automáticos
 const DECOY_PATHS = [
@@ -87,7 +88,7 @@ async function isIpBlocked(env, ip) {
 // onde um erro isolado pode ser só um engano de digitação)
 async function flagIp(env, ip, reason, threshold) {
   const now = Math.floor(Date.now() / 1000);
-  const row = await env.DB.prepare("SELECT hit_count, last_hit_at FROM blocked_ips WHERE ip = ?").bind(ip).first();
+  const row = await env.DB.prepare("SELECT hit_count, last_hit_at, blocked_until FROM blocked_ips WHERE ip = ?").bind(ip).first();
   const stale = !row || (now - row.last_hit_at) > IP_FLAG_RESET_S;
   const count = stale ? 1 : row.hit_count + 1;
   const until = count >= threshold ? now + IP_BLOCK_S : (stale ? 0 : row.blocked_until);
@@ -113,7 +114,10 @@ function corsHeaders(origin) {
 function json(data, status, origin) {
   return new Response(JSON.stringify(data), {
     status: status || 200,
-    headers: Object.assign({ "Content-Type": "application/json" }, corsHeaders(origin))
+    headers: Object.assign(
+      { "Content-Type": "application/json", "X-Content-Type-Options": "nosniff", "Referrer-Policy": "no-referrer" },
+      corsHeaders(origin)
+    )
   });
 }
 
@@ -133,25 +137,31 @@ async function hmacHex(secret, msg) {
   return hex(await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(msg)));
 }
 
-async function makeToken(env, uid, scope) {
+async function makeToken(env, uid, scope, tokenVersion) {
   scope = scope || "full";
+  const tv = tokenVersion || 0;
   const ttl = scope === "recovery" ? RECOVERY_TTL_S : FULL_TTL_S;
   const exp = Math.floor(Date.now() / 1000) + ttl;
-  const sig = await hmacHex(env.SESSION_SECRET, uid + "." + exp + "." + scope);
-  return uid + "." + exp + "." + scope + "." + sig;
+  const sig = await hmacHex(env.SESSION_SECRET, uid + "." + exp + "." + scope + "." + tv);
+  return uid + "." + exp + "." + scope + "." + tv + "." + sig;
 }
 
 async function checkToken(env, req) {
   const auth = req.headers.get("Authorization") || "";
-  const m = auth.match(/^Bearer (\d+)\.(\d+)\.(full|recovery)\.([0-9a-f]+)$/);
+  const m = auth.match(/^Bearer (\d+)\.(\d+)\.(full|recovery)\.(\d+)\.([0-9a-f]+)$/);
   if (!m) return null;
-  const [, uid, exp, scope, sig] = m;
+  const [, uid, exp, scope, tv, sig] = m;
   if (parseInt(exp, 10) < Math.floor(Date.now() / 1000)) return null;
-  const good = await hmacHex(env.SESSION_SECRET, uid + "." + exp + "." + scope);
+  const good = await hmacHex(env.SESSION_SECRET, uid + "." + exp + "." + scope + "." + tv);
   if (sig.length !== good.length) return null;
   let diff = 0;
   for (let i = 0; i < sig.length; i++) diff |= sig.charCodeAt(i) ^ good.charCodeAt(i);
-  return diff === 0 ? { uid: parseInt(uid, 10), scope: scope } : null;
+  if (diff !== 0) return null;
+  // a versão embrulhada no token tem de bater certo com a guardada: permite revogar
+  // todos os tokens emitidos até agora (ex.: depois de recuperar a conta) sem esperar que expirem
+  const row = await env.DB.prepare("SELECT token_version FROM users WHERE id = ?").bind(uid).first();
+  if (!row || String(row.token_version) !== tv) return null;
+  return { uid: parseInt(uid, 10), scope: scope };
 }
 
 function validEmail(e) {
@@ -178,6 +188,10 @@ function validBio(s) {
 function validAvatar(s) {
   return typeof s === "string" && s.length <= MAX_AVATAR && (s === "" || /^[A-Za-z0-9+/]+=*$/.test(s));
 }
+function validIv(s) {
+  // um IV de AES-GCM em base64 (12 bytes) tem 16 caracteres; 64 dá folga sem abrir a porta a abuso
+  return typeof s === "string" && s.length > 0 && s.length <= 64;
+}
 
 function genCode() {
   const bytes = crypto.getRandomValues(new Uint8Array(5)); // 40 bits, 8 símbolos base32
@@ -199,7 +213,7 @@ async function register(env, body, origin, ip) {
   if (body.hp) {
     // campo-armadilha do formulário: só um robô o preenche. Finge sucesso sem criar nada,
     // para não lhe dar nenhuma pista de que foi apanhado
-    return json({ token: "0.0.full.0", email: (body.email || "").toLowerCase().trim(), role: "user" }, 200, origin);
+    return json({ token: "0.0.full.0.0", email: (body.email || "").toLowerCase().trim(), role: "user" }, 200, origin);
   }
   // conta cada tentativa de registo por IP, para um script não conseguir criar contas sem limite
   await flagIp(env, ip, "register_attempt", REGISTER_THRESHOLD);
@@ -233,19 +247,20 @@ async function register(env, body, origin, ip) {
   }
 }
 
-async function login(env, body, origin) {
+async function login(env, body, origin, ip) {
   if (!validEmail(body.email) || !validAuthKey(body.authKey)) {
     return json({ error: "invalid_input" }, 400, origin);
   }
   const email = body.email.toLowerCase().trim();
   const row = await env.DB.prepare(
     "SELECT id, auth_salt, auth_hash, role, professional_code, dek_pass_iv, dek_pass_ct, " +
-    "ecdh_pub, ecdh_priv_pass_iv, ecdh_priv_pass_ct, display_name, avatar, bio, failed_logins, locked_until FROM users WHERE email = ?"
+    "ecdh_pub, ecdh_priv_pass_iv, ecdh_priv_pass_ct, display_name, avatar, bio, failed_logins, locked_until, token_version FROM users WHERE email = ?"
   ).bind(email).first();
   if (!row) {
     // faz o mesmo trabalho de hash de qualquer forma, para o tempo de resposta não denunciar
     // que este email não existe (o resultado nunca é comparado com nada)
     await sha256hex(DUMMY_HASH_SALT + "|" + body.authKey);
+    await flagIp(env, ip, "login_fail", LOGIN_IP_THRESHOLD);
     return json({ error: "bad_credentials" }, 401, origin);
   }
   const now = Math.floor(Date.now() / 1000);
@@ -259,13 +274,14 @@ async function login(env, body, origin) {
     const lockSecs = lockoutSeconds(failed);
     await env.DB.prepare("UPDATE users SET failed_logins = ?, locked_until = ? WHERE id = ?")
       .bind(failed, lockSecs ? now + lockSecs : 0, row.id).run();
+    await flagIp(env, ip, "login_fail", LOGIN_IP_THRESHOLD);
     return json({ error: "bad_credentials" }, 401, origin);
   }
   if (row.failed_logins > 0) {
     await env.DB.prepare("UPDATE users SET failed_logins = 0, locked_until = 0 WHERE id = ?").bind(row.id).run();
   }
   return json({
-    token: await makeToken(env, row.id, "full"),
+    token: await makeToken(env, row.id, "full", row.token_version),
     email: email,
     role: row.role,
     professionalCode: row.professional_code || "",
@@ -286,7 +302,7 @@ async function recoverStart(env, body, origin, ip) {
   }
   const email = body.email.toLowerCase().trim();
   const row = await env.DB.prepare(
-    "SELECT id, recovery_salt, recovery_hash, dek_recovery_iv, dek_recovery_ct, ecdh_priv_recovery_iv, ecdh_priv_recovery_ct " +
+    "SELECT id, recovery_salt, recovery_hash, dek_recovery_iv, dek_recovery_ct, ecdh_priv_recovery_iv, ecdh_priv_recovery_ct, token_version " +
     "FROM users WHERE email = ?"
   ).bind(email).first();
   if (!row || !row.recovery_hash) {
@@ -300,7 +316,7 @@ async function recoverStart(env, body, origin, ip) {
     return json({ error: "bad_recovery" }, 401, origin);
   }
   return json({
-    token: await makeToken(env, row.id, "recovery"),
+    token: await makeToken(env, row.id, "recovery", row.token_version),
     dekRecoveryIv: row.dek_recovery_iv,
     dekRecoveryCt: row.dek_recovery_ct,
     ecdhPrivRecoveryIv: row.ecdh_priv_recovery_iv,
@@ -315,15 +331,17 @@ async function recoverReset(env, uid, body, origin) {
   }
   const salt = hex(crypto.getRandomValues(new Uint8Array(16)));
   const hash = await sha256hex(salt + "|" + body.newAuthKey);
+  // sobe a token_version: qualquer token emitido antes desta recuperação (noutros
+  // dispositivos, ou um que tenha vazado) deixa de ser válido de imediato
   await env.DB.prepare(
     "UPDATE users SET auth_salt = ?, auth_hash = ?, dek_pass_iv = ?, dek_pass_ct = ?, " +
-    "ecdh_priv_pass_iv = ?, ecdh_priv_pass_ct = ? WHERE id = ?"
+    "ecdh_priv_pass_iv = ?, ecdh_priv_pass_ct = ?, token_version = token_version + 1 WHERE id = ?"
   ).bind(salt, hash, body.dekPassIv, body.dekPassCt, body.ecdhPrivPassIv, body.ecdhPrivPassCt, uid).run();
   const row = await env.DB.prepare(
-    "SELECT email, role, professional_code, display_name, avatar, bio FROM users WHERE id = ?"
+    "SELECT email, role, professional_code, display_name, avatar, bio, token_version FROM users WHERE id = ?"
   ).bind(uid).first();
   return json({
-    token: await makeToken(env, uid, "full"),
+    token: await makeToken(env, uid, "full", row.token_version),
     email: row.email, role: row.role, professionalCode: row.professional_code || "",
     displayName: row.display_name || "", avatar: row.avatar || "", bio: row.bio || ""
   }, 200, origin);
@@ -365,6 +383,14 @@ async function updateProfile(env, uid, body, origin) {
   return json({ ok: true }, 200, origin);
 }
 
+async function logoutAll(env, uid, origin) {
+  // sobe a token_version: invalida todos os tokens já emitidos, incluindo os de outros
+  // dispositivos. Emite logo um token novo para este pedido não ficar também sem sessão
+  await env.DB.prepare("UPDATE users SET token_version = token_version + 1 WHERE id = ?").bind(uid).run();
+  const row = await env.DB.prepare("SELECT token_version FROM users WHERE id = ?").bind(uid).first();
+  return json({ token: await makeToken(env, uid, "full", row.token_version) }, 200, origin);
+}
+
 /* ---------- dados das ferramentas ---------- */
 
 async function getData(env, uid, origin) {
@@ -376,7 +402,7 @@ async function getData(env, uid, origin) {
 
 async function putData(env, uid, tool, body, origin) {
   if (!TOOLS.includes(tool)) return json({ error: "unknown_tool" }, 400, origin);
-  if (typeof body.iv !== "string" || typeof body.ct !== "string" ||
+  if (!validIv(body.iv) || typeof body.ct !== "string" ||
       typeof body.updated !== "number" || body.ct.length > MAX_BLOB) {
     return json({ error: "invalid_input" }, 400, origin);
   }
@@ -485,7 +511,7 @@ async function putShare(env, uid, connId, category, body, origin) {
   if (!SHARE_CATEGORIES.includes(category)) return json({ error: "unknown_category" }, 400, origin);
   const role = await connectionRoleOf(env, uid, connId);
   if (role !== "patient") return json({ error: "not_found" }, 404, origin);
-  if (typeof body.iv !== "string" || typeof body.ct !== "string" ||
+  if (!validIv(body.iv) || typeof body.ct !== "string" ||
       typeof body.updated !== "number" || body.ct.length > MAX_BLOB) {
     return json({ error: "invalid_input" }, 400, origin);
   }
@@ -566,7 +592,7 @@ export default {
         let body;
         try { body = await req.json(); } catch (e) { return json({ error: "invalid_json" }, 400, origin); }
         if (path === "/auth/register") return register(env, body, origin, ip);
-        if (path === "/auth/login") return login(env, body, origin);
+        if (path === "/auth/login") return login(env, body, origin, ip);
         return recoverStart(env, body, origin, ip);
       }
 
@@ -595,6 +621,8 @@ export default {
         try { body = await req.json(); } catch (e) { return json({ error: "invalid_json" }, 400, origin); }
         return updateProfile(env, uid, body, origin);
       }
+
+      if (req.method === "POST" && path === "/account/logout-all") return logoutAll(env, uid, origin);
 
       if (req.method === "GET" && path === "/data") return getData(env, uid, origin);
 

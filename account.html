@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>html.pl-framed{display:none!important}</style>
+<script>if(window.top!==window.self){document.documentElement.className+=" pl-framed";try{window.top.location=window.self.location.href;}catch(e){}}</script>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev; base-uri 'self'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Conta · PsicoLab</title>
@@ -166,6 +168,7 @@
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
         <button class="btn btn-sm" id="btn-sync" data-i18n="btn.sync"></button>
         <button class="btn btn-ghost btn-sm" id="btn-logout" data-i18n="btn.logout"></button>
+        <button class="btn btn-ghost btn-sm" id="btn-logout-all" data-i18n="btn.logoutall"></button>
         <button class="btn btn-danger btn-sm" id="btn-delete" data-i18n="btn.delete" style="margin-left:auto"></button>
       </div>
     </div>
@@ -314,6 +317,9 @@ window.PAGE = {
       "acct.what": "O diário emocional, o registo de pensamentos, a gratidão e os hábitos sincronizam-se sozinhos sempre que guardas alguma coisa.",
       "btn.sync": "Sincronizar agora",
       "btn.logout": "Terminar sessão",
+      "btn.logoutall": "Terminar sessão em todos os dispositivos",
+      "logoutall.confirm": "Isto vai desligar todos os outros dispositivos onde tenhas sessão iniciada (vais continuar com sessão neste). Continuar?",
+      "logoutall.done": "Sessão terminada nos outros dispositivos 🌿",
       "btn.delete": "Apagar conta e dados",
       "sync.done": "✔ Tudo sincronizado",
       "sync.pulled": "✔ Sincronizado. Recebemos registos mais recentes.",
@@ -426,6 +432,9 @@ window.PAGE = {
       "acct.what": "Your mood diary, thought records, gratitude and habits sync by themselves whenever you save something.",
       "btn.sync": "Sync now",
       "btn.logout": "Sign out",
+      "btn.logoutall": "Sign out on all devices",
+      "logoutall.confirm": "This will sign you out on every other device where you're logged in (you'll stay signed in on this one). Continue?",
+      "logoutall.done": "Signed out on other devices 🌿",
       "btn.delete": "Delete account and data",
       "sync.done": "✔ Everything synced",
       "sync.pulled": "✔ Synced. Newer entries received.",
@@ -490,7 +499,7 @@ window.PAGE = {
   }
 };
 </script>
-<script src="js/app.js?v=6"></script>
+<script src="js/app.js?v=7"></script>
 <script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
@@ -796,6 +805,14 @@ window.PAGE = {
       PLSync.logout();
       $("sync-status").textContent = "";
       render();
+    });
+    $("btn-logout-all").addEventListener("click", function () {
+      if (!confirm(PL.t("logoutall.confirm"))) return;
+      PLSync.logoutAllDevices().then(function () {
+        PL.toast(PL.t("logoutall.done"));
+      }).catch(function () {
+        $("sync-status").textContent = PL.t("sync.err");
+      });
     });
     $("btn-delete").addEventListener("click", function () {
       if (!confirm(PL.t("del.confirm1"))) return;
