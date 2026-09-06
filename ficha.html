@@ -15,6 +15,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css?v=15">
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "97b7a3670b8244db86ceadacfe4d4283"}'></script>
+<style>
+  @media print {
+    #site-header, #site-footer, .no-print, #cat-list .ficha-row-off { display: none !important; }
+    #print-meta { display: block !important; }
+    body { background: #fff; }
+    #cat-list .panel { box-shadow: none; border: none; padding: 0; margin: 0 0 18px; page-break-inside: avoid; }
+    #cat-list button.tag-btn { all: unset; display: block; font-weight: 800; font-size: 1.05rem; color: #000; }
+    #cat-list button.tag-btn::before { content: "\2713  "; }
+    #cat-list .interp { border-left-color: #000; }
+  }
+</style>
 </head>
 <body>
 <div id="site-header"></div>
@@ -27,15 +38,25 @@
   </div>
 
   <section>
-    <h2 data-i18n="pick.title"></h2>
-    <p class="small muted" data-i18n="pick.note"></p>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <h2 style="margin:0" data-i18n="pick.title"></h2>
+      <button class="btn btn-ghost btn-sm no-print" id="btn-print" style="margin-left:auto" data-i18n="btn.print"></button>
+    </div>
+    <p class="small muted no-print" data-i18n="pick.note"></p>
+    <p class="hidden" id="print-meta" style="font-weight:700"></p>
     <div id="cat-list"></div>
   </section>
 
-  <section id="share-section" class="panel">
+  <section id="share-section" class="panel no-print">
     <h3 style="margin-top:0" data-i18n="share.title"></h3>
-    <p class="small muted hidden" id="share-noaccount" data-i18n="share.noaccount"></p>
-    <p class="small muted hidden" id="share-empty" data-i18n="share.empty"></p>
+    <div class="hidden" id="share-noaccount">
+      <p class="small muted" style="margin:0" data-i18n="share.noaccount"></p>
+      <div class="center mt-2"><a class="btn btn-sm" href="account.html" data-i18n="share.gotoaccount"></a></div>
+    </div>
+    <div class="hidden" id="share-empty">
+      <p class="small muted" style="margin:0" data-i18n="share.empty"></p>
+      <div class="center mt-2"><a class="btn btn-sm" href="account.html" data-i18n="share.gotoaccount"></a></div>
+    </div>
     <div id="share-picker" class="hidden">
       <label class="field-label" for="conn-select" data-i18n="share.pick"></label>
       <select id="conn-select"></select>
@@ -60,9 +81,12 @@ window.PAGE = {
       "intro.lead": "Escolhe o que queres incluir na tua ficha. Cada categoria que marcares mostra uma pré-visualização do que guardaste; se estiveres ligado(a) a um profissional, é isto que ele(a) vai ver quando partilhares. A tua selecção fica guardada automaticamente, como uma ficha pessoal tua.",
       "pick.title": "O que incluir",
       "pick.note": "Marca uma categoria para veres uma pré-visualização. Isto funciona mesmo sem sessão iniciada; só a partilha exige conta e ligação a um profissional.",
+      "btn.print": "🖨️ Exportar em PDF",
+      "print.meta": "Ficha pessoal · ",
       "share.title": "Partilhar com um profissional",
-      "share.noaccount": "Precisas de ter sessão iniciada, com sincronização activa, para partilhares dados com um profissional. Vai à página Conta para configurares isto.",
-      "share.empty": "Ainda não estás ligado a nenhum profissional. Vai à página Conta para te ligares com um, usando o código que ele(a) te der.",
+      "share.noaccount": "Precisas de ter sessão iniciada, com sincronização activa, para partilhares dados com um profissional.",
+      "share.empty": "Ainda não estás ligado a nenhum profissional.",
+      "share.gotoaccount": "Ir à Conta →",
       "share.pick": "Profissional",
       "btn.share": "Partilhar esta selecção",
       "share.done": "Selecção partilhada 🌿",
@@ -89,9 +113,12 @@ window.PAGE = {
       "intro.lead": "Choose what to include in your record. Each category you tick shows a preview of what you've saved; if you're connected to a professional, that's exactly what they'll see once you share it. Your selection is saved automatically, as your own personal record.",
       "pick.title": "What to include",
       "pick.note": "Tick a category to see a preview. This works even without being signed in; only sharing requires an account and a connection to a professional.",
+      "btn.print": "🖨️ Export as PDF",
+      "print.meta": "Personal record · ",
       "share.title": "Share with a professional",
-      "share.noaccount": "You need to be signed in, with sync enabled, to share data with a professional. Go to the Account page to set this up.",
-      "share.empty": "You are not connected to any professional yet. Go to the Account page to connect with one, using the code they give you.",
+      "share.noaccount": "You need to be signed in, with sync enabled, to share data with a professional.",
+      "share.empty": "You are not connected to any professional yet.",
+      "share.gotoaccount": "Go to Account →",
       "share.pick": "Professional",
       "btn.share": "Share this selection",
       "share.done": "Selection shared 🌿",
@@ -115,7 +142,7 @@ window.PAGE = {
   }
 };
 </script>
-<script src="js/app.js?v=7"></script>
+<script src="js/app.js?v=8"></script>
 <script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
@@ -144,7 +171,7 @@ window.PAGE = {
     CATS.forEach(function (cat) {
       var checked = selected.indexOf(cat) >= 0;
       var row = document.createElement("div");
-      row.className = "panel";
+      row.className = "panel " + (checked ? "ficha-row-on" : "ficha-row-off");
       var head = document.createElement("button");
       head.className = "tag-btn" + (checked ? " sel" : "");
       head.style.cssText = "width:100%;text-align:left";
@@ -165,7 +192,10 @@ window.PAGE = {
       }
       box.appendChild(row);
     });
+    $("print-meta").textContent = PL.t("print.meta") + PL.fmtDate(PL.todayISO());
   }
+
+  $("btn-print").addEventListener("click", function () { window.print(); });
 
   function loadShareSection() {
     if (!window.PLSync || !PLSync.user()) {
