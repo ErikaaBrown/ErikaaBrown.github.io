@@ -208,6 +208,14 @@
       </div>
     </div>
 
+    <div class="panel">
+      <h3 style="margin-top:0" data-i18n="ficha.title"></h3>
+      <p class="small muted" data-i18n="ficha.lead"></p>
+      <div class="center mt-2">
+        <a class="btn btn-sm" href="ficha.html" data-i18n="ficha.btn"></a>
+      </div>
+    </div>
+
     <dialog class="crop-dialog" id="dlg-crop">
       <h3 style="margin-top:0" data-i18n="crop.title"></h3>
       <p class="small muted" style="margin:0" data-i18n="crop.lead"></p>
@@ -253,7 +261,6 @@
           <button class="btn btn-danger btn-sm conn-disconnect" data-i18n="conn.disconnect"></button>
         </div>
         <p class="small muted conn-bio hidden" style="margin:10px 0 0"></p>
-        <a class="btn btn-ghost btn-sm" style="margin-top:14px;display:inline-block" href="ficha.html" data-i18n="conn.managesharing"></a>
       </div>
     </template>
   </section>
@@ -339,6 +346,9 @@ window.PAGE = {
       "profile.err": "✖ Não foi possível guardar. Tenta outra vez.",
       "profile.export.lead": "Descarrega uma cópia de tudo o que guardaste (humor, pensamentos, gratidão, hábitos, sono, preocupações, cartões de enfrentamento, conquistas, pausas de autocompaixão, hierarquia de medos, hierarquia de valores e resultados de testes) num ficheiro no teu computador.",
       "profile.btn.export": "⬇️ Exportar os meus dados",
+      "ficha.title": "A minha ficha",
+      "ficha.lead": "Escolhe o que queres incluir na tua ficha pessoal: humor, pensamentos, valores, resultados de testes e por aí fora. Fica guardada só tua, para consulta pessoal ou para partilhares com um profissional ligado.",
+      "ficha.btn": "📋 Criar ou editar a minha ficha",
       "crop.title": "Ajusta a tua foto",
       "crop.lead": "Arrasta para posicionar e usa o cursor para ampliar.",
       "crop.cancel": "Cancelar",
@@ -367,7 +377,6 @@ window.PAGE = {
       "conn.btn": "Ligar",
       "conn.since": "Ligado desde",
       "conn.disconnect": "Desligar",
-      "conn.managesharing": "Gerir o que partilho →",
       "conn.empty": "Ainda não estás ligado a nenhum profissional.",
       "conn.disconnect.confirm": "Desligar deste profissional? Deixa de poder ver qualquer dado teu.",
       "conn.connected": "Ligado! Escolhe em baixo o que queres partilhar.",
@@ -459,6 +468,9 @@ window.PAGE = {
       "profile.err": "✖ Could not save. Try again.",
       "profile.export.lead": "Download a copy of everything you've saved (mood, thoughts, gratitude, habits, sleep, worries, coping cards, achievements, self-compassion breaks, fear hierarchy, values hierarchy and test results) as a file on your computer.",
       "profile.btn.export": "⬇️ Export my data",
+      "ficha.title": "My record",
+      "ficha.lead": "Choose what to include in your personal record: mood, thoughts, values, test results and more. It's kept just for you, for your own reference or to share with a connected professional.",
+      "ficha.btn": "📋 Create or edit my record",
       "crop.title": "Adjust your photo",
       "crop.lead": "Drag to position and use the slider to zoom.",
       "crop.cancel": "Cancel",
@@ -487,7 +499,6 @@ window.PAGE = {
       "conn.btn": "Connect",
       "conn.since": "Connected since",
       "conn.disconnect": "Disconnect",
-      "conn.managesharing": "Manage what I share →",
       "conn.empty": "You are not connected to any professional yet.",
       "conn.disconnect.confirm": "Disconnect from this professional? They will lose access to anything of yours.",
       "conn.connected": "Connected! Choose below what you want to share.",
@@ -942,7 +953,6 @@ window.PAGE = {
         node.querySelector("[data-i18n='conn.since']").textContent =
           PL.t("conn.since") + " " + PL.fmtDate(String(conn.since).slice(0, 10));
         node.querySelector(".conn-disconnect").textContent = PL.t("conn.disconnect");
-        node.querySelector("[data-i18n='conn.managesharing']").textContent = PL.t("conn.managesharing");
         node.querySelector(".conn-disconnect").addEventListener("click", function () {
           if (!confirm(PL.t("conn.disconnect.confirm"))) return;
           PLSync.disconnect(conn.connectionId).then(renderConnections);
