@@ -359,15 +359,79 @@
       return "<li><strong>#" + e.n + " · " + fmtDate(e.date) + "</strong> · " + esc(words) + "</li>";
     }).join("") + "</ul>";
   }
-  var SCALAR_TEST_MAX = { stress: 40, rosenberg: 30, assertiveness: 36, selfcompassion: 36, gratefulness: 30 };
+  var VECTOR_TEST_DIMS = {
+    bigfive: [
+      { pt: "Abertura", en: "Openness" },
+      { pt: "Conscienciosidade", en: "Conscientiousness" },
+      { pt: "Extroversão", en: "Extraversion" },
+      { pt: "Amabilidade", en: "Agreeableness" },
+      { pt: "Neuroticismo", en: "Neuroticism" }
+    ],
+    attachment: [
+      { pt: "Seguro", en: "Secure" },
+      { pt: "Ansioso", en: "Anxious" },
+      { pt: "Evitante", en: "Avoidant" },
+      { pt: "Receoso", en: "Fearful" }
+    ],
+    eq: [
+      { pt: "Auto-consciência", en: "Self-awareness" },
+      { pt: "Auto-regulação", en: "Self-regulation" },
+      { pt: "Consciência social", en: "Social awareness" },
+      { pt: "Gestão de relações", en: "Relationship management" }
+    ],
+    resilience: [
+      { pt: "Recuperação", en: "Recovery" },
+      { pt: "Adaptação", en: "Adaptation" },
+      { pt: "Apoio e sentido", en: "Support and meaning" }
+    ],
+    panas: [
+      { pt: "Afecto positivo", en: "Positive affect" },
+      { pt: "Afecto negativo", en: "Negative affect" }
+    ]
+  };
+  var SCALAR_TEST_BANDS = {
+    stress: { max: 40, bands: [
+      { max: 13, pt: "Baixo", en: "Low" }, { max: 19, pt: "Moderado", en: "Moderate" },
+      { max: 26, pt: "Elevado", en: "High" }, { max: 40, pt: "Muito elevado", en: "Very high" }
+    ] },
+    rosenberg: { max: 30, bands: [
+      { max: 14, pt: "Baixa", en: "Low" }, { max: 25, pt: "Típica", en: "Typical" }, { max: 30, pt: "Elevada", en: "High" }
+    ] },
+    assertiveness: { max: 36, bands: [
+      { max: 17, pt: "Baixa", en: "Low" }, { max: 30, pt: "Moderada", en: "Moderate" }, { max: 36, pt: "Elevada", en: "High" }
+    ] },
+    selfcompassion: { max: 36, bands: [
+      { max: 17, pt: "Baixa", en: "Low" }, { max: 30, pt: "Típica", en: "Typical" }, { max: 36, pt: "Elevada", en: "High" }
+    ] },
+    gratefulness: { max: 30, bands: [
+      { max: 14, pt: "Baixa", en: "Low" }, { max: 25, pt: "Típica", en: "Typical" }, { max: 30, pt: "Elevada", en: "High" }
+    ] }
+  };
+  function scalarBandLabel(test, score) {
+    var b = SCALAR_TEST_BANDS[test];
+    if (!b) return "";
+    for (var i = 0; i < b.bands.length; i++) if (score <= b.bands[i].max) return b.bands[i][lang];
+    return b.bands[b.bands.length - 1][lang];
+  }
   function fmtTestResults(arr) {
     if (!Array.isArray(arr) || !arr.length) return "";
-    return "<table class='data'><tbody>" + arr.slice(-10).reverse().map(function (e) {
-      var summary = Array.isArray(e.scores)
-        ? e.scores.map(function (n) { return Math.round(n); }).join(" / ")
-        : (e.scores + (SCALAR_TEST_MAX[e.test] ? "/" + SCALAR_TEST_MAX[e.test] : ""));
-      return "<tr><td>" + t("test." + e.test) + "</td><td>" + fmtDate(e.date) + "</td><td>" + summary + "</td></tr>";
-    }).join("") + "</tbody></table>";
+    return arr.slice(-10).reverse().map(function (e) {
+      var head = "<div><strong>" + esc(t("test." + e.test)) + "</strong> · " + fmtDate(e.date) + "</div>";
+      var body;
+      if (Array.isArray(e.scores)) {
+        var dims = VECTOR_TEST_DIMS[e.test] || [];
+        body = "<ul style='margin:4px 0 0;padding-left:20px'>" + e.scores.map(function (n, i) {
+          var label = dims[i] ? esc(dims[i][lang]) : ("#" + (i + 1));
+          return "<li>" + label + ": " + Math.round(n) + "%</li>";
+        }).join("") + "</ul>";
+      } else {
+        var band = SCALAR_TEST_BANDS[e.test];
+        var maxTxt = band ? "/" + band.max : "";
+        var bandTxt = band ? " <span class='chip'>" + esc(scalarBandLabel(e.test, e.scores)) + "</span>" : "";
+        body = "<div style='margin-top:2px'>" + e.scores + maxTxt + bandTxt + "</div>";
+      }
+      return "<div style='margin-bottom:12px'>" + head + body + "</div>";
+    }).join("");
   }
   var GAME_KEYS = ["emotionwheel", "emotionladder", "distortions", "myths", "assertive", "innercritic", "digitspan", "nback"];
   var GAME_MAX = { emotionwheel: 16, emotionladder: 16, distortions: 10, myths: 12, assertive: 10, innercritic: 10 };
