@@ -57,9 +57,9 @@ window.PAGE = {
     pt: {
       "page.title": "A Minha Ficha",
       "crumb": "Conta",
-      "intro.lead": "Escolhe o que queres incluir na tua ficha. Cada categoria que marcares mostra uma pré-visualização do que guardaste — e, se estiveres ligado(a) a um profissional, é isto que ele(a) vai ver quando partilhares.",
+      "intro.lead": "Escolhe o que queres incluir na tua ficha. Cada categoria que marcares mostra uma pré-visualização do que guardaste; se estiveres ligado(a) a um profissional, é isto que ele(a) vai ver quando partilhares. A tua selecção fica guardada automaticamente, como uma ficha pessoal tua.",
       "pick.title": "O que incluir",
-      "pick.note": "Marca uma categoria para veres uma pré-visualização. Isto funciona mesmo sem sessão iniciada — só a partilha exige conta e ligação a um profissional.",
+      "pick.note": "Marca uma categoria para veres uma pré-visualização. Isto funciona mesmo sem sessão iniciada; só a partilha exige conta e ligação a um profissional.",
       "share.title": "Partilhar com um profissional",
       "share.noaccount": "Precisas de ter sessão iniciada, com sincronização activa, para partilhares dados com um profissional. Vai à página Conta para configurares isto.",
       "share.empty": "Ainda não estás ligado a nenhum profissional. Vai à página Conta para te ligares com um, usando o código que ele(a) te der.",
@@ -86,9 +86,9 @@ window.PAGE = {
     en: {
       "page.title": "My Record",
       "crumb": "Account",
-      "intro.lead": "Choose what to include in your record. Each category you tick shows a preview of what you've saved — and, if you're connected to a professional, that's exactly what they'll see once you share it.",
+      "intro.lead": "Choose what to include in your record. Each category you tick shows a preview of what you've saved; if you're connected to a professional, that's exactly what they'll see once you share it. Your selection is saved automatically, as your own personal record.",
       "pick.title": "What to include",
-      "pick.note": "Tick a category to see a preview. This works even without being signed in — only sharing requires an account and a connection to a professional.",
+      "pick.note": "Tick a category to see a preview. This works even without being signed in; only sharing requires an account and a connection to a professional.",
       "share.title": "Share with a professional",
       "share.noaccount": "You need to be signed in, with sync enabled, to share data with a professional. Go to the Account page to set this up.",
       "share.empty": "You are not connected to any professional yet. Go to the Account page to connect with one, using the code they give you.",
@@ -122,7 +122,7 @@ window.PAGE = {
   var CATS = ["test_results", "mood", "thoughts", "gratitude", "habits", "sleep", "worries",
     "copingcards", "achievements", "compassionbreak", "fears", "values"];
   var ARRAY_CATS = ["habits", "thoughts", "worries", "copingcards", "achievements", "compassionbreak", "fears", "values", "test_results"];
-  var selected = [];
+  var selected = PL.load("ficha", []);
   var connections = [];
 
   function previewFor(cat) {
@@ -152,6 +152,7 @@ window.PAGE = {
       head.addEventListener("click", function () {
         var p = selected.indexOf(cat);
         if (p >= 0) selected.splice(p, 1); else selected.push(cat);
+        PL.store("ficha", selected);
         renderChecklist();
       });
       row.appendChild(head);
@@ -163,13 +164,6 @@ window.PAGE = {
         row.appendChild(prev);
       }
       box.appendChild(row);
-    });
-  }
-
-  function selectConnection(id) {
-    PLSync.getShareStatus(id).then(function (onMap) {
-      selected = Object.keys(onMap);
-      renderChecklist();
     });
   }
 
@@ -198,13 +192,8 @@ window.PAGE = {
         opt.textContent = conn.otherDisplayName || conn.otherEmail;
         sel.appendChild(opt);
       });
-      selectConnection(connections[0].connectionId);
     });
   }
-
-  $("conn-select").addEventListener("change", function () {
-    selectConnection(parseInt(this.value, 10));
-  });
 
   $("btn-share").addEventListener("click", function () {
     var connectionId = parseInt($("conn-select").value, 10);
