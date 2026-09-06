@@ -253,8 +253,7 @@
           <button class="btn btn-danger btn-sm conn-disconnect" data-i18n="conn.disconnect"></button>
         </div>
         <p class="small muted conn-bio hidden" style="margin:10px 0 0"></p>
-        <p class="small muted" style="margin:14px 0 8px" data-i18n="conn.sharewhat"></p>
-        <div class="share-toggles"></div>
+        <a class="btn btn-ghost btn-sm" style="margin-top:14px;display:inline-block" href="ficha.html" data-i18n="conn.managesharing"></a>
       </div>
     </template>
   </section>
@@ -338,7 +337,7 @@ window.PAGE = {
       "profile.btn.save": "Guardar perfil",
       "profile.saved": "✔ Perfil guardado",
       "profile.err": "✖ Não foi possível guardar. Tenta outra vez.",
-      "profile.export.lead": "Descarrega uma cópia de tudo o que guardaste (humor, pensamentos, gratidão, hábitos, sono, preocupações, cartões de enfrentamento, conquistas, pausas de autocompaixão e resultados de testes) num ficheiro no teu computador.",
+      "profile.export.lead": "Descarrega uma cópia de tudo o que guardaste (humor, pensamentos, gratidão, hábitos, sono, preocupações, cartões de enfrentamento, conquistas, pausas de autocompaixão, hierarquia de medos, hierarquia de valores e resultados de testes) num ficheiro no teu computador.",
       "profile.btn.export": "⬇️ Exportar os meus dados",
       "crop.title": "Ajusta a tua foto",
       "crop.lead": "Arrasta para posicionar e usa o cursor para ampliar.",
@@ -368,7 +367,7 @@ window.PAGE = {
       "conn.btn": "Ligar",
       "conn.since": "Ligado desde",
       "conn.disconnect": "Desligar",
-      "conn.sharewhat": "O que queres partilhar com esta pessoa:",
+      "conn.managesharing": "Gerir o que partilho →",
       "conn.empty": "Ainda não estás ligado a nenhum profissional.",
       "conn.disconnect.confirm": "Desligar deste profissional? Deixa de poder ver qualquer dado teu.",
       "conn.connected": "Ligado! Escolhe em baixo o que queres partilhar.",
@@ -380,7 +379,12 @@ window.PAGE = {
       "cat.gratitude": "Diário de gratidão",
       "cat.habits": "Hábitos",
       "cat.sleep": "Sono",
-      "cat.worries": "Preocupações"
+      "cat.worries": "Preocupações",
+      "cat.copingcards": "Cartões de enfrentamento",
+      "cat.achievements": "Registo de conquistas",
+      "cat.compassionbreak": "Pausas de autocompaixão",
+      "cat.fears": "Hierarquia de medos",
+      "cat.values": "Hierarquia de valores"
     },
     en: {
       "page.title": "Your account",
@@ -453,7 +457,7 @@ window.PAGE = {
       "profile.btn.save": "Save profile",
       "profile.saved": "✔ Profile saved",
       "profile.err": "✖ Could not save. Try again.",
-      "profile.export.lead": "Download a copy of everything you've saved (mood, thoughts, gratitude, habits, sleep, worries, coping cards, achievements, self-compassion breaks and test results) as a file on your computer.",
+      "profile.export.lead": "Download a copy of everything you've saved (mood, thoughts, gratitude, habits, sleep, worries, coping cards, achievements, self-compassion breaks, fear hierarchy, values hierarchy and test results) as a file on your computer.",
       "profile.btn.export": "⬇️ Export my data",
       "crop.title": "Adjust your photo",
       "crop.lead": "Drag to position and use the slider to zoom.",
@@ -483,7 +487,7 @@ window.PAGE = {
       "conn.btn": "Connect",
       "conn.since": "Connected since",
       "conn.disconnect": "Disconnect",
-      "conn.sharewhat": "What you want to share with this person:",
+      "conn.managesharing": "Manage what I share →",
       "conn.empty": "You are not connected to any professional yet.",
       "conn.disconnect.confirm": "Disconnect from this professional? They will lose access to anything of yours.",
       "conn.connected": "Connected! Choose below what you want to share.",
@@ -495,7 +499,12 @@ window.PAGE = {
       "cat.gratitude": "Gratitude journal",
       "cat.habits": "Habits",
       "cat.sleep": "Sleep",
-      "cat.worries": "Worries"
+      "cat.worries": "Worries",
+      "cat.copingcards": "Coping cards",
+      "cat.achievements": "Achievement log",
+      "cat.compassionbreak": "Self-compassion breaks",
+      "cat.fears": "Fear hierarchy",
+      "cat.values": "Values hierarchy"
     }
   }
 };
@@ -877,7 +886,7 @@ window.PAGE = {
         profile: u ? { displayName: u.displayName, bio: u.bio, avatar: u.avatar } : {},
         data: {}
       };
-      var LIST_TOOLS = ["habits", "thoughts", "worries", "copingcards", "achievements", "compassionbreak", "test_results"];
+      var LIST_TOOLS = ["habits", "thoughts", "worries", "copingcards", "achievements", "compassionbreak", "fears", "values", "test_results"];
       PLSync.syncedTools().forEach(function (tool) {
         out.data[tool] = PL.load(tool, LIST_TOOLS.indexOf(tool) >= 0 ? [] : {});
       });
@@ -933,30 +942,10 @@ window.PAGE = {
         node.querySelector("[data-i18n='conn.since']").textContent =
           PL.t("conn.since") + " " + PL.fmtDate(String(conn.since).slice(0, 10));
         node.querySelector(".conn-disconnect").textContent = PL.t("conn.disconnect");
-        node.querySelector("[data-i18n='conn.sharewhat']").textContent = PL.t("conn.sharewhat");
+        node.querySelector("[data-i18n='conn.managesharing']").textContent = PL.t("conn.managesharing");
         node.querySelector(".conn-disconnect").addEventListener("click", function () {
           if (!confirm(PL.t("conn.disconnect.confirm"))) return;
           PLSync.disconnect(conn.connectionId).then(renderConnections);
-        });
-
-        var togglesBox = node.querySelector(".share-toggles");
-        PLSync.getShareStatus(conn.connectionId).then(function (onMap) {
-          PLSync.shareCategories().forEach(function (cat) {
-            var b = document.createElement("button");
-            b.className = "tag-btn" + (onMap[cat] ? " sel" : "");
-            b.textContent = PL.t("cat." + cat);
-            b.addEventListener("click", function () {
-              var turningOn = !b.classList.contains("sel");
-              b.disabled = true;
-              PLSync.setShare(conn.connectionId, cat, conn.otherPub, turningOn).then(function () {
-                b.disabled = false;
-                b.classList.toggle("sel", turningOn);
-              }).catch(function () {
-                b.disabled = false;
-              });
-            });
-            togglesBox.appendChild(b);
-          });
         });
 
         box.appendChild(node);

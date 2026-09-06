@@ -93,7 +93,10 @@ window.PAGE = {
       "chart.view.chart": "Ver gráfico",
       "tbl.date": "Data", "tbl.mood": "Humor", "tbl.tags": "Emoções",
       "hist.title": "Registos recentes",
-      "del.confirm": "Apagar este registo?"
+      "del.confirm": "Apagar este registo?",
+      "fam.joy": "Alegria", "fam.trust": "Confiança", "fam.fear": "Medo", "fam.surprise": "Surpresa",
+      "fam.sadness": "Tristeza", "fam.disgust": "Aversão", "fam.anger": "Raiva", "fam.anticipation": "Antecipação",
+      "fam.general": "Estados gerais"
     },
     en: {
       "page.title": "Mood Diary",
@@ -116,7 +119,10 @@ window.PAGE = {
       "chart.view.chart": "View chart",
       "tbl.date": "Date", "tbl.mood": "Mood", "tbl.tags": "Emotions",
       "hist.title": "Recent entries",
-      "del.confirm": "Delete this entry?"
+      "del.confirm": "Delete this entry?",
+      "fam.joy": "Joy", "fam.trust": "Trust", "fam.fear": "Fear", "fam.surprise": "Surprise",
+      "fam.sadness": "Sadness", "fam.disgust": "Disgust", "fam.anger": "Anger", "fam.anticipation": "Anticipation",
+      "fam.general": "General states"
     }
   }
 };
@@ -131,11 +137,45 @@ window.PAGE = {
     { e: "🙂", pt: "Bom", en: "Good" },
     { e: "😄", pt: "Óptimo", en: "Great" }
   ];
+  // Índices 0-11 são os originais: mantidos exactamente na mesma posição e conteúdo,
+  // para não desalinhar as tags já guardadas em registos antigos (guardadas por índice).
   var TAGS = [
     { pt: "calma", en: "calm" }, { pt: "alegria", en: "joy" }, { pt: "gratidão", en: "gratitude" },
     { pt: "energia", en: "energy" }, { pt: "entusiasmo", en: "excitement" }, { pt: "ansiedade", en: "anxiety" },
     { pt: "tristeza", en: "sadness" }, { pt: "irritação", en: "irritation" }, { pt: "cansaço", en: "tiredness" },
-    { pt: "stress", en: "stress" }, { pt: "solidão", en: "loneliness" }, { pt: "tédio", en: "boredom" }
+    { pt: "stress", en: "stress" }, { pt: "solidão", en: "loneliness" }, { pt: "tédio", en: "boredom" },
+    { pt: "Contentamento", en: "Contentment" }, { pt: "Euforia", en: "Euphoria" }, { pt: "Serenidade", en: "Serenity" },
+    { pt: "Optimismo", en: "Optimism" }, { pt: "Orgulho", en: "Pride" }, { pt: "Diversão", en: "Amusement" }, { pt: "Alívio", en: "Relief" },
+    { pt: "Aceitação", en: "Acceptance" }, { pt: "Admiração", en: "Admiration" }, { pt: "Segurança", en: "Security" },
+    { pt: "Lealdade", en: "Loyalty" }, { pt: "Ternura", en: "Tenderness" }, { pt: "Devoção", en: "Devotion" },
+    { pt: "Respeito", en: "Respect" }, { pt: "Sinceridade", en: "Sincerity" },
+    { pt: "Apreensão", en: "Apprehension" }, { pt: "Pavor", en: "Terror" }, { pt: "Insegurança", en: "Insecurity" },
+    { pt: "Nervosismo", en: "Nervousness" }, { pt: "Pânico", en: "Panic" }, { pt: "Timidez", en: "Shyness" }, { pt: "Alarme", en: "Alarm" },
+    { pt: "Espanto", en: "Amazement" }, { pt: "Assombro", en: "Astonishment" }, { pt: "Confusão", en: "Confusion" },
+    { pt: "Choque", en: "Shock" }, { pt: "Deslumbramento", en: "Wonder" }, { pt: "Perplexidade", en: "Bewilderment" },
+    { pt: "Distracção", en: "Distraction" }, { pt: "Incredulidade", en: "Disbelief" },
+    { pt: "Melancolia", en: "Pensiveness" }, { pt: "Desolação", en: "Grief" }, { pt: "Desânimo", en: "Dejection" },
+    { pt: "Desilusão", en: "Disappointment" }, { pt: "Desamparo", en: "Helplessness" }, { pt: "Nostalgia", en: "Nostalgia" }, { pt: "Mágoa", en: "Sorrow" },
+    { pt: "Repulsa", en: "Loathing" }, { pt: "Desprezo", en: "Contempt" }, { pt: "Rejeição", en: "Rejection" },
+    { pt: "Enjoo", en: "Revulsion" }, { pt: "Antipatia", en: "Dislike" }, { pt: "Desdém", en: "Disdain" }, { pt: "Escárnio", en: "Scorn" },
+    { pt: "Fúria", en: "Rage" }, { pt: "Frustração", en: "Frustration" }, { pt: "Ciúme", en: "Jealousy" },
+    { pt: "Inveja", en: "Envy" }, { pt: "Indignação", en: "Indignation" }, { pt: "Ressentimento", en: "Resentment" }, { pt: "Impaciência", en: "Impatience" },
+    { pt: "Interesse", en: "Interest" }, { pt: "Vigilância", en: "Vigilance" }, { pt: "Curiosidade", en: "Curiosity" },
+    { pt: "Expectativa", en: "Expectation" }, { pt: "Empolgação", en: "Eagerness" }, { pt: "Esperança", en: "Hope" },
+    { pt: "Prontidão", en: "Readiness" }, { pt: "Fascínio", en: "Fascination" }
+  ];
+  // Agrupa os índices acima por família, para a grelha de escolha ser "família → palavra específica"
+  // em vez de uma lista só. fam.general junta os estados que não são bem uma emoção-Plutchik.
+  var GROUPS = [
+    { fam: "joy", idx: [1, 4, 12, 13, 14, 15, 16, 17, 18] },
+    { fam: "trust", idx: [19, 20, 21, 22, 23, 24, 25, 26] },
+    { fam: "fear", idx: [5, 27, 28, 29, 30, 31, 32, 33] },
+    { fam: "surprise", idx: [34, 35, 36, 37, 38, 39, 40, 41] },
+    { fam: "sadness", idx: [6, 10, 42, 43, 44, 45, 46, 47, 48] },
+    { fam: "disgust", idx: [11, 49, 50, 51, 52, 53, 54, 55] },
+    { fam: "anger", idx: [7, 56, 57, 58, 59, 60, 61, 62] },
+    { fam: "anticipation", idx: [63, 64, 65, 66, 67, 68, 69, 70] },
+    { fam: "general", idx: [0, 2, 3, 8, 9] }
   ];
 
   var $ = function (id) { return document.getElementById(id); };
@@ -172,16 +212,24 @@ window.PAGE = {
     });
     var tr = $("tag-row");
     tr.innerHTML = "";
-    TAGS.forEach(function (t, i) {
-      var b = document.createElement("button");
-      b.className = "tag-btn" + (selTags.indexOf(i) >= 0 ? " sel" : "");
-      b.textContent = t[PL.lang];
-      b.addEventListener("click", function () {
-        var p = selTags.indexOf(i);
-        if (p >= 0) selTags.splice(p, 1); else selTags.push(i);
-        renderToday();
+    GROUPS.forEach(function (g) {
+      var head = document.createElement("div");
+      head.className = "small muted";
+      head.style.cssText = "flex-basis:100%;margin-top:8px";
+      head.textContent = PL.t("fam." + g.fam);
+      tr.appendChild(head);
+      g.idx.forEach(function (i) {
+        var t = TAGS[i];
+        var b = document.createElement("button");
+        b.className = "tag-btn" + (selTags.indexOf(i) >= 0 ? " sel" : "");
+        b.textContent = t[PL.lang];
+        b.addEventListener("click", function () {
+          var p = selTags.indexOf(i);
+          if (p >= 0) selTags.splice(p, 1); else selTags.push(i);
+          renderToday();
+        });
+        tr.appendChild(b);
       });
-      tr.appendChild(b);
     });
   }
 
