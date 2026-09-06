@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>html.pl-framed{display:none!important}</style>
+<script>if(window.top!==window.self){document.documentElement.className+=" pl-framed";try{window.top.location=window.self.location.href;}catch(e){}}</script>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev https://cloudflareinsights.com; base-uri 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Hierarquia de Medos · PsicoLab</title>
+<link rel="icon" type="image/png" href="../img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=15">
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "97b7a3670b8244db86ceadacfe4d4283"}'></script>
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1><span style="font-size:2.2rem">🪜</span> <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section class="panel panel-soft">
+    <p style="margin:0" data-i18n="how.p"></p>
+  </section>
+
+  <section class="panel">
+    <h3 style="margin-top:0" data-i18n="add.title"></h3>
+    <label class="field-label" for="f-situation" data-i18n="add.label1"></label>
+    <input type="text" id="f-situation" data-i18n-ph="add.ph1" maxlength="120">
+    <label class="field-label" for="f-suds" style="margin-top:10px;display:block" data-i18n="add.label2"></label>
+    <div style="display:flex;align-items:center;gap:12px">
+      <input type="range" id="f-suds" min="0" max="100" value="50" style="flex:1">
+      <span class="chip" id="f-suds-out" style="min-width:52px;text-align:center">50</span>
+    </div>
+    <div class="center mt-2">
+      <button class="btn" id="btn-add" data-i18n="btn.add"></button>
+    </div>
+  </section>
+
+  <section>
+    <h2 data-i18n="list.title"></h2>
+    <p class="small muted" id="count-line"></p>
+    <p class="small muted" data-i18n="list.sortnote"></p>
+    <div id="fear-list"></div>
+    <p class="small muted hidden" id="list-empty" data-i18n="list.empty"></p>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tools",
+  i18n: {
+    pt: {
+      "page.title": "Hierarquia de Medos",
+      "crumb": "Ferramentas",
+      "intro.lead": "Uma ferramenta clássica da terapia de exposição: lista situações que te causam ansiedade, dá-lhes uma nota, e enfrenta-as por ordem — da menos à mais desafiante.",
+      "how.p": "💡 Como funciona: para cada situação, escreve uma nota de 0 a 100 (SUDS — «unidades subjectivas de desconforto») que reflicta quanta ansiedade ela te causa hoje. A lista ordena-se sozinha, da mais fácil para a mais difícil. A ideia da exposição gradual é começares pelas situações mais baixas da lista, só avançando para a seguinte quando a anterior deixar de te perturbar tanto. Isto é auto-ajuda geral — se a ansiedade for muito incapacitante, faz mais sentido construir esta hierarquia com o apoio de um profissional.",
+      "add.title": "Adicionar uma situação",
+      "add.label1": "Situação",
+      "add.ph1": "ex.: Falar com um estranho na rua",
+      "add.label2": "Nível de ansiedade que te causa agora (0-100)",
+      "btn.add": "Adicionar à lista",
+      "added": "Situação adicionada 🌿",
+      "empty.req": "Escreve primeiro a situação",
+      "list.title": "A tua hierarquia",
+      "list.sortnote": "Ordenada automaticamente da menos para a mais ansiogénica.",
+      "list.empty": "Ainda não há situações na lista. Junta a primeira em cima.",
+      "del.confirm": "Remover esta situação da lista?"
+    },
+    en: {
+      "page.title": "Fear Hierarchy",
+      "crumb": "Tools",
+      "intro.lead": "A classic exposure-therapy tool: list situations that cause you anxiety, rate them, and face them in order — from the least to the most challenging.",
+      "how.p": "💡 How it works: for each situation, write a rating from 0 to 100 (SUDS — \"subjective units of distress\") reflecting how much anxiety it causes you today. The list sorts itself, from easiest to hardest. The idea of gradual exposure is to start with the lowest situations on the list, only moving to the next once the previous one stops feeling so disturbing. This is general self-help — if the anxiety is very disabling, it makes more sense to build this hierarchy with a professional's support.",
+      "add.title": "Add a situation",
+      "add.label1": "Situation",
+      "add.ph1": "e.g.: Talking to a stranger on the street",
+      "add.label2": "Anxiety level it causes you right now (0-100)",
+      "btn.add": "Add to the list",
+      "added": "Situation added 🌿",
+      "empty.req": "Write the situation first",
+      "list.title": "Your hierarchy",
+      "list.sortnote": "Automatically sorted from least to most anxiety-provoking.",
+      "list.empty": "No situations on the list yet. Add the first one above.",
+      "del.confirm": "Remove this situation from the list?"
+    }
+  }
+};
+</script>
+<script src="../js/app.js?v=7"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var fears = PL.load("fears", []);
+
+  function save() { PL.store("fears", fears); }
+
+  function renderCount() {
+    $("count-line").textContent = fears.length;
+  }
+
+  function renderList() {
+    var box = $("fear-list");
+    box.innerHTML = "";
+    fears.slice().sort(function (a, b) { return a.suds - b.suds; }).forEach(function (f) {
+      var idx = fears.indexOf(f);
+      var div = document.createElement("div");
+      div.className = "entry";
+      div.innerHTML =
+        "<div class='entry-head'><span class='entry-date'>" + PL.esc(f.situation) + "</span>" +
+        "<span class='chip'>" + f.suds + "/100</span>" +
+        "<button class='del' data-del='" + idx + "'>🗑️</button></div>";
+      box.appendChild(div);
+    });
+    $("list-empty").classList.toggle("hidden", fears.length > 0);
+    document.querySelectorAll(".del").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (confirm(PL.t("del.confirm"))) {
+          fears.splice(parseInt(b.getAttribute("data-del"), 10), 1);
+          save();
+          renderAll();
+        }
+      });
+    });
+  }
+
+  function renderAll() { renderCount(); renderList(); }
+
+  $("f-suds").addEventListener("input", function () {
+    $("f-suds-out").textContent = $("f-suds").value;
+  });
+
+  $("btn-add").addEventListener("click", function () {
+    var situation = $("f-situation").value.trim();
+    if (!situation) { PL.toast(PL.t("empty.req")); return; }
+    fears.push({ situation: situation, suds: parseInt($("f-suds").value, 10), added: PL.todayISO() });
+    save();
+    $("f-situation").value = "";
+    $("f-suds").value = 50;
+    $("f-suds-out").textContent = "50";
+    PL.toast(PL.t("added"));
+    renderAll();
+  });
+
+  document.addEventListener("pl:ready", renderAll);
+  PL.onLang(renderAll);
+})();
+</script>
+</body>
+</html>

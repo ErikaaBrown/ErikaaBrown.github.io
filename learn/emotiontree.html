@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>html.pl-framed{display:none!important}</style>
+<script>if(window.top!==window.self){document.documentElement.className+=" pl-framed";try{window.top.location=window.self.location.href;}catch(e){}}</script>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev https://cloudflareinsights.com; base-uri 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Árvore das Emoções · PsicoLab</title>
+<meta name="description" content="Explora a árvore das emoções: das 8 famílias principais às palavras mais específicas para o que sentes.">
+<link rel="icon" type="image/png" href="../img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=15">
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "97b7a3670b8244db86ceadacfe4d4283"}'></script>
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1><span style="font-size:2.2rem">🌳</span> <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section class="panel panel-soft">
+    <p style="margin:0" data-i18n="intro.p1"></p>
+  </section>
+
+  <section>
+    <h2 data-i18n="pick.title"></h2>
+    <div class="tag-row" id="fam-row" style="margin-bottom:10px"></div>
+    <div id="fam-words" class="panel hidden"></div>
+  </section>
+
+  <section class="panel panel-soft">
+    <p style="margin:0" data-i18n="footer.p"></p>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "learn",
+  i18n: {
+    pt: {
+      "page.title": "Árvore das Emoções",
+      "crumb": "Aprender",
+      "intro.lead": "A maior parte de nós usa poucas palavras para descrever o que sente: «bem», «mal», «mais ou menos». Esta árvore mostra como cada uma dessas famílias se ramifica em emoções bem mais específicas.",
+      "intro.p1": "Segundo a Roda das Emoções de Plutchik (também usada no jogo deste site), há 8 famílias principais de emoções. Cada uma reúne dezenas de emoções mais precisas — quanto mais destas palavras conheces, mais fácil é nomear com exactidão o que sentes, o que está ligado a uma melhor regulação emocional (ver «Granularidade emocional» no Glossário).",
+      "pick.title": "Escolhe uma família para veres as suas emoções",
+      "footer.p": "🎭 Queres pôr este vocabulário à prova? Experimenta a Roda das Emoções ou a Escada das Emoções, na secção de jogos.",
+      "fam.joy": "Alegria", "fam.trust": "Confiança", "fam.fear": "Medo", "fam.surprise": "Surpresa",
+      "fam.sadness": "Tristeza", "fam.disgust": "Aversão", "fam.anger": "Raiva", "fam.anticipation": "Antecipação"
+    },
+    en: {
+      "page.title": "The Emotion Tree",
+      "crumb": "Learn",
+      "intro.lead": "Most of us use very few words to describe what we feel: \"good\", \"bad\", \"so-so\". This tree shows how each of those families branches into much more specific emotions.",
+      "intro.p1": "According to Plutchik's Wheel of Emotions (also used in this site's game), there are 8 primary emotion families. Each one holds dozens of more precise emotions — the more of these words you know, the easier it is to name exactly what you feel, which is linked to better emotion regulation (see \"Emotional granularity\" in the Glossary).",
+      "pick.title": "Pick a family to see its emotions",
+      "footer.p": "🎭 Want to put this vocabulary to the test? Try the Wheel of Emotions or the Emotion Ladder, in the games section.",
+      "fam.joy": "Joy", "fam.trust": "Trust", "fam.fear": "Fear", "fam.surprise": "Surprise",
+      "fam.sadness": "Sadness", "fam.disgust": "Disgust", "fam.anger": "Anger", "fam.anticipation": "Anticipation"
+    }
+  }
+};
+</script>
+<script src="../js/app.js?v=7"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var FAMILIES = ["joy", "trust", "fear", "surprise", "sadness", "disgust", "anger", "anticipation"];
+  var FAM_EMOJI = { joy: "😊", trust: "🤝", fear: "😨", surprise: "😲", sadness: "😢", disgust: "🤢", anger: "😠", anticipation: "🤔" };
+  var FAM_WORDS = {
+    joy:          [{pt:"Contentamento",en:"Contentment"},{pt:"Euforia",en:"Euphoria"},{pt:"Serenidade",en:"Serenity"},{pt:"Optimismo",en:"Optimism"},{pt:"Orgulho",en:"Pride"},{pt:"Entusiasmo",en:"Enthusiasm"},{pt:"Diversão",en:"Amusement"},{pt:"Alívio",en:"Relief"}],
+    trust:        [{pt:"Aceitação",en:"Acceptance"},{pt:"Admiração",en:"Admiration"},{pt:"Segurança",en:"Security"},{pt:"Lealdade",en:"Loyalty"},{pt:"Ternura",en:"Tenderness"},{pt:"Devoção",en:"Devotion"},{pt:"Respeito",en:"Respect"},{pt:"Sinceridade",en:"Sincerity"}],
+    fear:         [{pt:"Apreensão",en:"Apprehension"},{pt:"Pavor",en:"Terror"},{pt:"Ansiedade",en:"Anxiety"},{pt:"Insegurança",en:"Insecurity"},{pt:"Nervosismo",en:"Nervousness"},{pt:"Pânico",en:"Panic"},{pt:"Timidez",en:"Shyness"},{pt:"Alarme",en:"Alarm"}],
+    surprise:     [{pt:"Espanto",en:"Amazement"},{pt:"Assombro",en:"Astonishment"},{pt:"Confusão",en:"Confusion"},{pt:"Choque",en:"Shock"},{pt:"Deslumbramento",en:"Wonder"},{pt:"Perplexidade",en:"Bewilderment"},{pt:"Distracção",en:"Distraction"},{pt:"Incredulidade",en:"Disbelief"}],
+    sadness:      [{pt:"Melancolia",en:"Pensiveness"},{pt:"Desolação",en:"Grief"},{pt:"Desânimo",en:"Dejection"},{pt:"Solidão",en:"Loneliness"},{pt:"Desilusão",en:"Disappointment"},{pt:"Desamparo",en:"Helplessness"},{pt:"Nostalgia",en:"Nostalgia"},{pt:"Mágoa",en:"Sorrow"}],
+    disgust:      [{pt:"Tédio",en:"Boredom"},{pt:"Repulsa",en:"Loathing"},{pt:"Desprezo",en:"Contempt"},{pt:"Rejeição",en:"Rejection"},{pt:"Enjoo",en:"Revulsion"},{pt:"Antipatia",en:"Dislike"},{pt:"Desdém",en:"Disdain"},{pt:"Escárnio",en:"Scorn"}],
+    anger:        [{pt:"Irritação",en:"Annoyance"},{pt:"Fúria",en:"Rage"},{pt:"Frustração",en:"Frustration"},{pt:"Ciúme",en:"Jealousy"},{pt:"Inveja",en:"Envy"},{pt:"Indignação",en:"Indignation"},{pt:"Ressentimento",en:"Resentment"},{pt:"Impaciência",en:"Impatience"}],
+    anticipation: [{pt:"Interesse",en:"Interest"},{pt:"Vigilância",en:"Vigilance"},{pt:"Curiosidade",en:"Curiosity"},{pt:"Expectativa",en:"Expectation"},{pt:"Empolgação",en:"Excitement"},{pt:"Esperança",en:"Hope"},{pt:"Prontidão",en:"Readiness"},{pt:"Fascínio",en:"Fascination"}]
+  };
+
+  var current = null;
+
+  function renderFamRow() {
+    var box = $("fam-row");
+    box.innerHTML = "";
+    FAMILIES.forEach(function (fam) {
+      var b = document.createElement("button");
+      b.className = "tag-btn" + (fam === current ? " sel" : "");
+      b.textContent = FAM_EMOJI[fam] + " " + PL.t("fam." + fam);
+      b.addEventListener("click", function () {
+        current = current === fam ? null : fam;
+        render();
+      });
+      box.appendChild(b);
+    });
+  }
+
+  function renderWords() {
+    var el = $("fam-words");
+    if (!current) { el.classList.add("hidden"); el.innerHTML = ""; return; }
+    el.classList.remove("hidden");
+    var words = FAM_WORDS[current];
+    el.innerHTML = "<div class='tag-row'>" + words.map(function (w) {
+      return "<span class='tag-btn' style='cursor:default'>" + PL.esc(w[PL.lang]) + "</span>";
+    }).join("") + "</div>";
+  }
+
+  function render() {
+    renderFamRow();
+    renderWords();
+  }
+
+  document.addEventListener("pl:ready", render);
+  PL.onLang(render);
+})();
+</script>
+</body>
+</html>

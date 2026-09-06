@@ -111,6 +111,10 @@ window.PAGE = {
       "cat.habits": "Hábitos",
       "cat.sleep": "Sono",
       "cat.worries": "Preocupações",
+      "cat.copingcards": "Cartões de enfrentamento",
+      "cat.achievements": "Registo de conquistas",
+      "cat.compassionbreak": "Pausas de autocompaixão",
+      "cat.fears": "Hierarquia de medos",
       "updated": "actualizado",
       "test.bigfive": "Big Five", "test.attachment": "Vinculação", "test.eq": "Inteligência Emocional", "test.stress": "Stress",
       "test.rosenberg": "Auto-Estima", "test.resilience": "Resiliência", "test.panas": "PANAS",
@@ -143,6 +147,10 @@ window.PAGE = {
       "cat.habits": "Habits",
       "cat.sleep": "Sleep",
       "cat.worries": "Worries",
+      "cat.copingcards": "Coping cards",
+      "cat.achievements": "Achievement log",
+      "cat.compassionbreak": "Self-compassion breaks",
+      "cat.fears": "Fear hierarchy",
       "updated": "updated",
       "test.bigfive": "Big Five", "test.attachment": "Attachment", "test.eq": "Emotional Intelligence", "test.stress": "Stress",
       "test.rosenberg": "Self-Esteem", "test.resilience": "Resilience", "test.panas": "PANAS",
@@ -285,13 +293,40 @@ window.PAGE = {
       return "<li><strong>" + PL.fmtDate(t.date) + "</strong> · " + PL.esc(t.thought) + (delta ? " <span class='chip'>" + delta + "</span>" : "") + "</li>";
     }).join("") + "</ul>";
   }
+  function fmtCopingCards(arr) {
+    if (!Array.isArray(arr) || !arr.length) return "";
+    return "<ul style='margin:0;padding-left:20px'>" + arr.slice(-10).reverse().map(function (c) {
+      return "<li>" + (c.situation ? "<strong>" + PL.esc(c.situation) + "</strong> · " : "") + PL.esc(c.text) + "</li>";
+    }).join("") + "</ul>";
+  }
+  function fmtAchievements(arr) {
+    if (!Array.isArray(arr) || !arr.length) return "";
+    var SIZE_ICON = { small: "🌱", medium: "🌿", big: "🌳" };
+    return "<ul style='margin:0;padding-left:20px'>" + arr.slice(-10).reverse().map(function (a) {
+      return "<li>" + (SIZE_ICON[a.size] || "🌿") + " " + PL.esc(a.text) + "</li>";
+    }).join("") + "</ul>";
+  }
+  function fmtCompassionBreak(arr) {
+    if (!Array.isArray(arr) || !arr.length) return "";
+    return "<ul style='margin:0;padding-left:20px'>" + arr.slice(-10).reverse().map(function (e) {
+      return "<li><strong>" + PL.fmtDate(e.date) + "</strong>" + (e.note ? " · " + PL.esc(e.note) : "") + "</li>";
+    }).join("") + "</ul>";
+  }
+  function fmtFears(arr) {
+    if (!Array.isArray(arr) || !arr.length) return "";
+    return "<ul style='margin:0;padding-left:20px'>" + arr.slice().sort(function (a, b) { return a.suds - b.suds; }).map(function (f) {
+      return "<li>" + PL.esc(f.situation) + " <span class='chip'>" + f.suds + "/100</span></li>";
+    }).join("") + "</ul>";
+  }
   var FORMATTERS = {
     test_results: fmtTestResults, mood: fmtMood, gratitude: fmtGratitude,
-    sleep: fmtSleep, habits: fmtHabits, worries: fmtWorries, thoughts: fmtThoughts
+    sleep: fmtSleep, habits: fmtHabits, worries: fmtWorries, thoughts: fmtThoughts,
+    copingcards: fmtCopingCards, achievements: fmtAchievements, compassionbreak: fmtCompassionBreak, fears: fmtFears
   };
   var CAT_ICONS = {
     test_results: "📊", mood: "📔", thoughts: "💭", gratitude: "🙏",
-    habits: "✅", sleep: "😴", worries: "📦"
+    habits: "✅", sleep: "😴", worries: "📦",
+    copingcards: "🗂️", achievements: "🏆", compassionbreak: "🫶", fears: "🪜"
   };
 
   var connections = [];
