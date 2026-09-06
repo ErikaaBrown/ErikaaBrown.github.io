@@ -17,13 +17,14 @@
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "97b7a3670b8244db86ceadacfe4d4283"}'></script>
 <style>
   @media print {
-    #site-header, #site-footer, .no-print, #cat-list .ficha-row-off { display: none !important; }
+    #site-header, #site-footer, .no-print, .ficha-no-data { display: none !important; }
     #print-meta { display: block !important; }
+    #cat-list .ficha-preview { display: block !important; }
     body { background: #fff; }
-    #cat-list .panel { box-shadow: none; border: none; padding: 0; margin: 0 0 18px; page-break-inside: avoid; }
-    #cat-list button.tag-btn { all: unset; display: block; font-weight: 800; font-size: 1.05rem; color: #000; }
-    #cat-list button.tag-btn::before { content: "\2713  "; }
-    #cat-list .interp { border-left-color: #000; }
+    #cat-list .panel, #games-panel { box-shadow: none; border: none; padding: 0; margin: 0 0 18px; page-break-inside: avoid; }
+    #cat-list button.tag-btn, #games-panel h4 { all: unset; display: block; font-weight: 800; font-size: 1.05rem; color: #000; }
+    #cat-list button.tag-btn::before, #games-panel h4::before { content: "\2713  "; }
+    #cat-list .interp, #games-panel .interp { border-left-color: #000; }
   }
 </style>
 </head>
@@ -43,8 +44,13 @@
       <button class="btn btn-ghost btn-sm no-print" id="btn-print" style="margin-left:auto" data-i18n="btn.print"></button>
     </div>
     <p class="small muted no-print" data-i18n="pick.note"></p>
+    <p class="small muted no-print" data-i18n="print.note"></p>
     <p class="hidden" id="print-meta" style="font-weight:700"></p>
     <div id="cat-list"></div>
+    <div class="panel" id="games-panel">
+      <h4 style="margin-top:0" data-i18n="cat.games"></h4>
+      <div id="games-preview" class="small muted interp" style="margin-top:10px"></div>
+    </div>
   </section>
 
   <section id="share-section" class="panel no-print">
@@ -80,9 +86,11 @@ window.PAGE = {
       "crumb": "Conta",
       "intro.lead": "Escolhe o que queres incluir na tua ficha. Cada categoria que marcares mostra uma pré-visualização do que guardaste; se estiveres ligado(a) a um profissional, é isto que ele(a) vai ver quando partilhares. A tua selecção fica guardada automaticamente, como uma ficha pessoal tua.",
       "pick.title": "O que incluir",
-      "pick.note": "Marca uma categoria para veres uma pré-visualização. Isto funciona mesmo sem sessão iniciada; só a partilha exige conta e ligação a um profissional.",
+      "pick.note": "Marca uma categoria para veres uma pré-visualização, e para a incluíres na selecção que partilhas com um profissional.",
+      "print.note": "O botão de exportar em PDF inclui sempre tudo o que guardaste (testes, ferramentas e jogos), independentemente do que estiver marcado acima para partilha.",
       "btn.print": "🖨️ Exportar em PDF",
       "print.meta": "Ficha pessoal · ",
+      "cat.games": "Jogos",
       "share.title": "Partilhar com um profissional",
       "share.noaccount": "Precisas de ter sessão iniciada, com sincronização activa, para partilhares dados com um profissional.",
       "share.empty": "Ainda não estás ligado a nenhum profissional.",
@@ -112,9 +120,11 @@ window.PAGE = {
       "crumb": "Account",
       "intro.lead": "Choose what to include in your record. Each category you tick shows a preview of what you've saved; if you're connected to a professional, that's exactly what they'll see once you share it. Your selection is saved automatically, as your own personal record.",
       "pick.title": "What to include",
-      "pick.note": "Tick a category to see a preview. This works even without being signed in; only sharing requires an account and a connection to a professional.",
+      "pick.note": "Tick a category to see a preview, and to include it in the selection you share with a professional.",
+      "print.note": "The PDF export always includes everything you've saved (tests, tools and games), regardless of what's ticked above for sharing.",
       "btn.print": "🖨️ Export as PDF",
       "print.meta": "Personal record · ",
+      "cat.games": "Games",
       "share.title": "Share with a professional",
       "share.noaccount": "You need to be signed in, with sync enabled, to share data with a professional.",
       "share.empty": "You are not connected to any professional yet.",
@@ -165,13 +175,26 @@ window.PAGE = {
     return html || PL.t("preview.empty");
   }
 
+  var GAMES = [
+    { key: "emotionwheel", pt: "Roda das Emoções", en: "Wheel of Emotions", max: 16 },
+    { key: "emotionladder", pt: "Escada das Emoções", en: "Emotion Ladder", max: 16 },
+    { key: "distortions", pt: "Apanha a Distorção", en: "Catch the Distortion", max: 10 },
+    { key: "myths", pt: "Mito ou Facto?", en: "Myth or Fact?", max: 12 },
+    { key: "assertive", pt: "Assertividade em Acção", en: "Assertiveness in Action", max: 10 },
+    { key: "innercritic", pt: "O Crítico Interno", en: "The Inner Critic", max: 10 },
+    { key: "digitspan", pt: "Amplitude de Memória", en: "Memory Span" },
+    { key: "nback", pt: "N-Back", en: "N-Back", suffix: "-back" }
+  ];
+
   function renderChecklist() {
     var box = $("cat-list");
     box.innerHTML = "";
     CATS.forEach(function (cat) {
       var checked = selected.indexOf(cat) >= 0;
+      var preview = previewFor(cat);
+      var hasData = preview !== PL.t("preview.empty");
       var row = document.createElement("div");
-      row.className = "panel " + (checked ? "ficha-row-on" : "ficha-row-off");
+      row.className = "panel " + (hasData ? "ficha-has-data" : "ficha-no-data");
       var head = document.createElement("button");
       head.className = "tag-btn" + (checked ? " sel" : "");
       head.style.cssText = "width:100%;text-align:left";
@@ -183,16 +206,29 @@ window.PAGE = {
         renderChecklist();
       });
       row.appendChild(head);
-      if (checked) {
-        var prev = document.createElement("div");
-        prev.className = "small muted interp";
-        prev.style.marginTop = "10px";
-        prev.innerHTML = previewFor(cat);
-        row.appendChild(prev);
-      }
+      var prev = document.createElement("div");
+      prev.className = "small muted interp ficha-preview";
+      prev.style.cssText = "margin-top:10px;display:" + (checked ? "block" : "none");
+      prev.innerHTML = preview;
+      row.appendChild(prev);
       box.appendChild(row);
     });
+    renderGamesPanel();
     $("print-meta").textContent = PL.t("print.meta") + PL.fmtDate(PL.todayISO());
+  }
+
+  function renderGamesPanel() {
+    var scores = PL.load("scores", {});
+    var items = GAMES.filter(function (g) { return scores[g.key] > 0; });
+    var panel = $("games-panel");
+    panel.className = "panel " + (items.length ? "ficha-has-data" : "ficha-no-data");
+    $("games-preview").innerHTML = items.length
+      ? "<ul style='margin:0;padding-left:20px'>" + items.map(function (g) {
+          var val = scores[g.key];
+          var text = g.suffix ? (val + g.suffix) : (g.max ? (val + "/" + g.max) : val);
+          return "<li>" + PL.esc(g[PL.lang]) + " · " + text + "</li>";
+        }).join("") + "</ul>"
+      : PL.t("preview.empty");
   }
 
   $("btn-print").addEventListener("click", function () { window.print(); });
