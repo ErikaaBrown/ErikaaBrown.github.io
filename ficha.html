@@ -80,7 +80,7 @@ window.PAGE = {
       "crumb": "Conta",
       "intro.lead": "Escolhe o que queres incluir na tua ficha. Cada categoria que marcares mostra uma pré-visualização do que guardaste; se estiveres ligado(a) a um profissional, é isto que ele(a) vai ver quando partilhares. A tua selecção fica guardada automaticamente, como uma ficha pessoal tua.",
       "pick.title": "O que incluir",
-      "pick.note": "Marca uma categoria para veres uma pré-visualização. Isto funciona mesmo sem sessão iniciada; só a partilha exige conta e ligação a um profissional.",
+      "pick.note": "Marca as categorias que fazem parte da tua ficha: aparecem aqui em pré-visualização, no PDF que exportares, e na selecção que partilhas com um profissional.",
       "btn.print": "🖨️ Exportar em PDF",
       "print.meta": "Ficha pessoal · ",
       "share.title": "Partilhar com um profissional",
@@ -92,8 +92,6 @@ window.PAGE = {
       "share.done": "Selecção partilhada 🌿",
       "share.err": "Não foi possível partilhar. Tenta novamente.",
       "preview.empty": "Ainda não guardaste nada aqui.",
-      "preview.testcount.n": " resultados de testes guardados",
-      "preview.testcount.1": " resultado de teste guardado",
       "cat.test_results": "Resultados de testes",
       "cat.mood": "Diário emocional",
       "cat.thoughts": "Registo de pensamentos",
@@ -112,7 +110,7 @@ window.PAGE = {
       "crumb": "Account",
       "intro.lead": "Choose what to include in your record. Each category you tick shows a preview of what you've saved; if you're connected to a professional, that's exactly what they'll see once you share it. Your selection is saved automatically, as your own personal record.",
       "pick.title": "What to include",
-      "pick.note": "Tick a category to see a preview. This works even without being signed in; only sharing requires an account and a connection to a professional.",
+      "pick.note": "Tick the categories that make up your record: they show here as a preview, in the PDF you export, and in the selection you share with a professional.",
       "btn.print": "🖨️ Export as PDF",
       "print.meta": "Personal record · ",
       "share.title": "Share with a professional",
@@ -124,8 +122,6 @@ window.PAGE = {
       "share.done": "Selection shared 🌿",
       "share.err": "Could not share. Please try again.",
       "preview.empty": "You haven't saved anything here yet.",
-      "preview.testcount.n": " test results saved",
-      "preview.testcount.1": " test result saved",
       "cat.test_results": "Test results",
       "cat.mood": "Mood diary",
       "cat.thoughts": "Thought records",
@@ -147,17 +143,12 @@ window.PAGE = {
 (function () {
   var $ = function (id) { return document.getElementById(id); };
   var CATS = ["test_results", "mood", "thoughts", "gratitude", "habits", "sleep", "worries",
-    "copingcards", "achievements", "compassionbreak", "fears", "values"];
+    "copingcards", "achievements", "compassionbreak", "fears", "values", "scores"];
   var ARRAY_CATS = ["habits", "thoughts", "worries", "copingcards", "achievements", "compassionbreak", "fears", "values", "test_results"];
   var selected = PL.load("ficha", []);
   var connections = [];
 
   function previewFor(cat) {
-    if (cat === "test_results") {
-      var n = PL.load("test_results", []).length;
-      if (!n) return PL.t("preview.empty");
-      return n + (n === 1 ? PL.t("preview.testcount.1") : PL.t("preview.testcount.n"));
-    }
     var def = ARRAY_CATS.indexOf(cat) >= 0 ? [] : {};
     var data = PL.load(cat, def);
     var fmt = PL.formatters[cat];

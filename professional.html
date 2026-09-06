@@ -117,8 +117,6 @@ window.PAGE = {
       "cat.fears": "Hierarquia de medos",
       "cat.values": "Hierarquia de valores",
       "updated": "actualizado",
-      "test.bigfive": "Big Five", "test.attachment": "Vinculação", "test.eq": "Inteligência Emocional", "test.stress": "Stress",
-      "test.rosenberg": "Auto-Estima", "test.resilience": "Resiliência", "test.panas": "PANAS",
       "worry.open": "em aberto", "worry.happened": "aconteceu", "worry.nothappened": "não aconteceu",
       "habit.days": "dias cumpridos"
     },
@@ -154,8 +152,6 @@ window.PAGE = {
       "cat.fears": "Fear hierarchy",
       "cat.values": "Values hierarchy",
       "updated": "updated",
-      "test.bigfive": "Big Five", "test.attachment": "Attachment", "test.eq": "Emotional Intelligence", "test.stress": "Stress",
-      "test.rosenberg": "Self-Esteem", "test.resilience": "Resilience", "test.panas": "PANAS",
       "worry.open": "open", "worry.happened": "happened", "worry.nothappened": "did not happen",
       "habit.days": "days completed"
     }
@@ -173,20 +169,7 @@ window.PAGE = {
     $("panel-main").classList.toggle("hidden", panel !== "main");
   }
 
-  /* ---------- formatadores por categoria ---------- */
-
-  var SCALAR_TEST_MAX = { stress: 40, rosenberg: 30 };
-
-  function fmtTestResults(arr) {
-    if (!Array.isArray(arr) || !arr.length) return "";
-    var rows = arr.slice(-10).reverse().map(function (e) {
-      var summary = Array.isArray(e.scores)
-        ? e.scores.map(function (n) { return Math.round(n); }).join(" / ")
-        : (e.scores + (SCALAR_TEST_MAX[e.test] ? "/" + SCALAR_TEST_MAX[e.test] : ""));
-      return "<tr><td>" + PL.t("test." + e.test) + "</td><td>" + PL.fmtDate(e.date) + "</td><td>" + summary + "</td></tr>";
-    }).join("");
-    return "<table class='data'><tbody>" + rows + "</tbody></table>";
-  }
+  /* ---------- formatadores por categoria (a maioria vive em PL.formatters, js/app.js) ---------- */
   function last30Days() {
     var out = [];
     for (var i = 29; i >= 0; i--) {
@@ -254,8 +237,8 @@ window.PAGE = {
   // cartões de enfrentamento, conquistas, pausas de autocompaixão, medos, valores) vivem em
   // PL.formatters/PL.catIcons (js/app.js), partilhados com ficha.html. Só test_results fica
   // aqui, por depender de SCALAR_TEST_MAX e dos nomes dos testes, que são locais a esta página.
-  var FORMATTERS = Object.assign({ test_results: fmtTestResults }, PL.formatters);
-  var CAT_ICONS = Object.assign({ test_results: "📊" }, PL.catIcons);
+  var FORMATTERS = PL.formatters;
+  var CAT_ICONS = PL.catIcons;
 
   var connections = [];
 
