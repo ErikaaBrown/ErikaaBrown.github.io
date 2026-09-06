@@ -29,8 +29,8 @@ const ALLOWED_ORIGINS = [
   "http://127.0.0.1:8765"
 ];
 
-const TOOLS = ["mood", "thoughts", "gratitude", "habits", "sleep", "worries", "copingcards", "achievements", "compassionbreak", "fears", "scores", "test_results"];
-const SHARE_CATEGORIES = ["test_results", "mood", "thoughts", "gratitude", "habits", "sleep", "worries", "copingcards", "achievements", "compassionbreak", "fears"];
+const TOOLS = ["mood", "thoughts", "gratitude", "habits", "sleep", "worries", "copingcards", "achievements", "compassionbreak", "fears", "values", "scores", "test_results"];
+const SHARE_CATEGORIES = ["test_results", "mood", "thoughts", "gratitude", "habits", "sleep", "worries", "copingcards", "achievements", "compassionbreak", "fears", "values"];
 const CODE_ALPHABET = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"; // Crockford base32, sem I/L/O/U
 const MAX_BLOB = 300 * 1024; // 300 KB por ferramenta/partilha
 const MAX_WRAP = 2 * 1024; // wrapped DEK/chave privada: bem menor que um blob de dados

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>html.pl-framed{display:none!important}</style>
+<script>if(window.top!==window.self){document.documentElement.className+=" pl-framed";try{window.top.location=window.self.location.href;}catch(e){}}</script>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev https://cloudflareinsights.com; base-uri 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>A Minha Ficha · PsicoLab</title>
+<meta name="description" content="Escolhe o que incluir na tua ficha e partilha-a com o teu profissional.">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=15">
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "97b7a3670b8244db86ceadacfe4d4283"}'></script>
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1><span style="font-size:2.2rem">📋</span> <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section>
+    <h2 data-i18n="pick.title"></h2>
+    <p class="small muted" data-i18n="pick.note"></p>
+    <div id="cat-list"></div>
+  </section>
+
+  <section id="share-section" class="panel">
+    <h3 style="margin-top:0" data-i18n="share.title"></h3>
+    <p class="small muted hidden" id="share-noaccount" data-i18n="share.noaccount"></p>
+    <p class="small muted hidden" id="share-empty" data-i18n="share.empty"></p>
+    <div id="share-picker" class="hidden">
+      <label class="field-label" for="conn-select" data-i18n="share.pick"></label>
+      <select id="conn-select"></select>
+      <div class="center mt-2">
+        <button class="btn" id="btn-share" data-i18n="btn.share"></button>
+      </div>
+      <p class="small muted center" id="share-status" style="min-height:1.2em"></p>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "",
+  section: "ficha",
+  i18n: {
+    pt: {
+      "page.title": "A Minha Ficha",
+      "crumb": "Conta",
+      "intro.lead": "Escolhe o que queres incluir na tua ficha. Cada categoria que marcares mostra uma pré-visualização do que guardaste — e, se estiveres ligado(a) a um profissional, é isto que ele(a) vai ver quando partilhares.",
+      "pick.title": "O que incluir",
+      "pick.note": "Marca uma categoria para veres uma pré-visualização. Isto funciona mesmo sem sessão iniciada — só a partilha exige conta e ligação a um profissional.",
+      "share.title": "Partilhar com um profissional",
+      "share.noaccount": "Precisas de ter sessão iniciada, com sincronização activa, para partilhares dados com um profissional. Vai à página Conta para configurares isto.",
+      "share.empty": "Ainda não estás ligado a nenhum profissional. Vai à página Conta para te ligares com um, usando o código que ele(a) te der.",
+      "share.pick": "Profissional",
+      "btn.share": "Partilhar esta selecção",
+      "share.done": "Selecção partilhada 🌿",
+      "share.err": "Não foi possível partilhar. Tenta novamente.",
+      "preview.empty": "Ainda não guardaste nada aqui.",
+      "preview.testcount.n": " resultados de testes guardados",
+      "preview.testcount.1": " resultado de teste guardado",
+      "cat.test_results": "Resultados de testes",
+      "cat.mood": "Diário emocional",
+      "cat.thoughts": "Registo de pensamentos",
+      "cat.gratitude": "Diário de gratidão",
+      "cat.habits": "Hábitos",
+      "cat.sleep": "Sono",
+      "cat.worries": "Preocupações",
+      "cat.copingcards": "Cartões de enfrentamento",
+      "cat.achievements": "Registo de conquistas",
+      "cat.compassionbreak": "Pausas de autocompaixão",
+      "cat.fears": "Hierarquia de medos",
+      "cat.values": "Hierarquia de valores"
+    },
+    en: {
+      "page.title": "My Record",
+      "crumb": "Account",
+      "intro.lead": "Choose what to include in your record. Each category you tick shows a preview of what you've saved — and, if you're connected to a professional, that's exactly what they'll see once you share it.",
+      "pick.title": "What to include",
+      "pick.note": "Tick a category to see a preview. This works even without being signed in — only sharing requires an account and a connection to a professional.",
+      "share.title": "Share with a professional",
+      "share.noaccount": "You need to be signed in, with sync enabled, to share data with a professional. Go to the Account page to set this up.",
+      "share.empty": "You are not connected to any professional yet. Go to the Account page to connect with one, using the code they give you.",
+      "share.pick": "Professional",
+      "btn.share": "Share this selection",
+      "share.done": "Selection shared 🌿",
+      "share.err": "Could not share. Please try again.",
+      "preview.empty": "You haven't saved anything here yet.",
+      "preview.testcount.n": " test results saved",
+      "preview.testcount.1": " test result saved",
+      "cat.test_results": "Test results",
+      "cat.mood": "Mood diary",
+      "cat.thoughts": "Thought records",
+      "cat.gratitude": "Gratitude journal",
+      "cat.habits": "Habits",
+      "cat.sleep": "Sleep",
+      "cat.worries": "Worries",
+      "cat.copingcards": "Coping cards",
+      "cat.achievements": "Achievement log",
+      "cat.compassionbreak": "Self-compassion breaks",
+      "cat.fears": "Fear hierarchy",
+      "cat.values": "Values hierarchy"
+    }
+  }
+};
+</script>
+<script src="js/app.js?v=7"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var CATS = ["test_results", "mood", "thoughts", "gratitude", "habits", "sleep", "worries",
+    "copingcards", "achievements", "compassionbreak", "fears", "values"];
+  var ARRAY_CATS = ["habits", "thoughts", "worries", "copingcards", "achievements", "compassionbreak", "fears", "values", "test_results"];
+  var selected = [];
+  var connections = [];
+
+  function previewFor(cat) {
+    if (cat === "test_results") {
+      var n = PL.load("test_results", []).length;
+      if (!n) return PL.t("preview.empty");
+      return n + (n === 1 ? PL.t("preview.testcount.1") : PL.t("preview.testcount.n"));
+    }
+    var def = ARRAY_CATS.indexOf(cat) >= 0 ? [] : {};
+    var data = PL.load(cat, def);
+    var fmt = PL.formatters[cat];
+    var html = fmt ? fmt(data) : "";
+    return html || PL.t("preview.empty");
+  }
+
+  function renderChecklist() {
+    var box = $("cat-list");
+    box.innerHTML = "";
+    CATS.forEach(function (cat) {
+      var checked = selected.indexOf(cat) >= 0;
+      var row = document.createElement("div");
+      row.className = "panel";
+      var head = document.createElement("button");
+      head.className = "tag-btn" + (checked ? " sel" : "");
+      head.style.cssText = "width:100%;text-align:left";
+      head.textContent = (PL.catIcons[cat] || "") + " " + PL.t("cat." + cat);
+      head.addEventListener("click", function () {
+        var p = selected.indexOf(cat);
+        if (p >= 0) selected.splice(p, 1); else selected.push(cat);
+        renderChecklist();
+      });
+      row.appendChild(head);
+      if (checked) {
+        var prev = document.createElement("div");
+        prev.className = "small muted interp";
+        prev.style.marginTop = "10px";
+        prev.innerHTML = previewFor(cat);
+        row.appendChild(prev);
+      }
+      box.appendChild(row);
+    });
+  }
+
+  function selectConnection(id) {
+    PLSync.getShareStatus(id).then(function (onMap) {
+      selected = Object.keys(onMap);
+      renderChecklist();
+    });
+  }
+
+  function loadShareSection() {
+    if (!window.PLSync || !PLSync.user()) {
+      $("share-noaccount").classList.remove("hidden");
+      $("share-empty").classList.add("hidden");
+      $("share-picker").classList.add("hidden");
+      return;
+    }
+    $("share-noaccount").classList.add("hidden");
+    PLSync.listConnections().then(function (r) {
+      connections = r.asPatient || [];
+      if (!connections.length) {
+        $("share-empty").classList.remove("hidden");
+        $("share-picker").classList.add("hidden");
+        return;
+      }
+      $("share-empty").classList.add("hidden");
+      $("share-picker").classList.remove("hidden");
+      var sel = $("conn-select");
+      sel.innerHTML = "";
+      connections.forEach(function (conn) {
+        var opt = document.createElement("option");
+        opt.value = conn.connectionId;
+        opt.textContent = conn.otherDisplayName || conn.otherEmail;
+        sel.appendChild(opt);
+      });
+      selectConnection(connections[0].connectionId);
+    });
+  }
+
+  $("conn-select").addEventListener("change", function () {
+    selectConnection(parseInt(this.value, 10));
+  });
+
+  $("btn-share").addEventListener("click", function () {
+    var connectionId = parseInt($("conn-select").value, 10);
+    var conn = connections.filter(function (c) { return c.connectionId === connectionId; })[0];
+    if (!conn) return;
+    $("btn-share").disabled = true;
+    $("share-status").textContent = "";
+    var chain = Promise.resolve();
+    CATS.forEach(function (cat) {
+      var on = selected.indexOf(cat) >= 0;
+      chain = chain.then(function () { return PLSync.setShare(connectionId, cat, conn.otherPub, on); });
+    });
+    chain.then(function () {
+      $("btn-share").disabled = false;
+      PL.toast(PL.t("share.done"));
+    }).catch(function (e) {
+      console.error("[ficha] share failed:", e && (e.code || e.message));
+      $("btn-share").disabled = false;
+      $("share-status").textContent = PL.t("share.err");
+    });
+  });
+
+  document.addEventListener("pl:ready", renderChecklist);
+  document.addEventListener("pl:sync-ready", loadShareSection);
+  PL.onLang(function () {
+    renderChecklist();
+    if (window.PLSync && PLSync.user() && connections.length) {
+      var sel = $("conn-select");
+      connections.forEach(function (conn, i) { sel.options[i].textContent = conn.otherDisplayName || conn.otherEmail; });
+    }
+  });
+})();
+</script>
+</body>
+</html>

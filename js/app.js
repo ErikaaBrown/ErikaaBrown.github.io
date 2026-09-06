@@ -39,7 +39,9 @@
       "footer.privacy": "Privacidade primeiro: os teus registos são cifrados e só tu os consegues ler.",
       "footer.made": "Feito com calma 🌿",
       "theme.toggle": "Alternar tema claro/escuro",
-      "nav.account": "Conta"
+      "nav.account": "Conta",
+      "habit.days": "dias cumpridos",
+      "worry.open": "em aberto", "worry.happened": "aconteceu", "worry.nothappened": "não aconteceu"
     },
     en: {
       "site.name": "PsychLab",
@@ -53,7 +55,9 @@
       "footer.privacy": "Privacy first: your entries are encrypted and only you can read them.",
       "footer.made": "Made with calm 🌿",
       "theme.toggle": "Toggle light/dark theme",
-      "nav.account": "Account"
+      "nav.account": "Account",
+      "habit.days": "days completed",
+      "worry.open": "open", "worry.happened": "happened", "worry.nothappened": "did not happen"
     }
   };
 
@@ -243,6 +247,110 @@
     store("test_results", hist);
   }
 
+  /* ---------- formatadores de dados partilhados (dashboard profissional e Ficha) ---------- */
+  function fmtMood(obj) {
+    var keys = Object.keys(obj || {}).sort().reverse().slice(0, 10);
+    if (!keys.length) return "";
+    return "<ul style='margin:0;padding-left:20px'>" + keys.map(function (iso) {
+      var e = obj[iso];
+      return "<li><strong>" + fmtDate(iso) + "</strong> · " + e.m + "/5" + (e.note ? " · " + esc(e.note) : "") + "</li>";
+    }).join("") + "</ul>";
+  }
+  function fmtGratitude(obj) {
+    var keys = Object.keys(obj || {}).sort().reverse().slice(0, 10);
+    if (!keys.length) return "";
+    return "<ul style='margin:0;padding-left:20px'>" + keys.map(function (iso) {
+      var items = (obj[iso] || []).filter(Boolean).map(esc).join("; ");
+      return "<li><strong>" + fmtDate(iso) + "</strong> · " + items + "</li>";
+    }).join("") + "</ul>";
+  }
+  function fmtSleep(obj) {
+    var keys = Object.keys(obj || {}).sort().reverse().slice(0, 10);
+    if (!keys.length) return "";
+    return "<ul style='margin:0;padding-left:20px'>" + keys.map(function (iso) {
+      var e = obj[iso];
+      return "<li><strong>" + fmtDate(iso) + "</strong> · " + e.b + "→" + e.w + " · " + e.q + "/5" + (e.note ? " · " + esc(e.note) : "") + "</li>";
+    }).join("") + "</ul>";
+  }
+  function fmtHabits(arr) {
+    if (!Array.isArray(arr) || !arr.length) return "";
+    return "<ul style='margin:0;padding-left:20px'>" + arr.map(function (h) {
+      var days = Object.keys(h.c || {}).filter(function (k) { return h.c[k]; }).length;
+      return "<li>" + h.e + " " + esc(h.n) + " · " + days + " " + t("habit.days") + "</li>";
+    }).join("") + "</ul>";
+  }
+  function fmtWorries(arr) {
+    if (!Array.isArray(arr) || !arr.length) return "";
+    return "<ul style='margin:0;padding-left:20px'>" + arr.slice(-15).reverse().map(function (w) {
+      var tag = !w.done ? t("worry.open") : (w.happened ? t("worry.happened") : t("worry.nothappened"));
+      return "<li>" + esc(w.text) + " <span class='chip'>" + tag + "</span></li>";
+    }).join("") + "</ul>";
+  }
+  function fmtThoughts(arr) {
+    if (!Array.isArray(arr) || !arr.length) return "";
+    return "<ul style='margin:0;padding-left:20px'>" + arr.slice(-10).reverse().map(function (e) {
+      var delta = (typeof e.int1 === "number" && typeof e.int2 === "number") ? (e.int1 + "% → " + e.int2 + "%") : "";
+      return "<li><strong>" + fmtDate(e.date) + "</strong> · " + esc(e.thought) + (delta ? " <span class='chip'>" + delta + "</span>" : "") + "</li>";
+    }).join("") + "</ul>";
+  }
+  function fmtCopingCards(arr) {
+    if (!Array.isArray(arr) || !arr.length) return "";
+    return "<ul style='margin:0;padding-left:20px'>" + arr.slice(-10).reverse().map(function (c) {
+      return "<li>" + (c.situation ? "<strong>" + esc(c.situation) + "</strong> · " : "") + esc(c.text) + "</li>";
+    }).join("") + "</ul>";
+  }
+  function fmtAchievements(arr) {
+    if (!Array.isArray(arr) || !arr.length) return "";
+    var SIZE_ICON = { small: "🌱", medium: "🌿", big: "🌳" };
+    return "<ul style='margin:0;padding-left:20px'>" + arr.slice(-10).reverse().map(function (a) {
+      return "<li>" + (SIZE_ICON[a.size] || "🌿") + " " + esc(a.text) + "</li>";
+    }).join("") + "</ul>";
+  }
+  function fmtCompassionBreak(arr) {
+    if (!Array.isArray(arr) || !arr.length) return "";
+    return "<ul style='margin:0;padding-left:20px'>" + arr.slice(-10).reverse().map(function (e) {
+      return "<li><strong>" + fmtDate(e.date) + "</strong>" + (e.note ? " · " + esc(e.note) : "") + "</li>";
+    }).join("") + "</ul>";
+  }
+  function fmtFears(arr) {
+    if (!Array.isArray(arr) || !arr.length) return "";
+    return "<ul style='margin:0;padding-left:20px'>" + arr.slice().sort(function (a, b) { return a.suds - b.suds; }).map(function (f) {
+      return "<li>" + esc(f.situation) + " <span class='chip'>" + f.suds + "/100</span></li>";
+    }).join("") + "</ul>";
+  }
+  var VALUES_POOL = [
+    { pt: "Amizade", en: "Friendship" }, { pt: "Amor", en: "Love" }, { pt: "Família", en: "Family" },
+    { pt: "Saúde", en: "Health" }, { pt: "Liberdade", en: "Freedom" }, { pt: "Honestidade", en: "Honesty" },
+    { pt: "Justiça", en: "Justice" }, { pt: "Segurança", en: "Security" }, { pt: "Aventura", en: "Adventure" },
+    { pt: "Criatividade", en: "Creativity" }, { pt: "Aprendizagem", en: "Learning" }, { pt: "Autonomia", en: "Autonomy" },
+    { pt: "Compaixão", en: "Compassion" }, { pt: "Coragem", en: "Courage" }, { pt: "Equilíbrio", en: "Balance" },
+    { pt: "Espiritualidade", en: "Spirituality" }, { pt: "Excelência", en: "Excellence" }, { pt: "Generosidade", en: "Generosity" },
+    { pt: "Gratidão", en: "Gratitude" }, { pt: "Humildade", en: "Humility" }, { pt: "Humor", en: "Humour" },
+    { pt: "Independência", en: "Independence" }, { pt: "Lealdade", en: "Loyalty" }, { pt: "Ordem", en: "Order" },
+    { pt: "Paz", en: "Peace" }, { pt: "Perdão", en: "Forgiveness" }, { pt: "Reconhecimento", en: "Recognition" },
+    { pt: "Respeito", en: "Respect" }, { pt: "Responsabilidade", en: "Responsibility" }, { pt: "Sabedoria", en: "Wisdom" },
+    { pt: "Simplicidade", en: "Simplicity" }, { pt: "Sinceridade", en: "Sincerity" }, { pt: "Sucesso", en: "Success" },
+    { pt: "Sustentabilidade", en: "Sustainability" }, { pt: "Tradição", en: "Tradition" }, { pt: "Confiança", en: "Trust" },
+    { pt: "Tolerância", en: "Tolerance" }, { pt: "Curiosidade", en: "Curiosity" }, { pt: "Diversão", en: "Fun" },
+    { pt: "Beleza", en: "Beauty" }, { pt: "Colaboração", en: "Collaboration" }, { pt: "Autenticidade", en: "Authenticity" }
+  ];
+  function fmtValues(arr) {
+    if (!Array.isArray(arr) || !arr.length) return "";
+    return "<ul style='margin:0;padding-left:20px'>" + arr.slice(-10).reverse().map(function (e) {
+      var words = (e.top5 || []).map(function (i) { return VALUES_POOL[i] ? VALUES_POOL[i][lang] : "?"; }).join(", ");
+      return "<li><strong>#" + e.n + " · " + fmtDate(e.date) + "</strong> · " + esc(words) + "</li>";
+    }).join("") + "</ul>";
+  }
+  const FORMATTERS = {
+    mood: fmtMood, gratitude: fmtGratitude, sleep: fmtSleep, habits: fmtHabits, worries: fmtWorries,
+    thoughts: fmtThoughts, copingcards: fmtCopingCards, achievements: fmtAchievements,
+    compassionbreak: fmtCompassionBreak, fears: fmtFears, values: fmtValues
+  };
+  const CAT_ICONS = {
+    mood: "📔", thoughts: "💭", gratitude: "🙏", habits: "✅", sleep: "😴", worries: "📦",
+    copingcards: "🗂️", achievements: "🏆", compassionbreak: "🫶", fears: "🪜", values: "🧭"
+  };
+
   let toastEl = null;
   let toastTimer = null;
   function toast(msg) {
@@ -271,6 +379,8 @@
     initials: initials,
     avatarInto: avatarInto,
     saveTestResult: saveTestResult,
+    formatters: FORMATTERS,
+    catIcons: CAT_ICONS,
     onLang: function (fn) { document.addEventListener("pl:lang", fn); },
     onTheme: function (fn) { document.addEventListener("pl:theme", fn); }
   };
