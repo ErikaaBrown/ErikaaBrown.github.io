@@ -41,7 +41,16 @@
       "theme.toggle": "Alternar tema claro/escuro",
       "nav.account": "Conta",
       "habit.days": "dias cumpridos",
-      "worry.open": "em aberto", "worry.happened": "aconteceu", "worry.nothappened": "não aconteceu"
+      "worry.open": "em aberto", "worry.happened": "aconteceu", "worry.nothappened": "não aconteceu",
+      "cat.scores": "Jogos",
+      "test.bigfive": "Big Five", "test.attachment": "Vinculação", "test.eq": "Inteligência Emocional",
+      "test.stress": "Stress", "test.rosenberg": "Auto-Estima", "test.resilience": "Resiliência",
+      "test.panas": "PANAS", "test.assertiveness": "Assertividade", "test.selfcompassion": "Autocompaixão",
+      "test.gratefulness": "Gratidão Disposicional",
+      "game.emotionwheel": "Roda das Emoções", "game.emotionladder": "Escada das Emoções",
+      "game.distortions": "Apanha a Distorção", "game.myths": "Mito ou Facto?",
+      "game.assertive": "Assertividade em Acção", "game.innercritic": "O Crítico Interno",
+      "game.digitspan": "Amplitude de Memória", "game.nback": "N-Back"
     },
     en: {
       "site.name": "PsychLab",
@@ -57,7 +66,16 @@
       "theme.toggle": "Toggle light/dark theme",
       "nav.account": "Account",
       "habit.days": "days completed",
-      "worry.open": "open", "worry.happened": "happened", "worry.nothappened": "did not happen"
+      "worry.open": "open", "worry.happened": "happened", "worry.nothappened": "did not happen",
+      "cat.scores": "Games",
+      "test.bigfive": "Big Five", "test.attachment": "Attachment", "test.eq": "Emotional Intelligence",
+      "test.stress": "Stress", "test.rosenberg": "Self-Esteem", "test.resilience": "Resilience",
+      "test.panas": "PANAS", "test.assertiveness": "Assertiveness", "test.selfcompassion": "Self-Compassion",
+      "test.gratefulness": "Dispositional Gratitude",
+      "game.emotionwheel": "Wheel of Emotions", "game.emotionladder": "Emotion Ladder",
+      "game.distortions": "Catch the Distortion", "game.myths": "Myth or Fact?",
+      "game.assertive": "Assertiveness in Action", "game.innercritic": "The Inner Critic",
+      "game.digitspan": "Memory Span", "game.nback": "N-Back"
     }
   };
 
@@ -341,14 +359,37 @@
       return "<li><strong>#" + e.n + " · " + fmtDate(e.date) + "</strong> · " + esc(words) + "</li>";
     }).join("") + "</ul>";
   }
+  var SCALAR_TEST_MAX = { stress: 40, rosenberg: 30, assertiveness: 36, selfcompassion: 36, gratefulness: 30 };
+  function fmtTestResults(arr) {
+    if (!Array.isArray(arr) || !arr.length) return "";
+    return "<table class='data'><tbody>" + arr.slice(-10).reverse().map(function (e) {
+      var summary = Array.isArray(e.scores)
+        ? e.scores.map(function (n) { return Math.round(n); }).join(" / ")
+        : (e.scores + (SCALAR_TEST_MAX[e.test] ? "/" + SCALAR_TEST_MAX[e.test] : ""));
+      return "<tr><td>" + t("test." + e.test) + "</td><td>" + fmtDate(e.date) + "</td><td>" + summary + "</td></tr>";
+    }).join("") + "</tbody></table>";
+  }
+  var GAME_KEYS = ["emotionwheel", "emotionladder", "distortions", "myths", "assertive", "innercritic", "digitspan", "nback"];
+  var GAME_MAX = { emotionwheel: 16, emotionladder: 16, distortions: 10, myths: 12, assertive: 10, innercritic: 10 };
+  function fmtScores(obj) {
+    var keys = GAME_KEYS.filter(function (k) { return obj && obj[k] > 0; });
+    if (!keys.length) return "";
+    return "<ul style='margin:0;padding-left:20px'>" + keys.map(function (k) {
+      var val = obj[k];
+      var text = k === "nback" ? (val + "-back") : (GAME_MAX[k] ? (val + "/" + GAME_MAX[k]) : val);
+      return "<li>" + esc(t("game." + k)) + " · " + text + "</li>";
+    }).join("") + "</ul>";
+  }
   const FORMATTERS = {
     mood: fmtMood, gratitude: fmtGratitude, sleep: fmtSleep, habits: fmtHabits, worries: fmtWorries,
     thoughts: fmtThoughts, copingcards: fmtCopingCards, achievements: fmtAchievements,
-    compassionbreak: fmtCompassionBreak, fears: fmtFears, values: fmtValues
+    compassionbreak: fmtCompassionBreak, fears: fmtFears, values: fmtValues,
+    test_results: fmtTestResults, scores: fmtScores
   };
   const CAT_ICONS = {
     mood: "📔", thoughts: "💭", gratitude: "🙏", habits: "✅", sleep: "😴", worries: "📦",
-    copingcards: "🗂️", achievements: "🏆", compassionbreak: "🫶", fears: "🪜", values: "🧭"
+    copingcards: "🗂️", achievements: "🏆", compassionbreak: "🫶", fears: "🪜", values: "🧭",
+    test_results: "📊", scores: "🎮"
   };
 
   let toastEl = null;
