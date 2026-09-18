@@ -375,7 +375,7 @@ table.data td { padding: 9px 10px; border-bottom: 1px solid var(--line); font-va
 }
 
 /* ---------- hub: search, subgroups, continue strip (homepage) ---------- */
-.hub-search { position: relative; max-width: 460px; margin: 1.6rem auto 0; }
+.hub-search { display: block; position: relative; max-width: 460px; margin: 1.6rem auto 0; }
 .hub-search svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--ink-3); pointer-events: none; }
 .hub-search input#hub-search { padding-left: 40px; width: 100%; }
 .hub-count { text-align: center; color: var(--ink-3); font-size: 0.85rem; margin: 8px 0 0; }
