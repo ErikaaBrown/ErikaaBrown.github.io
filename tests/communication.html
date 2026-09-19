@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>html.pl-framed{display:none!important}</style>
+<script>if(window.top!==window.self){document.documentElement.className+=" pl-framed";try{window.top.location=window.self.location.href;}catch(e){}}</script>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev https://cloudflareinsights.com; base-uri 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Estilo de Comunicação · PsicoLab</title>
+<meta name="description" content="Descobre qual dos quatro estilos de comunicação usas mais: agressivo, passivo, passivo-agressivo ou assertivo.">
+<link rel="icon" type="image/png" href="../img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=18">
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "97b7a3670b8244db86ceadacfe4d4283"}'></script>
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1><span style="font-size:2.2rem">🗣️</span> <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section id="panel-intro" class="panel">
+    <p data-i18n="intro.p1"></p>
+    <p data-i18n="intro.p2"></p>
+    <div class="center mt-2">
+      <button class="btn" id="btn-start" data-i18n="btn.start"></button>
+    </div>
+  </section>
+
+  <section id="panel-quiz" class="panel hidden">
+    <div class="progress-track"><div class="progress-fill" id="pfill" style="width:0%"></div></div>
+    <p class="small muted" id="qcount"></p>
+    <p class="quiz-q" id="qtext"></p>
+    <div class="likert" id="likert"></div>
+    <div class="scale-hints">
+      <span data-i18n="lk.1"></span>
+      <span data-i18n="lk.5"></span>
+    </div>
+    <div class="quiz-nav">
+      <button class="btn btn-ghost btn-sm" id="btn-back" data-i18n="btn.back"></button>
+      <span></span>
+    </div>
+  </section>
+
+  <section id="panel-result" class="hidden">
+    <div class="panel">
+      <h2 style="margin-top:0" data-i18n="res.title"></h2>
+      <p class="muted" id="dominant-line"></p>
+      <div id="bars"></div>
+    </div>
+    <div class="panel" id="interp"></div>
+    <div class="panel panel-soft">
+      <h3 style="margin-top:0" data-i18n="nvc.title"></h3>
+      <p data-i18n="nvc.lead"></p>
+      <p style="margin:0"><strong data-i18n="nvc.s1t"></strong> · <span data-i18n="nvc.s1d"></span><br>
+      <strong data-i18n="nvc.s2t"></strong> · <span data-i18n="nvc.s2d"></span><br>
+      <strong data-i18n="nvc.s3t"></strong> · <span data-i18n="nvc.s3d"></span><br>
+      <strong data-i18n="nvc.s4t"></strong> · <span data-i18n="nvc.s4d"></span></p>
+    </div>
+    <div class="notice" data-i18n-html="res.notice"></div>
+    <div class="center mt-2">
+      <button class="btn btn-ghost" id="btn-retake" data-i18n="btn.retake"></button>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tests",
+  i18n: {
+    pt: {
+      "page.title": "Estilo de Comunicação",
+      "crumb": "Testes",
+      "intro.lead": "Quando precisas de expressar uma necessidade, uma opinião ou um desconforto, como costumas fazê-lo?",
+      "intro.p1": "Responde a 12 afirmações sobre como costumas comunicar nas tuas relações. Indica até que ponto cada frase te descreve.",
+      "intro.p2": "No fim verás o teu perfil nos quatro estilos: agressivo, passivo, passivo-agressivo e assertivo. A maioria das pessoas já usou todos, em situações diferentes; o que importa é notar qual predomina.",
+      "btn.start": "Começar o teste",
+      "btn.back": "← Anterior",
+      "btn.retake": "Repetir o teste",
+      "lk.1": "Nada a ver comigo",
+      "lk.5": "Sou mesmo eu",
+      "res.title": "O teu perfil de comunicação",
+      "res.dominant": "Estilo predominante: ",
+      "res.notice": "<strong>Nota:</strong> nenhum estilo é uma etiqueta fixa. O objectivo não é nunca usares os outros três, mas sim conseguires escolher o assertivo com mais frequência, sobretudo nas situações que mais importam.",
+      "nvc.title": "Como comunicar de forma mais assertiva",
+      "nvc.lead": "Um método simples, inspirado na Comunicação Não-Violenta de Marshall Rosenberg, tem quatro passos:",
+      "nvc.s1t": "Observar", "nvc.s1d": "descreve a situação com factos, sem julgamentos.",
+      "nvc.s2t": "Sentir", "nvc.s2d": "diz o que sentes perante essa situação.",
+      "nvc.s3t": "Necessidade", "nvc.s3d": "explica que necessidade tua não está a ser atendida.",
+      "nvc.s4t": "Pedido", "nvc.s4d": "termina com um pedido concreto e realizável.",
+      "tip.label": "Pista de crescimento"
+    },
+    en: {
+      "page.title": "Communication Style",
+      "crumb": "Tests",
+      "intro.lead": "When you need to express a need, an opinion or a discomfort, how do you usually do it?",
+      "intro.p1": "Respond to 12 statements about how you usually communicate in your relationships. Indicate how well each sentence describes you.",
+      "intro.p2": "At the end you will see your profile across four styles: aggressive, passive, passive-aggressive and assertive. Most people have used all of them, in different situations; what matters is noticing which one predominates.",
+      "btn.start": "Start the test",
+      "btn.back": "← Previous",
+      "btn.retake": "Retake the test",
+      "lk.1": "Not me at all",
+      "lk.5": "That's exactly me",
+      "res.title": "Your communication profile",
+      "res.dominant": "Predominant style: ",
+      "res.notice": "<strong>Note:</strong> no style is a fixed label. The goal is not to never use the other three, but to be able to choose the assertive one more often, especially in the situations that matter most.",
+      "nvc.title": "How to communicate more assertively",
+      "nvc.lead": "A simple method, inspired by Marshall Rosenberg's Nonviolent Communication, has four steps:",
+      "nvc.s1t": "Observe", "nvc.s1d": "describe the situation with facts, without judgement.",
+      "nvc.s2t": "Feel", "nvc.s2d": "say what you feel about that situation.",
+      "nvc.s3t": "Need", "nvc.s3d": "explain which need of yours is not being met.",
+      "nvc.s4t": "Request", "nvc.s4d": "end with a concrete, achievable request.",
+      "tip.label": "Growth hint"
+    }
+  }
+};
+</script>
+<script src="../js/app.js?v=11"></script>
+<script>
+(function () {
+  var STYLES = [
+    { pt: "Agressiva", en: "Aggressive", emoji: "🔥",
+      desc: { pt: "Dizes o que pensas e sentes sem te preocupares muito com o efeito nos outros. Costuma resolver o problema imediato, mas a um custo: pode intimidar, ferir ou afastar as pessoas ao longo do tempo.",
+              en: "You say what you think and feel without worrying much about the effect on others. It tends to solve the immediate problem, but at a cost: it can intimidate, hurt or push people away over time." },
+      tip: { pt: "Experimenta uma pausa antes de responderes. Perguntares «o que preciso mesmo dizer?» ajuda a separar a necessidade real da reacção imediata.",
+             en: "Try pausing before you respond. Asking \"what do I actually need to say?\" helps separate the real need from the immediate reaction." } },
+    { pt: "Passiva", en: "Passive", emoji: "🫥",
+      desc: { pt: "Tendes a aceitar o que os outros querem, mesmo à custa das tuas próprias necessidades, para evitar conflito ou desagradar. A curto prazo evita atrito, mas a longo prazo costuma deixar-te cansado/a e ressentido/a.",
+              en: "You tend to accept what others want, even at the cost of your own needs, to avoid conflict or displeasing someone. It avoids friction short-term, but tends to leave you tired and resentful long-term." },
+      tip: { pt: "Treina frases curtas e directas para situações simples primeiro, como «prefiro que não» ou «hoje não me dá jeito». Começar pequeno facilita.",
+             en: "Practise short, direct phrases for simple situations first, like \"I'd rather not\" or \"today doesn't work for me\". Starting small makes it easier." } },
+    { pt: "Passivo-Agressiva", en: "Passive-Aggressive", emoji: "🌫️",
+      desc: { pt: "Quando algo te incomoda, tendes a mostrá-lo por indirectas, silêncio ou sarcasmo, em vez de o dizeres directamente. A outra pessoa sente que algo está mal, mas raramente sabe exactamente o quê.",
+              en: "When something bothers you, you tend to show it through hints, silence or sarcasm, instead of saying it directly. The other person senses something is wrong, but rarely knows exactly what." },
+      tip: { pt: "Sempre que notares um comentário indirecto a formar-se, tenta transformá-lo numa frase directa: em vez de «tudo bem, não faz mal» (com tom cortante), experimenta «isto incomodou-me, podemos falar sobre isso?».",
+             en: "Whenever you notice an indirect comment forming, try turning it into a direct sentence: instead of a clipped \"it's fine, don't worry about it\", try \"this bothered me, can we talk about it?\"." } },
+    { pt: "Assertiva", en: "Assertive", emoji: "🌿",
+      desc: { pt: "Consegues expressar o que pensas, sentes e precisas com clareza, sem atacar a outra pessoa nem te apagares a ti mesmo/a. É, por norma, o estilo mais eficaz a longo prazo, para ambas as partes.",
+              en: "You can express what you think, feel and need clearly, without attacking the other person or erasing yourself. It tends to be the most effective style long-term, for both sides." },
+      tip: { pt: "Continua a treinar em situações cada vez mais difíceis. A assertividade é uma competência, não um traço fixo: até quem a domina precisa de a exercitar de vez em quando.",
+             en: "Keep practising it in increasingly difficult situations. Assertiveness is a skill, not a fixed trait: even those who master it need to keep exercising it now and then." } }
+  ];
+
+  var ITEMS = [
+    { s: 0, pt: "Digo o que penso sem me preocupar muito com o efeito que tem nos outros.", en: "I say what I think without worrying much about the effect it has on others." },
+    { s: 1, pt: "Aceito o que os outros querem, mesmo quando não é o que eu quero.", en: "I go along with what others want, even when it's not what I want." },
+    { s: 2, pt: "Quando estou incomodado/a com alguém, prefiro dar a entender por indirectas em vez de dizer directamente.", en: "When something about someone bothers me, I'd rather hint at it than say it directly." },
+    { s: 3, pt: "Digo o que penso e sinto com clareza, sem atacar a outra pessoa.", en: "I say what I think and feel clearly, without attacking the other person." },
+    { s: 0, pt: "Costumo impor a minha opinião quando discuto com alguém.", en: "I tend to push my opinion when I argue with someone." },
+    { s: 1, pt: "Evito dizer o que penso, para não criar conflito.", en: "I avoid saying what I think, to avoid creating conflict." },
+    { s: 2, pt: "Uso o silêncio ou o sarcasmo para mostrar que não concordo com algo.", en: "I use silence or sarcasm to show that I disagree with something." },
+    { s: 3, pt: "Peço aquilo de que preciso directamente, de forma respeitosa.", en: "I ask for what I need directly, in a respectful way." },
+    { s: 0, pt: "Levanto a voz ou fico hostil quando não concordam comigo.", en: "I raise my voice or get hostile when people disagree with me." },
+    { s: 1, pt: "Digo «não faz mal» mesmo quando faz.", en: "I say \"it's fine\" even when it isn't." },
+    { s: 2, pt: "Concordo à frente da pessoa, mas depois faço críticas pelas costas.", en: "I agree to someone's face, but then criticise them behind their back." },
+    { s: 3, pt: "Consigo discordar de alguém sem que a relação fique prejudicada.", en: "I can disagree with someone without damaging the relationship." }
+  ];
+
+  var LIKERT = {
+    pt: ["Nada a ver comigo", "Pouco", "Mais ou menos", "Bastante", "Sou mesmo eu"],
+    en: ["Not me at all", "A little", "Somewhat", "Quite a lot", "Exactly me"]
+  };
+
+  var answers = new Array(ITEMS.length).fill(0);
+  var idx = 0;
+  var state = "intro";
+  var $ = function (id) { return document.getElementById(id); };
+
+  function show(panel) {
+    $("panel-intro").classList.toggle("hidden", panel !== "intro");
+    $("panel-quiz").classList.toggle("hidden", panel !== "quiz");
+    $("panel-result").classList.toggle("hidden", panel !== "result");
+    state = panel;
+  }
+
+  function renderQuestion() {
+    var item = ITEMS[idx];
+    $("qtext").textContent = item[PL.lang];
+    $("qcount").textContent = (idx + 1) + " / " + ITEMS.length;
+    $("pfill").style.width = (idx / ITEMS.length * 100) + "%";
+    var lk = $("likert");
+    lk.innerHTML = "";
+    LIKERT[PL.lang].forEach(function (label, i) {
+      var b = document.createElement("button");
+      b.innerHTML = "<span style='display:block;font-size:1.15rem;font-weight:800'>" + (i + 1) + "</span>" + label;
+      if (answers[idx] === i + 1) b.classList.add("sel");
+      b.addEventListener("click", function () {
+        answers[idx] = i + 1;
+        b.classList.add("sel");
+        setTimeout(function () {
+          if (idx < ITEMS.length - 1) { idx++; renderQuestion(); }
+          else { finish(); }
+        }, 220);
+      });
+      lk.appendChild(b);
+    });
+    $("btn-back").disabled = idx === 0;
+  }
+
+  function scores() {
+    var sums = [0, 0, 0, 0];
+    ITEMS.forEach(function (item, i) { sums[item.s] += answers[i]; });
+    return sums.map(function (s) { return Math.round((s - 3) / 12 * 100); });
+  }
+
+  function renderResult(sc) {
+    var maxI = sc.indexOf(Math.max.apply(null, sc));
+    var st = STYLES[maxI];
+    $("dominant-line").innerHTML = PL.t("res.dominant") + "<strong>" + st.emoji + " " + st[PL.lang] + "</strong>";
+    var bars = "";
+    sc.forEach(function (v, i) {
+      var s = STYLES[i];
+      var hl = i === maxI ? " style='color:var(--brand-ink)'" : "";
+      bars += "<div class='rbar'><div class='rbar-head'><span" + hl + ">" + s.emoji + " " + s[PL.lang] + "</span><span class='val'>" + v + "%</span></div>" +
+        "<div class='track'><div class='fill' style='width:" + v + "%'></div></div></div>";
+    });
+    $("bars").innerHTML = bars;
+    $("interp").innerHTML =
+      "<div class='interp'><h3>" + st.emoji + " " + st[PL.lang] + "</h3><p>" + st.desc[PL.lang] + "</p></div>" +
+      "<p class='small muted' style='margin:14px 0 0'><strong>💡 " + PL.t("tip.label") + ":</strong> " + st.tip[PL.lang] + "</p>";
+  }
+
+  function finish() {
+    $("pfill").style.width = "100%";
+    var sc = scores();
+    PL.saveTestResult("communication", sc);
+    renderResult(sc);
+    show("result");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  $("btn-start").addEventListener("click", function () {
+    answers.fill(0); idx = 0; show("quiz"); renderQuestion();
+  });
+  $("btn-back").addEventListener("click", function () {
+    if (idx > 0) { idx--; renderQuestion(); }
+  });
+  $("btn-retake").addEventListener("click", function () {
+    answers.fill(0); idx = 0; show("quiz"); renderQuestion();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  PL.onLang(function () {
+    if (state === "quiz") renderQuestion();
+    if (state === "result") renderResult(scores());
+  });
+})();
+</script>
+</body>
+</html>

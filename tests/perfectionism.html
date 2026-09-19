@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>html.pl-framed{display:none!important}</style>
+<script>if(window.top!==window.self){document.documentElement.className+=" pl-framed";try{window.top.location=window.self.location.href;}catch(e){}}</script>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev https://cloudflareinsights.com; base-uri 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Perfeccionismo · PsicoLab</title>
+<meta name="description" content="Avalia o teu nível de perfeccionismo e como ele pode estar a travar-te em vez de te ajudar.">
+<link rel="icon" type="image/png" href="../img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=18">
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "97b7a3670b8244db86ceadacfe4d4283"}'></script>
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1><span style="font-size:2.2rem">🎯</span> <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section id="panel-intro" class="panel">
+    <p data-i18n="intro.p1"></p>
+    <div class="notice" data-i18n-html="intro.notice"></div>
+    <div class="center mt-2">
+      <button class="btn" id="btn-start" data-i18n="btn.start"></button>
+    </div>
+  </section>
+
+  <section id="panel-quiz" class="panel hidden">
+    <div class="progress-track"><div class="progress-fill" id="pfill" style="width:0%"></div></div>
+    <p class="small muted" id="qcount"></p>
+    <p class="quiz-q" id="qtext"></p>
+    <div class="likert" id="likert"></div>
+    <div class="scale-hints">
+      <span data-i18n="lk.1"></span>
+      <span data-i18n="lk.4"></span>
+    </div>
+    <div class="quiz-nav">
+      <button class="btn btn-ghost btn-sm" id="btn-back" data-i18n="btn.back"></button>
+      <span></span>
+    </div>
+  </section>
+
+  <section id="panel-result" class="hidden">
+    <div class="panel center">
+      <h2 style="margin-top:0" data-i18n="res.title"></h2>
+      <div class="chart-wrap" id="gauge-wrap" style="max-width:420px;margin:0 auto"></div>
+      <p id="badge-line"></p>
+      <p id="band-text" class="muted" style="max-width:560px;margin:10px auto 0;text-align:left"></p>
+    </div>
+    <div class="panel panel-soft">
+      <p style="margin:0" data-i18n="res.expl"></p>
+    </div>
+    <div class="notice" data-i18n-html="res.notice"></div>
+    <div class="center mt-2">
+      <button class="btn btn-ghost" id="btn-retake" data-i18n="btn.retake"></button>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tests",
+  i18n: {
+    pt: {
+      "page.title": "Perfeccionismo",
+      "crumb": "Testes",
+      "intro.lead": "Ter padrões elevados pode impulsionar-te, mas quando nada é «suficientemente bom» o perfeccionismo passa a travar-te em vez de te ajudar.",
+      "intro.p1": "Vais responder a 10 afirmações sobre como costumas lidar com erros, tarefas e resultados. Indica até que ponto concordas com cada uma.",
+      "intro.notice": "<strong>Nota:</strong> este questionário é indicativo e educativo. O perfeccionismo não é «tudo ou nada»: a maioria das pessoas tem uma mistura de padrões saudáveis e exigência excessiva, consoante a área da vida.",
+      "btn.start": "Começar",
+      "btn.back": "← Anterior",
+      "btn.retake": "Repetir",
+      "lk.1": "Discordo totalmente",
+      "lk.4": "Concordo totalmente",
+      "res.title": "O teu resultado",
+      "res.notice": "<strong>Perfeccionismo adaptativo vs. desadaptativo:</strong> ter padrões elevados não é o problema; o problema é quando não os atingir se traduz em autocrítica severa. Se sentes que isso está a afectar bastante o teu dia-a-dia, um psicólogo pode ajudar-te a trabalhar isso.",
+      "band.low": "Nível baixo. Consegues ter padrões exigentes sem que isso te imobilize ou te leve a uma autocrítica severa quando as coisas não correm perfeitamente.",
+      "band.mid": "Nível moderado. Há alturas em que a exigência contigo próprio/a passa da conta, sobretudo em certas áreas da vida. Vale a pena reparar em quando isso acontece e porquê.",
+      "band.high": "Nível elevado. É provável que adies tarefas com medo de não as fazeres bem, que te julgues com dureza por pequenos erros, ou que só te sintas satisfeito/a quando algo é impecável. Vale a pena trabalhar isto, porque tende a gerar bastante sofrimento sem beneficio real.",
+      "lbl.low": "Baixo", "lbl.mid": "Moderado", "lbl.high": "Elevado",
+      "res.expl": "🎯 O que ajuda: valorizar o progresso e não só o resultado final, separar a tua identidade e valor pessoal do que produzes, e lembrar que «suficientemente bom» é, na maior parte das vezes, exactamente isso: suficiente."
+    },
+    en: {
+      "page.title": "Perfectionism",
+      "crumb": "Tests",
+      "intro.lead": "Having high standards can drive you forward, but when nothing is ever \"good enough\", perfectionism starts holding you back instead of helping you.",
+      "intro.p1": "You will answer 10 statements about how you usually deal with mistakes, tasks and outcomes. Indicate how much you agree with each one.",
+      "intro.notice": "<strong>Note:</strong> this questionnaire is indicative and educational. Perfectionism is not \"all or nothing\": most people have a mix of healthy standards and excessive demands, depending on the area of life.",
+      "btn.start": "Start",
+      "btn.back": "← Previous",
+      "btn.retake": "Retake",
+      "lk.1": "Strongly disagree",
+      "lk.4": "Strongly agree",
+      "res.title": "Your result",
+      "res.notice": "<strong>Adaptive vs. maladaptive perfectionism:</strong> having high standards is not the problem; the problem is when falling short of them turns into harsh self-criticism. If you feel this is significantly affecting your day-to-day, a psychologist can help you work through it.",
+      "band.low": "Low level. You manage to hold demanding standards without them immobilising you or leading to severe self-criticism when things don't go perfectly.",
+      "band.mid": "Moderate level. There are times when self-demand goes overboard, especially in certain areas of life. It's worth noticing when that happens and why.",
+      "band.high": "High level. You likely put off tasks for fear of not doing them well, judge yourself harshly for small mistakes, or only feel satisfied when something is flawless. It's worth working on this, since it tends to generate a lot of suffering without real benefit.",
+      "lbl.low": "Low", "lbl.mid": "Moderate", "lbl.high": "High",
+      "res.expl": "🎯 What helps: valuing progress and not just the final result, separating your identity and self-worth from what you produce, and remembering that \"good enough\" is, most of the time, exactly that: enough."
+    }
+  }
+};
+</script>
+<script src="../js/app.js?v=11"></script>
+<script>
+(function () {
+  var ITEMS = [
+    { r: false, pt: "Sinto que, se não fizer algo perfeitamente, não vale a pena fazê-lo.", en: "I feel that if I can't do something perfectly, it's not worth doing." },
+    { r: false, pt: "Costumo adiar tarefas com medo de não as fazer bem o suficiente.", en: "I tend to put off tasks for fear of not doing them well enough." },
+    { r: false, pt: "Julgo-me com dureza quando cometo um erro, mesmo pequeno.", en: "I judge myself harshly when I make a mistake, even a small one." },
+    { r: false, pt: "Só me sinto satisfeito/a com um trabalho quando é impecável.", en: "I only feel satisfied with a piece of work when it is flawless." },
+    { r: true,  pt: "Consigo reconhecer o meu progresso, mesmo quando o resultado final não é perfeito.", en: "I can recognise my progress, even when the final result isn't perfect." },
+    { r: false, pt: "Preocupo-me mais com o que os outros vão pensar do resultado do que com o processo em si.", en: "I worry more about what others will think of the result than about the process itself." },
+    { r: true,  pt: "Aceito bem que «suficientemente bom» às vezes chega.", en: "I'm fine with \"good enough\" being enough, sometimes." },
+    { r: false, pt: "Sinto que um erro pequeno pode arruinar todo o meu esforço.", en: "I feel that one small mistake can ruin all my effort." },
+    { r: true,  pt: "Consigo terminar e entregar tarefas mesmo sabendo que não ficarão perfeitas.", en: "I can finish and hand in tasks even knowing they won't be perfect." },
+    { r: false, pt: "Sinto necessidade de que alguém valide o meu trabalho para o considerar bom.", en: "I feel the need for someone to validate my work before I consider it good." }
+  ];
+
+  var LIKERT = {
+    pt: ["Discordo totalmente", "Discordo", "Concordo", "Concordo totalmente"],
+    en: ["Strongly disagree", "Disagree", "Agree", "Strongly agree"]
+  };
+
+  var BANDS = [
+    { max: 12, key: "low",  color: "var(--good)",     icon: "🌱" },
+    { max: 21, key: "mid",  color: "var(--brand)",    icon: "🎯" },
+    { max: 30, key: "high", color: "var(--serious)",  icon: "🔶" }
+  ];
+
+  var answers = new Array(ITEMS.length).fill(-1);
+  var idx = 0;
+  var state = "intro";
+  var $ = function (id) { return document.getElementById(id); };
+
+  function show(panel) {
+    $("panel-intro").classList.toggle("hidden", panel !== "intro");
+    $("panel-quiz").classList.toggle("hidden", panel !== "quiz");
+    $("panel-result").classList.toggle("hidden", panel !== "result");
+    state = panel;
+  }
+
+  function renderQuestion() {
+    var item = ITEMS[idx];
+    $("qtext").textContent = item[PL.lang];
+    $("qcount").textContent = (idx + 1) + " / " + ITEMS.length;
+    $("pfill").style.width = (idx / ITEMS.length * 100) + "%";
+    var lk = $("likert");
+    lk.innerHTML = "";
+    LIKERT[PL.lang].forEach(function (label, i) {
+      var b = document.createElement("button");
+      b.textContent = label;
+      if (answers[idx] === i) b.classList.add("sel");
+      b.addEventListener("click", function () {
+        answers[idx] = i;
+        b.classList.add("sel");
+        setTimeout(function () {
+          if (idx < ITEMS.length - 1) { idx++; renderQuestion(); }
+          else { finish(); }
+        }, 220);
+      });
+      lk.appendChild(b);
+    });
+    $("btn-back").disabled = idx === 0;
+  }
+
+  function score() {
+    var s = 0;
+    ITEMS.forEach(function (item, i) {
+      s += item.r ? 3 - answers[i] : answers[i];
+    });
+    return s;
+  }
+
+  function bandOf(s) {
+    for (var i = 0; i < BANDS.length; i++) if (s <= BANDS[i].max) return BANDS[i];
+    return BANDS[BANDS.length - 1];
+  }
+
+  function gauge(s) {
+    var cx = 210, cy = 200, R = 150, W = 26;
+    function pol(frac) {
+      var a = Math.PI + frac * Math.PI;
+      return [cx + R * Math.cos(a), cy + R * Math.sin(a)];
+    }
+    function arc(f0, f1, color) {
+      var p0 = pol(f0), p1 = pol(f1);
+      var large = (f1 - f0) > 0.5 ? 1 : 0;
+      return "<path d='M" + p0[0] + " " + p0[1] + " A" + R + " " + R + " 0 " + large + " 1 " + p1[0] + " " + p1[1] +
+        "' fill='none' style='stroke:" + color + "' stroke-width='" + W + "'/>";
+    }
+    var gap = 0.008;
+    var stops = [0, 12.5 / 30, 21.5 / 30, 1];
+    var arcs = "";
+    BANDS.forEach(function (b, i) {
+      arcs += arc(stops[i] + (i ? gap : 0), stops[i + 1] - (i < BANDS.length - 1 ? gap : 0), b.color);
+    });
+    var f = Math.max(0.01, Math.min(0.99, s / 30));
+    var tip = pol(f);
+    var innerR = R - W / 2 - 12;
+    var a = Math.PI + f * Math.PI;
+    var base = [cx + innerR * Math.cos(a), cy + innerR * Math.sin(a)];
+    var needle = "<line x1='" + base[0] + "' y1='" + base[1] + "' x2='" + tip[0] + "' y2='" + tip[1] +
+      "' style='stroke:var(--ink)' stroke-width='4' stroke-linecap='round'/>";
+    return "<svg viewBox='0 0 420 240' role='img' aria-label='Gauge'>" + arcs + needle +
+      "<text x='" + cx + "' y='" + (cy - 30) + "' text-anchor='middle' font-size='52' font-weight='800' style='fill:var(--ink)'>" + s + "</text>" +
+      "<text x='" + cx + "' y='" + (cy - 4) + "' text-anchor='middle' font-size='14' style='fill:var(--ink-3)'>/ 30</text>" +
+      "<text x='" + (cx - R) + "' y='" + (cy + 26) + "' text-anchor='middle' font-size='12' style='fill:var(--ink-3)'>0</text>" +
+      "<text x='" + (cx + R) + "' y='" + (cy + 26) + "' text-anchor='middle' font-size='12' style='fill:var(--ink-3)'>30</text>" +
+      "</svg>";
+  }
+
+  function renderResult() {
+    var s = score();
+    var b = bandOf(s);
+    $("gauge-wrap").innerHTML = gauge(s);
+    $("badge-line").innerHTML = "<span class='status-badge'>" + b.icon + " <span style='color:" + b.color + "'>" + PL.t("lbl." + b.key) + "</span></span>";
+    $("band-text").textContent = PL.t("band." + b.key);
+  }
+
+  function finish() {
+    $("pfill").style.width = "100%";
+    PL.saveTestResult("perfectionism", score());
+    renderResult();
+    show("result");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  $("btn-start").addEventListener("click", function () {
+    answers.fill(-1); idx = 0; show("quiz"); renderQuestion();
+  });
+  $("btn-back").addEventListener("click", function () {
+    if (idx > 0) { idx--; renderQuestion(); }
+  });
+  $("btn-retake").addEventListener("click", function () {
+    answers.fill(-1); idx = 0; show("quiz"); renderQuestion();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  PL.onLang(function () {
+    if (state === "quiz") renderQuestion();
+    if (state === "result") renderResult();
+  });
+})();
+</script>
+</body>
+</html>
