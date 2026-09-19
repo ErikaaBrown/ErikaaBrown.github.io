@@ -359,6 +359,44 @@
       return "<li><strong>#" + e.n + " · " + fmtDate(e.date) + "</strong> · " + esc(words) + "</li>";
     }).join("") + "</ul>";
   }
+  var LIFEWHEEL_AREAS = {
+    saude: { pt: "Saúde e Disposição", en: "Health and Energy" },
+    intelectual: { pt: "Desenvolvimento Intelectual", en: "Intellectual Growth" },
+    emocional: { pt: "Equilíbrio Emocional", en: "Emotional Balance" },
+    realizacao: { pt: "Realização e Propósito", en: "Achievement and Purpose" },
+    financeiro: { pt: "Recursos Financeiros", en: "Financial Resources" },
+    contribuicao: { pt: "Contribuição Social", en: "Social Contribution" },
+    familia: { pt: "Família", en: "Family" },
+    amoroso: { pt: "Relacionamento Amoroso", en: "Romantic Relationship" },
+    social: { pt: "Vida Social", en: "Social Life" },
+    hobbies: { pt: "Hobbies e Diversão", en: "Hobbies and Fun" },
+    plenitude: { pt: "Plenitude e Felicidade", en: "Fulfilment and Happiness" },
+    espiritualidade: { pt: "Espiritualidade", en: "Spirituality" }
+  };
+  var LIFEWHEEL_QUADRANTS = [
+    { pt: "Pessoal", en: "Personal", areas: ["saude", "intelectual", "emocional"] },
+    { pt: "Profissional", en: "Professional", areas: ["realizacao", "financeiro", "contribuicao"] },
+    { pt: "Relacionamentos", en: "Relationships", areas: ["familia", "amoroso", "social"] },
+    { pt: "Qualidade de Vida", en: "Quality of Life", areas: ["hobbies", "plenitude", "espiritualidade"] }
+  ];
+  function fmtLifeWheel(arr) {
+    if (!Array.isArray(arr) || !arr.length) return "";
+    return arr.slice(-10).reverse().map(function (e) {
+      var sc = e.scores || {};
+      var keys = Object.keys(LIFEWHEEL_AREAS).filter(function (a) { return typeof sc[a] === "number"; });
+      if (!keys.length) return "";
+      function fmt1(n) { return (Math.round(n * 10) / 10).toString().replace(".", lang === "pt" ? "," : "."); }
+      var overall = keys.reduce(function (s, a) { return s + sc[a]; }, 0) / keys.length;
+      var head = "<div><strong>#" + e.n + " · " + fmtDate(e.date) + "</strong> · " + fmt1(overall) + "/10</div>";
+      var body = "<ul style='margin:4px 0 0;padding-left:20px'>" + LIFEWHEEL_QUADRANTS.map(function (q) {
+        var qKeys = q.areas.filter(function (a) { return typeof sc[a] === "number"; });
+        if (!qKeys.length) return "";
+        var qAvg = qKeys.reduce(function (s, a) { return s + sc[a]; }, 0) / qKeys.length;
+        return "<li>" + esc(q[lang]) + ": " + fmt1(qAvg) + "/10</li>";
+      }).join("") + "</ul>";
+      return "<div style='margin-bottom:12px'>" + head + body + "</div>";
+    }).join("");
+  }
   var VECTOR_TEST_DIMS = {
     bigfive: [
       { pt: "Abertura", en: "Openness" },
@@ -447,12 +485,12 @@
   const FORMATTERS = {
     mood: fmtMood, gratitude: fmtGratitude, sleep: fmtSleep, habits: fmtHabits, worries: fmtWorries,
     thoughts: fmtThoughts, copingcards: fmtCopingCards, achievements: fmtAchievements,
-    compassionbreak: fmtCompassionBreak, fears: fmtFears, values: fmtValues,
+    compassionbreak: fmtCompassionBreak, fears: fmtFears, values: fmtValues, lifewheel: fmtLifeWheel,
     test_results: fmtTestResults, scores: fmtScores
   };
   const CAT_ICONS = {
     mood: "📔", thoughts: "💭", gratitude: "🙏", habits: "✅", sleep: "😴", worries: "📦",
-    copingcards: "🗂️", achievements: "🏆", compassionbreak: "🫶", fears: "🪜", values: "🧭",
+    copingcards: "🗂️", achievements: "🏆", compassionbreak: "🫶", fears: "🪜", values: "🧭", lifewheel: "🎡",
     test_results: "📊", scores: "🎮"
   };
 

@@ -103,7 +103,8 @@ window.PAGE = {
       "cat.achievements": "Registo de conquistas",
       "cat.compassionbreak": "Pausas de autocompaixão",
       "cat.fears": "Hierarquia de medos",
-      "cat.values": "Hierarquia de valores"
+      "cat.values": "Hierarquia de valores",
+      "cat.lifewheel": "Roda da vida"
     },
     en: {
       "page.title": "My Record",
@@ -133,18 +134,19 @@ window.PAGE = {
       "cat.achievements": "Achievement log",
       "cat.compassionbreak": "Self-compassion breaks",
       "cat.fears": "Fear hierarchy",
-      "cat.values": "Values hierarchy"
+      "cat.values": "Values hierarchy",
+      "cat.lifewheel": "Wheel of life"
     }
   }
 };
 </script>
-<script src="js/app.js?v=9"></script>
+<script src="js/app.js?v=10"></script>
 <script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
   var CATS = ["test_results", "mood", "thoughts", "gratitude", "habits", "sleep", "worries",
-    "copingcards", "achievements", "compassionbreak", "fears", "values", "scores"];
-  var ARRAY_CATS = ["habits", "thoughts", "worries", "copingcards", "achievements", "compassionbreak", "fears", "values", "test_results"];
+    "copingcards", "achievements", "compassionbreak", "fears", "values", "lifewheel", "scores"];
+  var ARRAY_CATS = ["habits", "thoughts", "worries", "copingcards", "achievements", "compassionbreak", "fears", "values", "lifewheel", "test_results"];
   var selected = PL.load("ficha", []);
   var connections = [];
 
