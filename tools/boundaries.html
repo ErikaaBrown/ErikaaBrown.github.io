@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>html.pl-framed{display:none!important}</style>
+<script>if(window.top!==window.self){document.documentElement.className+=" pl-framed";try{window.top.location=window.self.location.href;}catch(e){}}</script>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev https://cloudflareinsights.com; base-uri 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Definir Limites · PsicoLab</title>
+<meta name="description" content="Identifica os teus limites em cada tipo de relação, e acompanha se já começaste a comunicá-los.">
+<link rel="icon" type="image/png" href="../img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=18">
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "97b7a3670b8244db86ceadacfe4d4283"}'></script>
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1><span style="font-size:2.2rem">🚧</span> <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section class="panel panel-soft">
+    <p style="margin:0" data-i18n="how.p"></p>
+  </section>
+
+  <section class="panel">
+    <h3 style="margin-top:0" data-i18n="add.title"></h3>
+    <label class="field-label" for="f-cat" data-i18n="add.label1"></label>
+    <select id="f-cat"></select>
+    <label class="field-label" for="f-text" style="margin-top:10px" data-i18n="add.label2"></label>
+    <textarea id="f-text" rows="2" data-i18n-ph="add.ph2"></textarea>
+    <label class="field-label" for="f-feeling" data-i18n="add.label3"></label>
+    <textarea id="f-feeling" rows="2" data-i18n-ph="add.ph3"></textarea>
+    <div class="center mt-2">
+      <button class="btn" id="btn-add" data-i18n="btn.add"></button>
+    </div>
+  </section>
+
+  <section>
+    <h2 data-i18n="list.title"></h2>
+    <p class="small muted" id="count-line"></p>
+    <div id="entry-list"></div>
+    <p class="small muted hidden" id="list-empty" data-i18n="list.empty"></p>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tools",
+  i18n: {
+    pt: {
+      "page.title": "Definir Limites",
+      "crumb": "Ferramentas",
+      "intro.lead": "Saber o que é aceitável e o que não é para ti, em cada tipo de relação, é o primeiro passo para conseguires comunicá-lo.",
+      "how.p": "💡 Como funciona: para cada limite que identificares, escolhe o tipo de relação, descreve o limite e como te sentes em relação a ele. Depois de o começares a comunicar, marca-o como «já comecei» na lista, para acompanhares o teu progresso.",
+      "add.title": "Identificar um limite",
+      "add.label1": "Tipo de relação",
+      "cat.friends": "Amizades", "cat.romantic": "Relações amorosas", "cat.family": "Família",
+      "cat.colleagues": "Colegas / trabalho", "cat.self": "Comigo mesmo/a",
+      "add.label2": "Que limite precisas de estabelecer?",
+      "add.ph2": "ex.: Não responder a mensagens de trabalho depois das 20h",
+      "add.label3": "Como te sentes em relação a isto, ou porque é importante para ti?",
+      "add.ph3": "ex.: Sinto-me esgotado/a por estar sempre disponível.",
+      "btn.add": "Adicionar à lista",
+      "added": "Limite adicionado 🌿",
+      "empty.req": "Descreve primeiro o limite",
+      "list.title": "Os teus limites",
+      "list.empty": "Ainda não identificaste nenhum limite. Junta o primeiro em cima.",
+      "started.no": "Ainda não comecei", "started.yes": "Já comecei",
+      "del.confirm": "Remover este limite da lista?"
+    },
+    en: {
+      "page.title": "Setting Boundaries",
+      "crumb": "Tools",
+      "intro.lead": "Knowing what is and isn't acceptable to you, in each kind of relationship, is the first step towards communicating it.",
+      "how.p": "💡 How it works: for each boundary you identify, choose the type of relationship, describe the boundary and how you feel about it. Once you start communicating it, mark it as \"already started\" in the list, to track your progress.",
+      "add.title": "Identify a boundary",
+      "add.label1": "Type of relationship",
+      "cat.friends": "Friendships", "cat.romantic": "Romantic relationships", "cat.family": "Family",
+      "cat.colleagues": "Colleagues / work", "cat.self": "With myself",
+      "add.label2": "What boundary do you need to set?",
+      "add.ph2": "e.g.: Not answering work messages after 8pm",
+      "add.label3": "How do you feel about this, or why does it matter to you?",
+      "add.ph3": "e.g.: I feel drained from always being available.",
+      "btn.add": "Add to the list",
+      "added": "Boundary added 🌿",
+      "empty.req": "Describe the boundary first",
+      "list.title": "Your boundaries",
+      "list.empty": "You haven't identified any boundary yet. Add the first one above.",
+      "started.no": "Not started yet", "started.yes": "Already started",
+      "del.confirm": "Remove this boundary from the list?"
+    }
+  }
+};
+</script>
+<script src="../js/app.js?v=11"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var CATS = ["friends", "romantic", "family", "colleagues", "self"];
+  var entries = PL.load("boundaries", []);
+
+  function save() { PL.store("boundaries", entries); }
+
+  function renderCats() {
+    var sel = $("f-cat");
+    var current = sel.value;
+    sel.innerHTML = CATS.map(function (c) { return "<option value='" + c + "'>" + PL.esc(PL.t("cat." + c)) + "</option>"; }).join("");
+    if (current) sel.value = current;
+  }
+
+  function renderCount() {
+    $("count-line").textContent = entries.length;
+  }
+
+  function renderList() {
+    var box = $("entry-list");
+    box.innerHTML = "";
+    entries.slice().reverse().forEach(function (e) {
+      var idx = entries.indexOf(e);
+      var div = document.createElement("div");
+      div.className = "entry";
+      div.innerHTML =
+        "<div class='entry-head'><span class='entry-date'>" + PL.esc(PL.t("cat." + e.category)) + " · " + PL.fmtDate(e.added) + "</span>" +
+        "<button class='del' data-del='" + idx + "'>🗑️</button></div>" +
+        "<p style='margin:8px 0 0'><strong>" + PL.esc(e.text) + "</strong></p>" +
+        (e.feeling ? "<p class='small muted' style='margin:4px 0 0'>" + PL.esc(e.feeling) + "</p>" : "") +
+        "<div class='center mt-2'><button type='button' class='tag-btn started" + (e.started ? " sel" : "") + "' data-idx='" + idx + "'>" +
+        (e.started ? "✅ " + PL.t("started.yes") : "⬜ " + PL.t("started.no")) + "</button></div>";
+      box.appendChild(div);
+    });
+    $("list-empty").classList.toggle("hidden", entries.length > 0);
+    box.querySelectorAll(".del").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (confirm(PL.t("del.confirm"))) {
+          entries.splice(parseInt(b.getAttribute("data-del"), 10), 1);
+          save();
+          renderAll();
+        }
+      });
+    });
+    box.querySelectorAll(".started").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var i = parseInt(b.getAttribute("data-idx"), 10);
+        entries[i].started = !entries[i].started;
+        save();
+        renderList();
+      });
+    });
+  }
+
+  function renderAll() { renderCats(); renderCount(); renderList(); }
+
+  $("btn-add").addEventListener("click", function () {
+    var text = $("f-text").value.trim();
+    if (!text) { PL.toast(PL.t("empty.req")); return; }
+    entries.push({
+      category: $("f-cat").value, text: text, feeling: $("f-feeling").value.trim(),
+      started: false, added: PL.todayISO()
+    });
+    save();
+    $("f-text").value = "";
+    $("f-feeling").value = "";
+    PL.toast(PL.t("added"));
+    renderAll();
+  });
+
+  document.addEventListener("pl:ready", renderAll);
+  PL.onLang(renderAll);
+})();
+</script>
+</body>
+</html>

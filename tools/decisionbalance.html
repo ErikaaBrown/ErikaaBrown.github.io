@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>html.pl-framed{display:none!important}</style>
+<script>if(window.top!==window.self){document.documentElement.className+=" pl-framed";try{window.top.location=window.self.location.href;}catch(e){}}</script>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev https://cloudflareinsights.com; base-uri 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Balança de Decisão · PsicoLab</title>
+<meta name="description" content="Organiza as vantagens e desvantagens de uma decisão difícil, e guarda o histórico das tuas decisões.">
+<link rel="icon" type="image/png" href="../img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=18">
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "97b7a3670b8244db86ceadacfe4d4283"}'></script>
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1><span style="font-size:2.2rem">⚖️</span> <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section class="panel panel-soft">
+    <p style="margin:0" data-i18n="how.p"></p>
+  </section>
+
+  <section class="panel">
+    <h3 style="margin-top:0" data-i18n="add.title"></h3>
+    <label class="field-label" for="f-title" data-i18n="add.label1"></label>
+    <input type="text" id="f-title" data-i18n-ph="add.ph1" maxlength="140">
+    <label class="field-label" for="f-pros" data-i18n="add.label2"></label>
+    <p class="small muted" style="margin:0 0 6px" data-i18n="add.note"></p>
+    <textarea id="f-pros" rows="4" data-i18n-ph="add.ph2"></textarea>
+    <label class="field-label" for="f-cons" data-i18n="add.label3"></label>
+    <textarea id="f-cons" rows="4" data-i18n-ph="add.ph3"></textarea>
+    <label class="field-label" for="f-conclusion" data-i18n="add.label4"></label>
+    <textarea id="f-conclusion" rows="2" data-i18n-ph="add.ph4"></textarea>
+    <div class="center mt-2">
+      <button class="btn" id="btn-add" data-i18n="btn.add"></button>
+    </div>
+  </section>
+
+  <section>
+    <h2 data-i18n="list.title"></h2>
+    <p class="small muted" id="count-line"></p>
+    <div id="entry-list"></div>
+    <p class="small muted hidden" id="list-empty" data-i18n="list.empty"></p>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tools",
+  i18n: {
+    pt: {
+      "page.title": "Balança de Decisão",
+      "crumb": "Ferramentas",
+      "intro.lead": "Quando uma decisão te pesa, pôr as vantagens e desvantagens no papel ajuda a ver com mais clareza o que realmente importa.",
+      "how.p": "💡 Como funciona: escreve a decisão que estás a ponderar, depois lista as vantagens e desvantagens de cada opção, uma por linha. Não precisa de estar perfeito nem completo: o objectivo é organizares o teu pensamento, não encontrar a resposta «certa».",
+      "add.title": "Nova decisão",
+      "add.label1": "Que decisão estás a ponderar?",
+      "add.ph1": "ex.: Aceitar a proposta de trabalho ou ficar onde estou",
+      "add.label2": "Vantagens",
+      "add.note": "Escreve uma vantagem por linha.",
+      "add.ph2": "ex.:\nSalário mais alto\nAprendo coisas novas",
+      "add.label3": "Desvantagens",
+      "add.ph3": "ex.:\nMais longe de casa\nEquipa desconhecida",
+      "add.label4": "Conclusão (opcional)",
+      "add.ph4": "O que decidiste, ou para onde estás inclinado/a?",
+      "btn.add": "Guardar decisão",
+      "added": "Decisão guardada 🌿",
+      "empty.req": "Escreve primeiro a decisão",
+      "list.title": "As tuas decisões",
+      "list.empty": "Ainda não guardaste nenhuma decisão. Cria a primeira em cima.",
+      "pros.label": "Vantagens", "cons.label": "Desvantagens", "conclusion.label": "Conclusão",
+      "del.confirm": "Remover esta decisão da lista?"
+    },
+    en: {
+      "page.title": "Decision Balance",
+      "crumb": "Tools",
+      "intro.lead": "When a decision weighs on you, putting the advantages and disadvantages on paper helps you see more clearly what actually matters.",
+      "how.p": "💡 How it works: write the decision you're weighing up, then list the advantages and disadvantages, one per line. It doesn't need to be perfect or complete: the goal is to organise your thinking, not to find the \"right\" answer.",
+      "add.title": "New decision",
+      "add.label1": "What decision are you weighing up?",
+      "add.ph1": "e.g.: Accept the job offer or stay where I am",
+      "add.label2": "Advantages",
+      "add.note": "Write one advantage per line.",
+      "add.ph2": "e.g.:\nHigher salary\nI learn new things",
+      "add.label3": "Disadvantages",
+      "add.ph3": "e.g.:\nFurther from home\nUnfamiliar team",
+      "add.label4": "Conclusion (optional)",
+      "add.ph4": "What did you decide, or which way are you leaning?",
+      "btn.add": "Save decision",
+      "added": "Decision saved 🌿",
+      "empty.req": "Write the decision first",
+      "list.title": "Your decisions",
+      "list.empty": "You haven't saved any decision yet. Create the first one above.",
+      "pros.label": "Advantages", "cons.label": "Disadvantages", "conclusion.label": "Conclusion",
+      "del.confirm": "Remove this decision from the list?"
+    }
+  }
+};
+</script>
+<script src="../js/app.js?v=11"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var entries = PL.load("decisionbalance", []);
+
+  function save() { PL.store("decisionbalance", entries); }
+
+  function toLines(text) {
+    return text.split("\n").map(function (l) { return l.trim(); }).filter(Boolean);
+  }
+
+  function renderCount() {
+    $("count-line").textContent = entries.length;
+  }
+
+  function renderList() {
+    var box = $("entry-list");
+    box.innerHTML = "";
+    entries.slice().reverse().forEach(function (e) {
+      var idx = entries.indexOf(e);
+      var div = document.createElement("div");
+      div.className = "entry";
+      var prosHtml = e.pros.length ? "<ul style='margin:4px 0;padding-left:20px'>" + e.pros.map(function (p) { return "<li>" + PL.esc(p) + "</li>"; }).join("") + "</ul>" : "";
+      var consHtml = e.cons.length ? "<ul style='margin:4px 0;padding-left:20px'>" + e.cons.map(function (c) { return "<li>" + PL.esc(c) + "</li>"; }).join("") + "</ul>" : "";
+      div.innerHTML =
+        "<div class='entry-head'><span class='entry-date'>" + PL.fmtDate(e.added) + "</span>" +
+        "<button class='del' data-del='" + idx + "'>🗑️</button></div>" +
+        "<p style='margin:8px 0 0'><strong>" + PL.esc(e.title) + "</strong></p>" +
+        "<p class='small muted' style='margin:10px 0 0'><strong>✅ " + PL.t("pros.label") + "</strong></p>" + prosHtml +
+        "<p class='small muted' style='margin:10px 0 0'><strong>⚠️ " + PL.t("cons.label") + "</strong></p>" + consHtml +
+        (e.conclusion ? "<p class='small' style='margin:10px 0 0'><strong>🧭 " + PL.t("conclusion.label") + ":</strong> " + PL.esc(e.conclusion) + "</p>" : "");
+      box.appendChild(div);
+    });
+    $("list-empty").classList.toggle("hidden", entries.length > 0);
+    box.querySelectorAll(".del").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (confirm(PL.t("del.confirm"))) {
+          entries.splice(parseInt(b.getAttribute("data-del"), 10), 1);
+          save();
+          renderAll();
+        }
+      });
+    });
+  }
+
+  function renderAll() { renderCount(); renderList(); }
+
+  $("btn-add").addEventListener("click", function () {
+    var title = $("f-title").value.trim();
+    if (!title) { PL.toast(PL.t("empty.req")); return; }
+    entries.push({
+      title: title, pros: toLines($("f-pros").value), cons: toLines($("f-cons").value),
+      conclusion: $("f-conclusion").value.trim(), added: PL.todayISO()
+    });
+    save();
+    $("f-title").value = "";
+    $("f-pros").value = "";
+    $("f-cons").value = "";
+    $("f-conclusion").value = "";
+    PL.toast(PL.t("added"));
+    renderAll();
+  });
+
+  document.addEventListener("pl:ready", renderAll);
+  PL.onLang(renderAll);
+})();
+</script>
+</body>
+</html>
