@@ -47,10 +47,13 @@
       "test.stress": "Stress", "test.rosenberg": "Auto-Estima", "test.resilience": "Resiliência",
       "test.panas": "PANAS", "test.assertiveness": "Assertividade", "test.selfcompassion": "Autocompaixão",
       "test.gratefulness": "Gratidão Disposicional",
+      "test.communication": "Estilo de Comunicação", "test.perfectionism": "Perfeccionismo",
       "game.emotionwheel": "Roda das Emoções", "game.emotionladder": "Escada das Emoções",
       "game.distortions": "Apanha a Distorção", "game.myths": "Mito ou Facto?",
       "game.assertive": "Assertividade em Acção", "game.innercritic": "O Crítico Interno",
-      "game.digitspan": "Amplitude de Memória", "game.nback": "N-Back"
+      "game.digitspan": "Amplitude de Memória", "game.nback": "N-Back",
+      "game.sayingno": "Dizer Não Sem Culpa", "game.criticism": "Crítica Construtiva ou Destrutiva?",
+      "game.toxicpatterns": "Comportamentos Tóxicos"
     },
     en: {
       "site.name": "PsychLab",
@@ -72,10 +75,13 @@
       "test.stress": "Stress", "test.rosenberg": "Self-Esteem", "test.resilience": "Resilience",
       "test.panas": "PANAS", "test.assertiveness": "Assertiveness", "test.selfcompassion": "Self-Compassion",
       "test.gratefulness": "Dispositional Gratitude",
+      "test.communication": "Communication Style", "test.perfectionism": "Perfectionism",
       "game.emotionwheel": "Wheel of Emotions", "game.emotionladder": "Emotion Ladder",
       "game.distortions": "Catch the Distortion", "game.myths": "Myth or Fact?",
       "game.assertive": "Assertiveness in Action", "game.innercritic": "The Inner Critic",
-      "game.digitspan": "Memory Span", "game.nback": "N-Back"
+      "game.digitspan": "Memory Span", "game.nback": "N-Back",
+      "game.sayingno": "Saying No Without Guilt", "game.criticism": "Constructive or Destructive Criticism?",
+      "game.toxicpatterns": "Toxic Behaviours"
     }
   };
 
@@ -359,6 +365,37 @@
       return "<li><strong>#" + e.n + " · " + fmtDate(e.date) + "</strong> · " + esc(words) + "</li>";
     }).join("") + "</ul>";
   }
+  var BOUNDARY_CATS = {
+    friends: { pt: "Amizades", en: "Friendships" },
+    romantic: { pt: "Relações amorosas", en: "Romantic relationships" },
+    family: { pt: "Família", en: "Family" },
+    colleagues: { pt: "Colegas / trabalho", en: "Colleagues / work" },
+    self: { pt: "Comigo mesmo/a", en: "With myself" }
+  };
+  function fmtBoundaries(arr) {
+    if (!Array.isArray(arr) || !arr.length) return "";
+    return "<ul style='margin:0;padding-left:20px'>" + arr.slice(-15).reverse().map(function (b) {
+      var cat = BOUNDARY_CATS[b.category] ? esc(BOUNDARY_CATS[b.category][lang]) : "";
+      var status = b.started ? "✅" : "⬜";
+      return "<li>" + status + " " + esc(b.text) + " <span class='chip'>" + cat + "</span></li>";
+    }).join("") + "</ul>";
+  }
+  function fmtDecisionBalance(arr) {
+    if (!Array.isArray(arr) || !arr.length) return "";
+    return arr.slice(-10).reverse().map(function (e) {
+      var head = "<div><strong>" + fmtDate(e.added) + " · " + esc(e.title) + "</strong></div>";
+      var prosHtml = (e.pros || []).length ? "<ul style='margin:4px 0;padding-left:20px'>" + e.pros.map(function (p) { return "<li>✅ " + esc(p) + "</li>"; }).join("") + "</ul>" : "";
+      var consHtml = (e.cons || []).length ? "<ul style='margin:4px 0;padding-left:20px'>" + e.cons.map(function (c) { return "<li>⚠️ " + esc(c) + "</li>"; }).join("") + "</ul>" : "";
+      return "<div style='margin-bottom:12px'>" + head + prosHtml + consHtml + (e.conclusion ? "<div class='small muted'>🧭 " + esc(e.conclusion) + "</div>" : "") + "</div>";
+    }).join("");
+  }
+  function fmtSelfCareLog(arr) {
+    if (!Array.isArray(arr) || !arr.length) return "";
+    return "<ul style='margin:0;padding-left:20px'>" + arr.slice(-15).reverse().map(function (e) {
+      var icon = e.tag === "vitamin" ? "🌱" : "🌧️";
+      return "<li>" + icon + " " + esc(e.activity) + "</li>";
+    }).join("") + "</ul>";
+  }
   var LIFEWHEEL_AREAS = {
     saude: { pt: "Saúde e Disposição", en: "Health and Energy" },
     intelectual: { pt: "Desenvolvimento Intelectual", en: "Intellectual Growth" },
@@ -471,8 +508,8 @@
       return "<div style='margin-bottom:12px'>" + head + body + "</div>";
     }).join("");
   }
-  var GAME_KEYS = ["emotionwheel", "emotionladder", "distortions", "myths", "assertive", "innercritic", "digitspan", "nback"];
-  var GAME_MAX = { emotionwheel: 16, emotionladder: 16, distortions: 10, myths: 12, assertive: 10, innercritic: 10 };
+  var GAME_KEYS = ["emotionwheel", "emotionladder", "distortions", "myths", "assertive", "innercritic", "digitspan", "nback", "sayingno", "criticism", "toxicpatterns"];
+  var GAME_MAX = { emotionwheel: 16, emotionladder: 16, distortions: 10, myths: 12, assertive: 10, innercritic: 10, sayingno: 10, criticism: 12, toxicpatterns: 8 };
   function fmtScores(obj) {
     var keys = GAME_KEYS.filter(function (k) { return obj && obj[k] > 0; });
     if (!keys.length) return "";
@@ -486,11 +523,13 @@
     mood: fmtMood, gratitude: fmtGratitude, sleep: fmtSleep, habits: fmtHabits, worries: fmtWorries,
     thoughts: fmtThoughts, copingcards: fmtCopingCards, achievements: fmtAchievements,
     compassionbreak: fmtCompassionBreak, fears: fmtFears, values: fmtValues, lifewheel: fmtLifeWheel,
+    boundaries: fmtBoundaries, decisionbalance: fmtDecisionBalance, selfcarelog: fmtSelfCareLog,
     test_results: fmtTestResults, scores: fmtScores
   };
   const CAT_ICONS = {
     mood: "📔", thoughts: "💭", gratitude: "🙏", habits: "✅", sleep: "😴", worries: "📦",
     copingcards: "🗂️", achievements: "🏆", compassionbreak: "🫶", fears: "🪜", values: "🧭", lifewheel: "🎡",
+    boundaries: "🚧", decisionbalance: "⚖️", selfcarelog: "💊",
     test_results: "📊", scores: "🎮"
   };
 
