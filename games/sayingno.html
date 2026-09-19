@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>html.pl-framed{display:none!important}</style>
+<script>if(window.top!==window.self){document.documentElement.className+=" pl-framed";try{window.top.location=window.self.location.href;}catch(e){}}</script>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev https://cloudflareinsights.com; base-uri 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Dizer Não Sem Culpa · PsicoLab</title>
+<meta name="description" content="Pratica recusar pedidos sem culpa, usando o princípio agradecer, elogiar, negar e dar uma alternativa.">
+<link rel="icon" type="image/png" href="../img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=18">
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "97b7a3670b8244db86ceadacfe4d4283"}'></script>
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1><span style="font-size:2.2rem">🙅</span> <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section id="panel-intro" class="panel">
+    <p data-i18n="intro.p1"></p>
+    <p class="small muted" data-i18n="intro.principle"></p>
+    <p class="small muted" id="best-line"></p>
+    <div class="center mt-2">
+      <button class="btn" id="btn-start" data-i18n="btn.start"></button>
+    </div>
+  </section>
+
+  <section id="panel-game" class="panel hidden">
+    <div class="progress-track"><div class="progress-fill" id="pfill" style="width:0%"></div></div>
+    <p class="small muted" id="qcount"></p>
+    <div class="scenario-box" id="situation" style="max-width:none;margin-bottom:18px"></div>
+    <p class="small muted center" data-i18n="q.prompt"></p>
+    <div class="opt-list" id="options"></div>
+    <div id="feedback" class="hidden" style="margin-top:18px">
+      <div class="notice" id="feedback-text"></div>
+      <div class="center">
+        <button class="btn btn-sm" id="btn-next" data-i18n="btn.next"></button>
+      </div>
+    </div>
+  </section>
+
+  <section id="panel-result" class="hidden">
+    <div class="panel center">
+      <h2 style="margin-top:0" data-i18n="res.title"></h2>
+      <div class="tiles" style="max-width:340px;margin:1rem auto">
+        <div class="tile"><div class="num" id="r-score"></div><div class="lbl" data-i18n="res.score"></div></div>
+        <div class="tile"><div class="num" id="r-best"></div><div class="lbl" data-i18n="res.best"></div></div>
+      </div>
+      <p id="r-comment" class="muted" style="max-width:520px;margin:0 auto"></p>
+    </div>
+    <div class="panel panel-soft">
+      <p style="margin:0" data-i18n="res.expl"></p>
+    </div>
+    <div class="center mt-2">
+      <button class="btn" id="btn-again" data-i18n="btn.again"></button>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "games",
+  i18n: {
+    pt: {
+      "page.title": "Dizer Não Sem Culpa",
+      "crumb": "Jogos",
+      "intro.lead": "Dizer «não» sem culpa é uma competência que se treina. Consegues encontrar a forma mais gentil e ao mesmo tempo mais clara de recusar?",
+      "intro.p1": "Vais ler 10 situações em que precisas de recusar um pedido. Para cada uma, escolhe, entre 4 opções, a resposta que consegue dizer não com clareza e gentileza ao mesmo tempo.",
+      "intro.principle": "💡 Um princípio simples: Agradecer + Elogiar/Reconhecer + Negar com clareza + Dar uma alternativa (quando fizer sentido).",
+      "best.prefix": "O teu recorde: ",
+      "btn.start": "Começar",
+      "btn.next": "Seguinte →",
+      "btn.again": "Jogar outra vez",
+      "q.prompt": "Qual destas respostas diz não sem culpa?",
+      "fb.right": "✔️ Certo, essa recusa é clara e gentil ao mesmo tempo. ",
+      "fb.wrong": "✖️ A melhor resposta era: «",
+      "fb.wrong2": "». ",
+      "res.title": "Resultado",
+      "res.score": "em 10",
+      "res.best": "Recorde",
+      "res.c1": "Excelente! Consegues recusar sem cair na culpa nem no ataque.",
+      "res.c2": "Bom instinto. Dizer não com clareza e gentileza ao mesmo tempo exige prática.",
+      "res.c3": "É normal ainda hesitar entre ceder, ser brusco/a ou evitar. Com prática, fica mais fácil.",
+      "res.expl": "🙅 Porque custa tanto: normalmente não é a palavra «não» que assusta, é o medo da reacção do outro. Um «não» gentil, com um agradecimento e talvez uma alternativa, é geralmente muito melhor recebido do que se imagina.",
+      "new.record": "Novo recorde! 🏆"
+    },
+    en: {
+      "page.title": "Saying No Without Guilt",
+      "crumb": "Games",
+      "intro.lead": "Saying \"no\" without guilt is a skill you can train. Can you find the way to decline that is both kind and clear?",
+      "intro.p1": "You will read 10 situations where you need to decline a request. For each one, pick, among 4 options, the response that manages to say no clearly and kindly at the same time.",
+      "intro.principle": "💡 A simple principle: Thank + Acknowledge/Compliment + Decline clearly + Offer an alternative (when it makes sense).",
+      "best.prefix": "Your record: ",
+      "btn.start": "Start",
+      "btn.next": "Next →",
+      "btn.again": "Play again",
+      "q.prompt": "Which of these responses says no without guilt?",
+      "fb.right": "✔️ Correct, that decline is clear and kind at the same time. ",
+      "fb.wrong": "✖️ The best response was: \"",
+      "fb.wrong2": "\". ",
+      "res.title": "Result",
+      "res.score": "out of 10",
+      "res.best": "Record",
+      "res.c1": "Excellent! You can decline without falling into guilt or attack.",
+      "res.c2": "Good instinct. Being clear and kind at the same time takes practice.",
+      "res.c3": "It's normal to still waver between giving in, being blunt or avoiding it. With practice, it gets easier.",
+      "res.expl": "🙅 Why it's so hard: usually it isn't the word \"no\" itself that's scary, it's the fear of the other person's reaction. A kind \"no\", with a thank-you and maybe an alternative, is usually received far better than we imagine.",
+      "new.record": "New record! 🏆"
+    }
+  }
+};
+</script>
+<script src="../js/app.js?v=11"></script>
+<script>
+(function () {
+  var ITEMS = [
+    { s: { pt: "Um conhecido convida-te para um projeto que parece interessante, mas nessa data já tens outros compromissos.", en: "An acquaintance invites you to a project that sounds interesting, but you already have other commitments on that date." },
+      o: [
+        { pt: "Aceitas, mesmo sabendo que não vais conseguir cumprir tudo bem.", en: "You accept, even knowing you won't manage to do everything well.", r: false },
+        { pt: "Respondes secamente: «Não posso.»", en: "You reply curtly: \"I can't.\"", r: false },
+        { pt: "Dizes que talvez, sem te comprometeres, e depois vais adiando responder.", en: "You say maybe, without committing, and then keep putting off a real answer.", r: false },
+        { pt: "«Obrigado/a por te teres lembrado de mim, o projeto parece mesmo interessante. Infelizmente não consigo nessa data; que tal agendarmos outra altura?»", en: "\"Thank you for thinking of me, the project sounds really interesting. Unfortunately I can't make that date; how about we schedule another time?\"", r: true }
+      ] },
+    { s: { pt: "Pedem-te para trabalhar num feriado, pela terceira vez este ano, e desta vez querias mesmo descansar.", en: "You're asked to work on a public holiday, for the third time this year, and this time you really wanted to rest." },
+      o: [
+        { pt: "«Já trabalhei os dois últimos feriados; desta vez preciso mesmo de descansar. Conseguimos encontrar outra pessoa?»", en: "\"I've already worked the last two holidays; I really need to rest this time. Can we find someone else?\"", r: true },
+        { pt: "Aceitas outra vez, mesmo sentindo-te injustiçado/a.", en: "You accept again, even though you feel it's unfair.", r: false },
+        { pt: "Recusas de forma brusca, sem dar qualquer explicação.", en: "You refuse abruptly, without giving any explanation.", r: false },
+        { pt: "Aceitas, mas depois comentas com os colegas que a chefia é injusta.", en: "You accept, but then complain to coworkers that management is unfair.", r: false }
+      ] },
+    { s: { pt: "Um amigo pede-te dinheiro emprestado outra vez, e ainda te deve da última vez.", en: "A friend asks to borrow money again, and still owes you from last time." },
+      o: [
+        { pt: "Emprestas outra vez, mesmo não querendo, para não pareceres mesquinho/a.", en: "You lend it again, even though you don't want to, to avoid seeming stingy.", r: false },
+        { pt: "«Ainda me deves da última vez, por isso desta vez não me dá para emprestar mais.»", en: "\"You still owe me from last time, so this time I can't lend more.\"", r: true },
+        { pt: "Recusas de forma seca, chamando-lhe aproveitador/a.", en: "You refuse curtly, calling them a moocher.", r: false },
+        { pt: "Dizes que sim, mas depois evitas as chamadas dele/dela durante semanas.", en: "You say yes, but then avoid their calls for weeks afterward.", r: false }
+      ] },
+    { s: { pt: "Um familiar pede-te para tratares de um assunto dele/dela justamente no fim de semana em que tinhas planeado descansar.", en: "A relative asks you to sort out something of theirs on the very weekend you had planned to rest." },
+      o: [
+        { pt: "Não dizes nada e cancelas os teus planos sem explicares porquê.", en: "You say nothing and cancel your plans without explaining why.", r: false },
+        { pt: "Recusas com irritação, dizendo que ele/ela pede sempre demasiado.", en: "You refuse irritably, saying they always ask for too much.", r: false },
+        { pt: "«Percebo que precisas de ajuda; este fim de semana já tinha planos de descanso, mas posso ajudar-te na próxima semana?»", en: "\"I understand you need help; I already have rest plans this weekend, but can I help you next week?\"", r: true },
+        { pt: "Aceitas, adiando outra vez o teu próprio descanso.", en: "You agree, putting off your own rest yet again.", r: false }
+      ] },
+    { s: { pt: "Um amigo insiste para saíres com ele hoje, mas estás exausto/a e só querias ficar em casa.", en: "A friend keeps insisting you go out with them today, but you're exhausted and just wanted to stay home." },
+      o: [
+        { pt: "Vais, mesmo exausto/a, para não o/a desiludires.", en: "You go, even exhausted, so as not to disappoint them.", r: false },
+        { pt: "«Hoje estou mesmo sem energia para sair; adorava ir noutro dia, combinamos?»", en: "\"I really have no energy to go out today; I'd love to go another day, shall we plan it?\"", r: true },
+        { pt: "Não respondes à mensagem, para evitar o assunto.", en: "You don't reply to the message, to avoid the topic.", r: false },
+        { pt: "Respondes irritado/a que ele/ela nunca entende quando precisas de espaço.", en: "You reply irritably that they never understand when you need space.", r: false }
+      ] },
+    { s: { pt: "Pedem-te para rever um trabalho de última hora, sem tempo nenhum e sem ser da tua responsabilidade.", en: "You're asked to review someone's work at the last minute, with no time and it isn't your responsibility." },
+      o: [
+        { pt: "Aceitas, ficando acordado/a até tarde, mesmo contrariado/a.", en: "You accept, staying up late, even though you resent it.", r: false },
+        { pt: "Ignoras o pedido sem responder nada.", en: "You ignore the request without replying at all.", r: false },
+        { pt: "«Reparo que é urgente, mas com o tempo que tenho não consigo fazer isto com qualidade agora; consegues pedir ajuda a mais alguém desta vez?»", en: "\"I see it's urgent, but with the time I have I can't do this well right now; can you ask someone else to help this time?\"", r: true },
+        { pt: "Dizes que sim na hora, mas depois entregas algo feito à pressa e mal revisto.", en: "You say yes on the spot, but then hand in something rushed and poorly reviewed.", r: false }
+      ] },
+    { s: { pt: "Um vizinho pede-te outra vez para tratares do animal dele enquanto está fora, e já o fizeste várias vezes este mês.", en: "A neighbour asks you again to look after their pet while they're away, and you've already done it several times this month." },
+      o: [
+        { pt: "«Já o fiz um par de vezes este mês; desta vez não me dá jeito, mas talvez outro vizinho possa ajudar?»", en: "\"I've already done it a couple of times this month; it doesn't work for me this time, but maybe another neighbour could help?\"", r: true },
+        { pt: "Aceitas outra vez, mesmo achando que já é a mais.", en: "You accept again, even though you feel it's too much.", r: false },
+        { pt: "Respondes de forma seca que já não és o serviço de canil dele/dela.", en: "You reply curtly that you're not their kennel service.", r: false },
+        { pt: "Não respondes à mensagem, esperando que ele/ela desista de perguntar.", en: "You don't reply to the message, hoping they'll give up asking.", r: false }
+      ] },
+    { s: { pt: "Um colega pede-te para trocares de turno, pela terceira vez este mês.", en: "A coworker asks you to swap shifts, for the third time this month." },
+      o: [
+        { pt: "Aceitas mais uma vez, mesmo sentindo que é sempre a mesma pessoa a pedir.", en: "You accept once more, even feeling it's always the same person asking.", r: false },
+        { pt: "«Já troquei contigo duas vezes este mês; desta vez não consigo, mas espero que consigas resolver.»", en: "\"I've already swapped with you twice this month; I can't this time, but I hope you manage to sort it out.\"", r: true },
+        { pt: "Recusas de forma hostil, acusando-o/a de se aproveitar de ti.", en: "You refuse in a hostile way, accusing them of taking advantage of you.", r: false },
+        { pt: "Aceitas, mas comentas com outros colegas que ele/ela abusa da tua boa vontade.", en: "You accept, but complain to other coworkers that they abuse your good will.", r: false }
+      ] },
+    { s: { pt: "Um amigo insiste que vás a um evento que sabes que não vais gostar nada.", en: "A friend insists you go to an event you know you won't enjoy at all." },
+      o: [
+        { pt: "Vais, para não o/a chatear, mesmo sabendo que não vais gostar.", en: "You go, so as not to upset them, even knowing you won't enjoy it.", r: false },
+        { pt: "Combinas ir, mas depois inventas uma desculpa de última hora para não ires.", en: "You agree to go, but then invent a last-minute excuse not to.", r: false },
+        { pt: "«Sei que gostas muito, mas este tipo de evento não é mesmo para mim; diverte-te, conta-me depois como foi!»", en: "\"I know you love these, but this kind of event really isn't for me; have fun, tell me about it after!\"", r: true },
+        { pt: "Dizes que ele/ela só pensa nele/nela ao insistir tanto.", en: "You say they only think of themselves for insisting so much.", r: false }
+      ] },
+    { s: { pt: "Pedem-te, de última hora, para organizares algo que não é da tua responsabilidade.", en: "You're asked, at the last minute, to organise something that isn't your responsibility." },
+      o: [
+        { pt: "Aceitas na mesma, para não pareceres pouco prestável.", en: "You accept anyway, so as not to seem unhelpful.", r: false },
+        { pt: "«Isso não é bem a minha área, e agora não tenho tempo para o fazer bem; talvez a pessoa responsável consiga tratar disso?»", en: "\"That isn't really my area, and I don't have time to do it well right now; maybe the person in charge could handle it?\"", r: true },
+        { pt: "Recusas de forma cortante, dizendo que não é problema teu.", en: "You refuse curtly, saying it's not your problem.", r: false },
+        { pt: "Aceitas sem dizer nada, mas fazes de forma claramente relutante e lenta.", en: "You accept without saying anything, but do it in a clearly reluctant, slow way.", r: false }
+      ] }
+  ];
+
+  var $ = function (id) { return document.getElementById(id); };
+  var order = [], idx = 0, score = 0, state = "intro", answered = false;
+
+  function shuffled(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function scores() { return PL.load("scores", {}); }
+
+  function show(p) {
+    $("panel-intro").classList.toggle("hidden", p !== "intro");
+    $("panel-game").classList.toggle("hidden", p !== "game");
+    $("panel-result").classList.toggle("hidden", p !== "result");
+    state = p;
+  }
+
+  function bestLine() {
+    var b = scores().sayingno || 0;
+    $("best-line").textContent = b ? PL.t("best.prefix") + b + "/10" : "";
+  }
+
+  function renderRound() {
+    var it = ITEMS[order[idx]];
+    answered = false;
+    $("qcount").textContent = (idx + 1) + " / " + ITEMS.length;
+    $("pfill").style.width = (idx / ITEMS.length * 100) + "%";
+    $("feedback").classList.add("hidden");
+    $("situation").textContent = it.s[PL.lang];
+    var box = $("options");
+    box.innerHTML = "";
+    var opts = shuffled(it.o);
+    opts.forEach(function (opt) {
+      var b = document.createElement("button");
+      b.className = "opt-btn";
+      b.textContent = opt[PL.lang];
+      b.addEventListener("click", function () { pick(opt, b); });
+      box.appendChild(b);
+    });
+  }
+
+  function pick(opt, btn) {
+    if (answered) return;
+    answered = true;
+    var right = !!opt.r;
+    if (right) score++;
+    var correctOpt = ITEMS[order[idx]].o.filter(function (o) { return o.r; })[0];
+    document.querySelectorAll("#options button").forEach(function (b) {
+      if (b.textContent === correctOpt[PL.lang]) b.classList.add("correct");
+    });
+    if (!right) btn.classList.add("wrong");
+    var prefix = right ? PL.t("fb.right") : PL.t("fb.wrong") + correctOpt[PL.lang] + PL.t("fb.wrong2");
+    $("feedback-text").textContent = prefix;
+    $("feedback").classList.remove("hidden");
+  }
+
+  function next() {
+    idx++;
+    if (idx >= ITEMS.length) {
+      var sc = scores();
+      var isRecord = score > (sc.sayingno || 0);
+      if (isRecord) {
+        sc.sayingno = score;
+        PL.store("scores", sc);
+      }
+      renderResult(isRecord);
+      show("result");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      renderRound();
+    }
+  }
+
+  function renderResult(isRecord) {
+    $("r-score").textContent = score;
+    $("r-best").textContent = (scores().sayingno || score) + "/10";
+    var c = score >= 8 ? "res.c1" : score >= 5 ? "res.c2" : "res.c3";
+    $("r-comment").textContent = (isRecord ? PL.t("new.record") + " " : "") + PL.t(c);
+  }
+
+  function start() {
+    order = shuffled(ITEMS.map(function (_, i) { return i; }));
+    idx = 0; score = 0;
+    show("game");
+    renderRound();
+  }
+
+  $("btn-start").addEventListener("click", start);
+  $("btn-again").addEventListener("click", function () {
+    start();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  $("btn-next").addEventListener("click", next);
+
+  document.addEventListener("pl:ready", bestLine);
+  PL.onLang(function () {
+    bestLine();
+    if (state === "game" && !answered) renderRound();
+    if (state === "result") renderResult(false);
+  });
+})();
+</script>
+</body>
+</html>

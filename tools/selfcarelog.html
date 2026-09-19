@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>html.pl-framed{display:none!important}</style>
+<script>if(window.top!==window.self){document.documentElement.className+=" pl-framed";try{window.top.location=window.self.location.href;}catch(e){}}</script>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev https://cloudflareinsights.com; base-uri 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Diário de Autocuidado · PsicoLab</title>
+<meta name="description" content="Regista actividades Vitamina (que te energizam) e Toxina (que te esgotam), e observa o padrão ao longo do tempo.">
+<link rel="icon" type="image/png" href="../img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=18">
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "97b7a3670b8244db86ceadacfe4d4283"}'></script>
+<style>
+  .vt-tally { display: flex; gap: 12px; margin: 14px 0 0; }
+  .vt-tile { flex: 1; background: var(--surface-2); border-radius: var(--radius-sm); padding: 12px 14px; text-align: center; }
+  .vt-tile .num { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; }
+  .vt-tile .lbl { font-size: 0.78rem; color: var(--ink-2); margin-top: 2px; }
+  .vt-bar { height: 10px; border-radius: 999px; overflow: hidden; display: flex; margin-top: 10px; background: var(--surface-2); }
+  .vt-bar span { display: block; height: 100%; }
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1><span style="font-size:2.2rem">💊</span> <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+
+  <section class="panel panel-soft">
+    <p style="margin:0" data-i18n="how.p"></p>
+  </section>
+
+  <section class="panel">
+    <h3 style="margin-top:0" data-i18n="add.title"></h3>
+    <label class="field-label" for="f-activity" data-i18n="add.label1"></label>
+    <input type="text" id="f-activity" data-i18n-ph="add.ph1" maxlength="120">
+    <label class="field-label" data-i18n="add.label2"></label>
+    <div class="tag-row">
+      <button type="button" class="tag-btn" id="btn-vitamin">🌱 <span data-i18n="tag.vitamin"></span></button>
+      <button type="button" class="tag-btn" id="btn-toxin">🌧️ <span data-i18n="tag.toxin"></span></button>
+    </div>
+    <label class="field-label" for="f-note" data-i18n="add.label3"></label>
+    <textarea id="f-note" rows="2" data-i18n-ph="add.ph3"></textarea>
+    <div class="center mt-2">
+      <button class="btn" id="btn-add" data-i18n="btn.add"></button>
+    </div>
+  </section>
+
+  <section>
+    <h2 data-i18n="list.title"></h2>
+    <div class="vt-tally" id="tally"></div>
+    <div class="vt-bar" id="vt-bar"></div>
+    <p class="small muted" style="margin-top:20px" id="count-line"></p>
+    <div id="entry-list"></div>
+    <p class="small muted hidden" id="list-empty" data-i18n="list.empty"></p>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "../",
+  section: "tools",
+  i18n: {
+    pt: {
+      "page.title": "Diário de Autocuidado",
+      "crumb": "Ferramentas",
+      "intro.lead": "Nem todas as actividades te fazem bem da mesma forma: umas energizam-te (Vitamina), outras esgotam-te (Toxina).",
+      "how.p": "💡 Como funciona: sempre que fizeres algo que te energiza ou algo que te esgota, regista aqui. Com o tempo, vais construir a tua própria lista de actividades Vitamina, e vais perceber melhor quando os dias têm mais Toxina do que gostavas.",
+      "add.title": "Registar uma actividade",
+      "add.label1": "Que actividade foi?",
+      "add.ph1": "ex.: Dormir 8 horas, fazer uma caminhada, ver notícias durante uma hora",
+      "add.label2": "Foi Vitamina ou Toxina?",
+      "tag.vitamin": "Vitamina", "tag.toxin": "Toxina",
+      "add.label3": "Como te sentiste? (opcional)",
+      "add.ph3": "ex.: Mais leve e com mais energia.",
+      "btn.add": "Registar",
+      "added": "Registado 🌿",
+      "empty.req": "Escreve a actividade e escolhe Vitamina ou Toxina",
+      "list.title": "O teu registo",
+      "list.empty": "Ainda não registaste nada. Começa em cima.",
+      "tally.vitamin": "Vitamina", "tally.toxin": "Toxina",
+      "del.confirm": "Remover este registo?"
+    },
+    en: {
+      "page.title": "Self-Care Log",
+      "crumb": "Tools",
+      "intro.lead": "Not every activity does you good the same way: some energise you (Vitamin), others drain you (Toxin).",
+      "how.p": "💡 How it works: whenever you do something that energises you or something that drains you, log it here. Over time you'll build your own list of Vitamin activities, and get a clearer sense of when days carry more Toxin than you'd like.",
+      "add.title": "Log an activity",
+      "add.label1": "What was the activity?",
+      "add.ph1": "e.g.: Sleeping 8 hours, going for a walk, an hour of news",
+      "add.label2": "Was it Vitamin or Toxin?",
+      "tag.vitamin": "Vitamin", "tag.toxin": "Toxin",
+      "add.label3": "How did you feel? (optional)",
+      "add.ph3": "e.g.: Lighter and with more energy.",
+      "btn.add": "Log it",
+      "added": "Logged 🌿",
+      "empty.req": "Write the activity and choose Vitamin or Toxin",
+      "list.title": "Your log",
+      "list.empty": "You haven't logged anything yet. Start above.",
+      "tally.vitamin": "Vitamin", "tally.toxin": "Toxin",
+      "del.confirm": "Remove this entry?"
+    }
+  }
+};
+</script>
+<script src="../js/app.js?v=11"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var entries = PL.load("selfcarelog", []);
+  var picked = "";
+
+  function save() { PL.store("selfcarelog", entries); }
+
+  function renderPicker() {
+    $("btn-vitamin").classList.toggle("sel", picked === "vitamin");
+    $("btn-toxin").classList.toggle("sel", picked === "toxin");
+  }
+
+  function renderTally() {
+    var vit = entries.filter(function (e) { return e.tag === "vitamin"; }).length;
+    var tox = entries.filter(function (e) { return e.tag === "toxin"; }).length;
+    var total = vit + tox;
+    $("tally").innerHTML =
+      "<div class='vt-tile'><div class='num' style='color:var(--good)'>" + vit + "</div><div class='lbl'>🌱 " + PL.t("tally.vitamin") + "</div></div>" +
+      "<div class='vt-tile'><div class='num' style='color:var(--serious)'>" + tox + "</div><div class='lbl'>🌧️ " + PL.t("tally.toxin") + "</div></div>";
+    var vitPct = total ? Math.round((vit / total) * 100) : 50;
+    $("vt-bar").innerHTML = "<span style='width:" + vitPct + "%;background:var(--good)'></span><span style='width:" + (100 - vitPct) + "%;background:var(--serious)'></span>";
+  }
+
+  function renderCount() {
+    $("count-line").textContent = entries.length;
+  }
+
+  function renderList() {
+    var box = $("entry-list");
+    box.innerHTML = "";
+    entries.slice().reverse().forEach(function (e) {
+      var idx = entries.indexOf(e);
+      var div = document.createElement("div");
+      div.className = "entry";
+      var tagChip = e.tag === "vitamin" ? "<span class='chip' style='color:var(--good)'>🌱 " + PL.t("tally.vitamin") + "</span>" : "<span class='chip' style='color:var(--serious)'>🌧️ " + PL.t("tally.toxin") + "</span>";
+      div.innerHTML =
+        "<div class='entry-head'><span class='entry-date'>" + PL.fmtDate(e.added) + "</span>" + tagChip +
+        "<button class='del' data-del='" + idx + "'>🗑️</button></div>" +
+        "<p style='margin:8px 0 0'><strong>" + PL.esc(e.activity) + "</strong></p>" +
+        (e.note ? "<p class='small muted' style='margin:4px 0 0'>" + PL.esc(e.note) + "</p>" : "");
+      box.appendChild(div);
+    });
+    $("list-empty").classList.toggle("hidden", entries.length > 0);
+    box.querySelectorAll(".del").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (confirm(PL.t("del.confirm"))) {
+          entries.splice(parseInt(b.getAttribute("data-del"), 10), 1);
+          save();
+          renderAll();
+        }
+      });
+    });
+  }
+
+  function renderAll() { renderPicker(); renderTally(); renderCount(); renderList(); }
+
+  $("btn-vitamin").addEventListener("click", function () { picked = "vitamin"; renderPicker(); });
+  $("btn-toxin").addEventListener("click", function () { picked = "toxin"; renderPicker(); });
+
+  $("btn-add").addEventListener("click", function () {
+    var activity = $("f-activity").value.trim();
+    if (!activity || !picked) { PL.toast(PL.t("empty.req")); return; }
+    entries.push({ activity: activity, tag: picked, note: $("f-note").value.trim(), added: PL.todayISO() });
+    save();
+    $("f-activity").value = "";
+    $("f-note").value = "";
+    picked = "";
+    PL.toast(PL.t("added"));
+    renderAll();
+  });
+
+  document.addEventListener("pl:ready", renderAll);
+  PL.onLang(renderAll);
+})();
+</script>
+</body>
+</html>
