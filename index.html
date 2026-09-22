@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=18">
+<link rel="stylesheet" href="css/style.css?v=19">
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "97b7a3670b8244db86ceadacfe4d4283"}'></script>
 </head>
 <body>
@@ -29,7 +29,34 @@
 <main class="container">
 
   <section class="hero">
-    <img src="img/logo-tree.png" alt="" class="hero-emblem">
+    <div class="hero-deco-wrap">
+      <svg class="hero-deco" viewBox="0 0 400 100" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <defs>
+          <path id="leafD" d="M0,0 Q3.5,-9 0,-19 Q-3.5,-9 0,0 Z"/>
+          <g id="sprig" fill="none">
+            <path d="M6 92Q30 78 46 62Q58 50 62 40" stroke="#8a7053" stroke-width="1.8" stroke-linecap="round"/>
+            <g transform="translate(46,62) rotate(-35)">
+              <use href="#leafD" transform="rotate(-45) scale(0.85)" fill="var(--brand-ink)"/>
+              <use href="#leafD" transform="rotate(-15) scale(1.05)" fill="var(--brand)"/>
+              <use href="#leafD" transform="rotate(15) scale(1.0)" fill="#1aa47e"/>
+              <use href="#leafD" transform="rotate(45) scale(0.8)" fill="var(--accent)"/>
+            </g>
+            <g transform="translate(62,40) rotate(-45)">
+              <use href="#leafD" transform="rotate(-40) scale(0.7)" fill="var(--brand)"/>
+              <use href="#leafD" transform="rotate(-10) scale(0.9)" fill="#1aa47e"/>
+              <use href="#leafD" transform="rotate(25) scale(0.75)" fill="var(--accent)"/>
+            </g>
+            <g transform="translate(24,80) rotate(10)">
+              <use href="#leafD" transform="rotate(-30) scale(0.55)" fill="var(--brand-ink)"/>
+              <use href="#leafD" transform="rotate(10) scale(0.65)" fill="var(--brand)"/>
+            </g>
+          </g>
+        </defs>
+        <use href="#sprig"/>
+        <use href="#sprig" transform="translate(400,0) scale(-1,1)"/>
+      </svg>
+      <img class="hero-logo" src="img/logo-tree.png" alt="">
+    </div>
     <span class="kicker" data-i18n="hero.kicker"></span>
     <h1 data-i18n="hero.title"></h1>
     <p class="lead" data-i18n="hero.lead"></p>
@@ -55,8 +82,8 @@
 
   <section id="tests" data-accent="brand">
     <div class="section-head">
-      <h2 data-i18n="s.tests"></h2>
-      <span class="sub" data-i18n="s.tests.sub"></span>
+      <div><h2 data-i18n="s.tests"></h2><span class="sub" data-i18n="s.tests.sub"></span></div>
+      <span class="section-sig"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="3.5" width="12" height="17" rx="1.6"/><path d="M9 3.5V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v.5"/><path d="m9 12.5 2 2 4-4.5"/></svg></span>
     </div>
     <div class="tag-row hub-chips" data-chips-for="tests">
       <button type="button" class="tag-btn sel" data-filter="all" data-i18n="chip.allm"></button>
@@ -65,110 +92,89 @@
       <button type="button" class="tag-btn" data-filter="t3" data-i18n="grp.t3"></button>
     </div>
 
-    <div class="subgroup" data-group="t1">
-      <div class="subgroup-title">
-        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="10" r="5.3"/><circle cx="13" cy="10" r="5.3"/></svg>
-        <span data-i18n="grp.t1"></span>
-      </div>
+    <details class="subgroup-acc" data-group="t1" open>
+      <summary><svg class="chev" width="11" height="11" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 1l5 4-5 4"/></svg><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="10" r="5.3"/><circle cx="13" cy="10" r="5.3"/></svg><span data-i18n="grp.t1"></span><span class="count">2</span></summary>
       <div class="cards">
-        <a class="card card--art" href="tests/big-five.html" data-search-pt="personalidade big five abertura conscienciosidade extroversão amabilidade neuroticismo" data-search-en="big five personality openness conscientiousness extraversion agreeableness neuroticism">
-          <img src="img/icon-bigfive.png" alt="" class="card-bg">
+        <a class="card" href="tests/big-five.html" data-search-pt="personalidade big five abertura conscienciosidade extroversão amabilidade neuroticismo" data-search-en="big five personality openness conscientiousness extraversion agreeableness neuroticism">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx='12' cy='6' r='2.2'/><circle cx='6.5' cy='16' r='2.2'/><circle cx='17.5' cy='16' r='2.2'/><path d='M12 8.2 7.6 14.2M12 8.2l4.4 6'/></svg></span>
           <h3 data-i18n="bf.t"></h3>
-          <p data-i18n="bf.d"></p>
-          <span class="meta"><span class="chip" data-i18n="bf.m1"></span><span class="chip" data-i18n="bf.m2"></span></span>
+          <p class="hint" data-i18n="bf.h"></p>
         </a>
-        <a class="card card--art" href="tests/attachment.html" data-search-pt="estilo de vinculação seguro ansioso evitante receoso relações" data-search-en="attachment style secure anxious avoidant fearful relationships">
-          <img src="img/icon-attachment.png" alt="" class="card-bg">
+        <a class="card" href="tests/attachment.html" data-search-pt="estilo de vinculação seguro ansioso evitante receoso relações" data-search-en="attachment style secure anxious avoidant fearful relationships">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx='9' cy='12' r='5.2'/><circle cx='15' cy='12' r='5.2'/></svg></span>
           <h3 data-i18n="at.t"></h3>
-          <p data-i18n="at.d"></p>
-          <span class="meta"><span class="chip" data-i18n="at.m1"></span><span class="chip" data-i18n="at.m2"></span></span>
+          <p class="hint" data-i18n="at.h"></p>
         </a>
       </div>
-    </div>
+    </details>
 
-    <div class="subgroup" data-group="t2">
-      <div class="subgroup-title">
-        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 11h3l2-6 3 11 2-8 2 5h4"/></svg>
-        <span data-i18n="grp.t2"></span>
-      </div>
+    <details class="subgroup-acc" data-group="t2">
+      <summary><svg class="chev" width="11" height="11" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 1l5 4-5 4"/></svg><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 11h3l2-6 3 11 2-8 2 5h4"/></svg><span data-i18n="grp.t2"></span><span class="count">4</span></summary>
       <div class="cards">
-        <a class="card card--art" href="tests/eq.html" data-search-pt="inteligência emocional reconhecer compreender gerir emoções" data-search-en="emotional intelligence recognise understand manage emotions">
-          <img src="img/icon-eq.png" alt="" class="card-bg">
+        <a class="card" href="tests/eq.html" data-search-pt="inteligência emocional reconhecer compreender gerir emoções" data-search-en="emotional intelligence recognise understand manage emotions">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx='9' cy='11' r='4'/><circle cx='15' cy='11' r='4'/><path d='M12 7v9'/></svg></span>
           <h3 data-i18n="eq.t"></h3>
-          <p data-i18n="eq.d"></p>
-          <span class="meta"><span class="chip" data-i18n="eq.m1"></span><span class="chip" data-i18n="eq.m2"></span></span>
+          <p class="hint" data-i18n="eq.h"></p>
         </a>
-        <a class="card card--art" href="tests/panas.html" data-search-pt="panas afecto positivo negativo estado emocional" data-search-en="panas positive negative affect emotional state">
-          <img src="img/icon-panas.png" alt="" class="card-bg">
+        <a class="card" href="tests/panas.html" data-search-pt="panas afecto positivo negativo estado emocional" data-search-en="panas positive negative affect emotional state">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M8 16V8M5.5 10.5 8 8l2.5 2.5'/><path d='M16 8v8M13.5 13.5 16 16l2.5-2.5'/></svg></span>
           <h3 data-i18n="pn.t"></h3>
-          <p data-i18n="pn.d"></p>
-          <span class="meta"><span class="chip" data-i18n="pn.m1"></span><span class="chip" data-i18n="pn.m2"></span></span>
+          <p class="hint" data-i18n="pn.h"></p>
         </a>
-        <a class="card card--art" href="tests/stress.html" data-search-pt="termómetro de stress nível percebido" data-search-en="stress thermometer perceived level">
-          <img src="img/icon-stress.png" alt="" class="card-bg">
+        <a class="card" href="tests/stress.html" data-search-pt="termómetro de stress nível percebido" data-search-en="stress thermometer perceived level">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x='10.4' y='4' width='3.2' height='11' rx='1.6'/><circle cx='12' cy='18' r='3'/></svg></span>
           <h3 data-i18n="st.t"></h3>
-          <p data-i18n="st.d"></p>
-          <span class="meta"><span class="chip" data-i18n="st.m1"></span><span class="chip" data-i18n="st.m2"></span></span>
+          <p class="hint" data-i18n="st.h"></p>
         </a>
-        <a class="card card--art" href="tests/resilience.html" data-search-pt="resiliência recompor contratempos adaptar mudanças" data-search-en="resilience bounce back setbacks adapt change">
-          <img src="img/icon-resilience.png" alt="" class="card-bg">
+        <a class="card" href="tests/resilience.html" data-search-pt="resiliência recompor contratempos adaptar mudanças" data-search-en="resilience bounce back setbacks adapt change">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M4 17c2.5 0 2.5-9 5-9s2.5 9 5 9 2.5-9 5-9'/></svg></span>
           <h3 data-i18n="rs.t"></h3>
-          <p data-i18n="rs.d"></p>
-          <span class="meta"><span class="chip" data-i18n="rs.m1"></span><span class="chip" data-i18n="rs.m2"></span></span>
+          <p class="hint" data-i18n="rs.h"></p>
         </a>
       </div>
-    </div>
+    </details>
 
-    <div class="subgroup" data-group="t3">
-      <div class="subgroup-title">
-        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 16.8s-6.2-3.8-6.2-8.5A3.9 3.9 0 0110 5.6a3.9 3.9 0 016.2 2.7c0 4.7-6.2 8.5-6.2 8.5z"/></svg>
-        <span data-i18n="grp.t3"></span>
-      </div>
+    <details class="subgroup-acc" data-group="t3">
+      <summary><svg class="chev" width="11" height="11" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 1l5 4-5 4"/></svg><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 16.8s-6.2-3.8-6.2-8.5A3.9 3.9 0 0110 5.6a3.9 3.9 0 016.2 2.7c0 4.7-6.2 8.5-6.2 8.5z"/></svg><span data-i18n="grp.t3"></span><span class="count">6</span></summary>
       <div class="cards">
-        <a class="card card--art" href="tests/rosenberg.html" data-search-pt="auto-estima rosenberg avaliação global de ti" data-search-en="self-esteem rosenberg overall evaluation">
-          <img src="img/icon-rosenberg.png" alt="" class="card-bg">
+        <a class="card" href="tests/rosenberg.html" data-search-pt="auto-estima rosenberg avaliação global de ti" data-search-en="self-esteem rosenberg overall evaluation">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx='12' cy='9' r='5'/><path d='M12 14v6M9 20h6'/></svg></span>
           <h3 data-i18n="rb.t"></h3>
-          <p data-i18n="rb.d"></p>
-          <span class="meta"><span class="chip" data-i18n="rb.m1"></span><span class="chip" data-i18n="rb.m2"></span></span>
+          <p class="hint" data-i18n="rb.h"></p>
         </a>
-        <a class="card card--art" href="tests/selfcompassion.html" data-search-pt="autocompaixão tratas a ti mesmo gentileza dureza" data-search-en="self-compassion treat yourself kindness harshness">
-          <span class="card-bg card-bg-emoji">🤍</span>
+        <a class="card" href="tests/selfcompassion.html" data-search-pt="autocompaixão tratas a ti mesmo gentileza dureza" data-search-en="self-compassion treat yourself kindness harshness">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M12 19s-6.5-4-6.5-8.8C5.5 7.4 7.4 6 9.4 6c1.1 0 2.1.5 2.6 1.4C12.5 6.5 13.5 6 14.6 6c2 0 3.9 1.4 3.9 4.2C18.5 15 12 19 12 19z'/></svg></span>
           <h3 data-i18n="sc.t"></h3>
-          <p data-i18n="sc.d"></p>
-          <span class="meta"><span class="chip" data-i18n="sc.m1"></span><span class="chip" data-i18n="sc.m2"></span></span>
+          <p class="hint" data-i18n="sc.h"></p>
         </a>
-        <a class="card card--art" href="tests/assertiveness.html" data-search-pt="assertividade passividade agressividade comunicar" data-search-en="assertiveness passivity aggression communicate">
-          <span class="card-bg card-bg-emoji">🗣️</span>
+        <a class="card" href="tests/assertiveness.html" data-search-pt="assertividade passividade agressividade comunicar" data-search-en="assertiveness passivity aggression communicate">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M4 6h14v8H9l-3 3v-3H4z'/><path d='M8 10h6'/></svg></span>
           <h3 data-i18n="as.t"></h3>
-          <p data-i18n="as.d"></p>
-          <span class="meta"><span class="chip" data-i18n="as.m1"></span><span class="chip" data-i18n="as.m2"></span></span>
+          <p class="hint" data-i18n="as.h"></p>
         </a>
-        <a class="card card--art" href="tests/gratefulness.html" data-search-pt="gratidão disposicional tendência notar valorizar" data-search-en="dispositional gratitude tendency notice value">
-          <span class="card-bg card-bg-emoji">🌻</span>
+        <a class="card" href="tests/gratefulness.html" data-search-pt="gratidão disposicional tendência notar valorizar" data-search-en="dispositional gratitude tendency notice value">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx='12' cy='12' r='3.6'/><path d='M12 4.2v2M12 17.8v2M4.2 12h2M17.8 12h2M6.3 6.3l1.4 1.4M16.3 16.3l1.4 1.4M6.3 17.7l1.4-1.4M16.3 7.7l1.4-1.4'/></svg></span>
           <h3 data-i18n="gf.t"></h3>
-          <p data-i18n="gf.d"></p>
-          <span class="meta"><span class="chip" data-i18n="gf.m1"></span><span class="chip" data-i18n="gf.m2"></span></span>
+          <p class="hint" data-i18n="gf.h"></p>
         </a>
-        <a class="card card--art" href="tests/communication.html" data-search-pt="estilo de comunicação assertiva passiva agressiva passivo-agressiva" data-search-en="communication style assertive passive aggressive passive-aggressive">
-          <span class="card-bg card-bg-emoji">💬</span>
+        <a class="card" href="tests/communication.html" data-search-pt="estilo de comunicação assertiva passiva agressiva passivo-agressiva" data-search-en="communication style assertive passive aggressive passive-aggressive">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M3 5h10v6H8l-2.5 2.5V11H3z'/><path d='M21 9h-9v6h6.5L21 17.5V15h0z'/></svg></span>
           <h3 data-i18n="cm.t"></h3>
-          <p data-i18n="cm.d"></p>
-          <span class="meta"><span class="chip" data-i18n="cm.m1"></span><span class="chip" data-i18n="cm.m2"></span></span>
+          <p class="hint" data-i18n="cm.h"></p>
         </a>
-        <a class="card card--art" href="tests/perfectionism.html" data-search-pt="perfeccionismo tudo ou nada auto-crítica procrastinação" data-search-en="perfectionism all or nothing self-criticism procrastination">
-          <span class="card-bg card-bg-emoji">🎯</span>
+        <a class="card" href="tests/perfectionism.html" data-search-pt="perfeccionismo tudo ou nada auto-crítica procrastinação" data-search-en="perfectionism all or nothing self-criticism procrastination">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx='12' cy='12' r='7.5'/><circle cx='12' cy='12' r='4'/><circle cx='12' cy='12' r='0.9' fill='currentColor'/></svg></span>
           <h3 data-i18n="pf.t"></h3>
-          <p data-i18n="pf.d"></p>
-          <span class="meta"><span class="chip" data-i18n="pf.m1"></span><span class="chip" data-i18n="pf.m2"></span></span>
+          <p class="hint" data-i18n="pf.h"></p>
         </a>
       </div>
-    </div>
+    </details>
   </section>
 
   <section id="tools" data-accent="clay" style="--tag-accent:var(--clay); --tag-accent-soft:var(--clay-soft); --tag-accent-ink:var(--clay-ink)">
     <div class="section-head">
-      <h2 data-i18n="s.tools"></h2>
-      <span class="sub" data-i18n="s.tools.sub"></span>
+      <div><h2 data-i18n="s.tools"></h2><span class="sub" data-i18n="s.tools.sub"></span></div>
+      <span class="section-sig"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.3 5.6a4.3 4.3 0 0 0-5.8 5.8L4 17l3 3 5.6-5.5a4.3 4.3 0 0 0 5.8-5.8l-2.8 2.8-2.1-2.1z"/></svg></span>
     </div>
     <div class="tag-row hub-chips" data-chips-for="tools">
       <button type="button" class="tag-btn sel" data-filter="all" data-i18n="chip.allf"></button>
@@ -177,152 +183,124 @@
       <button type="button" class="tag-btn" data-filter="f3" data-i18n="grp.f3"></button>
     </div>
 
-    <div class="subgroup" data-group="f1">
-      <div class="subgroup-title">
-        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="12" height="14" rx="1.5"/><path d="M7 7.2h6M7 10.2h6M7 13.2h4"/></svg>
-        <span data-i18n="grp.f1"></span>
-      </div>
+    <details class="subgroup-acc" data-group="f1" open>
+      <summary><svg class="chev" width="11" height="11" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 1l5 4-5 4"/></svg><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="12" height="14" rx="1.5"/><path d="M7 7.2h6M7 10.2h6M7 13.2h4"/></svg><span data-i18n="grp.f1"></span><span class="count">7</span></summary>
       <div class="cards">
-        <a class="card card--art" href="tools/mood.html" data-search-pt="diário emocional humor gráfico padrões" data-search-en="mood diary log emotional chart patterns">
-          <img src="img/icon-mood.png" alt="" class="card-bg">
+        <a class="card" href="tools/mood.html" data-search-pt="diário emocional humor gráfico padrões" data-search-en="mood diary log emotional chart patterns">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x='5' y='4' width='14' height='16' rx='1.6'/><path d='M8 13c1.4-2 2.9-2 4 0s2.6 2 4 0'/></svg></span>
           <h3 data-i18n="md.t"></h3>
-          <p data-i18n="md.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.daily"></span></span>
+          <p class="hint" data-i18n="md.h"></p>
         </a>
-        <a class="card card--art" href="tools/gratitude.html" data-search-pt="diário de gratidão três coisas boas" data-search-en="gratitude journal three good things">
-          <img src="img/icon-gratitude.png" alt="" class="card-bg">
+        <a class="card" href="tools/gratitude.html" data-search-pt="diário de gratidão três coisas boas" data-search-en="gratitude journal three good things">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x='5' y='4' width='14' height='16' rx='1.6'/><path d='m12 9.3 1 2.1 2.3.3-1.7 1.6.4 2.3-2-1.1-2 1.1.4-2.3-1.7-1.6 2.3-.3z'/></svg></span>
           <h3 data-i18n="gr.t"></h3>
-          <p data-i18n="gr.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.daily"></span></span>
+          <p class="hint" data-i18n="gr.h"></p>
         </a>
-        <a class="card card--art" href="tools/sleep.html" data-search-pt="diário de sono horas qualidade" data-search-en="sleep diary hours quality">
-          <img src="img/icon-sleep.png" alt="" class="card-bg">
+        <a class="card" href="tools/sleep.html" data-search-pt="diário de sono horas qualidade" data-search-en="sleep diary hours quality">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M15.5 5.2A7.2 7.2 0 1 0 18.8 18 8.6 8.6 0 0 1 15.5 5.2z'/></svg></span>
           <h3 data-i18n="sl.t"></h3>
-          <p data-i18n="sl.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.daily"></span></span>
+          <p class="hint" data-i18n="sl.h"></p>
         </a>
-        <a class="card card--art" href="tools/habits.html" data-search-pt="rastreador de hábitos sequência" data-search-en="habit tracker streak">
-          <img src="img/icon-habits.png" alt="" class="card-bg">
+        <a class="card" href="tools/habits.html" data-search-pt="rastreador de hábitos sequência" data-search-en="habit tracker streak">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='m4.5 6.3 1.4 1.4L8.3 5'/><path d='M11 6.3h9'/><path d='m4.5 12.3 1.4 1.4L8.3 11'/><path d='M11 12.3h9'/><path d='m4.5 18.3 1.4 1.4 2.4-3'/><path d='M11 18.3h9'/></svg></span>
           <h3 data-i18n="hb.t"></h3>
-          <p data-i18n="hb.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.daily"></span></span>
+          <p class="hint" data-i18n="hb.h"></p>
         </a>
-        <a class="card card--art" href="tools/achievements.html" data-search-pt="diário de conquistas vitórias grandes pequenas" data-search-en="achievement log wins big small">
-          <span class="card-bg card-bg-emoji">🏆</span>
+        <a class="card" href="tools/achievements.html" data-search-pt="diário de conquistas vitórias grandes pequenas" data-search-en="achievement log wins big small">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx='12' cy='9' r='4.6'/><path d='M9.2 13 7.3 20l4.7-2.4L16.7 20l-1.9-7'/></svg></span>
           <h3 data-i18n="ac.t"></h3>
-          <p data-i18n="ac.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.daily"></span></span>
+          <p class="hint" data-i18n="ac.h"></p>
         </a>
-        <a class="card card--art" href="tools/worries.html" data-search-pt="caixa das preocupações desfecho aconteceu" data-search-en="worry box outcome happened">
-          <img src="img/icon-worries.png" alt="" class="card-bg">
+        <a class="card" href="tools/worries.html" data-search-pt="caixa das preocupações desfecho aconteceu" data-search-en="worry box outcome happened">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M4.5 9h15v10h-15z'/><path d='M4.5 9 6.8 5h10.4l2.3 4'/></svg></span>
           <h3 data-i18n="wr.t"></h3>
-          <p data-i18n="wr.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.cbt"></span></span>
+          <p class="hint" data-i18n="wr.h"></p>
         </a>
-        <a class="card card--art" href="tools/selfcarelog.html" data-search-pt="diário de autocuidado vitamina toxina actividades energizam esgotam" data-search-en="self-care log vitamin toxin activities energise drain">
-          <span class="card-bg card-bg-emoji">💊</span>
+        <a class="card" href="tools/selfcarelog.html" data-search-pt="diário de autocuidado vitamina toxina actividades energizam esgotam" data-search-en="self-care log vitamin toxin activities energise drain">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M12 4.2c3.6 2.8 6.4 6.6 6.4 10.2a6.4 6.4 0 0 1-12.8 0c0-3.6 2.8-7.4 6.4-10.2z'/></svg></span>
           <h3 data-i18n="vt.t"></h3>
-          <p data-i18n="vt.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.daily"></span></span>
+          <p class="hint" data-i18n="vt.h"></p>
         </a>
       </div>
-    </div>
+    </details>
 
-    <div class="subgroup" data-group="f2">
-      <div class="subgroup-title">
-        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10" cy="10" r="2"/><circle cx="10" cy="10" r="5.1"/><circle cx="10" cy="10" r="7.9"/></svg>
-        <span data-i18n="grp.f2"></span>
-      </div>
+    <details class="subgroup-acc" data-group="f2">
+      <summary><svg class="chev" width="11" height="11" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 1l5 4-5 4"/></svg><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10" cy="10" r="2"/><circle cx="10" cy="10" r="5.1"/><circle cx="10" cy="10" r="7.9"/></svg><span data-i18n="grp.f2"></span><span class="count">5</span></summary>
       <div class="cards">
-        <a class="card card--art" href="tools/breathing.html" data-search-pt="respiração guiada box breathing 4-7-8 coerente" data-search-en="guided breathing box breathing coherent">
-          <img src="img/icon-breathing.png" alt="" class="card-bg">
+        <a class="card" href="tools/breathing.html" data-search-pt="respiração guiada box breathing 4-7-8 coerente" data-search-en="guided breathing box breathing coherent">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx='12' cy='12' r='3.6'/><circle cx='12' cy='12' r='7.6' stroke-dasharray='2.2 3.2'/></svg></span>
           <h3 data-i18n="br.t"></h3>
-          <p data-i18n="br.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.calm"></span></span>
+          <p class="hint" data-i18n="br.h"></p>
         </a>
-        <a class="card card--art" href="tools/meditation.html" data-search-pt="temporizador de meditação sino silêncio" data-search-en="meditation timer bell silence">
-          <img src="img/icon-meditation.png" alt="" class="card-bg">
+        <a class="card" href="tools/meditation.html" data-search-pt="temporizador de meditação sino silêncio" data-search-en="meditation timer bell silence">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M7.5 4.5h9M7.5 19.5h9M7.5 4.5c0 4.6 4.5 5.5 4.5 7.5s-4.5 2.9-4.5 7.5M16.5 4.5c0 4.6-4.5 5.5-4.5 7.5s4.5 2.9 4.5 7.5'/></svg></span>
           <h3 data-i18n="me.t"></h3>
-          <p data-i18n="me.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.calm"></span></span>
+          <p class="hint" data-i18n="me.h"></p>
         </a>
-        <a class="card card--art" href="tools/pmr.html" data-search-pt="relaxamento muscular progressivo tensão" data-search-en="progressive muscle relaxation tension">
-          <img src="img/icon-pmr.png" alt="" class="card-bg">
+        <a class="card" href="tools/pmr.html" data-search-pt="relaxamento muscular progressivo tensão" data-search-en="progressive muscle relaxation tension">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M3.5 12c1.8-3.6 3.6-3.6 5.4 0s3.6 3.6 5.4 0 3.6-3.6 5.4 0'/></svg></span>
           <h3 data-i18n="pmr.t"></h3>
-          <p data-i18n="pmr.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.calm"></span></span>
+          <p class="hint" data-i18n="pmr.h"></p>
         </a>
-        <a class="card card--art" href="tools/compassionbreak.html" data-search-pt="pausa de autocompaixão 3 passos auto-crítica" data-search-en="self-compassion break 3 steps self-criticism">
-          <span class="card-bg card-bg-emoji">🫶</span>
+        <a class="card" href="tools/compassionbreak.html" data-search-pt="pausa de autocompaixão 3 passos auto-crítica" data-search-en="self-compassion break 3 steps self-criticism">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M4.5 7.8a11 11 0 0 1 15 0'/><circle cx='7' cy='13.5' r='1.5' fill='currentColor'/><circle cx='12' cy='13.5' r='1.5' fill='currentColor'/><circle cx='17' cy='13.5' r='1.5' fill='currentColor'/></svg></span>
           <h3 data-i18n="cb.t"></h3>
-          <p data-i18n="cb.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.calm"></span></span>
+          <p class="hint" data-i18n="cb.h"></p>
         </a>
-        <a class="card card--art" href="tools/copingcards.html" data-search-pt="cartões de enfrentamento frases momentos difíceis" data-search-en="coping cards phrases hard moments">
-          <span class="card-bg card-bg-emoji">🗂️</span>
+        <a class="card" href="tools/copingcards.html" data-search-pt="cartões de enfrentamento frases momentos difíceis" data-search-en="coping cards phrases hard moments">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x='6.5' y='7.5' width='12' height='8.5' rx='1.4'/><rect x='4' y='5' width='12' height='8.5' rx='1.4'/></svg></span>
           <h3 data-i18n="cc.t"></h3>
-          <p data-i18n="cc.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.cbt"></span></span>
+          <p class="hint" data-i18n="cc.h"></p>
         </a>
       </div>
-    </div>
+    </details>
 
-    <div class="subgroup" data-group="f3">
-      <div class="subgroup-title">
-        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v6M10 9l-4.3 4.3v4M10 9l4.3 4.3v4"/></svg>
-        <span data-i18n="grp.f3"></span>
-      </div>
+    <details class="subgroup-acc" data-group="f3">
+      <summary><svg class="chev" width="11" height="11" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 1l5 4-5 4"/></svg><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v6M10 9l-4.3 4.3v4M10 9l4.3 4.3v4"/></svg><span data-i18n="grp.f3"></span><span class="count">7</span></summary>
       <div class="cards">
-        <a class="card card--art" href="tools/thoughts.html" data-search-pt="registo de pensamentos terapia cognitivo-comportamental reestruturar" data-search-en="thought record cognitive behavioural reframe">
-          <img src="img/icon-thoughts.png" alt="" class="card-bg">
+        <a class="card" href="tools/thoughts.html" data-search-pt="registo de pensamentos terapia cognitivo-comportamental reestruturar" data-search-en="thought record cognitive behavioural reframe">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M9 16.5h6M10 19h4'/><path d='M12 4a5.4 5.4 0 0 0-3 9.9c.5.4.8 1 .8 1.6h4.4c0-.6.3-1.2.8-1.6A5.4 5.4 0 0 0 12 4z'/></svg></span>
           <h3 data-i18n="th.t"></h3>
-          <p data-i18n="th.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.cbt"></span></span>
+          <p class="hint" data-i18n="th.h"></p>
         </a>
-        <a class="card card--art" href="tools/insights.html" data-search-pt="painel de padrões humor hábitos gratidão sono" data-search-en="patterns panel mood habits gratitude sleep">
-          <img src="img/icon-insights.png" alt="" class="card-bg">
+        <a class="card" href="tools/insights.html" data-search-pt="painel de padrões humor hábitos gratidão sono" data-search-en="patterns panel mood habits gratitude sleep">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M5 19V11M11 19V6M17 19v-6'/></svg></span>
           <h3 data-i18n="in.t"></h3>
-          <p data-i18n="in.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.insights"></span></span>
+          <p class="hint" data-i18n="in.h"></p>
         </a>
-        <a class="card card--art" href="tools/fears.html" data-search-pt="hierarquia de medos situações ansiedade exposição" data-search-en="fear hierarchy anxiety exposure">
-          <span class="card-bg card-bg-emoji">🪜</span>
+        <a class="card" href="tools/fears.html" data-search-pt="hierarquia de medos situações ansiedade exposição" data-search-en="fear hierarchy anxiety exposure">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M4 19h4v-4h4v-4h4v-4h4'/></svg></span>
           <h3 data-i18n="fh.t"></h3>
-          <p data-i18n="fh.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.cbt"></span></span>
+          <p class="hint" data-i18n="fh.h"></p>
         </a>
-        <a class="card card--art" href="tools/values.html" data-search-pt="hierarquia de valores 42 valores reduz 5" data-search-en="values hierarchy narrow down">
-          <span class="card-bg card-bg-emoji">🧭</span>
+        <a class="card" href="tools/values.html" data-search-pt="hierarquia de valores 42 valores reduz 5" data-search-en="values hierarchy narrow down">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M12 4.2 16.4 12 12 19.8 7.6 12z'/></svg></span>
           <h3 data-i18n="vh.t"></h3>
-          <p data-i18n="vh.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.explore"></span></span>
+          <p class="hint" data-i18n="vh.h"></p>
         </a>
-        <a class="card card--art" href="tools/lifewheel.html" data-search-pt="roda da vida satisfação áreas objectivos smart" data-search-en="wheel of life satisfaction areas smart goals">
-          <span class="card-bg card-bg-emoji">🎡</span>
+        <a class="card" href="tools/lifewheel.html" data-search-pt="roda da vida satisfação áreas objectivos smart" data-search-en="wheel of life satisfaction areas smart goals">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx='12' cy='12' r='7.6'/><path d='M12 4.4V12h7.6M12 12 6.6 17.4M12 12 5.7 9.5'/></svg></span>
           <h3 data-i18n="lw.t"></h3>
-          <p data-i18n="lw.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.explore"></span></span>
+          <p class="hint" data-i18n="lw.h"></p>
         </a>
-        <a class="card card--art" href="tools/boundaries.html" data-search-pt="definir limites relações amizades família trabalho" data-search-en="setting boundaries relationships friends family work">
-          <span class="card-bg card-bg-emoji">🚧</span>
+        <a class="card" href="tools/boundaries.html" data-search-pt="definir limites relações amizades família trabalho" data-search-en="setting boundaries relationships friends family work">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M5.5 19.5v-13M12 19.5V5.5M18.5 19.5v-13'/><path d='M4.2 10.5h15.6'/></svg></span>
           <h3 data-i18n="bd.t"></h3>
-          <p data-i18n="bd.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.explore"></span></span>
+          <p class="hint" data-i18n="bd.h"></p>
         </a>
-        <a class="card card--art" href="tools/decisionbalance.html" data-search-pt="balança de decisão vantagens desvantagens decidir" data-search-en="decision balance pros cons deciding">
-          <span class="card-bg card-bg-emoji">🧮</span>
+        <a class="card" href="tools/decisionbalance.html" data-search-pt="balança de decisão vantagens desvantagens decidir" data-search-en="decision balance pros cons deciding">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M12 4.5v14.2'/><path d='M6 8.3h12'/><path d='M6 8.3 3.2 14h5.6zM18 8.3 15.2 14h5.6z'/><path d='M8.3 20.5h7.4'/></svg></span>
           <h3 data-i18n="db.t"></h3>
-          <p data-i18n="db.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.cbt"></span></span>
+          <p class="hint" data-i18n="db.h"></p>
         </a>
       </div>
-    </div>
+    </details>
   </section>
 
   <section id="games" data-accent="blue" style="--tag-accent:var(--accent); --tag-accent-soft:var(--accent-soft); --tag-accent-ink:var(--accent-ink)">
     <div class="section-head">
-      <h2 data-i18n="s.games"></h2>
-      <span class="sub" data-i18n="s.games.sub"></span>
+      <div><h2 data-i18n="s.games"></h2><span class="sub" data-i18n="s.games.sub"></span></div>
+      <span class="section-sig"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="3"/><circle cx="9" cy="9" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="15" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/></svg></span>
     </div>
     <div class="tag-row hub-chips" data-chips-for="games">
       <button type="button" class="tag-btn sel" data-filter="all" data-i18n="chip.allm"></button>
@@ -332,175 +310,142 @@
       <button type="button" class="tag-btn" data-filter="j4" data-i18n="grp.j4"></button>
     </div>
 
-    <div class="subgroup" data-group="j1">
-      <div class="subgroup-title">
-        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="5" cy="5" r="1.3" fill="currentColor"/><circle cx="10" cy="5" r="1.3" fill="currentColor"/><circle cx="15" cy="5" r="1.3" fill="currentColor"/><circle cx="5" cy="10" r="1.3" fill="currentColor"/><circle cx="10" cy="10" r="1.3" fill="currentColor"/><circle cx="15" cy="10" r="1.3" fill="currentColor"/><circle cx="5" cy="15" r="1.3" fill="currentColor"/><circle cx="10" cy="15" r="1.3" fill="currentColor"/><circle cx="15" cy="15" r="1.3" fill="currentColor"/></svg>
-        <span data-i18n="grp.j1"></span>
-      </div>
+    <details class="subgroup-acc" data-group="j1" open>
+      <summary><svg class="chev" width="11" height="11" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 1l5 4-5 4"/></svg><svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="5" cy="5" r="1.3" fill="currentColor"/><circle cx="10" cy="5" r="1.3" fill="currentColor"/><circle cx="15" cy="5" r="1.3" fill="currentColor"/><circle cx="5" cy="10" r="1.3" fill="currentColor"/><circle cx="10" cy="10" r="1.3" fill="currentColor"/><circle cx="15" cy="10" r="1.3" fill="currentColor"/><circle cx="5" cy="15" r="1.3" fill="currentColor"/><circle cx="10" cy="15" r="1.3" fill="currentColor"/><circle cx="15" cy="15" r="1.3" fill="currentColor"/></svg><span data-i18n="grp.j1"></span><span class="count">4</span></summary>
       <div class="cards">
-        <a class="card card--art" href="games/stroop.html" data-search-pt="teste de stroop cor palavra" data-search-en="stroop test colour word">
-          <img src="img/icon-stroop.png" alt="" class="card-bg">
+        <a class="card" href="games/stroop.html" data-search-pt="teste de stroop cor palavra" data-search-en="stroop test colour word">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M2.5 12S6 6 12 6s9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6z'/><circle cx='12' cy='12' r='2.6'/></svg></span>
           <h3 data-i18n="sp.t"></h3>
-          <p data-i18n="sp.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.classic"></span><span class="chip" data-i18n="chip.1min"></span></span>
+          <p class="hint" data-i18n="sp.h"></p>
         </a>
-        <a class="card card--art" href="games/reaction.html" data-search-pt="tempo de reacção reflexos rápido" data-search-en="reaction time reflexes fast">
-          <img src="img/icon-reaction.png" alt="" class="card-bg">
+        <a class="card" href="games/reaction.html" data-search-pt="tempo de reacção reflexos rápido" data-search-en="reaction time reflexes fast">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M13 3.2 5.5 13.6h5.6l-1.7 7.2 8.1-11.2h-5.6z'/></svg></span>
           <h3 data-i18n="rt.t"></h3>
-          <p data-i18n="rt.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.1min"></span></span>
+          <p class="hint" data-i18n="rt.h"></p>
         </a>
-        <a class="card card--art" href="games/digitspan.html" data-search-pt="amplitude de memória dígitos memória de trabalho" data-search-en="memory span digits working memory">
-          <img src="img/icon-digitspan.png" alt="" class="card-bg">
+        <a class="card" href="games/digitspan.html" data-search-pt="amplitude de memória dígitos memória de trabalho" data-search-en="memory span digits working memory">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M5 17v-3.4M10 17V9M15 17v-6.4M20 17v-3.4'/></svg></span>
           <h3 data-i18n="ds.t"></h3>
-          <p data-i18n="ds.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.classic"></span><span class="chip" data-i18n="chip.record"></span></span>
+          <p class="hint" data-i18n="ds.h"></p>
         </a>
-        <a class="card card--art" href="games/nback.html" data-search-pt="n-back memória de trabalho neurociência" data-search-en="n-back working memory neuroscience">
-          <img src="img/icon-nback.png" alt="" class="card-bg">
+        <a class="card" href="games/nback.html" data-search-pt="n-back memória de trabalho neurociência" data-search-en="n-back working memory neuroscience">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x='3' y='9.2' width='5.2' height='5.2' rx='1'/><rect x='9.4' y='9.2' width='5.2' height='5.2' rx='1' fill='currentColor' stroke='none'/><rect x='15.8' y='9.2' width='5.2' height='5.2' rx='1'/></svg></span>
           <h3 data-i18n="nb.t"></h3>
-          <p data-i18n="nb.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.classic"></span><span class="chip" data-i18n="chip.record"></span></span>
+          <p class="hint" data-i18n="nb.h"></p>
         </a>
       </div>
-    </div>
+    </details>
 
-    <div class="subgroup" data-group="j2">
-      <div class="subgroup-title">
-        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="2.5" y="2.5" width="9" height="9" rx="2"/><rect x="8.5" y="8.5" width="9" height="9" rx="2"/></svg>
-        <span data-i18n="grp.j2"></span>
-      </div>
+    <details class="subgroup-acc" data-group="j2">
+      <summary><svg class="chev" width="11" height="11" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 1l5 4-5 4"/></svg><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="2.5" y="2.5" width="9" height="9" rx="2"/><rect x="8.5" y="8.5" width="9" height="9" rx="2"/></svg><span data-i18n="grp.j2"></span><span class="count">3</span></summary>
       <div class="cards">
-        <a class="card card--art" href="games/biases.html" data-search-pt="quiz de vieses cognitivos armadilhas pensamento" data-search-en="cognitive bias quiz traps thinking">
-          <img src="img/icon-biases.png" alt="" class="card-bg">
+        <a class="card" href="games/biases.html" data-search-pt="quiz de vieses cognitivos armadilhas pensamento" data-search-en="cognitive bias quiz traps thinking">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M4.5 4.5h15v15h-15z'/><path d='M8.5 4.5v7.5h7.5V9h-3.5v3.5'/></svg></span>
           <h3 data-i18n="bi.t"></h3>
-          <p data-i18n="bi.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.10r"></span></span>
+          <p class="hint" data-i18n="bi.h"></p>
         </a>
-        <a class="card card--art" href="games/distortions.html" data-search-pt="apanha a distorção pensamentos primeira pessoa" data-search-en="catch the distortion first-person thoughts">
-          <img src="img/icon-distortions.png" alt="" class="card-bg">
+        <a class="card" href="games/distortions.html" data-search-pt="apanha a distorção pensamentos primeira pessoa" data-search-en="catch the distortion first-person thoughts">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx='10.2' cy='10.2' r='5.6'/><path d='m14.4 14.4 5.4 5.4'/></svg></span>
           <h3 data-i18n="di.t"></h3>
-          <p data-i18n="di.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.10r"></span><span class="chip" data-i18n="chip.record"></span></span>
+          <p class="hint" data-i18n="di.h"></p>
         </a>
-        <a class="card card--art" href="games/myths.html" data-search-pt="mito ou facto afirmações mente psicologia popular" data-search-en="myth or fact pop psychology">
-          <img src="img/icon-myths.png" alt="" class="card-bg">
+        <a class="card" href="games/myths.html" data-search-pt="mito ou facto afirmações mente psicologia popular" data-search-en="myth or fact pop psychology">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx='7.5' cy='7.5' r='2.3'/><circle cx='16.5' cy='16.5' r='2.3'/><path d='M9 9.2a4.4 4.4 0 0 0 3.9 3.9M15 14.8a4.4 4.4 0 0 0-3.9-3.9'/></svg></span>
           <h3 data-i18n="my.t"></h3>
-          <p data-i18n="my.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.12r"></span><span class="chip" data-i18n="chip.record"></span></span>
+          <p class="hint" data-i18n="my.h"></p>
         </a>
       </div>
-    </div>
+    </details>
 
-    <div class="subgroup" data-group="j3">
-      <div class="subgroup-title">
-        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="7.4"/><path d="M6.7 8.7h.01M13.3 8.7h.01M6.7 12.3c1.1 1.3 6.5 1.3 7.6 0"/></svg>
-        <span data-i18n="grp.j3"></span>
-      </div>
+    <details class="subgroup-acc" data-group="j3">
+      <summary><svg class="chev" width="11" height="11" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 1l5 4-5 4"/></svg><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="7.4"/><path d="M6.7 8.7h.01M13.3 8.7h.01M6.7 12.3c1.1 1.3 6.5 1.3 7.6 0"/></svg><span data-i18n="grp.j3"></span><span class="count">8</span></summary>
       <div class="cards">
-        <a class="card card--art" href="games/emotions.html" data-search-pt="reconhecer emoções caras situações dia-a-dia" data-search-en="reading emotions faces everyday">
-          <img src="img/icon-emotions.png" alt="" class="card-bg">
+        <a class="card" href="games/emotions.html" data-search-pt="reconhecer emoções caras situações dia-a-dia" data-search-en="reading emotions faces everyday">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx='12' cy='12' r='7.6'/><circle cx='9' cy='10.3' r='0.9' fill='currentColor' stroke='none'/><circle cx='15' cy='10.3' r='0.9' fill='currentColor' stroke='none'/><path d='M8.6 14.4c1.1 1.3 5.7 1.3 6.8 0'/></svg></span>
           <h3 data-i18n="em.t"></h3>
-          <p data-i18n="em.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.12r"></span></span>
+          <p class="hint" data-i18n="em.h"></p>
         </a>
-        <a class="card card--art" href="games/emotionwheel.html" data-search-pt="roda das emoções vocabulário emocional palavra família" data-search-en="wheel of emotions vocabulary word family">
-          <span class="card-bg card-bg-emoji">🎭</span>
+        <a class="card" href="games/emotionwheel.html" data-search-pt="roda das emoções vocabulário emocional palavra família" data-search-en="wheel of emotions vocabulary word family">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx='12' cy='12' r='7.6'/><path d='M12 4.4v7.6h7.6M12 12l6.6 4.4M12 12 5.7 15.8'/></svg></span>
           <h3 data-i18n="ew.t"></h3>
-          <p data-i18n="ew.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.16r"></span><span class="chip" data-i18n="chip.record"></span></span>
+          <p class="hint" data-i18n="ew.h"></p>
         </a>
-        <a class="card card--art" href="games/emotionladder.html" data-search-pt="escada das emoções família palavra granularidade" data-search-en="emotion ladder family word granularity">
-          <span class="card-bg card-bg-emoji">🪜</span>
+        <a class="card" href="games/emotionladder.html" data-search-pt="escada das emoções família palavra granularidade" data-search-en="emotion ladder family word granularity">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M7.2 3v18M16.8 3v18M7.2 7.5h9.6M7.2 12h9.6M7.2 16.5h9.6'/></svg></span>
           <h3 data-i18n="el.t"></h3>
-          <p data-i18n="el.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.16r"></span><span class="chip" data-i18n="chip.record"></span></span>
+          <p class="hint" data-i18n="el.h"></p>
         </a>
-        <a class="card card--art" href="games/innercritic.html" data-search-pt="o crítico interno pensamentos duros autocompassiva" data-search-en="inner critic harsh thoughts self-compassionate">
-          <span class="card-bg card-bg-emoji">👹</span>
+        <a class="card" href="games/innercritic.html" data-search-pt="o crítico interno pensamentos duros autocompassiva" data-search-en="inner critic harsh thoughts self-compassionate">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M4 6.4 5.7 7.6 7.4 6.4l1.7 1.2 1.7-1.2 1.7 1.2 1.7-1.2 1.7 1.2 1.7-1.2 1.6 1.2v8.4H10l-3 3v-3H4z'/></svg></span>
           <h3 data-i18n="ic.t"></h3>
-          <p data-i18n="ic.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.10r"></span><span class="chip" data-i18n="chip.record"></span></span>
+          <p class="hint" data-i18n="ic.h"></p>
         </a>
-        <a class="card card--art" href="games/assertive.html" data-search-pt="assertividade em acção situações passiva agressiva" data-search-en="assertiveness in action passive aggressive">
-          <span class="card-bg card-bg-emoji">⚖️</span>
+        <a class="card" href="games/assertive.html" data-search-pt="assertividade em acção situações passiva agressiva" data-search-en="assertiveness in action passive aggressive">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M4 12h6.4'/><path d='m8 9 2.4 3L8 15'/><path d='M20 12h-6.4'/><path d='m16 9-2.4 3L16 15'/></svg></span>
           <h3 data-i18n="av.t"></h3>
-          <p data-i18n="av.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.10r"></span><span class="chip" data-i18n="chip.record"></span></span>
+          <p class="hint" data-i18n="av.h"></p>
         </a>
-        <a class="card card--art" href="games/sayingno.html" data-search-pt="dizer não sem culpa recusar pedidos assertividade" data-search-en="saying no without guilt refuse requests assertiveness">
-          <span class="card-bg card-bg-emoji">🙅</span>
+        <a class="card" href="games/sayingno.html" data-search-pt="dizer não sem culpa recusar pedidos assertividade" data-search-en="saying no without guilt refuse requests assertiveness">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx='12' cy='12' r='7.6'/><path d='m6.6 6.6 10.8 10.8'/></svg></span>
           <h3 data-i18n="sn.t"></h3>
-          <p data-i18n="sn.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.10r"></span><span class="chip" data-i18n="chip.record"></span></span>
+          <p class="hint" data-i18n="sn.h"></p>
         </a>
-        <a class="card card--art" href="games/criticism.html" data-search-pt="crítica construtiva ou destrutiva feedback auto-crítica" data-search-en="constructive or destructive criticism feedback self-talk">
-          <span class="card-bg card-bg-emoji">🌱</span>
+        <a class="card" href="games/criticism.html" data-search-pt="crítica construtiva ou destrutiva feedback auto-crítica" data-search-en="constructive or destructive criticism feedback self-talk">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M12 20.5v-6.7'/><path d='M12 13.8c-3.6 0-5.4-1.8-5.4-5.4 3.6 0 5.4 1.8 5.4 5.4zM12 13.8c3.6 0 5.4-2.4 5.4-6.2-3.6 0-5.4 2.4-5.4 6.2z'/></svg></span>
           <h3 data-i18n="cr.t"></h3>
-          <p data-i18n="cr.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.12r"></span><span class="chip" data-i18n="chip.record"></span></span>
+          <p class="hint" data-i18n="cr.h"></p>
         </a>
-        <a class="card card--art" href="games/toxicpatterns.html" data-search-pt="comportamentos tóxicos manipulação vitimismo controlo" data-search-en="toxic behaviours manipulation playing victim control">
-          <span class="card-bg card-bg-emoji">🚩</span>
+        <a class="card" href="games/toxicpatterns.html" data-search-pt="comportamentos tóxicos manipulação vitimismo controlo" data-search-en="toxic behaviours manipulation playing victim control">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M6 20.5V4'/><path d='M6 4.5h10.5l-2.8 3.8 2.8 3.8H6'/></svg></span>
           <h3 data-i18n="tp.t"></h3>
-          <p data-i18n="tp.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.8r"></span><span class="chip" data-i18n="chip.record"></span></span>
+          <p class="hint" data-i18n="tp.h"></p>
         </a>
       </div>
-    </div>
+    </details>
 
-    <div class="subgroup" data-group="j4">
-      <div class="subgroup-title">
-        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1.5" y="3.5" width="10" height="7" rx="2"/><path d="M4 10.5l1.4 2.4V10.5"/><rect x="8.5" y="9" width="10" height="7" rx="2"/><path d="M16 16l-1.4 2.4V16"/></svg>
-        <span data-i18n="grp.j4"></span>
-      </div>
+    <details class="subgroup-acc" data-group="j4">
+      <summary><svg class="chev" width="11" height="11" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 1l5 4-5 4"/></svg><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1.5" y="3.5" width="10" height="7" rx="2"/><path d="M4 10.5l1.4 2.4V10.5"/><rect x="8.5" y="9" width="10" height="7" rx="2"/><path d="M16 16l-1.4 2.4V16"/></svg><span data-i18n="grp.j4"></span><span class="count">2</span></summary>
       <div class="cards">
-        <a class="card card--art" href="games/dilemma.html" data-search-pt="dilema do prisioneiro cooperar trair teoria dos jogos" data-search-en="prisoner dilemma cooperate defect game theory">
-          <img src="img/icon-dilemma.png" alt="" class="card-bg">
+        <a class="card" href="games/dilemma.html" data-search-pt="dilema do prisioneiro cooperar trair teoria dos jogos" data-search-en="prisoner dilemma cooperate defect game theory">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M12 4v6'/><path d='M12 10 6.5 20'/><path d='M12 10l5.5 10'/></svg></span>
           <h3 data-i18n="dl.t"></h3>
-          <p data-i18n="dl.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.strategy"></span></span>
+          <p class="hint" data-i18n="dl.h"></p>
         </a>
-        <a class="card card--art" href="games/adventure.html" data-search-pt="a grande apresentação história interactiva stress escolhas" data-search-en="the big presentation interactive story stress choices">
-          <img src="img/icon-adventure.png" alt="" class="card-bg">
+        <a class="card" href="games/adventure.html" data-search-pt="a grande apresentação história interactiva stress escolhas" data-search-en="the big presentation interactive story stress choices">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M4 5.5h16v10.5H4z'/><path d='M9.5 20h5M12 16v4'/></svg></span>
           <h3 data-i18n="ad.t"></h3>
-          <p data-i18n="ad.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.story"></span></span>
+          <p class="hint" data-i18n="ad.h"></p>
         </a>
       </div>
-    </div>
+    </details>
   </section>
 
   <section id="learn" data-accent="plum" style="--tag-accent:var(--plum); --tag-accent-soft:var(--plum-soft); --tag-accent-ink:var(--plum-ink)">
     <div class="section-head">
-      <h2 data-i18n="s.learn"></h2>
-      <span class="sub" data-i18n="s.learn.sub"></span>
+      <div><h2 data-i18n="s.learn"></h2><span class="sub" data-i18n="s.learn.sub"></span></div>
+      <span class="section-sig"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.4c-2-1.4-4.9-1.9-7.7-1V18c2.8-.9 5.7-.4 7.7 1 2-1.4 4.9-1.9 7.7-1V5.4c-2.8-.9-5.7-.4-7.7 1z"/><path d="M12 6.4V19"/></svg></span>
     </div>
     <div class="subgroup" data-group="a1">
       <div class="cards">
-        <a class="card card--art" href="learn/glossary.html" data-search-pt="glossário termos de psicologia português inglês" data-search-en="glossary psychology terms">
-          <img src="img/icon-glossary.png" alt="" class="card-bg">
+        <a class="card" href="learn/glossary.html" data-search-pt="glossário termos de psicologia português inglês" data-search-en="glossary psychology terms">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M12 6.4c-2-1.4-4.9-1.9-7.7-1V18c2.8-.9 5.7-.4 7.7 1 2-1.4 4.9-1.9 7.7-1V5.4c-2.8-.9-5.7-.4-7.7 1z'/><path d='M12 6.4V19'/></svg></span>
           <h3 data-i18n="gl.t"></h3>
-          <p data-i18n="gl.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.40t"></span></span>
+          <p class="hint" data-i18n="gl.h"></p>
         </a>
-        <a class="card card--art" href="learn/timeline.html" data-search-pt="cronologia da psicologia wundt kahneman marcos" data-search-en="timeline of psychology wundt kahneman">
-          <img src="img/icon-timeline.png" alt="" class="card-bg">
+        <a class="card" href="learn/timeline.html" data-search-pt="cronologia da psicologia wundt kahneman marcos" data-search-en="timeline of psychology wundt kahneman">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d='M4 12h16'/><path d='M8 9v6M14 9v6M19 10.4v3.2'/></svg></span>
           <h3 data-i18n="tl.t"></h3>
-          <p data-i18n="tl.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.history"></span></span>
+          <p class="hint" data-i18n="tl.h"></p>
         </a>
-        <a class="card card--art" href="learn/articles.html" data-search-pt="artigos leituras curtas mente mitos bem-estar" data-search-en="articles short reads mind myths wellbeing">
-          <img src="img/icon-articles.png" alt="" class="card-bg">
+        <a class="card" href="learn/articles.html" data-search-pt="artigos leituras curtas mente mitos bem-estar" data-search-en="articles short reads mind myths wellbeing">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x='6' y='4' width='12' height='16' rx='1.4'/><path d='M9 9h6M9 12.4h6M9 15.8h4'/></svg></span>
           <h3 data-i18n="ar.t"></h3>
-          <p data-i18n="ar.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.reads"></span></span>
+          <p class="hint" data-i18n="ar.h"></p>
         </a>
-        <a class="card card--art" href="learn/emotiontree.html" data-search-pt="árvore das emoções famílias palavras específicas" data-search-en="emotion tree families specific words">
-          <span class="card-bg card-bg-emoji">🌳</span>
+        <a class="card" href="learn/emotiontree.html" data-search-pt="árvore das emoções famílias palavras específicas" data-search-en="emotion tree families specific words">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx='12' cy='9' r='6'/><path d='M12 15v6'/></svg></span>
           <h3 data-i18n="et.t"></h3>
-          <p data-i18n="et.d"></p>
-          <span class="meta"><span class="chip" data-i18n="chip.explore"></span></span>
+          <p class="hint" data-i18n="et.h"></p>
         </a>
       </div>
     </div>
@@ -529,120 +474,172 @@ window.PAGE = {
       "s.learn": "Aprender", "s.learn.sub": "Para mentes curiosas",
       "bf.t": "Personalidade Big Five",
       "bf.d": "Os cinco grandes traços: abertura, conscienciosidade, extroversão, amabilidade e neuroticismo.",
+      "bf.h": "Os 5 grandes traços de personalidade",
       "bf.m1": "25 perguntas", "bf.m2": "≈ 6 min",
       "at.t": "Estilo de Vinculação",
       "at.d": "Como te ligas aos outros nas relações próximas: seguro, ansioso, evitante ou receoso.",
+      "at.h": "Seguro, ansioso, evitante ou receoso",
       "at.m1": "12 perguntas", "at.m2": "≈ 3 min",
       "eq.t": "Inteligência Emocional",
       "eq.d": "Como reconheces, compreendes e geres emoções, as tuas e as dos outros.",
+      "eq.h": "Reconhecer, compreender e gerir emoções",
       "eq.m1": "16 perguntas", "eq.m2": "≈ 4 min",
       "st.t": "Termómetro de Stress",
       "st.d": "Qual tem sido o teu nível de stress percebido no último mês?",
+      "st.h": "O teu nível de stress no último mês",
       "st.m1": "10 perguntas", "st.m2": "≈ 3 min",
       "rb.t": "Auto-Estima",
       "rb.d": "A escala de Rosenberg: a avaliação global que fazes de ti próprio/a.",
+      "rb.h": "A tua avaliação global de ti próprio/a",
       "rb.m1": "10 perguntas", "rb.m2": "≈ 3 min",
       "rs.t": "Resiliência",
       "rs.d": "Como te recompões de contratempos e te adaptas quando as coisas mudam.",
+      "rs.h": "Como te recompões de contratempos",
       "rs.m1": "12 perguntas", "rs.m2": "≈ 3 min",
       "pn.t": "PANAS · Afecto Positivo e Negativo",
       "pn.d": "Duas dimensões independentes do teu estado emocional recente.",
+      "pn.h": "O teu estado emocional recente",
       "pn.m1": "20 palavras", "pn.m2": "≈ 4 min",
       "sc.t": "Autocompaixão",
       "sc.d": "Como te tratas a ti mesmo/a nos momentos difíceis: com gentileza ou com dureza?",
+      "sc.h": "Gentileza ou dureza contigo mesmo/a",
       "sc.m1": "12 afirmações", "sc.m2": "≈ 3 min",
       "as.t": "Assertividade",
       "as.d": "O ponto de equilíbrio entre a passividade e a agressividade na tua forma de comunicar.",
+      "as.h": "Entre a passividade e a agressividade",
       "as.m1": "12 afirmações", "as.m2": "≈ 3 min",
       "gf.t": "Gratidão Disposicional",
       "gf.d": "A tua tendência geral para notar e valorizar o que já tens, para lá de um momento pontual.",
+      "gf.h": "A tua tendência para notar o que já tens",
       "gf.m1": "10 afirmações", "gf.m2": "≈ 3 min",
       "md.t": "Diário Emocional",
       "md.d": "Regista o teu humor de cada dia e observa padrões ao longo do tempo num gráfico.",
+      "md.h": "O teu humor, dia após dia, num gráfico",
       "th.t": "Registo de Pensamentos",
       "th.d": "Técnica da terapia cognitivo-comportamental para reestruturar pensamentos difíceis.",
+      "th.h": "Reestrutura pensamentos difíceis, passo a passo",
       "br.t": "Respiração Guiada",
       "br.d": "Box breathing, 4-7-8 e respiração coerente, com uma animação para acompanhares.",
+      "br.h": "Box breathing, 4-7-8, respiração coerente",
       "me.t": "Temporizador de Meditação",
       "me.d": "Sessões de silêncio com sino de início e fim. Simples e sem distracções.",
+      "me.h": "Sessões de silêncio, com sino a marcar",
       "gr.t": "Diário de Gratidão",
       "gr.d": "Três coisas boas por dia. Um hábito pequeno com efeitos comprovados.",
+      "gr.h": "Três coisas boas, todos os dias",
       "hb.t": "Rastreador de Hábitos",
       "hb.d": "Acompanha hábitos diários e mantém a tua sequência viva.",
+      "hb.h": "Mantém a tua sequência viva",
       "sl.t": "Diário de Sono",
       "sl.d": "Regista horas e qualidade do sono e vê o padrão das últimas noites.",
+      "sl.h": "Horas e qualidade das tuas noites",
       "wr.t": "Caixa das Preocupações",
       "wr.d": "Guarda as preocupações, marca o desfecho e descobre quantas nunca aconteceram.",
+      "wr.h": "Quantas nunca chegam a acontecer",
       "pmr.t": "Relaxamento Muscular Progressivo",
       "pmr.d": "Tensiona e relaxa cada grupo muscular, guiado, para libertar tensão física acumulada.",
+      "pmr.h": "Tensiona e relaxa cada grupo muscular",
       "in.t": "Painel de Padrões",
       "in.d": "Cruza o teu humor, hábitos, gratidão e sono para descobrires padrões simples.",
+      "in.h": "Humor, hábitos, gratidão e sono cruzados",
       "cc.t": "Cartões de Enfrentamento",
       "cc.d": "Escreve frases que te ajudam nos momentos difíceis, prontas a usar quando mais precisares.",
+      "cc.h": "Frases tuas para os momentos difíceis",
       "ac.t": "Diário de Conquistas",
       "ac.d": "Regista as tuas vitórias, grandes e pequenas. A mente foca-se no que corre mal; isto equilibra a balança.",
+      "ac.h": "As tuas vitórias, grandes e pequenas",
       "cb.t": "Pausa de Autocompaixão",
       "cb.d": "Uma prática guiada de 3 passos para os momentos em que a auto-crítica aperta.",
+      "cb.h": "3 passos para quando a auto-crítica aperta",
       "sp.t": "Teste de Stroop",
       "sp.d": "Diz a cor, ignora a palavra. Mais difícil do que parece.",
+      "sp.h": "Diz a cor, ignora a palavra",
       "rt.t": "Tempo de Reacção",
       "rt.d": "Quão depressa consegues reagir? Mede os teus reflexos.",
+      "rt.h": "Mede os teus reflexos",
       "em.t": "Reconhecer Emoções",
       "em.d": "Consegues ler emoções em caras e em situações do dia-a-dia?",
+      "em.h": "Emoções em caras e situações reais",
       "bi.t": "Quiz de Vieses Cognitivos",
       "bi.d": "Descobre as armadilhas do teu próprio pensamento.",
+      "bi.h": "As armadilhas do teu próprio pensamento",
       "dl.t": "Dilema do Prisioneiro",
       "dl.d": "Cooperar ou trair? Joga contra estratégias clássicas da teoria dos jogos.",
+      "dl.h": "Cooperar ou trair? Tu decides",
       "ad.t": "A Grande Apresentação",
       "ad.d": "Uma história interactiva sobre stress, escolhas e formas de lidar com uma semana difícil.",
+      "ad.h": "Uma semana difícil, as tuas escolhas",
       "ds.t": "Amplitude de Memória",
       "ds.d": "Quantos dígitos aguentas na cabeça? O teste clássico da memória de trabalho.",
+      "ds.h": "Quantos dígitos aguentas na cabeça",
       "my.t": "Mito ou Facto?",
       "my.d": "12 afirmações sobre a mente. Consegues apanhar os mitos da psicologia popular?",
+      "my.h": "Separa os mitos da psicologia popular",
       "nb.t": "N-Back",
       "nb.d": "O teste de memória de trabalho mais usado em neurociência cognitiva. Escolhe a tua dificuldade.",
+      "nb.h": "O clássico da memória de trabalho",
       "di.t": "Apanha a Distorção",
       "di.d": "10 pensamentos na primeira pessoa. Identifica a distorção cognitiva por trás de cada um.",
+      "di.h": "A distorção por trás de cada pensamento",
       "ew.t": "Roda das Emoções",
       "ew.d": "Amplia o teu vocabulário emocional: identifica a que emoção principal pertence cada palavra.",
+      "ew.h": "A que família pertence cada palavra",
       "ic.t": "O Crítico Interno",
       "ic.d": "10 pensamentos duros contigo mesmo/a. Encontra a resposta mais autocompassiva a cada um.",
+      "ic.h": "A resposta mais gentil a ti mesmo/a",
       "av.t": "Assertividade em Acção",
       "av.d": "10 situações do dia a dia. Identifica a resposta assertiva entre passiva, agressiva e passivo-agressiva.",
+      "av.h": "Passiva, agressiva ou assertiva? Escolhe",
       "gl.t": "Glossário",
       "gl.d": "Dezenas de termos de psicologia explicados, em português e inglês.",
+      "gl.h": "Dezenas de termos, em PT e EN",
       "tl.t": "Cronologia da Psicologia",
       "tl.d": "De Wundt a Kahneman: os marcos que fizeram a psicologia.",
+      "tl.h": "De Wundt a Kahneman",
       "ar.t": "Artigos",
       "ar.d": "Leituras curtas sobre a mente, mitos e bem-estar.",
+      "ar.h": "Leituras curtas sobre a mente",
       "et.t": "Árvore das Emoções",
       "et.d": "Das 8 famílias de emoções às palavras mais específicas para o que sentes.",
+      "et.h": "Das famílias às palavras específicas",
       "fh.t": "Hierarquia de Medos",
       "fh.d": "Lista situações que te causam ansiedade e enfrenta-as por ordem, da mais fácil à mais difícil.",
+      "fh.h": "Enfrenta o mais fácil primeiro",
       "vh.t": "Hierarquia de Valores",
       "vh.d": "De uma lista de 42 valores, reduz passo a passo até aos 5 que mais te definem.",
+      "vh.h": "De 42 valores aos 5 que te definem",
       "lw.t": "Roda da Vida",
       "lw.d": "Avalia a tua satisfação em 12 áreas da vida e define objectivos concretos para as que queres melhorar.",
+      "lw.h": "12 áreas da vida, de 1 a 10",
       "el.t": "Escada das Emoções",
       "el.d": "Sabendo a família, encontras a palavra certa? O passo seguinte da granularidade emocional.",
+      "el.h": "Encontra a palavra mais específica",
       "cm.t": "Estilo de Comunicação",
       "cm.d": "Como comunicas nos momentos difíceis: de forma agressiva, passiva, passivo-agressiva ou assertiva?",
+      "cm.h": "Agressiva, passiva, passivo-agressiva ou assertiva",
       "cm.m1": "12 perguntas", "cm.m2": "≈ 3 min",
       "pf.t": "Perfeccionismo",
       "pf.d": "Até que ponto o «tudo ou nada» e o medo de errar influenciam a forma como fazes as coisas.",
+      "pf.h": "Tudo ou nada, e medo de errar",
       "pf.m1": "10 perguntas", "pf.m2": "≈ 3 min",
       "bd.t": "Definir Limites",
       "bd.d": "Identifica os teus limites em cada tipo de relação, e acompanha se já começaste a comunicá-los.",
+      "bd.h": "O que aceitas e o que não",
       "db.t": "Balança de Decisão",
       "db.d": "Organiza as vantagens e desvantagens de uma decisão difícil, e guarda o histórico das tuas decisões.",
+      "db.h": "Vantagens e desvantagens, lado a lado",
       "vt.t": "Diário de Autocuidado",
       "vt.d": "Regista actividades Vitamina que te energizam e Toxina que te esgotam, e observa o padrão.",
+      "vt.h": "Vitamina que energiza, Toxina que esgota",
       "sn.t": "Dizer Não Sem Culpa",
       "sn.d": "10 pedidos do dia a dia. Encontra a forma de dizer não com clareza, sem te desculpares em demasia.",
+      "sn.h": "Recusar com clareza, sem culpa",
       "cr.t": "Crítica Construtiva ou Destrutiva?",
       "cr.d": "12 exemplos de crítica, aos outros e a ti mesmo/a. Consegues distinguir a construtiva da destrutiva?",
+      "cr.h": "Distingue o que ajuda do que magoa",
       "tp.t": "Comportamentos Tóxicos",
       "tp.d": "8 situações do dia a dia. Consegues reconhecer o padrão tóxico por trás de cada uma?",
+      "tp.h": "O padrão por trás da situação",
       "chip.daily": "Uso diário", "chip.cbt": "TCC", "chip.calm": "Relaxamento", "chip.insights": "Análise de padrões",
       "chip.classic": "Clássico", "chip.1min": "≈ 1 min", "chip.12r": "12 rondas",
       "chip.10r": "10 cenários", "chip.16r": "16 rondas", "chip.8r": "8 cenários", "chip.strategy": "Estratégia", "chip.story": "História",
@@ -680,120 +677,172 @@ window.PAGE = {
       "s.learn": "Learn", "s.learn.sub": "For curious minds",
       "bf.t": "Big Five Personality",
       "bf.d": "The five major traits: openness, conscientiousness, extraversion, agreeableness and neuroticism.",
+      "bf.h": "The 5 major personality traits",
       "bf.m1": "25 questions", "bf.m2": "≈ 6 min",
       "at.t": "Attachment Style",
       "at.d": "How you connect to others in close relationships: secure, anxious, avoidant or fearful.",
+      "at.h": "Secure, anxious, avoidant or fearful",
       "at.m1": "12 questions", "at.m2": "≈ 3 min",
       "eq.t": "Emotional Intelligence",
       "eq.d": "How you recognise, understand and manage emotions, yours and other people's.",
+      "eq.h": "Recognise, understand and manage emotions",
       "eq.m1": "16 questions", "eq.m2": "≈ 4 min",
       "st.t": "Stress Thermometer",
       "st.d": "How high has your perceived stress been over the last month?",
+      "st.h": "Your stress level over the last month",
       "st.m1": "10 questions", "st.m2": "≈ 3 min",
       "rb.t": "Self-Esteem",
       "rb.d": "The Rosenberg scale: the overall evaluation you make of yourself.",
+      "rb.h": "Your overall self-evaluation",
       "rb.m1": "10 questions", "rb.m2": "≈ 3 min",
       "rs.t": "Resilience",
       "rs.d": "How you bounce back from setbacks and adapt when things change.",
+      "rs.h": "How you bounce back from setbacks",
       "rs.m1": "12 questions", "rs.m2": "≈ 3 min",
       "pn.t": "PANAS · Positive and Negative Affect",
       "pn.d": "Two independent dimensions of your recent emotional state.",
+      "pn.h": "Your recent emotional state",
       "pn.m1": "20 words", "pn.m2": "≈ 4 min",
       "sc.t": "Self-Compassion",
       "sc.d": "How you treat yourself in hard moments: with kindness or with harshness?",
+      "sc.h": "Kindness or harshness towards yourself",
       "sc.m1": "12 statements", "sc.m2": "≈ 3 min",
       "as.t": "Assertiveness",
       "as.d": "The balance point between passivity and aggression in how you communicate.",
+      "as.h": "Between passivity and aggression",
       "as.m1": "12 statements", "as.m2": "≈ 3 min",
       "gf.t": "Dispositional Gratitude",
       "gf.d": "Your general tendency to notice and value what you already have, beyond a one-off moment.",
+      "gf.h": "Your tendency to notice what you have",
       "gf.m1": "10 statements", "gf.m2": "≈ 3 min",
       "md.t": "Mood Diary",
       "md.d": "Log your mood each day and watch patterns emerge over time in a chart.",
+      "md.h": "Your mood, day after day, in a chart",
       "th.t": "Thought Record",
       "th.d": "A cognitive-behavioural therapy technique for reframing difficult thoughts.",
+      "th.h": "Reframe difficult thoughts, step by step",
       "br.t": "Guided Breathing",
       "br.d": "Box breathing, 4-7-8 and coherent breathing, with an animation to follow.",
+      "br.h": "Box breathing, 4-7-8, coherent breathing",
       "me.t": "Meditation Timer",
       "me.d": "Silent sessions with a start and end bell. Simple and distraction-free.",
+      "me.h": "Silent sessions, with a bell to mark them",
       "gr.t": "Gratitude Journal",
       "gr.d": "Three good things a day. A tiny habit with proven effects.",
+      "gr.h": "Three good things, every day",
       "hb.t": "Habit Tracker",
       "hb.d": "Track daily habits and keep your streak alive.",
+      "hb.h": "Keep your streak alive",
       "sl.t": "Sleep Diary",
       "sl.d": "Log sleep hours and quality and see the pattern of your recent nights.",
+      "sl.h": "Hours and quality of your nights",
       "wr.t": "The Worry Box",
       "wr.d": "Store your worries, record the outcome and discover how many never happened.",
+      "wr.h": "How many never come true",
       "pmr.t": "Progressive Muscle Relaxation",
       "pmr.d": "Tense and release each muscle group, guided, to release built-up physical tension.",
+      "pmr.h": "Tense and release each muscle group",
       "in.t": "Patterns Panel",
       "in.d": "Cross-reference your mood, habits, gratitude and sleep to find simple patterns.",
+      "in.h": "Mood, habits, gratitude and sleep, crossed",
       "cc.t": "Coping Cards",
       "cc.d": "Write phrases that help you through hard moments, ready to use exactly when you need them.",
+      "cc.h": "Your own phrases for hard moments",
       "ac.t": "Achievement Log",
       "ac.d": "Record your wins, big and small. The mind fixates on what goes wrong; this balances the scale.",
+      "ac.h": "Your wins, big and small",
       "cb.t": "Self-Compassion Break",
       "cb.d": "A guided 3-step practice for moments when self-criticism tightens its grip.",
+      "cb.h": "3 steps for when self-criticism tightens",
       "sp.t": "Stroop Test",
       "sp.d": "Name the colour, ignore the word. Harder than it sounds.",
+      "sp.h": "Name the colour, ignore the word",
       "rt.t": "Reaction Time",
       "rt.d": "How fast can you react? Measure your reflexes.",
+      "rt.h": "Measure your reflexes",
       "em.t": "Reading Emotions",
       "em.d": "Can you read emotions in faces and everyday situations?",
+      "em.h": "Emotions in faces and real situations",
       "bi.t": "Cognitive Bias Quiz",
       "bi.d": "Discover the traps in your own thinking.",
+      "bi.h": "The traps in your own thinking",
       "dl.t": "Prisoner's Dilemma",
       "dl.d": "Cooperate or defect? Play against classic game-theory strategies.",
+      "dl.h": "Cooperate or defect? You decide",
       "ad.t": "The Big Presentation",
       "ad.d": "An interactive story about stress, choices and coping with a hard week.",
+      "ad.h": "A hard week, your choices",
       "ds.t": "Memory Span",
       "ds.d": "How many digits can you hold in your head? The classic working memory test.",
+      "ds.h": "How many digits can you hold",
       "my.t": "Myth or Fact?",
       "my.d": "12 statements about the mind. Can you catch the pop psychology myths?",
+      "my.h": "Separate myth from pop psychology",
       "nb.t": "N-Back",
       "nb.d": "The working memory test most used in cognitive neuroscience. Pick your difficulty.",
+      "nb.h": "The classic working memory test",
       "di.t": "Catch the Distortion",
       "di.d": "10 first-person thoughts. Identify the cognitive distortion behind each one.",
+      "di.h": "The distortion behind each thought",
       "ew.t": "Wheel of Emotions",
       "ew.d": "Expand your emotional vocabulary: identify which primary emotion each word belongs to.",
+      "ew.h": "Which family each word belongs to",
       "ic.t": "The Inner Critic",
       "ic.d": "10 harsh thoughts about yourself. Find the most self-compassionate response to each one.",
+      "ic.h": "The kindest response to yourself",
       "av.t": "Assertiveness in Action",
       "av.d": "10 everyday situations. Identify the assertive response among passive, aggressive and passive-aggressive.",
+      "av.h": "Passive, aggressive or assertive? Choose",
       "gl.t": "Glossary",
       "gl.d": "Dozens of psychology terms explained, in Portuguese and English.",
+      "gl.h": "Dozens of terms, in PT and EN",
       "tl.t": "Timeline of Psychology",
       "tl.d": "From Wundt to Kahneman: the milestones that made psychology.",
+      "tl.h": "From Wundt to Kahneman",
       "ar.t": "Articles",
       "ar.d": "Short reads on the mind, myths and wellbeing.",
+      "ar.h": "Short reads on the mind",
       "et.t": "The Emotion Tree",
       "et.d": "From the 8 emotion families to the most specific words for what you feel.",
+      "et.h": "From families to specific words",
       "fh.t": "Fear Hierarchy",
       "fh.d": "List situations that cause you anxiety and face them in order, from easiest to hardest.",
+      "fh.h": "Face the easiest one first",
       "vh.t": "Values Hierarchy",
       "vh.d": "From a list of 42 values, narrow down step by step to the 5 that define you most.",
+      "vh.h": "From 42 values to the 5 that define you",
       "lw.t": "Wheel of Life",
       "lw.d": "Assess your satisfaction across 12 areas of life and set concrete goals for the ones you want to improve.",
+      "lw.h": "12 areas of life, from 1 to 10",
       "el.t": "Emotion Ladder",
       "el.d": "Knowing the family, can you find the right word? The next step in emotional granularity.",
+      "el.h": "Find the more specific word",
       "cm.t": "Communication Style",
       "cm.d": "How you communicate in difficult moments: aggressively, passively, passive-aggressively or assertively?",
+      "cm.h": "Aggressive, passive, passive-aggressive or assertive",
       "cm.m1": "12 questions", "cm.m2": "≈ 3 min",
       "pf.t": "Perfectionism",
       "pf.d": "How much \"all or nothing\" thinking and fear of failure shape the way you do things.",
+      "pf.h": "All or nothing, and fear of failure",
       "pf.m1": "10 questions", "pf.m2": "≈ 3 min",
       "bd.t": "Setting Boundaries",
       "bd.d": "Identify your boundaries in each kind of relationship, and track whether you've started communicating them.",
+      "bd.h": "What you accept, and what you don't",
       "db.t": "Decision Balance",
       "db.d": "Organise the advantages and disadvantages of a hard decision, and keep a history of your decisions.",
+      "db.h": "Advantages and disadvantages, side by side",
       "vt.t": "Self-Care Log",
       "vt.d": "Log Vitamin activities that energise you and Toxin ones that drain you, and observe the pattern.",
+      "vt.h": "Vitamin that energises, Toxin that drains",
       "sn.t": "Saying No Without Guilt",
       "sn.d": "10 everyday requests. Find the way to say no clearly, without over-apologising.",
+      "sn.h": "Refuse with clarity, without guilt",
       "cr.t": "Constructive or Destructive Criticism?",
       "cr.d": "12 examples of criticism, to others and to yourself. Can you tell the constructive from the destructive?",
+      "cr.h": "Tell what helps from what hurts",
       "tp.t": "Toxic Behaviours",
       "tp.d": "8 everyday situations. Can you recognise the toxic pattern behind each one?",
+      "tp.h": "The pattern behind the situation",
       "chip.daily": "Daily use", "chip.cbt": "CBT", "chip.calm": "Relaxation", "chip.insights": "Pattern analysis",
       "chip.classic": "Classic", "chip.1min": "≈ 1 min", "chip.12r": "12 rounds",
       "chip.10r": "10 scenarios", "chip.16r": "16 rounds", "chip.8r": "8 scenarios", "chip.strategy": "Strategy", "chip.story": "Story",
@@ -931,7 +980,7 @@ window.PAGE = {
       var sel = section.querySelector(".hub-chips .tag-btn.sel");
       var activeFilter = sel ? sel.dataset.filter : "all";
       var sectionVisible = false;
-      section.querySelectorAll(".subgroup").forEach(function (group) {
+      section.querySelectorAll(".subgroup, .subgroup-acc").forEach(function (group) {
         var groupMatchesFilter = activeFilter === "all" || activeFilter === group.dataset.group;
         var groupVisible = false;
         group.querySelectorAll(".card").forEach(function (card) {
@@ -942,6 +991,7 @@ window.PAGE = {
           if (visible) groupVisible = true;
         });
         group.classList.toggle("hidden", !groupVisible);
+        if (groupVisible && "open" in group && (q || activeFilter !== "all")) group.open = true;
         if (groupVisible) sectionVisible = true;
       });
       if (sectionVisible) anyVisible = true;
