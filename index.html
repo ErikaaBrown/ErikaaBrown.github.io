@@ -19,13 +19,6 @@
 <body>
 <div id="site-header"></div>
 
-<div id="whatsnew-banner" class="whatsnew-banner">
-  <div class="whatsnew-inner">
-    <span data-i18n="whatsnew.text"></span>
-    <button id="whatsnew-close" data-i18n-aria="whatsnew.close">✕</button>
-  </div>
-</div>
-
 <main class="container">
 
   <section class="hero">
@@ -464,8 +457,6 @@ window.PAGE = {
       "hero.kicker": "Psicologia interactiva",
       "hero.title": "Explora a tua mente.",
       "hero.lead": "Testes, ferramentas e jogos para descobrires como pensas, sentes e decides, com base na ciência psicológica.",
-      "whatsnew.text": "✨ Novidades: 2 novos testes (Estilo de Comunicação e Perfeccionismo), 3 novas ferramentas (Definir Limites, Balança de Decisão e Diário de Autocuidado) e 3 novos jogos (Dizer Não Sem Culpa, Crítica Construtiva ou Destrutiva? e Comportamentos Tóxicos). Explora aqui em baixo!",
-      "whatsnew.close": "Fechar aviso de novidades",
       "hero.cta1": "Fazer um teste",
       "hero.cta2": "Explorar ferramentas",
       "s.tests": "Testes", "s.tests.sub": "Auto-conhecimento com base científica",
@@ -667,8 +658,6 @@ window.PAGE = {
       "hero.kicker": "Interactive psychology",
       "hero.title": "Explore your mind.",
       "hero.lead": "Tests, tools and games to discover how you think, feel and decide, grounded in psychological science.",
-      "whatsnew.text": "✨ New: 2 new tests (Communication Style and Perfectionism), 3 new tools (Setting Boundaries, Decision Balance and Self-Care Log) and 3 new games (Saying No Without Guilt, Constructive or Destructive Criticism? and Toxic Behaviours). Explore below!",
-      "whatsnew.close": "Close what's new notice",
       "hero.cta1": "Take a test",
       "hero.cta2": "Explore tools",
       "s.tests": "Tests", "s.tests.sub": "Science-based self-knowledge",
@@ -871,16 +860,6 @@ window.PAGE = {
 </script>
 <script src="js/app.js?v=11"></script>
 <script>
-(function () {
-  var KEY = "pl_dismissed_whatsnew_2026_09b";
-  var banner = document.getElementById("whatsnew-banner");
-  if (localStorage.getItem(KEY)) banner.classList.add("hidden");
-  document.getElementById("whatsnew-close").addEventListener("click", function () {
-    localStorage.setItem(KEY, "1");
-    banner.classList.add("hidden");
-  });
-})();
-
 (function () {
   var TEST_PAGES = {
     bigfive: "tests/big-five.html", attachment: "tests/attachment.html", eq: "tests/eq.html",
