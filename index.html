@@ -19,41 +19,21 @@
 <body>
 <div id="site-header"></div>
 
-<div id="whatsnew-banner" class="whatsnew-banner">
-  <div class="whatsnew-inner">
-    <span data-i18n="whatsnew.text"></span>
-    <button id="whatsnew-close" data-i18n-aria="whatsnew.close">✕</button>
-  </div>
-</div>
-
 <main class="container">
 
   <section class="hero">
     <div class="hero-deco-wrap">
       <svg class="hero-deco" viewBox="0 0 400 100" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <defs>
-          <path id="leafD" d="M0,0 Q3.5,-9 0,-19 Q-3.5,-9 0,0 Z"/>
-          <g id="sprig" fill="none">
-            <path d="M6 92Q30 78 46 62Q58 50 62 40" stroke="#8a7053" stroke-width="1.8" stroke-linecap="round"/>
-            <g transform="translate(46,62) rotate(-35)">
-              <use href="#leafD" transform="rotate(-45) scale(0.85)" fill="var(--brand-ink)"/>
-              <use href="#leafD" transform="rotate(-15) scale(1.05)" fill="var(--brand)"/>
-              <use href="#leafD" transform="rotate(15) scale(1.0)" fill="#1aa47e"/>
-              <use href="#leafD" transform="rotate(45) scale(0.8)" fill="var(--accent)"/>
-            </g>
-            <g transform="translate(62,40) rotate(-45)">
-              <use href="#leafD" transform="rotate(-40) scale(0.7)" fill="var(--brand)"/>
-              <use href="#leafD" transform="rotate(-10) scale(0.9)" fill="#1aa47e"/>
-              <use href="#leafD" transform="rotate(25) scale(0.75)" fill="var(--accent)"/>
-            </g>
-            <g transform="translate(24,80) rotate(10)">
-              <use href="#leafD" transform="rotate(-30) scale(0.55)" fill="var(--brand-ink)"/>
-              <use href="#leafD" transform="rotate(10) scale(0.65)" fill="var(--brand)"/>
-            </g>
+          <g id="sideBadges" stroke-width="1.7">
+            <g transform="translate(12,50)"><rect width="26" height="26" rx="8" fill="var(--brand-soft)" stroke="none"/><g transform="translate(5,5) scale(0.65)" stroke="var(--brand-ink)"><rect x="6" y="3.5" width="12" height="17" rx="1.6"/><path d="M9 3.5V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v.5"/><path d="m9 12.5 2 2 4-4.5"/></g></g>
+            <g transform="translate(38,34)"><rect width="24" height="24" rx="7" fill="var(--clay-soft)" stroke="none"/><g transform="translate(4.5,4.5) scale(0.62)" stroke="var(--clay-ink)"><path d="M15.3 5.6a4.3 4.3 0 0 0-5.8 5.8L4 17l3 3 5.6-5.5a4.3 4.3 0 0 0 5.8-5.8l-2.8 2.8-2.1-2.1z"/></g></g>
+            <g transform="translate(62,18)"><rect width="22" height="22" rx="7" fill="var(--accent-soft)" stroke="none"/><g transform="translate(4,4) scale(0.58)" stroke="var(--accent-ink)"><rect x="5" y="5" width="14" height="14" rx="3"/><circle cx="9" cy="9" r="1" fill="var(--accent-ink)" stroke="none"/><circle cx="15" cy="15" r="1" fill="var(--accent-ink)" stroke="none"/><circle cx="12" cy="12" r="1" fill="var(--accent-ink)" stroke="none"/></g></g>
+            <g transform="translate(84,2)"><rect width="20" height="20" rx="6" fill="var(--plum-soft)" stroke="none"/><g transform="translate(3.5,3.5) scale(0.55)" stroke="var(--plum-ink)"><path d="M12 6.4c-2-1.4-4.9-1.9-7.7-1V18c2.8-.9 5.7-.4 7.7 1 2-1.4 4.9-1.9 7.7-1V5.4c-2.8-.9-5.7-.4-7.7 1z"/><path d="M12 6.4V19"/></g></g>
           </g>
         </defs>
-        <use href="#sprig"/>
-        <use href="#sprig" transform="translate(400,0) scale(-1,1)"/>
+        <use href="#sideBadges"/>
+        <use href="#sideBadges" transform="translate(400,0) scale(-1,1)"/>
       </svg>
       <img class="hero-logo" src="img/logo-tree.png" alt="">
     </div>
@@ -464,8 +444,6 @@ window.PAGE = {
       "hero.kicker": "Psicologia interactiva",
       "hero.title": "Explora a tua mente.",
       "hero.lead": "Testes, ferramentas e jogos para descobrires como pensas, sentes e decides, com base na ciência psicológica.",
-      "whatsnew.text": "✨ Novidades: 2 novos testes (Estilo de Comunicação e Perfeccionismo), 3 novas ferramentas (Definir Limites, Balança de Decisão e Diário de Autocuidado) e 3 novos jogos (Dizer Não Sem Culpa, Crítica Construtiva ou Destrutiva? e Comportamentos Tóxicos). Explora aqui em baixo!",
-      "whatsnew.close": "Fechar aviso de novidades",
       "hero.cta1": "Fazer um teste",
       "hero.cta2": "Explorar ferramentas",
       "s.tests": "Testes", "s.tests.sub": "Auto-conhecimento com base científica",
@@ -667,8 +645,6 @@ window.PAGE = {
       "hero.kicker": "Interactive psychology",
       "hero.title": "Explore your mind.",
       "hero.lead": "Tests, tools and games to discover how you think, feel and decide, grounded in psychological science.",
-      "whatsnew.text": "✨ New: 2 new tests (Communication Style and Perfectionism), 3 new tools (Setting Boundaries, Decision Balance and Self-Care Log) and 3 new games (Saying No Without Guilt, Constructive or Destructive Criticism? and Toxic Behaviours). Explore below!",
-      "whatsnew.close": "Close what's new notice",
       "hero.cta1": "Take a test",
       "hero.cta2": "Explore tools",
       "s.tests": "Tests", "s.tests.sub": "Science-based self-knowledge",
@@ -871,16 +847,6 @@ window.PAGE = {
 </script>
 <script src="js/app.js?v=11"></script>
 <script>
-(function () {
-  var KEY = "pl_dismissed_whatsnew_2026_09b";
-  var banner = document.getElementById("whatsnew-banner");
-  if (localStorage.getItem(KEY)) banner.classList.add("hidden");
-  document.getElementById("whatsnew-close").addEventListener("click", function () {
-    localStorage.setItem(KEY, "1");
-    banner.classList.add("hidden");
-  });
-})();
-
 (function () {
   var TEST_PAGES = {
     bigfive: "tests/big-five.html", attachment: "tests/attachment.html", eq: "tests/eq.html",
