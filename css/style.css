@@ -174,9 +174,15 @@ a:hover { text-decoration: underline; }
 /* ---------- hero ---------- */
 .hero { padding: 72px 0 30px; text-align: center; }
 .hero-emblem { width: 130px; height: auto; display: block; margin: 0 auto 14px; }
-.hero-deco-wrap { position: relative; max-width: 560px; margin: 0 auto; }
-.hero-deco { display: block; width: 100%; height: auto; }
-.hero-deco-wrap .hero-logo { position: absolute; top: 48%; left: 50%; transform: translate(-50%, -50%); width: 92px; height: 92px; object-fit: contain; }
+.hero-banner-wrap { max-width: 900px; margin: 0 auto 4px; }
+.hero-banner {
+  display: block; width: 100%; height: auto;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 14%, black 86%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 14%, black 86%, transparent 100%);
+}
+.hero-banner-dark { display: none; }
+html[data-theme="dark"] .hero-banner-light { display: none; }
+html[data-theme="dark"] .hero-banner-dark { display: block; }
 .hero .kicker {
   display: inline-block; padding: 6px 16px; border-radius: 999px;
   background: var(--brand-soft); color: var(--brand-ink);
