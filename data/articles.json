@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-23T11:44:38.300Z",
+ "updated": "2026-10-24T11:08:07.895Z",
  "articles": [
   {
    "id": 0,
@@ -149,12 +149,12 @@
    "source": "Psyche",
    "cc": false,
    "lang": "en",
-   "title": "Are you getting enough sun?",
-   "author": "Hannah Seo",
+   "title": "How to overcome task paralysis",
+   "author": "Joe Wilner",
    "date": "2026-10-20",
-   "url": "https://psyche.co/notes-to-self/why-sunlight-is-vital-to-our-physical-and-mental-health",
-   "image": "https://images.aeonmedia.co/images/4bd4e006-07c9-4580-b6df-7c356885e4be/sz-2014-07-27t120000z_1298661931_lm1ea7r16uz01_rtrmadp_3_britain-weather.jpg?top=143&left=0&cropWidth=2448&cropHeight=1377&width=1200&quality=75&format=auto",
-   "summary": "The new book ‘In Defense of Sunlight’ argues that our concerns about the sun’s risks lead us to overlook its benefits - by Hannah Seo Read on Psyche",
+   "url": "https://psyche.co/guides/how-to-overcome-task-paralysis",
+   "image": "https://images.aeonmedia.co/images/97132dde-0fba-4546-bc3b-33b1999cee57/sz-surface-hpw43cbt1lk-unsplash.jpg?top=125&left=0&cropWidth=2416&cropHeight=1359&width=1200&quality=75&format=auto",
+   "summary": "If you have ADHD or you’re stressed, tired and stuck, goal management training can help you get started and keep going - by Joe Wilner Read on Psyche",
    "contentHtml": ""
   },
   {
@@ -162,12 +162,12 @@
    "source": "Psyche",
    "cc": false,
    "lang": "en",
-   "title": "How to overcome task paralysis",
-   "author": "Joe Wilner",
+   "title": "Are you getting enough sun?",
+   "author": "Hannah Seo",
    "date": "2026-10-20",
-   "url": "https://psyche.co/guides/how-to-overcome-task-paralysis",
-   "image": "https://images.aeonmedia.co/images/97132dde-0fba-4546-bc3b-33b1999cee57/sz-surface-hpw43cbt1lk-unsplash.jpg?top=125&left=0&cropWidth=2416&cropHeight=1359&width=1200&quality=75&format=auto",
-   "summary": "If you have ADHD or you’re stressed, tired and stuck, goal management training can help you get started and keep going - by Joe Wilner Read on Psyche",
+   "url": "https://psyche.co/notes-to-self/why-sunlight-is-vital-to-our-physical-and-mental-health",
+   "image": "https://images.aeonmedia.co/images/4bd4e006-07c9-4580-b6df-7c356885e4be/sz-2014-07-27t120000z_1298661931_lm1ea7r16uz01_rtrmadp_3_britain-weather.jpg?top=143&left=0&cropWidth=2448&cropHeight=1377&width=1200&quality=75&format=auto",
+   "summary": "The new book ‘In Defense of Sunlight’ argues that our concerns about the sun’s risks lead us to overlook its benefits - by Hannah Seo Read on Psyche",
    "contentHtml": ""
   },
   {
