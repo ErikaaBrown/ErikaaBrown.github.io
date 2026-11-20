@@ -1,8 +1,47 @@
 {
- "updated": "2026-11-19T15:49:13.264Z",
+ "updated": "2026-11-20T15:31:22.611Z",
  "articles": [
   {
    "id": 0,
+   "source": "ScienceDaily",
+   "cc": false,
+   "lang": "en",
+   "title": "This simple habit is linked to a 33% lower risk of Alzheimer's",
+   "author": "",
+   "date": "2026-11-20",
+   "url": "https://www.sciencedaily.com/releases/2026/11/261118065536.htm",
+   "image": "",
+   "summary": "Reading for pleasure may have surprisingly powerful benefits for the brain, with studies linking it to better memory, reduced stress, improved mental health, and a lower risk of dementia. Researchers highlight findings that just five minutes of fiction can reduce stress by up to 20%, while reading…",
+   "contentHtml": ""
+  },
+  {
+   "id": 1,
+   "source": "Psyche",
+   "cc": false,
+   "lang": "en",
+   "title": "The end of Xanadu",
+   "author": "Henrick Karoliszyn",
+   "date": "2026-11-20",
+   "url": "https://psyche.co/turning-points/the-house-my-father-built-was-resilient-and-rickety-like-him",
+   "image": "https://images.aeonmedia.co/images/48a08e0b-f3cf-401c-9b85-ad8912f65b20/main-essay.jpg?top=131&left=0&cropWidth=2496&cropHeight=1404&width=1200&quality=75&format=auto",
+   "summary": "The house my father built taught me to expect disaster. Seeing it come down was a release - by Henrick Karoliszyn Read on Psyche",
+   "contentHtml": ""
+  },
+  {
+   "id": 2,
+   "source": "ScienceDaily",
+   "cc": false,
+   "lang": "en",
+   "title": "For better mental health, how often you exercise may matter more than how hard",
+   "author": "",
+   "date": "2026-11-20",
+   "url": "https://www.sciencedaily.com/releases/2026/11/261119194601.htm",
+   "image": "",
+   "summary": "A study of more than 10,000 college students found that exercising regularly may be more important for mental health than pushing yourself through intense or lengthy workouts. Students who exercised less frequently were more likely to experience depression and anxiety a year later, suggesting that…",
+   "contentHtml": ""
+  },
+  {
+   "id": 3,
    "source": "ScienceDaily",
    "cc": false,
    "lang": "en",
@@ -15,7 +54,7 @@
    "contentHtml": ""
   },
   {
-   "id": 1,
+   "id": 4,
    "source": "ScienceDaily",
    "cc": false,
    "lang": "en",
@@ -28,7 +67,7 @@
    "contentHtml": ""
   },
   {
-   "id": 2,
+   "id": 5,
    "source": "Psyche",
    "cc": false,
    "lang": "en",
@@ -41,7 +80,7 @@
    "contentHtml": ""
   },
   {
-   "id": 3,
+   "id": 6,
    "source": "ScienceDaily",
    "cc": false,
    "lang": "en",
@@ -54,7 +93,7 @@
    "contentHtml": ""
   },
   {
-   "id": 4,
+   "id": 7,
    "source": "The Conversation",
    "cc": true,
    "lang": "en",
@@ -67,7 +106,7 @@
    "contentHtml": "<p>Monsters are often used to represent mental health struggles, in both literature and film. These creatures often act as physical stand-ins for internal battles, giving shape to feelings that are usually invisible and hard to explain. By turning psychological distress into something audiences can see and react to, writers and filmmakers make those experiences easier to understand. </p>\n\n<p>In the <a href=\"https://theconversation.com/topics/clowns-13153\" target=\"_blank\" rel=\"noopener nofollow\">It franchise</a>, the central monster is <a href=\"https://theconversation.com/why-are-we-so-scared-of-clowns-heres-what-weve-discovered-199352\" target=\"_blank\" rel=\"noopener nofollow\">Pennywise the clown</a>. In my research I seek to challenge the trivialisation of OCD by portraying the fear and complexity of living with the condition – and to deepen understanding of OCD themes through prose. While <a href=\"https://uk.bookshop.org/a/15793/9781473666948\" target=\"_blank\" rel=\"noopener nofollow\">Stephen King’s original 1986 novel</a> includes a complex mythology, I have found that the 2017 and 2019 film adaptations simplify Pennywise into a figure that works surprisingly well as a metaphor for obsessive compulsive disorder (OCD). </p>\n\n<p><a href=\"https://www.ocduk.org/ocd/introduction-to-ocd/\" target=\"_blank\" rel=\"noopener nofollow\">OCD</a> is a condition in which a person experiences intense intrusive thoughts, known as obsessions. In response, people with OCD perform repetitive behaviours or mental acts called compulsions, to reduce distress or prevent a feared outcome. OCD can manifest itself through a range of different <a href=\"https://www.ocduk.org/ocd/types/\" target=\"_blank\" rel=\"noopener nofollow\">themes</a>, often focusing on what someone values or fears most. For example, a person might worry they are a bad person because they dwell on a moment when they were slightly rude, or fear that stepping on a crack could harm a family member.</p>\n\n<p>Eddie Kaspbrak, one of the main protagonists of King’s novel, experiences these kinds of compulsions. He has an intense fear of germs and illness that leads to a strong need for cleanliness, which he believes will prevent him from getting severe diseases. </p>\n\n\n\n\n\n<p><em>This article is part of <a href=\"https://theconversation.com/topics/rethinking-the-classics-156235\" target=\"_blank\" rel=\"noopener nofollow\">Rethinking the Classics</a>. The stories in this series offer insightful new ways to think about and interpret classic books and artworks. This is the canon – with a twist.</em></p>\n\n\n\n<p>Eddie fits with one of the most recognisable sub-types of the condition: <a href=\"https://www.ocduk.org/ocd/types/\" target=\"_blank\" rel=\"noopener nofollow\">contamination</a>. This is a form of OCD in which someone believes that something has become contaminated by germs, illness, or even moral impurity such as sin. In response, they may engage in compulsive behaviour like frequent hand-washing, excessive cleaning of surfaces, or avoiding places and people they perceive as contaminated. </p>\n\n<h2>OCD and Pennywise</h2>\n\n<p>Played by Bill Skarsgård in the films It (2017) and It Chapter Two (2019), Pennywise’s strength builds from his ability to get into people’s heads. He feeds off the fear that grows through <a href=\"https://www.ocduk.org/ocd/obsessions/\" target=\"_blank\" rel=\"noopener nofollow\">obsessions</a> and <a href=\"https://www.treatmyocd.com/blog/the-rumination-trap\" target=\"_blank\" rel=\"noopener nofollow\">remuneration</a>. Remuneration is a compulsion in which a person repeatedly engages with intrusive thoughts, analysing them in an attempt to understand or resolve them. However this often makes the OCD cycle worse. </p>\n\n<p>In It, the more the victim dwells on the fear, the stronger Pennywise becomes. This is similar to the way that when someone with OCD gives into their compulsions, their symptoms worsen.</p>\n\n<p>Pennywise changes shape to match each child’s deepest fear. As the children become more frightened, he grows larger and more threatening. This mirrors the OCD cycle, where fear and avoidance reinforce <a href=\"https://www.ocduk.org/features/dont-think-of-a-pink-elephant/\" target=\"_blank\" rel=\"noopener nofollow\">intrusive thoughts</a>, making them feel increasingly real and impossible to ignore. </p>\n\n<figure>\n            \n            <figcaption>The trailer for It: Chapter Two.</figcaption>\n          </figure>\n\n<p>In It: Chapter Two, Mike (Isaiah Mustafa) – one of the original frightened children, now a grown man – suggests that Pennywise knows “what scares [children] the most” and uses it to “salt the meat”. In both the film and novel, Pennywise appeared to Eddie as a diseased leper, directly targeting his intense fear of illness and contamination.</p>\n\n<p>In the novel, Eddie experiences intrusive thoughts in his mother’s voice, something he calls his “mind-mother”. Eddie remembers his mother telling him he is “not like other people” and has “a very weak system,” reinforcing the idea that he is always at risk. Even after her death, her fears about sickness continue to control his behaviour. These internal warnings eventually become absurd in their extremity – “Eddie, get out of the taxi! They give you cancer!” – highlighting the exaggerated, catastrophic thinking typical of contamination OCD.</p>\n\n<p>If Eddie’s mother’s voice represents his intrusive thoughts, then his inhaler (or his “aspirator”) is his compulsion. Even though, as an adult, he knows his inhaler was only ever a placebo, he still uses it in moments of stress. The irrationality of his fear doesn’t make it feel any less real.</p>\n\n<p>In the novel, Eddie’s inhaler is repeatedly linked to violent imagery. In one section of the book, it is described like a weapon. Eddie stuffs it into his mouth and, “like miming suicide”, pulls “the trigger”. This unsettling comparison highlights how compulsions, while meant to provide relief, are harmful. </p>\n\n<p>Later in the novel, Eddie’s compulsion of using his inhaler, meant to provide mental relief, is personified as a cruel voice that threatens him: “this time I might just kill ya!” This suggests that compulsions can become as frightening as the intrusive thoughts they are meant to control. Even knowing this, Eddie instinctively reaches for the inhaler, trapped in the familiar cycle of fear and temporary relief.</p>\n\n<h2>Eddie fights Pennywise and OCD</h2>\n\n<p>During the novel’s climax, Eddie turns his inhaler into a weapon against Pennywise, aiming it at the creature’s eyes. As he does, he imagines his mother’s voice warning him: “Don’t go near that Thing, Eddie! Things like that give you cancer!” This moment is important because Eddie doesn’t obey the intrusive thought – he challenges it. By using the object of his compulsion as a tool of resistance, Eddie symbolically pushes back against both his mother’s control and his disorder. </p>\n\n<p>The final confrontation in the film adaptation It: Chapter Two (2019) also reflects real therapeutic ideas. Unlike in the novel, Pennywise isn’t defeated through brute force, but through psychological resistance. </p>\n\n<figure>\n            \n            <figcaption>The final battle in It: Chapter Two.</figcaption>\n          </figure>\n\n<p>The “losers” (as the kids describe themselves) insult and mock him, calling him “just a clown”. As they do, Pennywise physically shrinks and loses power. This mirrors <a href=\"https://www.ocduk.org/overcoming-ocd/accessing-ocd-treatment/exposure-response-prevention/\" target=\"_blank\" rel=\"noopener nofollow\">Exposure and Response Prevention (ERP)</a>, a therapy which encourages patients to let obsessions occur without completing the compulsion. Once Pennywise is no longer feared, he collapses, much like OCD loses its hold when compulsions are resisted.</p>\n\n<p>It works as a striking metaphor for OCD. Each character is attacked through their deepest fears, and the more those fears are fixated on, the stronger Pennywise becomes. By turning intrusive thoughts into literal monsters, It captures the intensity of OCD’s internal struggles and offers a deeper, more empathetic understanding of the disorder and its emotional weight.</p>\n\n<p><em>This article features references to books that have been included for editorial reasons, and may contain links to bookshop.org. If you click on one of the links and go on to buy something from bookshop.org The Conversation UK may earn a commission.</em></p><img src=\"https://counter.theconversation.com/content/276714/count.gif\" alt=\"The Conversation\" loading=\"lazy\">\n<p><em>Aisleen Sturrock does not work for, consult, own shares in or receive funding from any company or organisation that would benefit from this article, and has disclosed no relevant affiliations beyond their academic appointment.</em></p>"
   },
   {
-   "id": 5,
+   "id": 8,
    "source": "ScienceDaily",
    "cc": false,
    "lang": "en",
@@ -80,7 +119,7 @@
    "contentHtml": ""
   },
   {
-   "id": 6,
+   "id": 9,
    "source": "Psyche",
    "cc": false,
    "lang": "en",
@@ -93,7 +132,7 @@
    "contentHtml": ""
   },
   {
-   "id": 7,
+   "id": 10,
    "source": "The Conversation",
    "cc": true,
    "lang": "en",
@@ -106,7 +145,7 @@
    "contentHtml": "<figure><img src=\"https://images.theconversation.com/files/771865/original/file-20261113-64-tukvg.jpg?ixlib=rb-4.1.1&amp;rect=0%2C80%2C1920%2C1280&amp;q=45&amp;auto=format&amp;w=1050&amp;h=700&amp;fit=crop\" alt=\"\" loading=\"lazy\"><figcaption>_Mimosa tenuiflora_. <a href=\"https://commons.wikimedia.org/wiki/File:Mimosa_tenuiflora_%E2%80%94_Jo%C3%A3o_de_Deus_Medeiros_002.jpg\" target=\"_blank\" rel=\"noopener nofollow\">João Medeiros/Wikimedia Commons</a>, <a href=\"http://creativecommons.org/licenses/by/4.0/\" target=\"_blank\" rel=\"noopener nofollow\">CC BY</a></figcaption></figure><p>Jurema-preta is the name of both a plant – <em>Mimosa tenuiflora</em> – and an indigenous spiritual tradition of northeastern Brazil. The plant is used to make a potentially hallucinogenic brew that is consumed in sacred rituals. The exact mixture of herbs and other elements contained in the brew is a secret known only by <em>jurema mestre</em> shamans and never revealed.</p>\n\n<p>In 2024 I had the opportunity to visit, as an anthropologist, the city of Natal, in <a href=\"https://theconversation.com/topics/brazil-2153\" target=\"_blank\" rel=\"noopener nofollow\">Brazil</a>’s Rio Grande do Norte region, which is a hotspot of the jurema cult. While there, I learned that jurema’s power is as much social as it is chemical. </p>\n\n<p>The sacred and molecular properties of the plant are currently fostering all manner of exciting (though challenging) connections between indigenous knowledge and neuroscience. But jurema’s power goes beyond the plant and its ceremonies, as the jurema cult provides a radically plural space that welcomes all kinds of non-normative identities.</p>\n\n<h2>Therapuetic psychedelics</h2>\n\n<p>In recent years, neuroscientists from the Brain Institute of the Universidade Federal do Rio Grando do Norte, in Natal, have conducted <a href=\"https://journals.sagepub.com/doi/full/10.1089/psymed.2024.0002\" target=\"_blank\" rel=\"noopener nofollow\">groundbreaking research</a> into jurema’s healing potential. In particular, they have found that the plant contains N,N-dimethyltryptamine, popularly known as <a href=\"https://theconversation.com/topics/dmt-54950\" target=\"_blank\" rel=\"noopener nofollow\">DMT</a>. </p>\n\n<p>DMT is a powerful molecule that, when released into the brain, generates intense visions and induces states of trance.</p>\n\n<p>But jurema’s effects are not just the result of ingesting DMT. As with the better known <a href=\"https://theconversation.com/topics/ayahuasca-6916\" target=\"_blank\" rel=\"noopener nofollow\">ayahuasca</a>, the traditional recipe of the ritual brew is what allows DMT molecules to reach the brain. In their traditional preparation, both jurema and ayahuasca brews contain specific chemical inhibitors of the enzymes that would otherwise degrade the molecule in the stomach. </p>\n\n<p>To date, it is unclear how indigenous peoples found the combination of plants and cooking techniques that allow DMT to make it through the stomach and reach the brain.</p>\n\n<p>In recent years, there have been significant advances in research into the healing potential of substances such as MDMA, psylocibin, LSD and DMT. This <a href=\"https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(26)00969-4/fulltext\" target=\"_blank\" rel=\"noopener nofollow\">psychedelic renaissance</a> – which unites the fields of neuroscience, psychiatry and psychopharmacology –  is finding new molecular pathways to treat PSTD, anxiety, addiction, and depression. DMT, in particular, seems to excel in mitigating depression.</p>\n\n<p>Scientists at the Brain Institute in Natal have shown that the DMT extracted from jurema and inhaled by vaporisation has a rapid and powerful antidepressant effect, which can <a href=\"https://journals.sagepub.com/doi/10.1177/02698811261465005\" target=\"_blank\" rel=\"noopener nofollow\">last for weeks</a>. </p>\n\n<p>But the institute is not just researching the plant and its molecules. It is also documenting – and engaging with – the Indigenous traditions that have been using this plant for centuries.</p>\n\n<h2>Science in dialogue with indigenous knowledge</h2>\n\n<p>In an innovative, non-traditional approach to research, scientists and jurema mestres have started to hold <a href=\"https://www.even3.com.br/e/ii-seminario-de-medicinas-ancestrais-jurema-ciencias-cuidados-e-protecao-672673\" target=\"_blank\" rel=\"noopener nofollow\">regular meetings</a> to exchange perspectives on the plant. The goal is to include local communities and jurema shamans in a debate on how to respectfully relate to the sacred plant, while also pursuing scientific research into DMT as a possible treatment for a range of mental health issues.</p>\n\n<p>This dialogue is, however, far from easy. While scientists at the Brain Institute try to approach the jurema with care towards other forms of understanding the plant, some mestres reject any scientific uses of any kind. </p>\n\n<p>Recently, researchers at the Brain Institute have even abandoned the idea of extracting DMT from the jurema, focusing instead on synthetic DMT. But some shamans worry that the practice could become more widespread, and that other labs would not treat the plant with proper care and respect. These unresolved tensions are thoroughly described in a <a href=\"https://chacruna.net/resurrection-jurema-3/\" target=\"_blank\" rel=\"noopener nofollow\">series of articles</a> and a <a href=\"https://link.springer.com/book/10.1007/978-3-032-22705-8\" target=\"_blank\" rel=\"noopener nofollow\">book</a> by Brazilian journalist Marcelo Leite.</p>\n\n<figure>\n            <a href=\"https://images.theconversation.com/files/770993/original/file-20261110-64-r9wey6.jpg?ixlib=rb-4.1.1&amp;rect=0%2C265%2C2848%2C1602&amp;q=45&amp;auto=format&amp;w=1000&amp;fit=clip\" target=\"_blank\" rel=\"noopener nofollow\"><img src=\"https://images.theconversation.com/files/770993/original/file-20261110-64-r9wey6.jpg?ixlib=rb-4.1.1&amp;rect=0%2C265%2C2848%2C1602&amp;q=45&amp;auto=format&amp;w=754&amp;fit=clip\" alt=\"\" loading=\"lazy\"></a>\n            <figcaption>\n              <em>Mimosa tenuiflora</em> is a fern-like plant that has to be specially prepared to activate its psychoactive properties.\n              <a href=\"https://commons.wikimedia.org/wiki/File:Mimosa_-tenuiflora-Jurema.jpg\" target=\"_blank\" rel=\"noopener nofollow\">Drewpiter/Wikimedia Commons</a>, <a href=\"http://creativecommons.org/licenses/by/4.0/\" target=\"_blank\" rel=\"noopener nofollow\">CC BY</a>\n            </figcaption>\n          </figure>\n\n<p>In his book, Leite notes a key aspect of current jurema cults, something I could confirm from my own ethnographic experience in Natal: most of the brews used in current rituals are not prepared in a way that allows DMT to reach the brain. </p>\n\n<p>So, if its psychedelic effects are not always present, where does the power of the jurema reside?</p>\n\n<h2>A broad, accepting culture</h2>\n\n<p>In Natal, jurema rituals bring together all kinds of people and sensibilities. Following the work of anthropologist <a href=\"https://lassuncao.blogspot.com/2024/03/parcerias.html\" target=\"_blank\" rel=\"noopener nofollow\">Luiz Assunção</a>, an expert in the history of this religion, I was able to verify the richness, diversity and symbolic exuberance of the cult, which many practitioners consider as a science.</p>\n\n<p>The variety of symbols that make up a jurema ritual is unfathomable. Each combines theological and spiritual references that range from indigenous animism to Catholic Christianity, Afro-Brazilian candomblé, spiritism, and even elements of Islam.</p>\n\n<p>During my ethnographic survey in Natal, I attended rituals where practitioners danced, sang, played drums, took oaths and were seemingly possessed by spirits. </p>\n\n<p>One of the most striking things I noticed is that many of the practitioners belonged to the LGTBQ+ collective. Many of these identities are not accepted in other religious traditions that are far more present in the region, such as evangelism. A <a href=\"https://c57aa6b6-3b66-4e07-b276-1007722be4a6.filesusr.com/ugd/a296ba_59e1754bafe84c19b5a9bacb234ffc67.pdf\" target=\"_blank\" rel=\"noopener nofollow\">2023 book on Natal’s ancestral religion and culture</a> includes a chapter on a trans woman who became a mestre juremeira.</p>\n\n<p>The jurema plant has many interconnected potentials. One is its capacity to expand consciousness and induce states of spiritual trance. Another is the healing potential of DMT, which can have a powerful effect on symptoms of depression. But its most significant power is not molecular, but relational. </p>\n\n<p>Both the plant and the cult create dialogue and connection between unlikely bedfellows: between indigenous peoples and neuroscientists, and between people with traditional and non-normative identities. The power of the jurema therefore also lies in creating connections between radically different kinds of people.</p>\n\n\n\n<figure>\n            <img src=\"https://images.theconversation.com/files/653322/original/file-20250305-56-uw659u.jpg?ixlib=rb-4.1.1&amp;q=45&amp;auto=format&amp;w=237&amp;fit=clip\" alt=\"\" loading=\"lazy\">\n            <figcaption>\n              \n              \n            </figcaption>\n          </figure>\n\n<p><em>A weekly e-mail in English featuring expertise from scholars and researchers. It provides an introduction to the diversity of research coming out of the continent and considers some of the key issues facing European countries. <a href=\"https://theconversation.com/europe/newsletters?promoted=europe-newsletter-116\" target=\"_blank\" rel=\"noopener nofollow\">Get the newsletter!</a></em></p>\n\n<img src=\"https://counter.theconversation.com/content/293996/count.gif\" alt=\"The Conversation\" loading=\"lazy\">\n<p><em>The research discussed in this article was partially financed by the Spanish Ministry of Science, Innovation and Universities&#39; CREALM project, PID2021-127093NB-C21. The content of this article is the responsibility of the author, and does not necessarily reflect the position of funders.</em></p>"
   },
   {
-   "id": 8,
+   "id": 11,
    "source": "Psyche",
    "cc": false,
    "lang": "en",
@@ -119,7 +158,7 @@
    "contentHtml": ""
   },
   {
-   "id": 9,
+   "id": 12,
    "source": "Psyche",
    "cc": false,
    "lang": "en",
@@ -132,7 +171,7 @@
    "contentHtml": ""
   },
   {
-   "id": 10,
+   "id": 13,
    "source": "ScienceDaily",
    "cc": false,
    "lang": "en",
@@ -145,7 +184,7 @@
    "contentHtml": ""
   },
   {
-   "id": 11,
+   "id": 14,
    "source": "ScienceDaily",
    "cc": false,
    "lang": "en",
@@ -158,7 +197,7 @@
    "contentHtml": ""
   },
   {
-   "id": 12,
+   "id": 15,
    "source": "ScienceDaily",
    "cc": false,
    "lang": "en",
@@ -171,7 +210,7 @@
    "contentHtml": ""
   },
   {
-   "id": 13,
+   "id": 16,
    "source": "ScienceDaily",
    "cc": false,
    "lang": "en",
@@ -184,7 +223,7 @@
    "contentHtml": ""
   },
   {
-   "id": 14,
+   "id": 17,
    "source": "ScienceDaily",
    "cc": false,
    "lang": "en",
@@ -197,7 +236,7 @@
    "contentHtml": ""
   },
   {
-   "id": 15,
+   "id": 18,
    "source": "Psyche",
    "cc": false,
    "lang": "en",
@@ -210,7 +249,7 @@
    "contentHtml": ""
   },
   {
-   "id": 16,
+   "id": 19,
    "source": "Psyche",
    "cc": false,
    "lang": "en",
@@ -223,7 +262,7 @@
    "contentHtml": ""
   },
   {
-   "id": 17,
+   "id": 20,
    "source": "The Conversation",
    "cc": true,
    "lang": "en",
@@ -236,7 +275,7 @@
    "contentHtml": "<p>Imagine visiting your GP for your physical or mental health and leaving with a prescription to spend more time outdoors. </p>\n\n<p>This is becoming a reality in Australia, with the Royal Australian College of General Practitioners recently <a href=\"https://peopleandparks.org/nature-wise-programs/the-nature-dose/\" target=\"_blank\" rel=\"noopener nofollow\">endorsing resources</a> to help doctors recommend spending time in nature.  </p>\n\n<p>The advice includes spending 20 minutes a day noticing the natural world – whether that’s walking through a park, listening to birds or wildlife gardening.  </p>\n\n<p>Spending time in nature has <a href=\"https://peopleandparks.org/research-and-evidence/\" target=\"_blank\" rel=\"noopener nofollow\">recognised health benefits</a>. But does a doctor’s recommendation actually mean people are more likely to experience those benefits?</p>\n\n\n\n<h2>What do we know about nature and health?</h2>\n\n<p>Aboriginal and Torres Strait Islander peoples have <a href=\"https://doi.org/10.1016/j.lanwpc.2024.101220\" target=\"_blank\" rel=\"noopener nofollow\">long recognised</a> the importance of connection to Country for health and wellbeing. This connection encompasses relationships with land, waters, culture, community and identity.</p>\n\n<p>Over recent decades, researchers have investigated whether spending time in nature can benefit our physical and mental health. But the strength of evidence varies depending on the activity and health outcome being measured. </p>\n\n<p>A recent <a href=\"https://doi.org/10.1111/aphw.70164\" target=\"_blank\" rel=\"noopener nofollow\">review</a> assessed the evidence for nature prescribing on mental health. The reviewers examined 47 trials with almost 3,800 participants, including nature walks, outdoor exercise and gardening. Of these, 17 found significant improvements in mental health compared with control groups, particularly for depression, anxiety and stress.</p>\n\n<p>A further 15 studies found some benefits, although these were less consistent. The researchers concluded that nature-based activities show promise for improving mental health, but more rigorous studies are needed to understand their longer-term benefits.</p>\n\n<p>There may also be benefits for physical health. A <a href=\"https://doi.org/10.1093/pubmed/fdaf074\" target=\"_blank\" rel=\"noopener nofollow\">review</a> of 22 studies examining forest-based activities found improvements in blood pressure, heart rate variability and cortisol, a hormone associated with stress. </p>\n\n<p>However, findings for blood glucose, or blood sugar, were less consistent.  </p>\n\n<h2>So how much time should we spend outdoors?</h2>\n\n<figure>\n            <img src=\"https://images.theconversation.com/files/771500/original/file-20261112-64-3akqxv.jpg?ixlib=rb-4.1.1&amp;q=45&amp;auto=format&amp;w=237&amp;fit=clip\" alt=\"A tranquil forest scene with a picnic table bathed in soft sunlight, perfect for a peaceful retreat.\" loading=\"lazy\">\n            <figcaption>\n              In one observational study, people with spent two hours a week in nature were more likely to report good health.\n              <a href=\"https://www.pexels.com/photo/serene-forest-picnic-area-in-sunlight-29159501/\" target=\"_blank\" rel=\"noopener nofollow\">Samidarefle/Pexels</a>\n            </figcaption>\n          </figure>\n\n<p>A recommendation of <a href=\"https://www.parkprescriptions.ca/\" target=\"_blank\" rel=\"noopener nofollow\">two hours per week</a> comes largely from a <a href=\"https://doi.org/10.1038/s41598-019-44097-3\" target=\"_blank\" rel=\"noopener nofollow\">study</a> involving almost 20,000 adults in England. </p>\n\n<p>People who spent at least two hours in nature each week were more likely to report good health and wellbeing than those who spent no time in nature. </p>\n\n<p>However, this was an observational study. It found an association between nature exposure and health, rather than demonstrating that two hours of nature causes better health. </p>\n\n<p>The amount of time needed to experience benefits may vary between people, and we don’t yet know whether there is an ideal amount of time for everyone.</p>\n\n<h2>Does prescribing nature actually work?</h2>\n\n<p>This is where things become more complicated. </p>\n\n<p>Nature prescribing is a form of <a href=\"https://whis.world/resources/gspa-types-of-social-prescribing/\" target=\"_blank\" rel=\"noopener nofollow\">social prescribing</a>. This is a way health professionals encourage patients to participate in activities that support their health and wellbeing. </p>\n\n<p>A nature prescription might involve recommending regular park walks, community gardening or participation in a local conservation group. </p>\n\n<p>But there’s an important difference between knowing that spending time in nature can benefit health and knowing whether a GP’s recommendation helps people experience those benefits. </p>\n\n<p>Research into nature prescribing is growing, with programs such as <a href=\"https://www.parkprescriptions.ca/\" target=\"_blank\" rel=\"noopener nofollow\">Canada’s PaRx</a> and <a href=\"https://www.parkrx.org/about\" target=\"_blank\" rel=\"noopener nofollow\">Park Rx America</a> in the United States providing examples of how health professionals can encourage patients to spend time outdoors. </p>\n\n<p>England’s <a href=\"https://www.shu.ac.uk/centre-regional-economic-social-research/publications/gsp-final-report-march-2021-to-june-2023\" target=\"_blank\" rel=\"noopener nofollow\">green social prescribing</a> multi-site trial enabled more than 8,000 participants to access nature-based activities. Community link workers also supported referred patients to engage with local activities. Participants reported significant improvements in their mental health.  </p>\n\n<p>A <a href=\"https://doi.org/10.1016/S2542-5196(23)00025-6\" target=\"_blank\" rel=\"noopener nofollow\">review</a> of 92 studies also found nature prescribing delivered by health or social professionals improved participants’ blood pressure and mental health, and increased the number of steps they took each day. </p>\n\n<p>The evidence for nature prescribing remains limited by differences in how programs are delivered, how referrals are provided, and how outcomes are measured. </p>\n\n<p>It’s difficult to know whether improvements come from spending time in nature, increased physical activity, social connection, or the additional encouragement provided by a health professional. </p>\n\n<p>There are also challenges for GPs. Not all doctors are familiar with the evidence for nature prescribing or know which local activities and services are available to their patients. </p>\n\n<p>Without this knowledge, it can be difficult to turn a recommendation to spend more time outdoors into practical advice that patients can follow.</p>\n\n<h2>What would make nature prescribing successful?</h2>\n\n<p>Recommending time outdoors might sound straightforward. But following that advice isn’t equally easy for everyone. </p>\n\n<p>Some people have access to safe and welcoming <a href=\"https://www.sciencedirect.com/science/article/pii/S2590252024000199?via%3Dihub\" target=\"_blank\" rel=\"noopener nofollow\">local parks</a>. But someone working long hours, managing a disability or living in an area with limited quality green space may face greater challenges. </p>\n\n<figure>\n            <img src=\"https://images.theconversation.com/files/771502/original/file-20261112-64-n2wyaj.jpg?ixlib=rb-4.1.1&amp;q=45&amp;auto=format&amp;w=754&amp;fit=clip\" alt=\"Brightly colored apartment balconies\" loading=\"lazy\">\n            <figcaption>\n              Not everyone has easy access to nature.\n              <a href=\"https://www.pexels.com/photo/block-of-flats-with-balconies-19190343/\" target=\"_blank\" rel=\"noopener nofollow\">Jan van der Wolf/Pexels</a>\n            </figcaption>\n          </figure>\n\n<p>This means nature prescribing needs to consider people’s circumstances, preferences and access to suitable outdoor environments. </p>\n\n<p><a href=\"https://doi.org/10.1016/j.healthplace.2025.103430\" target=\"_blank\" rel=\"noopener nofollow\">Research</a> also suggests successful clinician-led referrals require:</p>\n\n<ul>\n<li>local knowledge of nature-based activities</li>\n<li>confidence that recommended activities are safe and accessible for their patients</li>\n<li>alignment with patients’ interests. </li>\n</ul>\n\n<p>It may also require more than a conversation during a GP appointment. </p>\n\n<p>Connecting patients with local walking groups, community gardens or other structured activities such as conservation volunteering could help turn a recommendation into something practical. </p>\n\n<p><a href=\"https://springfieldgreenheartsau.org/\" target=\"_blank\" rel=\"noopener nofollow\">Our research</a> is currently exploring how nature prescribing might work in everyday health care.</p>\n\n<h2>So should we follow a nature prescription?</h2>\n\n<p>Spending time in nature is generally accessible and can offer benefits for physical, mental and social wellbeing. </p>\n\n<p>The Royal Australian College of General Practitioners’ endorsement of nature prescribing is an opportunity for GPs to discuss these benefits with patients. </p>\n\n<p>But we still need stronger evidence about whether nature prescribing itself improves health outcomes, which patients benefit most and how to make it work in practice. </p>\n\n<p>For now, spending time outdoors is something many people can try, with or without a prescription. The challenge is ensuring everyone has opportunities to enjoy the benefits.</p><img src=\"https://counter.theconversation.com/content/296469/count.gif\" alt=\"The Conversation\" loading=\"lazy\">\n<p><em>Lauren Ball receives funding from the National Health and Medical Research Council, Health and Wellbeing Queensland, Heart Foundation, Gallipoli Medical Research and Mater Health, Springfield City Group. She is a director of Dietitians Australia, a director of the Darling Downs and West Moreton Primary Health Network and an associate member of the Australian Academy of Health and Medical Sciences.</em></p><p><em>Victoria Sullivan does not work for, consult, own shares in or receive funding from any company or organisation that would benefit from this article.  \n\nVictoria is a volunteer Walk Organiser and Local Coordinator with the Heart Foundation Walking Program (registered charity), and a volunteer member of the nature-based health committee with Outdoors Queensland (not-for profit organisation). \n</em></p>"
   },
   {
-   "id": 18,
+   "id": 21,
    "source": "ScienceDaily",
    "cc": false,
    "lang": "en",
@@ -249,20 +288,7 @@
    "contentHtml": ""
   },
   {
-   "id": 19,
-   "source": "Psyche",
-   "cc": false,
-   "lang": "en",
-   "title": "Shunning people who ‘look homeless’ is an aesthetic injustice",
-   "author": "Giacomo Floris",
-   "date": "2026-11-12",
-   "url": "https://psyche.co/ideas/shunning-people-who-look-homeless-is-an-aesthetic-injustice",
-   "image": "https://images.aeonmedia.co/images/9418b37e-751a-49b7-98c6-6090f2472c77/sz-final-2023-05-03t223620z_724465317_rc20r0aw7wfg_rtrmadp_3_usa-dailylife.jpg?top=287&left=2&cropWidth=2800&cropHeight=1575&width=1200&quality=75&format=auto",
-   "summary": "Society owes unhoused people access to haircuts, showers and clean clothes, not as charity, but as a matter of justice - by Giacomo Floris Read on Psyche",
-   "contentHtml": ""
-  },
-  {
-   "id": 20,
+   "id": 22,
    "source": "Psyche",
    "cc": false,
    "lang": "en",
@@ -275,7 +301,20 @@
    "contentHtml": ""
   },
   {
-   "id": 21,
+   "id": 23,
+   "source": "Psyche",
+   "cc": false,
+   "lang": "en",
+   "title": "Shunning people who ‘look homeless’ is an aesthetic injustice",
+   "author": "Giacomo Floris",
+   "date": "2026-11-12",
+   "url": "https://psyche.co/ideas/shunning-people-who-look-homeless-is-an-aesthetic-injustice",
+   "image": "https://images.aeonmedia.co/images/9418b37e-751a-49b7-98c6-6090f2472c77/sz-final-2023-05-03t223620z_724465317_rc20r0aw7wfg_rtrmadp_3_usa-dailylife.jpg?top=287&left=2&cropWidth=2800&cropHeight=1575&width=1200&quality=75&format=auto",
+   "summary": "Society owes unhoused people access to haircuts, showers and clean clothes, not as charity, but as a matter of justice - by Giacomo Floris Read on Psyche",
+   "contentHtml": ""
+  },
+  {
+   "id": 24,
    "source": "Psyche",
    "cc": false,
    "lang": "en",
@@ -288,7 +327,7 @@
    "contentHtml": ""
   },
   {
-   "id": 22,
+   "id": 25,
    "source": "The Conversation",
    "cc": true,
    "lang": "en",
@@ -301,7 +340,7 @@
    "contentHtml": "<figure><img src=\"https://images.theconversation.com/files/771247/original/file-20261110-78-klcyxe.jpg?ixlib=rb-4.1.1&amp;rect=0%2C0%2C4641%2C3094&amp;q=45&amp;auto=format&amp;w=1050&amp;h=700&amp;fit=crop\" alt=\"\" loading=\"lazy\"><figcaption> <a href=\"https://www.pexels.com/photo/a-close-up-shot-of-medicine-tablets-7722642/\" target=\"_blank\" rel=\"noopener nofollow\">Tara Winstead/Pexels</a></figcaption></figure><p><a href=\"https://doi.org/10.1016/S2215-0366(26)00326-3\" target=\"_blank\" rel=\"noopener nofollow\">A new review</a> has found some antidepressants may be more effective than others at helping people reduce the severity of their symptoms of depression over the long term.</p>\n\n<p>The research, published in The Lancet Psychiatry, found people taking escitalopram (commonly sold as Lexapro), duloxetine (Cymbalta) and agomelatine (Valdoxan) were more likely to report improved symptoms over the long term than those taking fluoxetine (Prozac). For those taking Lexapro and Cymbalta, they were also more likely to stay on their medications.</p>\n\n<p>But does that mean these are the <em>best</em> antidepressants?</p>\n\n<h2>Why do people take antidepressants long term?</h2>\n\n<p>Around <a href=\"https://www.beyondblue.org.au/mental-health/depression\" target=\"_blank\" rel=\"noopener nofollow\">one in seven Australians</a> will experience depression during their lifetime. </p>\n\n<p><a href=\"https://www.blackdoginstitute.org.au/resources-support/depression/treatment/\" target=\"_blank\" rel=\"noopener nofollow\">Treatment can involve</a> psychological therapies, social support and lifestyle changes, such as doing more exercise. For some people, these approaches may be enough to support recovery. For others, adding an antidepressant can be an important part of treatment.</p>\n\n<p>In 2024-2025, <a href=\"https://www.aihw.gov.au/mental-health/topic-areas/community-based-services/mental-health-prescriptions#Prescriptions-by-medication-type\" target=\"_blank\" rel=\"noopener nofollow\">3.8 million Australians were dispensed a prescription for an antidepressant</a>.</p>\n\n<p>For adults with depression, <a href=\"https://www.ccm.health.qld.gov.au/management-of-diagnosed-conditions/depression#section__4medicinesfordepression2679\" target=\"_blank\" rel=\"noopener nofollow\">clinical guidelines</a> recommend continuing antidepressants for at least six months, and preferably 12 months, after an acceptable response to treatment is achieved. </p>\n\n<p>If, after six to 12 months, the depressive episode has resolved, <a href=\"https://australianprescriber.tg.org.au/articles/stopping-antidepressants-when-and-how.html\" target=\"_blank\" rel=\"noopener nofollow\">it may be appropriate to reduce</a>, and eventually stop the antidepressant. But symptoms can occur when discontinuing antidepressants so it’s important this is done gradually, in consultation with a doctor.</p>\n\n<p>Studies of real world antidepressant prescribing patterns in Australia suggest many people take antidepressants for longer than this. <a href=\"https://doi.org/10.1192/bjo.2022.522\" target=\"_blank\" rel=\"noopener nofollow\">One 2022 study</a> found nearly a quarter of those prescribed antidepressants were still receiving prescriptions for them two years later. </p>\n\n<p><a href=\"https://doi.org/10.1002/pds.70267\" target=\"_blank\" rel=\"noopener nofollow\">Another Australian study</a> found people take antidepressants for an average of four years.</p>\n\n\n\n<h2>What did the researchers find?</h2>\n\n<p>The new review set out to compare how well different antidepressants help people maintain improvements in depression. The researchers also compared how acceptable the medicines were to the people taking them. They measured this by looking at the proportion of people who stopped treatment for any reason during the study period.</p>\n\n<p>The researchers identified and reviewed 115 randomised controlled trials, involving more than 30,000 people. The researchers classified long-term use as six months or more. Their main analysis combined the results of 35 trials that directly compared one antidepressant with another.</p>\n\n<p>They found that three antidepressants – escitalopram, duloxetine and agomelatine – were associated with a greater likelihood of sustained response than fluoxetine.</p>\n\n<p>People taking escitalopram or duloxetine were also less likely to drop out of the trials than those taking fluoxetine.</p>\n\n<h2>How reliable are the findings?</h2>\n\n<p>The findings are interesting as escitalopram (Lexapro) is the most commonly prescribed antidepressant in Australia. It ranked number 13 out of all <a href=\"https://www.pbs.gov.au/statistics/expenditure-prescriptions/2024-2025/Expenditure-prescriptions-report-tables-2024-25.PDF\" target=\"_blank\" rel=\"noopener nofollow\">PBS-dispensed prescriptions</a> in 2024–25. Duloxetine was number 45, but agomelatine isn’t available on the PBS.</p>\n\n<p>The findings suggest some antidepressants may be more effective than others at sustaining a response to treatment, but the results are far from definitive. More than half of the studies included in the main analysis were assessed as having a high risk of bias. </p>\n\n<p>This means some of the differences between antidepressants may reflect limitations in the original studies rather than genuine differences between the medicines. Some medicines were also supported by very few studies, making comparisons less certain. </p>\n\n<p>Another aspect to keep in mind when considering these results is what is meant by “long term”. The trials directly comparing antidepressants typically followed participants for around six months after they first started taking the medication. Only six followed people for longer than six months.  </p>\n\n<p>This means we still know relatively little about how the effectiveness of different antidepressants compares over longer periods. This is important given the average time people take them is much longer. </p>\n\n\n\n<h2>What this research can’t tell us</h2>\n\n<p>Importantly, these findings reflect average outcomes across groups of people. They can’t tell us which antidepressant will work best for any particular person.</p>\n\n<p>People respond differently to antidepressants, and what makes a medicine acceptable to one person may not be acceptable to another. While the researchers used trial drop-out rates as a measure of acceptability, this doesn’t necessarily capture people’s experiences of taking these medicines. </p>\n\n<p>For someone taking an antidepressant, acceptability might not be so binary. It may involve a trade-off between how the medication improves symptoms, its side effects, and how the medicine affects their everyday life.</p>\n\n<p>Continuing to take an antidepressant doesn’t necessarily mean someone finds it acceptable. Some people experience <a href=\"https://www1.racgp.org.au/ajgp/2026/june/continuing-antidepressants-or-not\" target=\"_blank\" rel=\"noopener nofollow\">withdrawal symptoms</a> when trying to stop, which can make discontinuation difficult.</p>\n\n<h2>What’s the best fit for you?</h2>\n\n<p>Ultimately, determining if an antidepressant is right for you, and which is the best fit, depends on many factors. These include your symptoms, other health conditions, previous experiences with medicines, potential side effects and what matters most to you.</p>\n\n<p>If you’re taking an antidepressant that’s working well for you, the findings of this study aren’t a reason to switch.</p>\n\n<p>And if you’re considering starting, changing or stopping an antidepressant, discuss your options with your doctor.</p><img src=\"https://counter.theconversation.com/content/296151/count.gif\" alt=\"The Conversation\" loading=\"lazy\">\n<p><em>The authors do not work for, consult, own shares in or receive funding from any company or organisation that would benefit from this article, and have disclosed no relevant affiliations beyond their academic appointment.</em></p>"
   },
   {
-   "id": 23,
+   "id": 26,
    "source": "Psyche",
    "cc": false,
    "lang": "en",
@@ -314,7 +353,7 @@
    "contentHtml": ""
   },
   {
-   "id": 24,
+   "id": 27,
    "source": "Psyche",
    "cc": false,
    "lang": "en",
@@ -327,7 +366,7 @@
    "contentHtml": ""
   },
   {
-   "id": 25,
+   "id": 28,
    "source": "ScienceDaily",
    "cc": false,
    "lang": "en",
@@ -340,7 +379,7 @@
    "contentHtml": ""
   },
   {
-   "id": 26,
+   "id": 29,
    "source": "Psyche",
    "cc": false,
    "lang": "en",
@@ -350,45 +389,6 @@
    "url": "https://psyche.co/ideas/the-ethics-of-having-a-good-time-at-disney-world-florida",
    "image": "https://images.aeonmedia.co/images/ff18a74b-939d-4635-bdde-6e865b0ee1ad/sz-final-gettyimages-2254333607.jpg?top=138&left=0&cropWidth=2400&cropHeight=1350&width=1200&quality=75&format=auto",
    "summary": "Is the value of the universalist experience undermined by the profit-hungry global corporation behind the theme parks? - by Adam Kadlac Read on Psyche",
-   "contentHtml": ""
-  },
-  {
-   "id": 27,
-   "source": "ScienceDaily",
-   "cc": false,
-   "lang": "en",
-   "title": "Scientists discover hidden brain changes linked to common sleep disorders",
-   "author": "",
-   "date": "2026-11-08",
-   "url": "https://www.sciencedaily.com/releases/2026/11/261104012303.htm",
-   "image": "",
-   "summary": "Scientists have discovered that sleep disorders are associated with structural changes in brain regions that control attention, decision-making, and emotions, potentially explaining why disrupted sleep can affect everyday thinking and behavior. The findings, drawn from 57 brain imaging studies,…",
-   "contentHtml": ""
-  },
-  {
-   "id": 28,
-   "source": "ScienceDaily",
-   "cc": false,
-   "lang": "en",
-   "title": "Magic mushrooms rewire the brain in a way scientists didn't expect",
-   "author": "",
-   "date": "2026-11-07",
-   "url": "https://www.sciencedaily.com/releases/2026/11/261104012308.htm",
-   "image": "",
-   "summary": "A surprising discovery reveals how psilocybin, the active compound in magic mushrooms, rapidly reshapes the brain by creating new neural connections and strengthening them. Researchers found that the drug behaves differently in healthy and chronically stressed mice, potentially helping repair…",
-   "contentHtml": ""
-  },
-  {
-   "id": 29,
-   "source": "Psyche",
-   "cc": false,
-   "lang": "en",
-   "title": "How to break a bad habit",
-   "author": "Psyche Video",
-   "date": "2026-11-06",
-   "url": "https://psyche.co/videos/to-break-a-bad-habit-try-telling-yourself-a-different-story",
-   "image": "https://images.aeonmedia.co/images/279ea3af-c0a1-471e-8521-daa836666f5d/how-to-break-a-bad-habit-landscape-2.jpg?top=0&left=0&cropWidth=2560&cropHeight=1440&width=1200&quality=75&format=auto",
-   "summary": "Feel stuck with a habit you know is bad for you? Getting to know your brain better could help you change the narrative - Video by Dr Tracey Marks Watch on Psyche",
    "contentHtml": ""
   }
  ]
