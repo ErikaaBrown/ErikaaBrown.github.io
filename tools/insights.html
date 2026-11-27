@@ -37,6 +37,9 @@
 
     <div id="patterns-list"></div>
 
+    <div id="weekday-panel"></div>
+    <div id="trend-panel"></div>
+
     <div class="panel panel-soft">
       <p style="margin:0" data-i18n="caveat.p"></p>
     </div>
@@ -64,7 +67,7 @@ window.PAGE = {
     pt: {
       "page.title": "Painel de Padrões",
       "crumb": "Ferramentas",
-      "intro.lead": "Cruza os teus próprios registos (humor, hábitos, gratidão e sono) para mostrar padrões simples. Tudo calculado aqui no teu browser, a partir dos dados que já guardaste.",
+      "intro.lead": "Cruza os teus próprios registos (humor, hábitos, sono, gratidão, pensamentos e autocuidado) para mostrar os padrões mais fortes nos teus dados, incluindo dia da semana e tendência recente. Tudo calculado aqui no teu browser, a partir dos dados que já guardaste.",
       "empty.p": "Ainda não há dados suficientes. Regista o teu humor durante mais alguns dias (e, se quiseres, hábitos, gratidão ou sono) para os padrões começarem a aparecer aqui.",
       "consistency.title": "A tua consistência (últimos 30 dias)",
       "c.mood": "Dias com humor registado",
@@ -84,18 +87,46 @@ window.PAGE = {
       "p.gratitude.sentence.down": "Nos dias em que escreveste gratidão, o teu humor médio foi mais baixo ({a} vs {b} em 5): talvez recorras mais a este exercício precisamente nos dias mais difíceis.",
       "p.gratitude.sentence.flat": "O teu humor médio foi semelhante com ou sem gratidão escrita ({a} vs {b} em 5).",
       "p.sleep.title": "Sono e humor",
-      "p.sleep.a": "Depois de sono bom (4-5/5)",
-      "p.sleep.b": "Depois de sono fraco (1-2/5)",
-      "p.sleep.sentence.up": "Nos dias a seguir a uma boa noite de sono, o teu humor médio foi mais alto ({a} vs {b} em 5).",
-      "p.sleep.sentence.down": "Nos dias a seguir a uma boa noite de sono, o teu humor médio foi mais baixo ({a} vs {b} em 5).",
-      "p.sleep.sentence.flat": "O teu humor médio foi semelhante depois de noites boas ou fracas ({a} vs {b} em 5).",
+      "p.sleep.a": "Depois de 7h+ de sono",
+      "p.sleep.b": "Depois de menos de 6h de sono",
+      "p.sleep.sentence.up": "Nos dias a seguir a 7h ou mais de sono, o teu humor médio foi mais alto ({a} vs {b} em 5).",
+      "p.sleep.sentence.down": "Nos dias a seguir a 7h ou mais de sono, o teu humor médio foi mais baixo ({a} vs {b} em 5).",
+      "p.sleep.sentence.flat": "O teu humor médio foi semelhante depois de noites longas ou curtas ({a} vs {b} em 5).",
+      "p.thoughts.title": "Registo de pensamentos e humor",
+      "p.thoughts.a": "Com um pensamento registado",
+      "p.thoughts.b": "Sem pensamento registado",
+      "p.thoughts.sentence.up": "Nos dias em que registaste um pensamento, o teu humor médio foi mais alto ({a} vs {b} em 5).",
+      "p.thoughts.sentence.down": "Nos dias em que registaste um pensamento, o teu humor médio foi mais baixo ({a} vs {b} em 5): talvez recorras a este registo precisamente nos dias mais difíceis.",
+      "p.thoughts.sentence.flat": "O teu humor médio foi semelhante com ou sem registo de pensamentos ({a} vs {b} em 5).",
+      "p.compassionbreak.title": "Pausas de autocompaixão e humor",
+      "p.compassionbreak.a": "Com pausa de autocompaixão",
+      "p.compassionbreak.b": "Sem pausa de autocompaixão",
+      "p.compassionbreak.sentence.up": "Nos dias em que fizeste uma pausa de autocompaixão, o teu humor médio foi mais alto ({a} vs {b} em 5).",
+      "p.compassionbreak.sentence.down": "Nos dias em que fizeste uma pausa de autocompaixão, o teu humor médio foi mais baixo ({a} vs {b} em 5): talvez recorras a ela precisamente nos dias mais difíceis.",
+      "p.compassionbreak.sentence.flat": "O teu humor médio foi semelhante com ou sem pausa de autocompaixão ({a} vs {b} em 5).",
+      "p.selfcarelog.title": "Autocuidado e humor",
+      "p.selfcarelog.a": "Com autocuidado registado",
+      "p.selfcarelog.b": "Sem autocuidado registado",
+      "p.selfcarelog.sentence.up": "Nos dias em que registaste autocuidado, o teu humor médio foi mais alto ({a} vs {b} em 5).",
+      "p.selfcarelog.sentence.down": "Nos dias em que registaste autocuidado, o teu humor médio foi mais baixo ({a} vs {b} em 5): talvez recorras a isso precisamente nos dias mais difíceis.",
+      "p.selfcarelog.sentence.flat": "O teu humor médio foi semelhante com ou sem autocuidado registado ({a} vs {b} em 5).",
       "avg.mood": "Humor médio (/5)",
+      "weekday.title": "Padrão por dia da semana",
+      "weekday.both": "O teu melhor dia costuma ser {best} (humor médio {bv}/5); o mais difícil costuma ser {worst} (humor médio {wv}/5).",
+      "weekday.flat": "O teu humor não varia muito consoante o dia da semana.",
+      "weekday.need_more": "Regista o humor em mais dias da semana para este padrão aparecer.",
+      "wd.0": "ao domingo", "wd.1": "à segunda-feira", "wd.2": "à terça-feira", "wd.3": "à quarta-feira",
+      "wd.4": "à quinta-feira", "wd.5": "à sexta-feira", "wd.6": "ao sábado",
+      "trend.title": "Tendência (últimas semanas)",
+      "trend.up": "O teu humor tem estado a subir nas últimas semanas.",
+      "trend.down": "O teu humor tem estado a descer nas últimas semanas.",
+      "trend.flat": "O teu humor tem-se mantido estável nas últimas semanas.",
       "caveat.p": "🔎 Nota: isto mostra correlações simples nos teus próprios dados, não relações de causa-efeito. E com poucos dias registados, um só dia fora do comum pode influenciar bastante a média. Usa isto como ponto de partida para reparar em ti, não como diagnóstico."
     },
     en: {
       "page.title": "Patterns Panel",
       "crumb": "Tools",
-      "intro.lead": "Cross-references your own entries (mood, habits, gratitude and sleep) to surface simple patterns. Everything is calculated here in your browser, from data you already saved.",
+      "intro.lead": "Cross-references your own entries (mood, habits, sleep, gratitude, thoughts and self-care) to surface the strongest patterns in your data, including day-of-week and recent trend. Everything is calculated here in your browser, from data you already saved.",
       "empty.p": "There isn't enough data yet. Log your mood for a few more days (and, if you like, habits, gratitude or sleep) for patterns to start showing up here.",
       "consistency.title": "Your consistency (last 30 days)",
       "c.mood": "Days with mood logged",
@@ -115,12 +146,40 @@ window.PAGE = {
       "p.gratitude.sentence.down": "On days you wrote gratitude, your average mood was lower ({a} vs {b} out of 5): maybe you reach for this exercise most on harder days.",
       "p.gratitude.sentence.flat": "Your average mood was similar with or without gratitude written ({a} vs {b} out of 5).",
       "p.sleep.title": "Sleep and mood",
-      "p.sleep.a": "Following good sleep (4-5/5)",
-      "p.sleep.b": "Following poor sleep (1-2/5)",
-      "p.sleep.sentence.up": "On days following a good night's sleep, your average mood was higher ({a} vs {b} out of 5).",
-      "p.sleep.sentence.down": "On days following a good night's sleep, your average mood was lower ({a} vs {b} out of 5).",
-      "p.sleep.sentence.flat": "Your average mood was similar after good or poor nights ({a} vs {b} out of 5).",
+      "p.sleep.a": "Following 7h+ of sleep",
+      "p.sleep.b": "Following under 6h of sleep",
+      "p.sleep.sentence.up": "On days following 7 or more hours of sleep, your average mood was higher ({a} vs {b} out of 5).",
+      "p.sleep.sentence.down": "On days following 7 or more hours of sleep, your average mood was lower ({a} vs {b} out of 5).",
+      "p.sleep.sentence.flat": "Your average mood was similar after long or short nights ({a} vs {b} out of 5).",
+      "p.thoughts.title": "Thought records and mood",
+      "p.thoughts.a": "With a thought logged",
+      "p.thoughts.b": "Without a thought logged",
+      "p.thoughts.sentence.up": "On days you logged a thought, your average mood was higher ({a} vs {b} out of 5).",
+      "p.thoughts.sentence.down": "On days you logged a thought, your average mood was lower ({a} vs {b} out of 5): maybe you reach for this most on harder days.",
+      "p.thoughts.sentence.flat": "Your average mood was similar with or without a thought logged ({a} vs {b} out of 5).",
+      "p.compassionbreak.title": "Self-compassion breaks and mood",
+      "p.compassionbreak.a": "With a self-compassion break",
+      "p.compassionbreak.b": "Without a self-compassion break",
+      "p.compassionbreak.sentence.up": "On days you took a self-compassion break, your average mood was higher ({a} vs {b} out of 5).",
+      "p.compassionbreak.sentence.down": "On days you took a self-compassion break, your average mood was lower ({a} vs {b} out of 5): maybe you reach for it most on harder days.",
+      "p.compassionbreak.sentence.flat": "Your average mood was similar with or without a self-compassion break ({a} vs {b} out of 5).",
+      "p.selfcarelog.title": "Self-care and mood",
+      "p.selfcarelog.a": "With self-care logged",
+      "p.selfcarelog.b": "Without self-care logged",
+      "p.selfcarelog.sentence.up": "On days you logged self-care, your average mood was higher ({a} vs {b} out of 5).",
+      "p.selfcarelog.sentence.down": "On days you logged self-care, your average mood was lower ({a} vs {b} out of 5): maybe you reach for it most on harder days.",
+      "p.selfcarelog.sentence.flat": "Your average mood was similar with or without self-care logged ({a} vs {b} out of 5).",
       "avg.mood": "Average mood (/5)",
+      "weekday.title": "Day-of-week pattern",
+      "weekday.both": "Your best day tends to be {best} (average mood {bv}/5); your hardest tends to be {worst} (average mood {wv}/5).",
+      "weekday.flat": "Your mood doesn't vary much by day of the week.",
+      "weekday.need_more": "Log your mood on more days of the week for this pattern to show up.",
+      "wd.0": "on Sundays", "wd.1": "on Mondays", "wd.2": "on Tuesdays", "wd.3": "on Wednesdays",
+      "wd.4": "on Thursdays", "wd.5": "on Fridays", "wd.6": "on Saturdays",
+      "trend.title": "Trend (last few weeks)",
+      "trend.up": "Your mood has been trending up over the last few weeks.",
+      "trend.down": "Your mood has been trending down over the last few weeks.",
+      "trend.flat": "Your mood has stayed fairly stable over the last few weeks.",
       "caveat.p": "🔎 Note: this shows simple correlations in your own data, not cause-and-effect relationships. And with few days logged, a single unusual day can sway the average quite a bit. Use this as a starting point for noticing yourself, not as a diagnosis."
     }
   }
@@ -132,6 +191,8 @@ window.PAGE = {
   var $ = function (id) { return document.getElementById(id); };
   var MIN_BUCKET = 5; // dias mínimos em cada grupo para mostrar uma comparação
   var MIN_MOOD_DAYS = 5; // dias mínimos de humor registado para mostrar seja o que for
+  var MIN_WEEKDAY_BUCKET = 3; // registos mínimos num dia da semana para o considerar
+  var MAX_CARDS = 5; // número máximo de cartões de padrão a mostrar
 
   function isoDaysAgo(n) {
     var d = new Date();
@@ -151,6 +212,19 @@ window.PAGE = {
       Object.keys(h.c || {}).forEach(function (iso) { if (h.c[iso]) set[iso] = true; });
     });
     return set;
+  }
+
+  function dateSet(entries, field) {
+    var set = {};
+    (entries || []).forEach(function (e) { if (e && e[field]) set[e[field]] = true; });
+    return set;
+  }
+
+  function durationH(bed, wake) {
+    var b = bed.split(":"), w = wake.split(":");
+    var mins = (parseInt(w[0], 10) * 60 + parseInt(w[1], 10)) - (parseInt(b[0], 10) * 60 + parseInt(b[1], 10));
+    if (mins <= 0) mins += 24 * 60;
+    return mins / 60;
   }
 
   function renderConsistency(mood, habits, gratitude, sleep) {
@@ -184,7 +258,7 @@ window.PAGE = {
     return "flat";
   }
 
-  function renderPatterns(mood, habits, gratitude, sleep) {
+  function renderPatterns(mood, habits, gratitude, sleep, thoughts, compassionbreak, selfcarelog) {
     var box = $("patterns-list");
     var tpl = $("tpl-pattern");
     box.innerHTML = "";
@@ -198,19 +272,36 @@ window.PAGE = {
     var goodMood = [], poorMood = [];
     Object.keys(mood).forEach(function (iso) {
       var s = sleep[iso];
-      if (!s) return;
-      if (s.q >= 4) goodMood.push(mood[iso].m);
-      else if (s.q <= 2) poorMood.push(mood[iso].m);
+      if (!s || !s.b || !s.w) return;
+      var h = durationH(s.b, s.w);
+      if (h >= 7) goodMood.push(mood[iso].m);
+      else if (h < 6) poorMood.push(mood[iso].m);
     });
     if (goodMood.length >= MIN_BUCKET && poorMood.length >= MIN_BUCKET) {
       pSleep = { a: avg(goodMood), b: avg(poorMood) };
     }
 
+    var thoughtSet = dateSet(thoughts, "date");
+    var pThoughts = comparison(mood, function (iso) { return !!thoughtSet[iso]; });
+
+    var breakSet = dateSet(compassionbreak, "date");
+    var pBreak = comparison(mood, function (iso) { return !!breakSet[iso]; });
+
+    var careSet = dateSet(selfcarelog, "added");
+    var pCare = comparison(mood, function (iso) { return !!careSet[iso]; });
+
     var cards = [
       { key: "habits", data: pHabits },
       { key: "gratitude", data: pGratitude },
-      { key: "sleep", data: pSleep }
+      { key: "sleep", data: pSleep },
+      { key: "thoughts", data: pThoughts },
+      { key: "compassionbreak", data: pBreak },
+      { key: "selfcarelog", data: pCare }
     ].filter(function (c) { return c.data; });
+
+    // padrões mais fortes primeiro, para cada pessoa ver o que mais se destaca nos seus próprios dados
+    cards.sort(function (x, y) { return Math.abs(y.data.a - y.data.b) - Math.abs(x.data.a - x.data.b); });
+    cards = cards.slice(0, MAX_CARDS);
 
     if (!cards.length) {
       box.innerHTML = "<div class='panel panel-soft'><p style='margin:0' data-i18n='empty.p'>" + PL.t("empty.p") + "</p></div>";
@@ -231,11 +322,91 @@ window.PAGE = {
     });
   }
 
+  function renderWeekday(mood) {
+    var box = $("weekday-panel");
+    var buckets = [[], [], [], [], [], [], []]; // 0=domingo .. 6=sábado
+    Object.keys(mood).forEach(function (iso) {
+      var wd = new Date(iso + "T00:00:00").getDay();
+      buckets[wd].push(mood[iso].m);
+    });
+    var stats = buckets.map(function (arr, i) {
+      return arr.length >= MIN_WEEKDAY_BUCKET ? { wd: i, avg: avg(arr) } : null;
+    }).filter(Boolean);
+
+    if (stats.length < 4) { box.innerHTML = ""; return; }
+
+    stats.sort(function (x, y) { return y.avg - x.avg; });
+    var best = stats[0], worst = stats[stats.length - 1];
+    var sentence;
+    if (best.avg - worst.avg < 0.4) {
+      sentence = PL.t("weekday.flat");
+    } else {
+      sentence = PL.t("weekday.both")
+        .replace("{best}", PL.t("wd." + best.wd)).replace("{bv}", best.avg.toFixed(1))
+        .replace("{worst}", PL.t("wd." + worst.wd)).replace("{wv}", worst.avg.toFixed(1));
+    }
+    box.innerHTML = "<div class='panel'><h3 style='margin-top:0'>" + PL.t("weekday.title") +
+      "</h3><p class='muted' style='margin:0'>" + sentence + "</p></div>";
+  }
+
+  function weeklyAverages(mood) {
+    var weeks = []; // mais antiga -> mais recente, 8 semanas
+    for (var w = 7; w >= 0; w--) {
+      var vals = [];
+      for (var d = 0; d < 7; d++) {
+        var iso = isoDaysAgo(w * 7 + d);
+        if (mood[iso]) vals.push(mood[iso].m);
+      }
+      weeks.push(vals.length ? avg(vals) : null);
+    }
+    return weeks;
+  }
+
+  function sparklineSVG(weeks) {
+    var points = [];
+    weeks.forEach(function (v, i) { if (v !== null) points.push({ x: i, y: v }); });
+    var w = 280, h = 64, pad = 8;
+    var xStep = (w - pad * 2) / 7;
+    var toY = function (v) { return h - pad - (v - 1) / 4 * (h - pad * 2); };
+    var path = points.map(function (p, i) {
+      return (i === 0 ? "M" : "L") + (pad + p.x * xStep).toFixed(1) + "," + toY(p.y).toFixed(1);
+    }).join(" ");
+    var dots = points.map(function (p) {
+      return "<circle cx='" + (pad + p.x * xStep).toFixed(1) + "' cy='" + toY(p.y).toFixed(1) + "' r='3' fill='var(--brand)'/>";
+    }).join("");
+    return "<svg viewBox='0 0 " + w + " " + h + "' width='100%' height='" + h + "' aria-hidden='true'>" +
+      "<path d='" + path + "' fill='none' stroke='var(--brand)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/>" +
+      dots + "</svg>";
+  }
+
+  function renderTrend(mood) {
+    var box = $("trend-panel");
+    var weeks = weeklyAverages(mood);
+    var present = [];
+    weeks.forEach(function (v, i) { if (v !== null) present.push(v); });
+    if (present.length < 4) { box.innerHTML = ""; return; }
+
+    var mid = Math.ceil(present.length / 2);
+    var firstHalf = present.slice(0, mid), secondHalf = present.slice(mid);
+    var trendKey = "flat";
+    if (secondHalf.length && firstHalf.length) {
+      var diff = avg(secondHalf) - avg(firstHalf);
+      if (diff > 0.3) trendKey = "up";
+      else if (diff < -0.3) trendKey = "down";
+    }
+    box.innerHTML = "<div class='panel'><h3 style='margin-top:0'>" + PL.t("trend.title") +
+      "</h3>" + sparklineSVG(weeks) +
+      "<p class='muted' style='margin:8px 0 0'>" + PL.t("trend." + trendKey) + "</p></div>";
+  }
+
   function renderAll() {
     var mood = PL.load("mood", {});
     var habits = PL.load("habits", []);
     var gratitude = PL.load("gratitude", {});
     var sleep = PL.load("sleep", {});
+    var thoughts = PL.load("thoughts", []);
+    var compassionbreak = PL.load("compassionbreak", []);
+    var selfcarelog = PL.load("selfcarelog", []);
 
     var moodDays = Object.keys(mood).length;
     if (moodDays < MIN_MOOD_DAYS) {
@@ -246,7 +417,9 @@ window.PAGE = {
     $("panel-empty").classList.add("hidden");
     $("panel-main").classList.remove("hidden");
     renderConsistency(mood, habits, gratitude, sleep);
-    renderPatterns(mood, habits, gratitude, sleep);
+    renderPatterns(mood, habits, gratitude, sleep, thoughts, compassionbreak, selfcarelog);
+    renderWeekday(mood);
+    renderTrend(mood);
   }
 
   document.addEventListener("pl:ready", renderAll);
