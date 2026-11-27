@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 /**
- * PsicoLab — recolha diária de artigos de psicologia.
+ * PsicoLab, recolha diária de artigos de psicologia.
  *
  * Fontes CC (The Conversation, licença CC BY-ND): texto integral + imagens,
- * sempre com crédito ao autor e ligação ao original. Sem alterações ao texto
- * (a licença ND não permite derivados — por isso ficam na língua original).
+ * sempre com crédito ao autor e ligação ao original. Sem alterações ao texto,
+ * já que a licença ND não permite derivados, por isso ficam na língua original.
  * Outras fontes: apenas título + resumo + imagem (se o feed a fornecer) + link.
  *
- * Saída: data/articles.json — máximo 30 artigos, mais recentes primeiro;
+ * Saída: data/articles.json, máximo 30 artigos, mais recentes primeiro;
  * os mais antigos são descartados. Corre via GitHub Action (ver
  * .github/workflows/update-articles.yml) ou manualmente: node scripts/fetch-articles.js
  */
@@ -19,13 +19,13 @@ const MAX_ARTICLES = 30;
 const OUT = path.join(__dirname, "..", "data", "articles.json");
 
 let FEEDS = [
-  // The Conversation — vários tópicos/edições; os que falharem são ignorados
+  // The Conversation: vários tópicos/edições; os que falharem são ignorados
   { url: "https://theconversation.com/us/topics/psychology-566/articles.atom", source: "The Conversation", cc: true },
   { url: "https://theconversation.com/uk/topics/psychology-566/articles.atom", source: "The Conversation", cc: true },
   { url: "https://theconversation.com/us/topics/mental-health-343/articles.atom", source: "The Conversation", cc: true },
   { url: "https://theconversation.com/us/topics/neuroscience-301/articles.atom", source: "The Conversation", cc: true },
   { url: "https://theconversation.com/uk/topics/mental-health-343/articles.atom", source: "The Conversation", cc: true },
-  // Fontes não-CC — só título + resumo + ligação
+  // Fontes não-CC: só título + resumo + ligação
   { url: "https://www.sciencedaily.com/rss/mind_brain/psychology.xml", source: "ScienceDaily", cc: false },
   { url: "https://www.sciencedaily.com/rss/mind_brain/mental_health.xml", source: "ScienceDaily", cc: false },
   { url: "https://psyche.co/feed", source: "Psyche", cc: false }
@@ -202,7 +202,7 @@ function normDate(d) {
   }));
 
   if (top.length === 0) {
-    console.error("Nenhum artigo recolhido — mantém-se o ficheiro anterior.");
+    console.error("Nenhum artigo recolhido, mantém-se o ficheiro anterior.");
     process.exit(0); // não falhar o workflow nem apagar dados existentes
   }
 
