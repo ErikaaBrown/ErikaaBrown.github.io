@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>html.pl-framed{display:none!important}</style>
+<script>if(window.top!==window.self){document.documentElement.className+=" pl-framed";try{window.top.location=window.self.location.href;}catch(e){}}</script>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://psicolab-api.nightmareftw.workers.dev https://cloudflareinsights.com; base-uri 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Sem ligação · PsicoLab</title>
+<meta name="description" content="Não foi possível carregar esta página sem ligação à internet.">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+<meta name="theme-color" content="#12876f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=21">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main class="container narrow">
+  <div class="page-hero">
+    <span class="crumb" data-i18n="crumb"></span>
+    <h1><span style="font-size:2.2rem">📡</span> <span data-i18n="page.title"></span></h1>
+    <p data-i18n="intro.lead"></p>
+  </div>
+  <div class="center mt-2">
+    <button class="btn" id="btn-retry" data-i18n="btn.retry"></button>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+
+<script>
+window.PAGE = {
+  root: "",
+  section: "offline",
+  i18n: {
+    pt: {
+      "page.title": "Sem ligação",
+      "crumb": "PsicoLab",
+      "intro.lead": "Não foi possível carregar esta página sem ligação à internet. As páginas que já visitaste antes continuam a funcionar sem ligação; esta ainda não tinha sido guardada no teu dispositivo.",
+      "btn.retry": "Tentar novamente"
+    },
+    en: {
+      "page.title": "You're offline",
+      "crumb": "PsicoLab",
+      "intro.lead": "This page couldn't load without an internet connection. Pages you've already visited keep working offline; this one hadn't been saved to your device yet.",
+      "btn.retry": "Try again"
+    }
+  }
+};
+</script>
+<script src="js/app.js?v=12"></script>
+<script>
+document.getElementById("btn-retry").addEventListener("click", function () { location.reload(); });
+</script>
+</body>
+</html>

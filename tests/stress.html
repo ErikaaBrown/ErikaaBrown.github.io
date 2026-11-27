@@ -9,6 +9,9 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Termómetro de Stress · PsicoLab</title>
 <link rel="icon" type="image/png" href="../img/favicon.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+<meta name="theme-color" content="#12876f">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
@@ -53,6 +56,9 @@
       <p id="band-text" class="muted" style="max-width:560px;margin:10px auto 0;text-align:left"></p>
     </div>
     <div class="panel" id="suggestions"></div>
+    <div class="panel panel-soft">
+      <p style="margin:0" data-i18n="res.expl"></p>
+    </div>
     <div class="notice" data-i18n-html="res.notice"></div>
     <div class="center mt-2">
       <button class="btn btn-ghost" id="btn-retake" data-i18n="btn.retake"></button>
@@ -72,55 +78,57 @@ window.PAGE = {
       "crumb": "Testes",
       "intro.lead": "O stress percebido é a medida em que sentes a tua vida como imprevisível, incontrolável e sobrecarregada.",
       "intro.p1": "Vais responder a 10 perguntas sobre como te sentiste durante o último mês. Indica com que frequência cada situação aconteceu. Responde depressa e com sinceridade: a primeira resposta costuma ser a mais fiel.",
-      "intro.notice": "<strong>Importante:</strong> este termómetro é apenas indicativo. Não mede ansiedade clínica nem burnout, e não substitui uma avaliação profissional.",
+      "intro.notice": "<strong>Importante:</strong> este termómetro é inspirado na Escala de Stress Percebido (PSS-10, Cohen, Kamarck &amp; Mermelstein, 1983), com alguns itens adaptados. Não mede ansiedade clínica nem burnout, não tem cortes de diagnóstico oficiais (a própria equipa que criou a escala original afirma o mesmo sobre ela) e não substitui uma avaliação profissional.",
       "btn.start": "Começar",
       "btn.back": "← Anterior",
       "btn.retake": "Repetir",
       "quiz.frame": "No último mês...",
       "res.title": "O teu nível de stress percebido",
       "res.notice": "<strong>Se o stress te está a pesar:</strong> falar com um psicólogo faz diferença. Em Portugal podes começar pela linha SNS 24: 808 24 24 24 (opção de aconselhamento psicológico).",
-      "band.low": "Nível baixo. O último mês parece ter estado em equilíbrio: sentiste que tinhas controlo sobre o essencial. Continua a proteger os hábitos que te dão estabilidade.",
-      "band.mod": "Nível moderado. Há alguma pressão acumulada (nada de invulgar), mas vale a pena olhar para o que a está a causar antes que cresça.",
-      "band.high": "Nível elevado. O último mês foi exigente e a sensação de sobrecarga é significativa. Prioriza activamente a recuperação: sono, pausas e apoio.",
-      "band.vhigh": "Nível muito elevado. Sentes pouco controlo e muita sobrecarga há semanas. Isto merece atenção a sério, e idealmente uma conversa com um profissional.",
-      "lbl.low": "Baixo", "lbl.mod": "Moderado", "lbl.high": "Elevado", "lbl.vhigh": "Muito elevado",
+      "band.low": "O teu resultado ficou abaixo da média observada em grandes amostras (cerca de 13, numa escala de 0 a 40). O último mês parece ter estado em equilíbrio: sentiste que tinhas controlo sobre o essencial. Continua a proteger os hábitos que te dão estabilidade.",
+      "band.mod": "O teu resultado está perto da média observada em grandes amostras (cerca de 13). Há alguma pressão acumulada, o que é comum, mas vale a pena olhar para o que a está a causar antes que cresça.",
+      "band.high": "O teu resultado está acima da média observada em grandes amostras (cerca de 13). O último mês foi exigente e a sensação de sobrecarga é significativa. Prioriza activamente a recuperação: sono, pausas e apoio.",
+      "band.vhigh": "O teu resultado está bem acima da média observada em grandes amostras (cerca de 13). Sentes pouco controlo e muita sobrecarga há semanas. Isto merece atenção a sério, e idealmente uma conversa com um profissional.",
+      "lbl.low": "Abaixo da média", "lbl.mod": "Perto da média", "lbl.high": "Acima da média", "lbl.vhigh": "Bem acima da média",
       "sug.title": "O que costuma ajudar",
       "sug.1": "🛌 Protege o sono: é a base da regulação emocional.",
       "sug.2": "🌬️ Experimenta a Respiração Guiada aqui do site: 3 minutos chegam para acalmar o sistema nervoso.",
       "sug.3": "🚶 Movimento regular, mesmo que leve: caminhar 20 minutos já reduz cortisol.",
       "sug.4": "🗣️ Fala com alguém de confiança: pôr o stress em palavras alivia-o.",
       "sug.5": "📋 Divide o que te sobrecarrega em passos pequenos e concretos.",
-      "sug.pro": "🤝 Se este nível se mantém há semanas, considera procurar apoio profissional: não é fraqueza, é estratégia."
+      "sug.pro": "🤝 Se este nível se mantém há semanas, considera procurar apoio profissional: não é fraqueza, é estratégia.",
+      "res.expl": "📊 Para comparação: numa sondagem americana com 2387 pessoas, a média nesta escala foi de cerca de 13 pontos em 40. É uma referência populacional, não um corte de diagnóstico: a equipa que criou a escala original afirma directamente que não existem cortes oficiais de «stress baixo/moderado/elevado»."
     },
     en: {
       "page.title": "Stress Thermometer",
       "crumb": "Tests",
       "intro.lead": "Perceived stress is the degree to which you experience your life as unpredictable, uncontrollable and overloaded.",
       "intro.p1": "You will answer 10 questions about how you felt during the last month. Indicate how often each situation happened. Answer quickly and honestly: the first answer is usually the truest.",
-      "intro.notice": "<strong>Important:</strong> this thermometer is indicative only. It does not measure clinical anxiety or burnout, and does not replace a professional assessment.",
+      "intro.notice": "<strong>Important:</strong> this thermometer is inspired by the Perceived Stress Scale (PSS-10, Cohen, Kamarck &amp; Mermelstein, 1983), with some items adapted. It does not measure clinical anxiety or burnout, has no official diagnostic cutoffs (the team behind the original scale says the same about it), and does not replace a professional assessment.",
       "btn.start": "Start",
       "btn.back": "← Previous",
       "btn.retake": "Retake",
       "quiz.frame": "In the last month...",
       "res.title": "Your perceived stress level",
       "res.notice": "<strong>If stress is weighing on you:</strong> talking to a psychologist makes a difference. Reach out to a local mental-health helpline or your doctor to get started.",
-      "band.low": "Low level. The last month seems to have been in balance: you felt in control of what matters. Keep protecting the habits that give you stability.",
-      "band.mod": "Moderate level. Some pressure has built up (nothing unusual), but it is worth looking at what is causing it before it grows.",
-      "band.high": "High level. The last month was demanding and the sense of overload is significant. Actively prioritise recovery: sleep, breaks and support.",
-      "band.vhigh": "Very high level. You have felt little control and a lot of overload for weeks. This deserves serious attention, ideally a conversation with a professional.",
-      "lbl.low": "Low", "lbl.mod": "Moderate", "lbl.high": "High", "lbl.vhigh": "Very high",
+      "band.low": "Your result was below the average seen in large samples (around 13, on a 0-40 scale). The last month seems to have been in balance: you felt in control of what matters. Keep protecting the habits that give you stability.",
+      "band.mod": "Your result is close to the average seen in large samples (around 13). Some pressure has built up, which is common, but it is worth looking at what is causing it before it grows.",
+      "band.high": "Your result is above the average seen in large samples (around 13). The last month was demanding and the sense of overload is significant. Actively prioritise recovery: sleep, breaks and support.",
+      "band.vhigh": "Your result is well above the average seen in large samples (around 13). You have felt little control and a lot of overload for weeks. This deserves serious attention, ideally a conversation with a professional.",
+      "lbl.low": "Below average", "lbl.mod": "Near average", "lbl.high": "Above average", "lbl.vhigh": "Well above average",
       "sug.title": "What usually helps",
       "sug.1": "🛌 Protect your sleep: it is the foundation of emotional regulation.",
       "sug.2": "🌬️ Try the Guided Breathing on this site: 3 minutes are enough to calm the nervous system.",
       "sug.3": "🚶 Regular movement, even light: a 20-minute walk already lowers cortisol.",
       "sug.4": "🗣️ Talk to someone you trust: putting stress into words relieves it.",
       "sug.5": "📋 Break what overwhelms you into small, concrete steps.",
-      "sug.pro": "🤝 If this level has lasted for weeks, consider seeking professional support: it is not weakness, it is strategy."
+      "sug.pro": "🤝 If this level has lasted for weeks, consider seeking professional support: it is not weakness, it is strategy.",
+      "res.expl": "📊 For comparison: in a US survey of 2,387 people, the average on this scale was around 13 points out of 40. It is a population reference, not a diagnostic cutoff: the team behind the original scale directly states that no official \"low/moderate/high stress\" cutoffs exist."
     }
   }
 };
 </script>
-<script src="../js/app.js?v=11"></script>
+<script src="../js/app.js?v=12"></script>
 <script>
 (function () {
   var ITEMS = [

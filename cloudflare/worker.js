@@ -1,12 +1,12 @@
 /**
- * PsicoLab — API de contas, sincronização e partilha profissional (Cloudflare Worker)
+ * PsicoLab, API de contas, sincronização e partilha profissional (Cloudflare Worker)
  *
  * Requisitos configurados no dashboard:
  * - Binding D1 com o nome "DB" (base de dados criada com schema.sql)
  * - Variável secreta "SESSION_SECRET" (string longa e aleatória)
  *
  * Privacidade: o servidor só guarda blobs cifrados no browser (AES-GCM).
- * A palavra-passe nunca chega aqui — o cliente envia uma chave de
+ * A palavra-passe nunca chega aqui: o cliente envia uma chave de
  * autenticação derivada (PBKDF2), distinta da chave de cifra.
  *
  * Recuperação de conta: os dados são cifrados com uma chave aleatória (DEK)
@@ -18,7 +18,7 @@
  * (P-256). A chave pública é guardada em claro (não é secreta); a privada
  * segue exactamente o mesmo esquema de protecção da DEK. Quando um
  * paciente liga a um profissional, ambos os browsers derivam a MESMA
- * chave partilhada por ECDH (Diffie-Hellman) — o servidor nunca a vê e
+ * chave partilhada por ECDH (Diffie-Hellman); o servidor nunca a vê e
  * nunca vê os dados partilhados em claro. As flags de "profissional" só
  * podem ser atribuídas por uma conta com role = 'admin'.
  */
@@ -39,7 +39,7 @@ const MAX_DISPLAY_NAME = 60;
 const MAX_BIO = 500;
 const MAX_AVATAR = 60 * 1024; // base64 de uma miniatura JPEG ~200x200, folga generosa
 const FULL_TTL_S = 60 * 60 * 24 * 30; // 30 dias
-const RECOVERY_TTL_S = 60 * 15; // 15 minutos — janela curta para trocar a password
+const RECOVERY_TTL_S = 60 * 15; // 15 minutos, janela curta para trocar a password
 
 /* ---------- protecção contra abuso: bloqueio progressivo + armadilhas para scanners ---------- */
 
@@ -368,7 +368,7 @@ async function upgradeKeys(env, uid, body, origin) {
   return json({ ok: true }, 200, origin);
 }
 
-/* ---------- perfil opcional (nome, foto, biografia — em claro, não cifrado) ---------- */
+/* ---------- perfil opcional (nome, foto, biografia, em claro, não cifrado) ---------- */
 
 async function updateProfile(env, uid, body, origin) {
   const displayName = typeof body.displayName === "string" ? body.displayName.trim() : "";

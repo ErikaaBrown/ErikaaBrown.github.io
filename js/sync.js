@@ -1,4 +1,4 @@
-/* PsicoLab — sincronização opcional com cifragem ponta-a-ponta.
+/* PsicoLab, sincronização opcional com cifragem ponta-a-ponta.
    Configuração: substituir API_BASE pelo URL do teu Worker (ver cloudflare/README.md). */
 const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
 
@@ -240,7 +240,7 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
 
   function upgradeAddECDH(email, dek, passWrapKey, existingDekPass) {
     // conta que já tinha DEK + recuperação (upgrade anterior a esta funcionalidade),
-    // mas ainda não tinha par ECDH — gera-o agora e roda o código de recuperação
+    // mas ainda não tinha par ECDH; gera-o agora e roda o código de recuperação
     var recoveryCode = genRecoveryCode();
     return deriveRecoveryKeys(email, recoveryCode).then(function (recKeys) {
       return Promise.all([genECDHPair(), wrapDEK(dek, recKeys.wrapKey)]).then(function (r) {
@@ -387,7 +387,7 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
       email = email.toLowerCase().trim();
       return derivePassKeys(email, password).then(function (passKeys) {
         return api("/auth/login", "POST", { email: email, authKey: passKeys.authKey }).then(function (r) {
-          // fica só em memória até a DEK ser desembrulhada com sucesso — saveAcct() só
+          // fica só em memória até a DEK ser desembrulhada com sucesso; saveAcct() só
           // no fim, para nunca persistir uma conta "a meio" sem chave utilizável
           acct = {
             token: r.token, email: r.email, role: r.role || "user", professionalCode: r.professionalCode || "",
@@ -407,7 +407,7 @@ const API_BASE = "https://psicolab-api.nightmareftw.workers.dev";
             encKey = dek;
             if (!r.ecdhPrivPassCt) {
               // já tinha DEK + recuperação (upgrade anterior a esta funcionalidade), mas ainda
-              // não tinha par ECDH — gera-o agora, sem perder a DEK nem os dados já cifrados
+              // não tinha par ECDH; gera-o agora, sem perder a DEK nem os dados já cifrados
               return crypto.subtle.exportKey("jwk", dek).then(function (dekJwk) {
                 acct.dek = dekJwk;
                 return upgradeAddECDH(email, dek, passKeys.wrapKey, { iv: r.dekPassIv, ct: r.dekPassCt });

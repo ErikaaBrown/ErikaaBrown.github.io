@@ -1,4 +1,4 @@
-/* PsicoLab / PsychLab — núcleo partilhado: i18n, tema, header/footer, helpers */
+/* PsicoLab / PsychLab, núcleo partilhado: i18n, tema, header/footer, helpers */
 (function () {
   const PAGE = window.PAGE || {};
   const ROOT = PAGE.root || "";
@@ -604,3 +604,9 @@
     boot();
   }
 })();
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("/sw.js").catch(function () {});
+  });
+}
